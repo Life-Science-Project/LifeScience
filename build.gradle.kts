@@ -22,6 +22,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.6")
+    implementation("org.springdoc:springdoc-openapi-ui:1.5.6")
 }
 
 tasks.withType<KotlinCompile> {
