@@ -6,10 +6,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/section")
-class SectionController {
+class SectionController(
+    val repository: SectionRepository
+) {
 
     @GetMapping("/test")
-    fun getTestData() = "test"
+    fun getTestData(){
+        repository.save(Section(1, "sasha2"))
+    }
 
 
 }

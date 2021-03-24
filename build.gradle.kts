@@ -5,6 +5,8 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.4.31"
     kotlin("plugin.spring") version "1.4.31"
+    kotlin("plugin.allopen") version "1.4.31"
+    kotlin("plugin.noarg") version "1.4.31"
 }
 
 group = "com.jetbrains"
@@ -24,6 +26,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.6")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.6")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation(group = "org.postgresql", name="postgresql")
 }
 
 tasks.withType<KotlinCompile> {
@@ -31,6 +35,18 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
     }
+}
+
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.Embeddable")
+    annotation("javax.persistence.MappedSuperclass")
+}
+
+noArg{
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.Embeddable")
+    annotation("javax.persistence.MappedSuperclass")
 }
 
 tasks.withType<Test> {
