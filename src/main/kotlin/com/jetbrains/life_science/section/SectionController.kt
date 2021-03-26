@@ -1,18 +1,27 @@
 package com.jetbrains.life_science.section
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.jetbrains.life_science.method.dto.MethodDTO
+import com.jetbrains.life_science.method.dto.MethodDTOToInfoWrapper
+import com.jetbrains.life_science.section.dto.SectionDTO
+import com.jetbrains.life_science.section.dto.SectionDTOToInfoWrapper
+import com.jetbrains.life_science.section.entity.Section
+import com.jetbrains.life_science.section.service.SectionServiceImpl
+import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/section")
 class SectionController(
-    val repository: SectionRepository
+    val sectionService: SectionServiceImpl
 ) {
+    @PostMapping("")
+    fun addMethod (@RequestBody @Valid sectionDTO: SectionDTO) {
+        sectionService.addSection(SectionDTOToInfoWrapper(sectionDTO))
+    }
 
     @GetMapping("/test")
     fun getTestData(){
-        repository.save(Section(1, "sasha2"))
+        sectionService.addSection(SectionDTOToInfoWrapper(SectionDTO("sasha2", null)))
     }
 
 
