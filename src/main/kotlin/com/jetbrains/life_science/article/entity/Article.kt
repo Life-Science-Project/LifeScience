@@ -6,7 +6,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-class Article (
+class Article(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
