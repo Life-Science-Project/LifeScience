@@ -5,7 +5,7 @@ import com.jetbrains.life_science.method.entity.Method
 import org.springframework.stereotype.Component
 
 @Component
-class MethodViewMapper (val articleViewMapper: ArticleViewMapper) {
+class MethodViewMapper(val articleViewMapper: ArticleViewMapper) {
     fun createView(method: Method): MethodView {
         return MethodView(method.name, method.section.id, articleViewMapper.createView(method.article))
     }

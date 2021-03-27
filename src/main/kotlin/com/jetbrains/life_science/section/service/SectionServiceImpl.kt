@@ -8,7 +8,7 @@ import com.jetbrains.life_science.section.repository.SectionRepository
 import org.springframework.stereotype.Service
 
 @Service
-class SectionServiceImpl (
+class SectionServiceImpl(
     val sectionRepository: SectionRepository,
     val sectionFactory: SectionFactory
 ) : SectionService {

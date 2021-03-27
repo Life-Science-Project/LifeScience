@@ -8,11 +8,11 @@ import com.jetbrains.life_science.exceptions.ArticleNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class ArticleServiceImpl (
+class ArticleServiceImpl(
     val articleRepository: ArticleRepository,
     val articleFactory: ArticleFactory
 ) : ArticleService {
-    override fun addArticle(articleInfo: ArticleInfo) : Article {
+    override fun addArticle(articleInfo: ArticleInfo): Article {
         return articleRepository.save(articleFactory.createArticle(articleInfo))
     }
 

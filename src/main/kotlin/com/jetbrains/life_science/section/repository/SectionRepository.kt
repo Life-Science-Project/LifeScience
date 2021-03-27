@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface SectionRepository : JpaRepository<Section, Long> {
-    fun findAllByParentId(id: Long) : List<Section>
+    fun findAllByParentId(id: Long): List<Section>
 }

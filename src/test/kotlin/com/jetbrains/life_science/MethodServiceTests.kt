@@ -36,7 +36,7 @@ class MethodServiceTests @Autowired constructor(val methodService: MethodService
 
     @Test
     fun methodAdd() {
-        //Given
+        // Given
         Mockito
             .`when`(articleService.addArticle(any(ArticleInfo::class.java)))
             .thenReturn(Article(666))
@@ -45,17 +45,17 @@ class MethodServiceTests @Autowired constructor(val methodService: MethodService
             .`when`(sectionService.getSection(anyLong()))
             .thenReturn(Section(666, "Test session"))
 
-        //When
+        // When
         val methodInfo = MethodDTOToInfoAdapter(MethodDTO("Method #21321", 1))
         methodService.addMethod(methodInfo)
 
-        //Then
-        //No exceptions =)
+        // Then
+        // No exceptions =)
     }
 
     @Test
     fun methodGet() {
-        //Given
+        // Given
         val section = Section(16, "Section you got")
         val article = Article(45)
         val method = Method(12, "Method you got", section, article)
@@ -72,16 +72,15 @@ class MethodServiceTests @Autowired constructor(val methodService: MethodService
             .`when`(methodRepository.getOne(12))
             .thenReturn(method)
 
-        //Then
+        // Then
         assertThatThrownBy { methodService.getMethod(666) }.isInstanceOf(MethodNotFoundException::class.java)
         assertThat(methodService.getMethod(12)).isEqualTo(method)
-
     }
 
     @Test
     fun methodDelete() {
 
-        //Given
+        // Given
         val section = Section(1, "first section")
         val article = Article(1)
         val method = Method(1, "First method", section, article)
@@ -98,7 +97,7 @@ class MethodServiceTests @Autowired constructor(val methodService: MethodService
             .`when`(methodRepository.getOne(1))
             .thenReturn(method)
 
-        //Then
+        // Then
         assertThatThrownBy { methodService.deleteMethod(666) }.isInstanceOf(MethodNotFoundException::class.java)
         methodService.deleteMethod(1)
     }

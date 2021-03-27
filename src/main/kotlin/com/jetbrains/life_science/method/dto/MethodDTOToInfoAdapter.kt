@@ -15,5 +15,4 @@ class MethodDTOToInfoAdapter(private val methodDTO: MethodDTO) : MethodInfo {
     override fun getSectionId(): Long {
         return methodDTO.sectionID
     }
-
 }

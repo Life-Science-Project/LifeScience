@@ -10,7 +10,7 @@ import com.jetbrains.life_science.section.service.SectionService
 import org.springframework.stereotype.Service
 
 @Service
-class MethodServiceImpl (
+class MethodServiceImpl(
     val methodRepository: MethodRepository,
     val sectionService: SectionService,
     val articleService: ArticleServiceImpl,

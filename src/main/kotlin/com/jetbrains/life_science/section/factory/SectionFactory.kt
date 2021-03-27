@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class SectionFactory {
-    fun createSection(sectionInfo: SectionInfo, parent: Section?) : Section {
+    fun createSection(sectionInfo: SectionInfo, parent: Section?): Section {
         return Section(sectionInfo.getID(), sectionInfo.getName(), parent)
     }
 }
