@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank
 class Method (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long?,
 
     @NotBlank
     @Column(nullable = false)
@@ -18,6 +18,6 @@ class Method (
     @ManyToOne
     var section: Section,
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
     var article: Article
 )
