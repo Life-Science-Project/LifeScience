@@ -10,4 +10,6 @@ interface SectionService {
     fun deleteSection(id: Long)
 
     fun getSection(id: Long): Section
+
+    fun getChildren(id: Long): List<Section>
 }

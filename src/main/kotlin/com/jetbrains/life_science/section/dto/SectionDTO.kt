@@ -7,5 +7,4 @@ class SectionDTO (
     val name: String,
 
     val parentID: Long?,
-
 )

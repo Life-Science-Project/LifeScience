@@ -18,16 +18,23 @@ class SectionServiceImpl @Autowired constructor(
     }
 
     override fun deleteSection(id: Long) {
-        if (!sectionRepository.existsById(id)) {
-            throw SectionNotFoundException()
-        }
+        existByID(id)
         sectionRepository.deleteById(id)
     }
 
     override fun getSection(id: Long): Section {
-        if (!sectionRepository.existsById(id)) {
-            throw SectionNotFoundException()
-        }
+        existByID(id)
         return sectionRepository.getOne(id)
+    }
+
+    override fun getChildren(id: Long): List<Section> {
+        existByID(id)
+        return sectionRepository.findAllByParentId(id)
+    }
+
+    private fun existByID(id: Long) {
+        if (!sectionRepository.existsById(id)) {
+            throw SectionNotFoundException("Check if the id is correct: $id")
+        }
     }
 }
