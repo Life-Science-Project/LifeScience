@@ -9,5 +9,4 @@ class LifeScienceApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }
