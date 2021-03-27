@@ -1,3 +1,3 @@
 package com.jetbrains.life_science.exceptions
 
-class ArticleNotFoundException : RuntimeException()
+class ArticleNotFoundException(message: String) : AbstractNotFoundException(message)

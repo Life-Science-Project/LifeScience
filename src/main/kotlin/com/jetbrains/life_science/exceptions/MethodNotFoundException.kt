@@ -1,3 +1,3 @@
 package com.jetbrains.life_science.exceptions
 
-class MethodNotFoundException : RuntimeException()
+class MethodNotFoundException(message: String) : AbstractNotFoundException(message)

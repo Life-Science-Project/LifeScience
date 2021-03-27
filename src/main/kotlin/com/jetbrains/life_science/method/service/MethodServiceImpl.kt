@@ -26,16 +26,18 @@ class MethodServiceImpl @Autowired constructor(
     }
 
     override fun deleteMethod(id: Long) {
-        if (!methodRepository.existsById(id)) {
-            throw MethodNotFoundException()
-        }
+        existByID(id)
         methodRepository.deleteById(id)
     }
 
     override fun getMethod(id: Long): Method {
-        if (!methodRepository.existsById(id)) {
-            throw MethodNotFoundException()
-        }
+        existByID(id)
         return methodRepository.getOne(id)
+    }
+
+    private fun existByID(id: Long) {
+        if (!methodRepository.existsById(id)) {
+            throw MethodNotFoundException("Check if the id is correct: $id")
+        }
     }
 }

@@ -16,16 +16,18 @@ class ArticleServiceImpl @Autowired constructor(
     }
 
     override fun deleteArticle(id: Long) {
-        if (!articleRepository.existsById(id)) {
-            throw ArticleNotFoundException()
-        }
+        existByID(id)
         articleRepository.deleteById(id)
     }
 
     override fun getArticle(id: Long): Article {
-        if (!articleRepository.existsById(id)) {
-            throw ArticleNotFoundException()
-        }
+        existByID(id)
         return articleRepository.findById(id).orElse(Article(0))
+    }
+
+    private fun existByID(id: Long) {
+        if (!articleRepository.existsById(id)) {
+            throw ArticleNotFoundException("Check if the id is correct: $id")
+        }
     }
 }
