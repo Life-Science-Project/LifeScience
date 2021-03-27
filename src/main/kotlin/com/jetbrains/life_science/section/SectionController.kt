@@ -11,9 +11,7 @@ class SectionController(
 ) {
 
     @GetMapping("/test")
-    fun getTestData(){
+    fun getTestData() {
         repository.save(Section(1, "sasha2"))
     }
-
-
 }
