@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 class MethodFactory {
     fun createMethod(methodInfo: MethodInfo, section: Section): Method {
-        //TODO: Добавить создание статьи через сервис по шаблону по умолчанию
+        // TODO: Добавить создание статьи через сервис по шаблону по умолчанию
         return Method(methodInfo.getId(), methodInfo.getName(), section, Article(0))
     }
 }
