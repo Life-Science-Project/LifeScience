@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank
 class Method(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long?,
+    val id: Long,
 
     @NotBlank
     @Column(nullable = false)
