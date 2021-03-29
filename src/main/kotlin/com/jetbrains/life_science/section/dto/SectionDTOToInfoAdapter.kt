@@ -4,8 +4,8 @@ import com.jetbrains.life_science.section.entity.SectionInfo
 
 class SectionDTOToInfoAdapter(private val sectionDTO: SectionDTO) : SectionInfo {
 
-    override fun getID(): Long? {
-        return null
+    override fun getID(): Long {
+        return 0
     }
 
     override fun getName(): String {
