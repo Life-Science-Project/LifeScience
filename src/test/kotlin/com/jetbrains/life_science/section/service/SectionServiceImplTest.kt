@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.section.service
 
-import com.jetbrains.life_science.exceptions.SectionNotFoundException
+import com.jetbrains.life_science.exceptions.SectionNotFoundException // ktlint-disable
 import com.jetbrains.life_science.section.entity.SectionInfo
 import com.jetbrains.life_science.section.repository.SectionRepository
 import com.nhaarman.mockitokotlin2.mock
@@ -25,7 +25,6 @@ internal class SectionServiceImplTest {
     @Autowired
     lateinit var sectionRepository: SectionRepository
 
-
     @BeforeEach
     @Sql("/scripts/test_trunc_data.sql")
     internal fun setUp() {
@@ -47,7 +46,6 @@ internal class SectionServiceImplTest {
         assertEquals("sample section", savedSection.name)
         assertNull(savedSection.parent)
     }
-
 
     @Test
     @Sql("/scripts/test_common_data.sql")
@@ -81,7 +79,6 @@ internal class SectionServiceImplTest {
     internal fun `delete a non-existent section`() {
         assertThrows(SectionNotFoundException::class.java) { sectionService.deleteSection(-1L) }
     }
-
 
     @Test
     @Sql("/scripts/test_common_data.sql")
@@ -119,6 +116,4 @@ internal class SectionServiceImplTest {
     internal fun `get children of a non-existent section`() {
         assertThrows(SectionNotFoundException::class.java) { sectionService.getChildren(-1L) }
     }
-
-
 }

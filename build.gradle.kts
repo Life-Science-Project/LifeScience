@@ -60,6 +60,9 @@ ktlint {
     reporters {
         reporter(ReporterType.CHECKSTYLE)
     }
+    filter {
+        exclude("**/test/**")
+    }
 }
 
 tasks.withType<Test> {
