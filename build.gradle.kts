@@ -53,6 +53,9 @@ noArg {
 }
 
 ktlint {
+    disabledRules.add("import-ordering")
+    disabledRules.add("no-wildcard-imports")
+    verbose.set(true)
     outputToConsole.set(true)
     coloredOutput.set(true)
     reporters {
