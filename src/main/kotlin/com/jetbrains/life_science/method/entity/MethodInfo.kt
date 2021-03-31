@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.method.entity
 
 interface MethodInfo {
-    fun getId(): Long?
+    fun getId(): Long
 
     fun getName(): String
 

@@ -19,7 +19,7 @@ class SectionController(
     val sectionService: SectionServiceImpl,
     val sectionViewMapper: SectionViewMapper
 ) {
-    @PostMapping("")
+    @PostMapping
     fun addSection(@RequestBody @Valid sectionDTO: SectionDTO) {
         sectionService.addSection(SectionDTOToInfoAdapter(sectionDTO))
     }

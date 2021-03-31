@@ -12,7 +12,7 @@ data class Section(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?,
+    var id: Long,
 
     @NotBlank
     var name: String,
