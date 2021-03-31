@@ -1,3 +1,5 @@
 package com.jetbrains.life_science.article.view
 
-class ArticleView
+class ArticleView(
+    val text: String
+)

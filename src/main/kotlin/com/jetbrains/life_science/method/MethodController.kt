@@ -16,7 +16,10 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("api/method")
-class MethodController(val methodService: MethodService, val methodViewMapper: MethodViewMapper) {
+class MethodController(
+    val methodService: MethodService,
+    val methodViewMapper: MethodViewMapper,
+) {
 
     @PostMapping
     fun addMethod(@RequestBody @Valid methodDTO: MethodDTO) {

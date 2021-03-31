@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component
 @Component
 class ArticleViewMapper {
     fun createView(article: Article): ArticleView {
-        return ArticleView()
+        return ArticleView(article.text)
     }
 }

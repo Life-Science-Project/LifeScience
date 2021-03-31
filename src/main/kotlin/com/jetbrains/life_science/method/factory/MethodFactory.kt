@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component
 @Component
 class MethodFactory {
     fun createMethod(methodInfo: MethodInfo, section: Section): Method {
-        return Method(methodInfo.getId(), methodInfo.getName(), section, Article(null))
+        return Method(methodInfo.getId(), methodInfo.getName(), section, Article(null, "test"))
     }
 }

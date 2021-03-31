@@ -9,4 +9,8 @@ interface ArticleService {
     fun deleteArticle(id: Long)
 
     fun getArticle(id: Long): Article
+
+    fun searchArticle(query: String): List<Article>
+
+    fun editArticle(id: Long, text: String): Article
 }
