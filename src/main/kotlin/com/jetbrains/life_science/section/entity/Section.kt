@@ -19,4 +19,5 @@ class Section(
 
     @ManyToOne
     var parent: Section? = null,
+
 )

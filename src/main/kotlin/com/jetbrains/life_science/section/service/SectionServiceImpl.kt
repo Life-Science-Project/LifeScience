@@ -13,9 +13,11 @@ class SectionServiceImpl(
     val sectionFactory: SectionFactory
 ) : SectionService {
 
-    override fun addSection(sectionInfo: SectionInfo) {
-        val parent = sectionInfo.getParentID()?.let { sectionRepository.getOne(it) }
-        sectionRepository.save(sectionFactory.createSection(sectionInfo, parent))
+    override fun addSection(sectionInfo: SectionInfo): Section {
+        val parent = sectionInfo.getParentID()?.let {
+            sectionRepository.getOne(it)
+        }
+        return sectionRepository.save(sectionFactory.createSection(sectionInfo, parent))
     }
 
     override fun deleteSection(id: Long) {

@@ -5,7 +5,7 @@ import com.jetbrains.life_science.section.entity.SectionInfo
 
 interface SectionService {
 
-    fun addSection(sectionInfo: SectionInfo)
+    fun addSection(sectionInfo: SectionInfo): Section
 
     fun deleteSection(id: Long)
 
