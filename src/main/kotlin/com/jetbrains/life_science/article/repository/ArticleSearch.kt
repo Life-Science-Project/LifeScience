@@ -17,7 +17,7 @@ class ArticleSearch(@PersistenceContext val entityManager: EntityManager) {
         val result = session.search(Article::class.java)
             .where { f ->
                 f.match()
-                    .field("text")
+                    .fields("text", "method.name")
                     .matching(text)
             }
             .fetch(10)
