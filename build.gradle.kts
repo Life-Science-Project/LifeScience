@@ -24,7 +24,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.h2database:h2:1.4.200")
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.6")
@@ -60,6 +62,9 @@ ktlint {
     coloredOutput.set(true)
     reporters {
         reporter(ReporterType.CHECKSTYLE)
+    }
+    filter {
+        exclude("**/test/**")
     }
 }
 
