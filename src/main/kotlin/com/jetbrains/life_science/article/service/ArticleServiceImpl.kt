@@ -7,6 +7,7 @@ import com.jetbrains.life_science.article.repository.ArticleRepository
 import com.jetbrains.life_science.article.repository.ArticleSearch
 import com.jetbrains.life_science.exceptions.ArticleNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ArticleServiceImpl(
@@ -32,11 +33,12 @@ class ArticleServiceImpl(
         return articleSearch.search(query)
     }
 
+    @Transactional
     override fun editArticle(id: Long, text: String): Article {
         existByID(id)
         val article = articleRepository.getOne(id)
         article.text = text
-        return articleRepository.save(article)
+        return article
     }
 
     private fun existByID(id: Long) {
