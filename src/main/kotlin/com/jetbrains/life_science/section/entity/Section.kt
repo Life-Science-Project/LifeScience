@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne
 import javax.validation.constraints.NotBlank
 
 @Entity
-data class Section(
+class Section(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

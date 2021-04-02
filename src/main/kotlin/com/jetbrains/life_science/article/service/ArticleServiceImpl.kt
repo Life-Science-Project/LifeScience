@@ -4,13 +4,16 @@ import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.entity.ArticleInfo
 import com.jetbrains.life_science.article.factory.ArticleFactory
 import com.jetbrains.life_science.article.repository.ArticleRepository
+import com.jetbrains.life_science.article.repository.ArticleSearch
 import com.jetbrains.life_science.exceptions.ArticleNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ArticleServiceImpl(
     val articleRepository: ArticleRepository,
-    val articleFactory: ArticleFactory
+    val articleFactory: ArticleFactory,
+    val articleSearch: ArticleSearch
 ) : ArticleService {
     override fun addArticle(articleInfo: ArticleInfo): Article {
         return articleRepository.save(articleFactory.createArticle(articleInfo))
@@ -23,7 +26,19 @@ class ArticleServiceImpl(
 
     override fun getArticle(id: Long): Article {
         existByID(id)
-        return articleRepository.findById(id).orElse(Article(0))
+        return articleRepository.findById(id).get()
+    }
+
+    override fun searchArticle(query: String): List<Article> {
+        return articleSearch.search(query)
+    }
+
+    @Transactional
+    override fun editArticle(id: Long, text: String): Article {
+        existByID(id)
+        val article = articleRepository.getOne(id)
+        article.text = text
+        return article
     }
 
     private fun existByID(id: Long) {
