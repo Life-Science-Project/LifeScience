@@ -4,9 +4,9 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Positive
 
 class MethodDTO(
-    @NotBlank
+    @field:NotBlank
     val name: String,
 
-    @Positive
+    @field:Positive
     val sectionID: Long,
 )
