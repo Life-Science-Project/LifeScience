@@ -1,16 +1,17 @@
 package com.jetbrains.life_science.article.service
 
+import com.jetbrains.life_science.article.dto.ArticleCreationDTOToInfoAdapter
 import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.entity.ArticleInfo
 
 interface ArticleService {
-    fun addArticle(articleInfo: ArticleInfo): Article
 
-    fun deleteArticle(id: Long)
+    fun createEmpty()
 
-    fun getArticle(id: Long): Article
+    fun getAll(): List<Article>
 
-    fun searchArticle(query: String): List<Article>
+    fun searchBySubString(ss: String): List<Article>
 
-    fun editArticle(id: Long, text: String): Article
+    fun create(info: ArticleInfo)
+
 }

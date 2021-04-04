@@ -4,46 +4,32 @@ import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.entity.ArticleInfo
 import com.jetbrains.life_science.article.factory.ArticleFactory
 import com.jetbrains.life_science.article.repository.ArticleRepository
-import com.jetbrains.life_science.article.repository.ArticleSearch
-import com.jetbrains.life_science.exceptions.ArticleNotFoundException
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ArticleServiceImpl(
-    val articleRepository: ArticleRepository,
-    val articleFactory: ArticleFactory,
-    val articleSearch: ArticleSearch
+    val repository: ArticleRepository,
+    val factory: ArticleFactory
 ) : ArticleService {
-    override fun addArticle(articleInfo: ArticleInfo): Article {
-        return articleRepository.save(articleFactory.createArticle(articleInfo))
+
+    override fun createEmpty() {
+        val links = mutableListOf("http//localhost:80801")
+        val tags = mutableListOf("kek", "lol")
+        val article = Article(0, "1234567890 0987654321", tags, links)
+        repository.save(article)
     }
 
-    override fun deleteArticle(id: Long) {
-        existByID(id)
-        articleRepository.deleteById(id)
+    override fun create(info: ArticleInfo) {
+        val article = factory.create(info)
+        repository.save(article)
     }
 
-    override fun getArticle(id: Long): Article {
-        existByID(id)
-        return articleRepository.findById(id).get()
+    override fun searchBySubString(ss: String): List<Article> {
+        return repository.findAll().toList()
     }
 
-    override fun searchArticle(query: String): List<Article> {
-        return articleSearch.search(query)
+    override fun getAll(): List<Article> {
+        return repository.findAll().toList()
     }
 
-    @Transactional
-    override fun editArticle(id: Long, text: String): Article {
-        existByID(id)
-        val article = articleRepository.getOne(id)
-        article.text = text
-        return article
-    }
-
-    private fun existByID(id: Long) {
-        if (!articleRepository.existsById(id)) {
-            throw ArticleNotFoundException("Check if the id is correct: $id")
-        }
-    }
 }

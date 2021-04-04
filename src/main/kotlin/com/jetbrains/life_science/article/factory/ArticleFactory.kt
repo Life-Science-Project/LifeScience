@@ -6,7 +6,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class ArticleFactory {
-    fun createArticle(articleInfo: ArticleInfo): Article {
-        return Article(articleInfo.getId(), articleInfo.getText())
+
+    fun create(info: ArticleInfo): Article {
+        val article = Article(info.containerId, info.text, info.references, info.tags)
+        article.id = info.id
+        return article
     }
+
+
 }

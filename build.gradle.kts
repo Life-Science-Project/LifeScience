@@ -1,6 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions.useIR = true
+
 plugins {
     id("org.springframework.boot") version "2.4.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -20,8 +23,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.hibernate.search:hibernate-search-mapper-orm:6.0.2.Final")
-    implementation("org.hibernate.search:hibernate-search-backend-elasticsearch:6.0.2.Final")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -33,8 +34,14 @@ dependencies {
     testImplementation("com.h2database:h2:1.4.200")
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.6")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.6")
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation(group="org.springframework.data", name = "spring-data-elasticsearch", version = "4.1.7")
+
     implementation(group = "org.postgresql", name = "postgresql")
+
+    implementation("org.hibernate.search:hibernate-search-mapper-orm:6.0.2.Final")
+    implementation("org.hibernate.search:hibernate-search-backend-elasticsearch:6.0.2.Final")
 }
 
 tasks.withType<KotlinCompile> {

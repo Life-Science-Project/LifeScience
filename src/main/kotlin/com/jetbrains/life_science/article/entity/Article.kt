@@ -1,28 +1,27 @@
 package com.jetbrains.life_science.article.entity
 
-import com.jetbrains.life_science.method.entity.Method
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.OneToOne
+import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.TypeAlias
+import org.springframework.data.elasticsearch.annotations.Document
+import org.springframework.data.elasticsearch.annotations.Field
+import org.springframework.data.elasticsearch.annotations.FieldType
 
-@Entity
-@Indexed
+@TypeAlias("Article")
+@Document(indexName = "article", createIndex = true)
 class Article(
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
+    val containerId: Long,
 
-    @FullTextField
+    @Field(type = FieldType.Text)
     var text: String,
 
+    @Field
+    var tags: MutableList<String>,
+
+    @Field
+    var references: MutableList<String>
+
 ) {
-    @OneToOne
-    @IndexedEmbedded
-    lateinit var method: Method
+    @Id
+    var id: String? = null
 }

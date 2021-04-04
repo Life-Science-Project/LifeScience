@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.method
+package com.jetbrains.life_science.method.controller
 
 import com.jetbrains.life_science.method.dto.MethodDTO
 import com.jetbrains.life_science.method.dto.MethodDTOToInfoAdapter
