@@ -6,7 +6,7 @@ class ArticleCreationDTOToInfoAdapter(
     val dto: ArticleCreationDTO
 ) : ArticleInfo {
 
-    override val id: String?
+    override val id: Long?
         get() = null
 
     override val containerId: Long

@@ -13,8 +13,8 @@ class MethodFactory(
 
 
     fun createMethod(info: MethodInfo, section: Section): Method {
-        val method = Method(info.getId(), info.getName(), section)
-        val generalInfoContainer = containerFactory.create(info.getName(), DEFAULT_DESCRIPTION, method)
+        val method = Method(info.getId(), "Method: ${info.getName()}", section)
+        val generalInfoContainer = containerFactory.create("Container: ${info.getName()}", DEFAULT_DESCRIPTION, method)
         method.generalInfo = generalInfoContainer
         return method
     }

@@ -16,7 +16,7 @@ class Container(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long,
 
-    @FullTextField
+    @FullTextField(name = "text")
     @Column(nullable = false)
     var name: String,
 

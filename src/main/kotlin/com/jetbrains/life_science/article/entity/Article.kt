@@ -19,9 +19,13 @@ class Article(
     var tags: MutableList<String>,
 
     @Field
-    var references: MutableList<String>
+    var references: MutableList<String>,
 
-) {
+    @Field(name = "_entity_type")
+    val type: String = "Article",
+
     @Id
-    var id: String? = null
-}
+    @Field(name = "id")
+    val id: Long? = null
+
+)

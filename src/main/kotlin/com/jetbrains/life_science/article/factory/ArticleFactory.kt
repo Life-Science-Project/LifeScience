@@ -9,7 +9,6 @@ class ArticleFactory {
 
     fun create(info: ArticleInfo): Article {
         val article = Article(info.containerId, info.text, info.references, info.tags)
-        article.id = info.id
         return article
     }
 

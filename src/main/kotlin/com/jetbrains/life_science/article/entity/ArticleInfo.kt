@@ -2,7 +2,7 @@ package com.jetbrains.life_science.article.entity
 
 interface ArticleInfo {
 
-    val id: String?
+    val id: Long?
 
     val containerId: Long
 

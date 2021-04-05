@@ -2,6 +2,7 @@ package com.jetbrains.life_science.method.entity
 
 import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.section.entity.Section
+import org.hibernate.annotations.Cascade
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed
 import org.springframework.data.annotation.TypeAlias
@@ -22,7 +23,7 @@ class Method(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @FullTextField
+    @FullTextField(name = "text")
     @NotBlank
     var name: String,
 
@@ -31,6 +32,7 @@ class Method(
 ) {
 
     @OneToOne
+    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     lateinit var generalInfo: Container
 
 }

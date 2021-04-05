@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.method.service
 
+import com.jetbrains.life_science.article.entity.ArticleInfoImpl
 import com.jetbrains.life_science.article.service.ArticleService
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
 import com.jetbrains.life_science.method.entity.Method
@@ -23,6 +24,8 @@ class MethodServiceImpl(
         val section = sectionService.getSection(methodInfo.getSectionId())
         val method = methodFactory.createMethod(methodInfo, section)
         methodRepository.save(method)
+        val containerId = method.generalInfo.id
+        articleService.create(ArticleInfoImpl(containerId))
     }
 
     override fun deleteMethod(id: Long) {
