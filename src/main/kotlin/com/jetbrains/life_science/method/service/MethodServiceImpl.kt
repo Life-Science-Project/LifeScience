@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.method.service
 
-import com.jetbrains.life_science.article.service.ArticleServiceImpl
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
 import com.jetbrains.life_science.method.entity.Method
 import com.jetbrains.life_science.method.entity.MethodInfo
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service
 class MethodServiceImpl(
     val methodRepository: MethodRepository,
     val sectionService: SectionService,
-    val articleService: ArticleServiceImpl,
     val methodFactory: MethodFactory
 ) : MethodService {
 

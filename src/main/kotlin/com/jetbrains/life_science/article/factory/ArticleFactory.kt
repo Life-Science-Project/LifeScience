@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component
 @Component
 class ArticleFactory {
     fun createArticle(articleInfo: ArticleInfo): Article {
-        return Article(articleInfo.getId())
+        return Article(articleInfo.getId(), articleInfo.getText())
     }
 }

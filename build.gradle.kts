@@ -20,6 +20,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.hibernate.search:hibernate-search-mapper-orm:6.0.2.Final")
+    implementation("org.hibernate.search:hibernate-search-backend-elasticsearch:6.0.2.Final")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

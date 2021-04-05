@@ -2,8 +2,8 @@ package com.jetbrains.life_science.method.entity
 
 import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.section.entity.Section
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField
 import javax.persistence.CascadeType
-import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -19,12 +19,12 @@ class Method(
     val id: Long,
 
     @NotBlank
-    @Column(nullable = false)
+    @FullTextField
     var name: String,
 
     @ManyToOne
     var section: Section,
 
-    @OneToOne(cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
+    @OneToOne(cascade = [CascadeType.REMOVE, CascadeType.PERSIST], mappedBy = "method")
     var article: Article
 )
