@@ -13,17 +13,17 @@ import java.time.LocalDateTime
 class ControllerAdvisor : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(SectionNotFoundException::class)
-    fun handleSectionNotFound(ex: SectionNotFoundException?, request: WebRequest?): ResponseEntity<Any> {
+    fun handleSectionNotFound(ex: SectionNotFoundException, request: WebRequest): ResponseEntity<Any> {
         return handleNotFound("Section")
     }
 
     @ExceptionHandler(MethodNotFoundException::class)
-    fun handleMethodNotFound(ex: SectionNotFoundException?, request: WebRequest?): ResponseEntity<Any> {
+    fun handleMethodNotFound(ex: MethodNotFoundException, request: WebRequest): ResponseEntity<Any> {
         return handleNotFound("Method")
     }
 
     @ExceptionHandler(ArticleNotFoundException::class)
-    fun handleArticleNotFound(ex: SectionNotFoundException?, request: WebRequest?): ResponseEntity<Any> {
+    fun handleArticleNotFound(ex: ArticleNotFoundException, request: WebRequest): ResponseEntity<Any> {
         return handleNotFound("Article")
     }
 
