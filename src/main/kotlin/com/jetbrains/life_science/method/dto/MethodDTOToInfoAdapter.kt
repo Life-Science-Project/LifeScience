@@ -4,15 +4,13 @@ import com.jetbrains.life_science.method.entity.MethodInfo
 
 class MethodDTOToInfoAdapter(private val methodDTO: MethodDTO) : MethodInfo {
 
-    override fun getId(): Long {
-        return 0
-    }
+    override val id: Long
+        get() = 0
 
-    override fun getName(): String {
-        return methodDTO.name
-    }
+    override val name: String
+        get() = methodDTO.name
 
-    override fun getSectionId(): Long {
-        return methodDTO.sectionID
-    }
+    override val sectionId: Long
+        get() = methodDTO.sectionID
+
 }

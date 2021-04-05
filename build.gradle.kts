@@ -12,6 +12,7 @@ plugins {
     kotlin("plugin.spring") version "1.4.31"
     kotlin("plugin.allopen") version "1.4.31"
     kotlin("plugin.noarg") version "1.4.31"
+    kotlin("plugin.serialization") version "1.4.31"
 }
 
 group = "com.jetbrains"
@@ -27,6 +28,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
+
+
     implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
@@ -36,7 +41,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.5.6")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation(group="org.springframework.data", name = "spring-data-elasticsearch", version = "4.1.7")
+    implementation(group = "org.springframework.data", name = "spring-data-elasticsearch", version = "4.1.7")
 
     implementation(group = "org.postgresql", name = "postgresql")
 

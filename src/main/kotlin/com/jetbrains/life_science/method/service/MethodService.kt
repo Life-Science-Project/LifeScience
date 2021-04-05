@@ -5,7 +5,7 @@ import com.jetbrains.life_science.method.entity.MethodInfo
 
 interface MethodService {
 
-    fun addMethod(methodInfo: MethodInfo)
+    fun create(methodInfo: MethodInfo): Method
 
     fun deleteMethod(id: Long)
 

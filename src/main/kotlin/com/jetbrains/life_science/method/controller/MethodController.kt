@@ -23,7 +23,7 @@ class MethodController(
 
     @PostMapping
     fun addMethod(@RequestBody @Valid methodDTO: MethodDTO) {
-        methodService.addMethod(MethodDTOToInfoAdapter(methodDTO))
+        methodService.create(MethodDTOToInfoAdapter(methodDTO))
     }
 
     @GetMapping("/{id}")

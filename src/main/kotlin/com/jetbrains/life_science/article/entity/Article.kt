@@ -25,7 +25,6 @@ class Article(
     val type: String = "Article",
 
     @Id
-    @Field(name = "id")
-    val id: Long? = null
+    val id: String? = null
 
 )

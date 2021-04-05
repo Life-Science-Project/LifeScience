@@ -3,6 +3,7 @@ package com.jetbrains.life_science.section.service
 import com.jetbrains.life_science.exceptions.SectionNotFoundException // ktlint-disable
 import com.jetbrains.life_science.section.entity.SectionInfo
 import com.jetbrains.life_science.section.repository.SectionRepository
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -36,8 +37,8 @@ internal class SectionServiceImplTest {
     @Transactional
     internal fun `add section without parent`() {
         val mock = mock<SectionInfo> {
-            on { getName() }.then { "sample section" }
-            on { getParentID() }.then { null }
+            on { getName() } doReturn "sample section"
+            on { getParentID() } doReturn null
         }
 
         val section = sectionService.addSection(mock)
@@ -52,8 +53,8 @@ internal class SectionServiceImplTest {
     @Transactional
     internal fun `add section with parent`() {
         val mock = mock<SectionInfo> {
-            on { getName() }.then { "sample section" }
-            on { getParentID() }.then { 1L }
+            on { getName() } doReturn "sample section"
+            on { getParentID() } doReturn 1L
         }
 
         val section = sectionService.addSection(mock)
@@ -69,8 +70,8 @@ internal class SectionServiceImplTest {
     @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `delete a section`() {
-        sectionService.deleteSection(2)
-        assertFalse(sectionRepository.existsById(2))
+        sectionService.deleteSection(3)
+        assertFalse(sectionRepository.existsById(3))
     }
 
     @Test

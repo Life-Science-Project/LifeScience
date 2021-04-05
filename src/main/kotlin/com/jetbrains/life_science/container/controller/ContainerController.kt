@@ -4,9 +4,7 @@ import com.jetbrains.life_science.container.dto.ContainerDTO
 import com.jetbrains.life_science.container.dto.ContainerDTOToInfoAdapter
 import com.jetbrains.life_science.container.service.ContainerService
 import io.swagger.v3.oas.annotations.parameters.RequestBody
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/container")
@@ -19,6 +17,9 @@ class ContainerController(
         service.create(ContainerDTOToInfoAdapter(dto))
     }
 
-
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long) {
+        service.delete(id)
+    }
 
 }

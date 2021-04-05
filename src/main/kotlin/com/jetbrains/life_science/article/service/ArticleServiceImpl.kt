@@ -4,32 +4,50 @@ import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.entity.ArticleInfo
 import com.jetbrains.life_science.article.factory.ArticleFactory
 import com.jetbrains.life_science.article.repository.ArticleRepository
+import com.jetbrains.life_science.container.service.ContainerService
+import com.jetbrains.life_science.exceptions.ArticleNotFoundException
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class ArticleServiceImpl(
     val repository: ArticleRepository,
-    val factory: ArticleFactory
+    val factory: ArticleFactory,
 ) : ArticleService {
 
-    override fun createEmpty() {
-        val links = mutableListOf("http//localhost:80801")
-        val tags = mutableListOf("kek", "lol")
-        val article = Article(0, "1234567890 0987654321", tags, links)
-        repository.save(article)
+    @Autowired
+    lateinit var containerService: ContainerService
+
+    override fun deleteByContainerId(containerId: Long) {
+        repository.deleteAllByContainerId(containerId)
+    }
+
+    override fun findAllByContainerId(containerId: Long): List<Article> {
+        return repository.findAllByContainerId(containerId)
     }
 
     override fun create(info: ArticleInfo) {
+        containerService.checkExistsById(info.containerId)
         val article = factory.create(info)
         repository.save(article)
     }
 
-    override fun searchBySubString(ss: String): List<Article> {
-        return repository.findAll().toList()
+
+    override fun updateText(id: String, text: String) {
+        checkArticleExists(id)
+        repository.updateText(id, text)
     }
 
-    override fun getAll(): List<Article> {
-        return repository.findAll().toList()
+
+    override fun delete(id: String) {
+        checkArticleExists(id)
+        repository.deleteById(id)
     }
 
+
+    private fun checkArticleExists(id: String) {
+        if (!repository.existsById(id)) {
+            throw ArticleNotFoundException("Article not found by id: $id")
+        }
+    }
 }

@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component
 class ArticleFactory {
 
     fun create(info: ArticleInfo): Article {
-        val article = Article(info.containerId, info.text, info.references, info.tags)
-        return article
+        return Article(info.containerId, info.text, info.tags, info.references)
     }
 
 

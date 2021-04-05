@@ -1,9 +1,9 @@
 package com.jetbrains.life_science.method.entity
 
 interface MethodInfo {
-    fun getId(): Long
+    val id: Long
 
-    fun getName(): String
+    val name: String
 
-    fun getSectionId(): Long
+    val sectionId: Long
 }
