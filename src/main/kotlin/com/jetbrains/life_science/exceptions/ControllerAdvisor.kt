@@ -1,40 +1,34 @@
 package com.jetbrains.life_science.exceptions
 
-import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import org.springframework.web.context.request.WebRequest
-import org.springframework.http.ResponseEntity
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
-import java.util.LinkedHashMap
-import java.time.LocalDateTime
+import org.springframework.web.bind.annotation.ResponseStatus
 
-@ControllerAdvice
+@RestControllerAdvice
 class ControllerAdvisor : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(SectionNotFoundException::class)
-    fun handleSectionNotFound(ex: SectionNotFoundException, request: WebRequest): ResponseEntity<Any> {
-        return handleNotFound("Section")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleSectionNotFound(ex: SectionNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Section")
     }
 
     @ExceptionHandler(MethodNotFoundException::class)
-    fun handleMethodNotFound(ex: MethodNotFoundException, request: WebRequest): ResponseEntity<Any> {
-        return handleNotFound("Method")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleMethodNotFound(ex: MethodNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Method")
     }
 
     @ExceptionHandler(ArticleNotFoundException::class)
-    fun handleArticleNotFound(ex: ArticleNotFoundException, request: WebRequest): ResponseEntity<Any> {
-        return handleNotFound("Article")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleArticleNotFound(ex: ArticleNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Article")
     }
 
-    private fun handleNotFound(entity: String): ResponseEntity<Any> {
-        return errorResponse(HttpStatus.NOT_FOUND, "$entity not found")
-    }
-
-    private fun errorResponse(responseStatus: HttpStatus, message: String): ResponseEntity<Any> {
-        val body: MutableMap<String, Any> = LinkedHashMap()
-        body["timestamp"] = LocalDateTime.now()
-        body["message"] = message
-        return ResponseEntity(body, responseStatus)
+    private fun notFoundResponse(entity: String): ApiErrorResponse {
+        return ApiErrorResponse("$entity not found")
     }
 }
