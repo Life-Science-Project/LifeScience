@@ -10,5 +10,4 @@ interface ArticleRepository : ElasticsearchRepository<Article, String>, ArticleR
     fun findAllByContainerId(containerId: Long): List<Article>
 
     fun deleteAllByContainerId(containerId: Long)
-
 }

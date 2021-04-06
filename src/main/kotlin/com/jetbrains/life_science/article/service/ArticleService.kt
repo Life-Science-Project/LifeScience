@@ -14,5 +14,4 @@ interface ArticleService {
     fun deleteByContainerId(containerId: Long)
 
     fun findAllByContainerId(containerId: Long): List<Article>
-
 }
