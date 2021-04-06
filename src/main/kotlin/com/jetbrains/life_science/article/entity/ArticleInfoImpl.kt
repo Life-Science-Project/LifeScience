@@ -15,5 +15,4 @@ class ArticleInfoImpl(
 
     override val tags: MutableList<String>
         get() = mutableListOf()
-
 }

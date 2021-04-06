@@ -9,5 +9,4 @@ class SearchDTOToInfoAdapter(val dto: SearchDTO) : SearchInfo {
     override val tags: List<String> by lazy { dto.tags }
 
     override val exclusionTypes: List<String> by lazy { dto.exclusionTypes }
-
 }

@@ -20,5 +20,4 @@ class ContainerController(
     fun delete(@PathVariable id: Long) {
         service.deleteById(id)
     }
-
 }

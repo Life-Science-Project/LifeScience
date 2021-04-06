@@ -17,5 +17,4 @@ class ContainerDTOToInfoAdapter(
 
     override val methodId: Long
         get() = dto.methodId
-
 }

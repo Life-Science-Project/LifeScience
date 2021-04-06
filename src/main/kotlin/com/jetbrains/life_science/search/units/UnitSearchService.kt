@@ -5,5 +5,4 @@ abstract class UnitSearchService(
 ) {
 
     abstract fun process(id: String, response: Map<String, Any>): SearchResult
-
 }

@@ -11,5 +11,4 @@ class ArticleSearchService : UnitSearchService("Article") {
         val text = response.getOrThrow("text") { "Text not found" }.toString()
         return ArticleSearchResult(id, text)
     }
-
 }

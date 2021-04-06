@@ -11,5 +11,4 @@ interface ArticleInfo {
     val references: MutableList<String>
 
     val tags: MutableList<String>
-
 }

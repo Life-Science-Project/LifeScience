@@ -32,5 +32,4 @@ class Method(
     @OneToOne
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     lateinit var generalInfo: Container
-
 }

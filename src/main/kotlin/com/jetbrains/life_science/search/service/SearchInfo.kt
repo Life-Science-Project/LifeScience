@@ -7,5 +7,4 @@ interface SearchInfo {
     val tags: List<String>
 
     val exclusionTypes: List<String>
-
 }
