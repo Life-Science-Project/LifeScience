@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.search.units.article
 
 import com.jetbrains.life_science.search.units.UnitSearchService
-import com.jetbrains.life_science.search.units.article.ArticleSearchResult
 import com.jetbrains.life_science.utils.getOrThrow
 import org.springframework.stereotype.Service
 

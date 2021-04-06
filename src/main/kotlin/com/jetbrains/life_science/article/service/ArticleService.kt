@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.article.service
 
-import com.jetbrains.life_science.article.dto.ArticleCreationDTOToInfoAdapter
 import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.entity.ArticleInfo
 

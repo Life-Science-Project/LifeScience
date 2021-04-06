@@ -28,7 +28,6 @@ class ContainerServiceImpl(
         return repository.save(container)
     }
 
-
     @Transactional
     override fun deleteById(id: Long) {
         checkExistsById(id)
@@ -44,7 +43,7 @@ class ContainerServiceImpl(
     }
 
     private fun checkNotGeneralInfo(container: Container) {
-        if  (container.method.generalInfo.id == container.id ) {
+        if (container.method.generalInfo.id == container.id) {
             throw GeneralInformationDeletionException("Attempt to delete general information of method: ${container.method.id}")
         }
     }
@@ -54,5 +53,4 @@ class ContainerServiceImpl(
             throw ContainerNotFoundException("Container not found by id: $id")
         }
     }
-
 }

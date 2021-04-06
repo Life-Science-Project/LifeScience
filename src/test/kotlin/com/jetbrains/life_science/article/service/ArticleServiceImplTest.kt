@@ -3,7 +3,6 @@ package com.jetbrains.life_science.article.service
 import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.entity.ArticleInfo
 import com.jetbrains.life_science.article.repository.ArticleRepository
-import com.jetbrains.life_science.container.service.ContainerService
 import com.jetbrains.life_science.exceptions.ArticleNotFoundException
 import com.jetbrains.life_science.exceptions.ContainerNotFoundException
 import com.nhaarman.mockitokotlin2.*
@@ -16,11 +15,9 @@ import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.jdbc.datasource.AbstractDataSource
 import org.mockito.ArgumentCaptor
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
-
 
 @SpringBootTest
 internal class ArticleServiceImplTest {
@@ -76,7 +73,6 @@ internal class ArticleServiceImplTest {
         assertThrows<ContainerNotFoundException> { articleService.create(articleInfo) }
     }
 
-
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
@@ -113,7 +109,6 @@ internal class ArticleServiceImplTest {
         assertThrows<ArticleNotFoundException> { articleService.updateText("123", "text") }
     }
 
-
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
@@ -134,5 +129,4 @@ internal class ArticleServiceImplTest {
         assertEquals("text 1", result[0].text)
         assertEquals("text 1", result[0].text)
     }
-
 }

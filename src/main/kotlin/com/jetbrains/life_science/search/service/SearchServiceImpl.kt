@@ -3,6 +3,7 @@ package com.jetbrains.life_science.search.service
 import com.jetbrains.life_science.search.units.SearchResult
 import com.jetbrains.life_science.search.units.UnitSearchService
 import com.jetbrains.life_science.utils.getLogger
+import com.jetbrains.life_science.utils.getOrThrow
 import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.client.RequestOptions
@@ -12,8 +13,6 @@ import org.elasticsearch.search.SearchHit
 import org.elasticsearch.search.builder.SearchSourceBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.lang.IllegalStateException
-import com.jetbrains.life_science.utils.getOrThrow
 
 @Service
 class SearchServiceImpl(

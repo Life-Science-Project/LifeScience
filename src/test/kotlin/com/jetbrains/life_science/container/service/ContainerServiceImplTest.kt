@@ -95,7 +95,6 @@ internal class ContainerServiceImplTest {
         containerService.checkExistsById(container.id)
     }
 
-
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
@@ -110,14 +109,12 @@ internal class ContainerServiceImplTest {
         assertTrue(methodRepository.existsById(1))
     }
 
-
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `general information container delete attempt test`() {
         assertThrows<GeneralInformationDeletionException> { containerService.deleteById(1) }
     }
-
 
     @Test
     @Sql("/scripts/test_common_data.sql")
@@ -143,5 +140,4 @@ internal class ContainerServiceImplTest {
         // Check that parent method was not deleted
         assertTrue(methodRepository.existsById(1))
     }
-
 }

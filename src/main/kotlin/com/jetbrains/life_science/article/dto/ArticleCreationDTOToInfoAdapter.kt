@@ -19,6 +19,5 @@ class ArticleCreationDTOToInfoAdapter(
         get() = dto.references
 
     override val tags: MutableList<String>
-        get() =  dto.tags
-
+        get() = dto.tags
 }

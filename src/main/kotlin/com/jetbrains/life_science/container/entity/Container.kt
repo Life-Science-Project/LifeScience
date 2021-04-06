@@ -8,7 +8,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed
 import org.springframework.data.annotation.TypeAlias
 import javax.persistence.*
 
-
 @Entity
 @TypeAlias("Container")
 @Indexed(index = "container")
@@ -25,7 +24,7 @@ class Container(
     var description: String?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="method_id", nullable=false)
+    @JoinColumn(name = "method_id", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     val method: Method
 )

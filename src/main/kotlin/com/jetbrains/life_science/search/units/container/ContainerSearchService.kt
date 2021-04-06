@@ -6,12 +6,10 @@ import org.springframework.stereotype.Service
 
 @Service
 
-class ContainerSearchService: UnitSearchService("Container") {
-
+class ContainerSearchService : UnitSearchService("Container") {
 
     override fun process(id: String, response: Map<String, Any>): ContainerSearchResult {
         val text = response.getOrThrow("text") { "Text not found" }.toString()
         return ContainerSearchResult(id, text)
     }
-
 }
