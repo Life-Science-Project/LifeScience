@@ -20,5 +20,4 @@ class SearchController(
         return service.search(SearchDTOToInfoAdapter(queryDTO))
     }
 
-
 }

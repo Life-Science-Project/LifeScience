@@ -9,11 +9,9 @@ import java.util.*
 @Configuration
 class MessagesConfig {
 
-
     @Bean
     fun messageSourceAccessor(messageSource: MessageSource): MessageSourceAccessor {
         return MessageSourceAccessor(messageSource, Locale.ENGLISH)
     }
-
 
 }

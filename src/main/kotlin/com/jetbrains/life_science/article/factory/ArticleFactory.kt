@@ -11,5 +11,4 @@ class ArticleFactory {
         return Article(info.containerId, info.text, info.tags, info.references)
     }
 
-
 }

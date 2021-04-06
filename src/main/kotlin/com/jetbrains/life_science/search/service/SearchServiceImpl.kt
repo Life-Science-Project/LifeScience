@@ -62,5 +62,4 @@ class SearchServiceImpl(
         return service.process(id, content)
     }
 
-
 }

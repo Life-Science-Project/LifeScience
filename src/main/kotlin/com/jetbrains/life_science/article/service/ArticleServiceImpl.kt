@@ -32,18 +32,15 @@ class ArticleServiceImpl(
         repository.save(article)
     }
 
-
     override fun updateText(id: String, text: String) {
         checkArticleExists(id)
         repository.updateText(id, text)
     }
 
-
     override fun delete(id: String) {
         checkArticleExists(id)
         repository.deleteById(id)
     }
-
 
     private fun checkArticleExists(id: String) {
         if (!repository.existsById(id)) {
