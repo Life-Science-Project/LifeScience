@@ -2,6 +2,7 @@ package com.jetbrains.life_science.container.entity
 
 import com.jetbrains.life_science.method.entity.Method
 import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed
 import org.springframework.data.annotation.TypeAlias
@@ -23,7 +24,8 @@ class Container(
 
     var description: String?,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="method_id", nullable=false)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     val method: Method
 )

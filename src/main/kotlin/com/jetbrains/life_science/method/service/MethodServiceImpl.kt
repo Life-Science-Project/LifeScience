@@ -32,10 +32,10 @@ class MethodServiceImpl(
     }
 
     @Transactional
-    override fun deleteMethod(id: Long) {
+    override fun deleteByID(id: Long) {
         checkExistsById(id)
         val method = getMethod(id)
-        method.containers.forEach { containerService.delete(it.id) }
+        method.containers.forEach { containerService.prepareDeletionById(it.id) }
         repository.delete(method)
     }
 

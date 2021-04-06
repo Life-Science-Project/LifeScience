@@ -3,17 +3,12 @@ package com.jetbrains.life_science.method.service
 import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.repository.ArticleRepository
 import com.jetbrains.life_science.container.repository.ContainerRepository
+import com.jetbrains.life_science.exceptions.MethodNotFoundException
 import com.jetbrains.life_science.exceptions.SectionNotFoundException
 import com.jetbrains.life_science.method.entity.MethodInfo
 import com.jetbrains.life_science.method.repository.MethodRepository
-import com.jetbrains.life_science.section.entity.Section
-import com.jetbrains.life_science.section.repository.SectionRepository
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
+import com.nhaarman.mockitokotlin2.*
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -38,13 +33,16 @@ internal class MethodServiceImplTest {
     @Autowired
     lateinit var methodRepository: MethodRepository
 
+    @Autowired
+    lateinit var containerRepository: ContainerRepository
+
     @MockBean
     lateinit var messageSourceAccessor: MessageSourceAccessor
 
     @BeforeEach
     @Sql("/scripts/test_trunc_data.sql")
     internal fun setUp() {
-
+        reset(articleRepository, messageSourceAccessor)
     }
 
     @Test
@@ -89,6 +87,26 @@ internal class MethodServiceImplTest {
         }
 
         assertThrows<SectionNotFoundException> { methodService.create(info) }
+    }
 
+    @Test
+    @Transactional
+    @Sql("/scripts/test_common_data.sql")
+    internal fun `delete method test`() {
+        assertTrue(methodRepository.existsById(2))
+        assertTrue(containerRepository.existsById(3))
+
+        methodService.deleteByID(2)
+
+        assertFalse(methodRepository.existsById(2))
+        assertFalse(containerRepository.existsById(3))
+        verify(articleRepository, times(1)).deleteAllByContainerId(3)
+    }
+
+    @Test
+    @Transactional
+    @Sql("/scripts/test_common_data.sql")
+    internal fun `delete method incorrect id test`() {
+        assertThrows<MethodNotFoundException> { methodService.deleteByID(-1) }
     }
 }

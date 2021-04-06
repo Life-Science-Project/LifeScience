@@ -34,6 +34,6 @@ class MethodController(
 
     @DeleteMapping("/{id}")
     fun deleteMethod(@PathVariable id: Long) {
-        methodService.deleteMethod(id)
+        methodService.deleteByID(id)
     }
 }

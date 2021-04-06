@@ -4,12 +4,11 @@ import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.entity.ArticleInfo
 import com.jetbrains.life_science.article.repository.ArticleRepository
 import com.jetbrains.life_science.container.service.ContainerService
+import com.jetbrains.life_science.exceptions.ArticleNotFoundException
 import com.jetbrains.life_science.exceptions.ContainerNotFoundException
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -35,7 +34,7 @@ internal class ArticleServiceImplTest {
     @BeforeEach
     @Sql("/scripts/test_trunc_data.sql")
     internal fun setUp() {
-
+        reset(articleRepository)
     }
 
     @Test
@@ -54,7 +53,7 @@ internal class ArticleServiceImplTest {
 
         val argument = ArgumentCaptor.forClass(Article::class.java)
 
-        verify(articleRepository, times(1)).save( argument.capture() )
+        verify(articleRepository, times(1)).save(argument.capture())
         assertEquals(1L, argument.value.containerId)
         assertEquals("sample text", argument.value.text)
         assertEquals(mutableListOf("r1", "r2"), argument.value.references)
@@ -62,16 +61,78 @@ internal class ArticleServiceImplTest {
     }
 
     @Test
+    @Transactional
+    @Sql("/scripts/test_common_data.sql")
     internal fun `article creation test with wrong container id`() {
+
         val articleInfo = mock<ArticleInfo> {
-            on { text } doReturn ("sample text")
-            on { id } doReturn (null)
-            on { containerId } doReturn (-1L)
-            on { references } doReturn (mutableListOf("r1", "r2"))
-            on { tags } doReturn (mutableListOf("tag 1", "tag 2"))
+            on { text } doReturn "sample text"
+            on { id } doReturn null
+            on { containerId } doReturn -1L
+            on { references } doReturn mutableListOf("ref1", "ref2")
+            on { tags } doReturn mutableListOf("tag 1", "tag 2")
         }
 
         assertThrows<ContainerNotFoundException> { articleService.create(articleInfo) }
+    }
+
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `article delete test`() {
+        Mockito.`when`(articleRepository.existsById("123")).thenReturn(true)
+
+        articleService.delete("123")
+
+        verify(articleRepository, times(1)).deleteById("123")
+    }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `article delete wrong id test`() {
+        assertThrows<ArticleNotFoundException> { articleService.delete("123") }
+    }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `article update text test`() {
+        Mockito.`when`(articleRepository.existsById("123")).thenReturn(true)
+
+        articleService.updateText("123", "text")
+
+        verify(articleRepository, times(1)).updateText("123", "text")
+    }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `article update text wrong id test`() {
+        assertThrows<ArticleNotFoundException> { articleService.updateText("123", "text") }
+    }
+
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `find by container id test`() {
+        val a1 = Article(1, "text 1", mutableListOf(), mutableListOf(), id = "1")
+        val a2 = Article(1, "text 2", mutableListOf(), mutableListOf(), id = "2")
+        val a3 = Article(1, "text 3", mutableListOf(), mutableListOf(), id = "3")
+
+        Mockito.`when`(articleRepository.findAllByContainerId(1)).thenReturn(listOf(a1, a2, a3))
+
+        val result = articleService.findAllByContainerId(1L)
+
+        assertTrue(result.size == 3)
+        assertEquals("1", result[0].id!!)
+        assertEquals("2", result[1].id!!)
+        assertEquals("3", result[2].id!!)
+        assertEquals("text 1", result[0].text)
+        assertEquals("text 1", result[0].text)
+        assertEquals("text 1", result[0].text)
     }
 
 }

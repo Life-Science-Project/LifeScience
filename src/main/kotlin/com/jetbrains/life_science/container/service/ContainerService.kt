@@ -7,9 +7,9 @@ interface ContainerService {
 
     fun create(info: ContainerInfo): Container
 
-    fun existsById(id: Long): Boolean
+    fun deleteById(id: Long)
 
-    fun delete(id: Long)
+    fun prepareDeletionById(containerId: Long)
 
     fun checkExistsById(id: Long)
 }

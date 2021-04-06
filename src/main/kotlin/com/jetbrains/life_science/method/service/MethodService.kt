@@ -7,7 +7,7 @@ interface MethodService {
 
     fun create(methodInfo: MethodInfo): Method
 
-    fun deleteMethod(id: Long)
+    fun deleteByID(id: Long)
 
     fun getMethod(id: Long): Method
 }

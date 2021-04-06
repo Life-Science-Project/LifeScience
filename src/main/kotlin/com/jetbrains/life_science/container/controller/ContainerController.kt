@@ -3,7 +3,6 @@ package com.jetbrains.life_science.container.controller
 import com.jetbrains.life_science.container.dto.ContainerDTO
 import com.jetbrains.life_science.container.dto.ContainerDTOToInfoAdapter
 import com.jetbrains.life_science.container.service.ContainerService
-import io.swagger.v3.oas.annotations.parameters.RequestBody
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -19,7 +18,7 @@ class ContainerController(
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) {
-        service.delete(id)
+        service.deleteById(id)
     }
 
 }

@@ -24,13 +24,13 @@ class Method(
     @ManyToOne
     var section: Section,
 
-    @OneToMany(mappedBy = "method")
+    @OneToMany(mappedBy = "method", cascade = [CascadeType.ALL])
     var containers: MutableList<Container> = mutableListOf()
 
 ) {
 
     @OneToOne
-    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     lateinit var generalInfo: Container
 
 }

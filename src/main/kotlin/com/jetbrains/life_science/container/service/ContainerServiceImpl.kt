@@ -6,6 +6,7 @@ import com.jetbrains.life_science.container.entity.ContainerInfo
 import com.jetbrains.life_science.container.factory.ContainerFactory
 import com.jetbrains.life_science.container.repository.ContainerRepository
 import com.jetbrains.life_science.exceptions.ContainerNotFoundException
+import com.jetbrains.life_science.exceptions.GeneralInformationDeletionException
 import com.jetbrains.life_science.method.service.MethodService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -27,11 +28,25 @@ class ContainerServiceImpl(
         return repository.save(container)
     }
 
+
     @Transactional
-    override fun delete(id: Long) {
+    override fun deleteById(id: Long) {
         checkExistsById(id)
+        val container = repository.findById(id).orElseThrow()
+        checkNotGeneralInfo(container)
         articleService.deleteByContainerId(id)
-        repository.deleteById(id)
+        repository.delete(container)
+    }
+
+    override fun prepareDeletionById(containerId: Long) {
+        checkExistsById(containerId)
+        articleService.deleteByContainerId(containerId)
+    }
+
+    private fun checkNotGeneralInfo(container: Container) {
+        if  (container.method.generalInfo.id == container.id ) {
+            throw GeneralInformationDeletionException("Attempt to delete general information of method: ${container.method.id}")
+        }
     }
 
     override fun checkExistsById(id: Long) {
@@ -40,7 +55,4 @@ class ContainerServiceImpl(
         }
     }
 
-    override fun existsById(id: Long): Boolean {
-        return repository.existsById(id)
-    }
 }
