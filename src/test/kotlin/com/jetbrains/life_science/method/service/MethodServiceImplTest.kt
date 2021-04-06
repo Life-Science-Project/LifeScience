@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.method.service
 
-import com.jetbrains.life_science.article.entity.Article
+import com.jetbrains.life_science.article.entity.Article // ktlint-disable
 import com.jetbrains.life_science.article.repository.ArticleRepository
 import com.jetbrains.life_science.container.repository.ContainerRepository
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
@@ -68,7 +68,6 @@ internal class MethodServiceImplTest {
 
         assertEquals(generalInfo.method.id, method.id)
         assertEquals("General information", generalInfo.name)
-
 
         val argument = ArgumentCaptor.forClass(Article::class.java)
         verify(articleRepository, times(1)).save(argument.capture())

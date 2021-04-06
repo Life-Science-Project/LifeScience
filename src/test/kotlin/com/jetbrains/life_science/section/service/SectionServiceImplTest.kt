@@ -29,7 +29,6 @@ internal class SectionServiceImplTest {
     @BeforeEach
     @Sql("/scripts/test_trunc_data.sql")
     internal fun setUp() {
-
     }
 
     @Test
