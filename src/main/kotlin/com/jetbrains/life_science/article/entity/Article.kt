@@ -21,10 +21,10 @@ class Article(
     @Field
     var references: MutableList<String>,
 
-    @Field(name = "_entity_type")
-    val type: String = "Article",
-
     @Id
     val id: String? = null
 
-)
+) {
+    @Field(name = "_entity_type")
+    val type: String = "Article"
+}
