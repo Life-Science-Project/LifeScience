@@ -11,5 +11,4 @@ class MethodSearchService : UnitSearchService("Method") {
         val text = response.getOrThrow("text") { "Text not found" }.toString()
         return MethodSearchResult(id, text)
     }
-
 }

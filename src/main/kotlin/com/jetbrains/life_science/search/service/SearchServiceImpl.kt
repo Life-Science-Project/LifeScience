@@ -61,5 +61,4 @@ class SearchServiceImpl(
         val service = searchUnits.getOrThrow(type) { "Service not found for type: $type" }
         return service.process(id, content)
     }
-
 }

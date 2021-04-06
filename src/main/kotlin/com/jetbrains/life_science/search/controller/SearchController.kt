@@ -19,5 +19,4 @@ class SearchController(
     fun search(@RequestBody queryDTO: SearchDTO): List<SearchResult> {
         return service.search(SearchDTOToInfoAdapter(queryDTO))
     }
-
 }

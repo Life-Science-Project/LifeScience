@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.section.entity
 
-import javax.persistence.*
+import javax.persistence.* // ktlint-disable no-wildcard-imports
 
 @Entity
 class Section(
@@ -15,4 +15,4 @@ class Section(
     @ManyToOne
     var parent: Section? = null,
 
-    )
+)
