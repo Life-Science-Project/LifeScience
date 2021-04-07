@@ -1,12 +1,13 @@
 package com.jetbrains.life_science.article.factory
 
 import com.jetbrains.life_science.article.entity.Article
-import com.jetbrains.life_science.article.entity.ArticleInfo
+import com.jetbrains.life_science.article.service.ArticleInfo
 import org.springframework.stereotype.Component
 
 @Component
 class ArticleFactory {
-    fun createArticle(articleInfo: ArticleInfo): Article {
-        return Article(articleInfo.getId(), articleInfo.getText())
+
+    fun create(info: ArticleInfo): Article {
+        return Article(info.containerId, info.text, info.tags, info.references)
     }
 }
