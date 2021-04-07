@@ -5,8 +5,8 @@ import com.jetbrains.life_science.method.dto.MethodDTOToInfoAdapter
 import com.jetbrains.life_science.method.service.MethodService
 import com.jetbrains.life_science.method.view.MethodView
 import com.jetbrains.life_science.method.view.MethodViewMapper
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import javax.validation.Valid
 
 @RestController
 @RequestMapping("api/method")
@@ -16,7 +16,7 @@ class MethodController(
 ) {
 
     @PostMapping
-    fun addMethod(@RequestBody @Valid methodDTO: MethodDTO) {
+    fun addMethod(@RequestBody @Validated methodDTO: MethodDTO) {
         methodService.create(MethodDTOToInfoAdapter(methodDTO))
     }
 

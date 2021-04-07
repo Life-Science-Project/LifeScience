@@ -15,7 +15,7 @@ class ContainerController(
 ) {
 
     @PostMapping
-    fun create(@RequestBody dto: ContainerDTO) {
+    fun create(@Validated @RequestBody dto: ContainerDTO) {
         service.create(ContainerDTOToInfoAdapter(dto))
     }
 
