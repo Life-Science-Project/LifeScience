@@ -1,0 +1,30 @@
+.auth__form {
+    margin: 2rem auto;
+    background-color: #282c34;
+    border-radius: 0.5rem;
+    width: 40%;
+}
+
+.auth__form_fields {
+    /*width: 30%;*/
+    width: 100%!important;
+    margin: auto!important;
+}
+
+.auth__form_submit {
+    width: 30%;
+    margin: 1rem auto 2rem;
+}
+
+.auth__form_field {
+    border-radius: 0.5rem;
+    width: 90%;
+    padding: 0.7rem;
+    margin: 1rem auto;
+}
+
+.auth__form_header {
+    padding: 1rem;
+    margin: auto;
+    color: white;
+}

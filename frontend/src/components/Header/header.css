@@ -1,0 +1,21 @@
+.header__logo_text {
+    font-size: 4rem;
+    padding: 0 3rem;
+}
+
+.header__group {
+    margin-right: 3rem;
+}
+
+.header__group_link {
+    font-size: 1.5rem;
+    vertical-align: center;
+    border-left: 2px solid #282c34;
+    color: black;
+    float:left;
+}
+
+.header__group_icon {
+    height: 1.7rem;
+    float: right;
+}
