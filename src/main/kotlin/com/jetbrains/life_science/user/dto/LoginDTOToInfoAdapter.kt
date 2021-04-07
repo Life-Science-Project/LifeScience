@@ -1,8 +1,8 @@
 package com.jetbrains.life_science.user.dto
 
-import com.jetbrains.life_science.user.entity.UserInfo
+import com.jetbrains.life_science.user.entity.LoginInfo
 
-class LoginDTOToInfoAdapter(private val loginDTO: LoginDTO) : UserInfo {
+class LoginDTOToInfoAdapter(private val loginDTO: LoginDTO) : LoginInfo {
 
     override fun getID(): Long {
         return 0
@@ -14,21 +14,5 @@ class LoginDTOToInfoAdapter(private val loginDTO: LoginDTO) : UserInfo {
 
     override fun getPassword(): String {
         return loginDTO.password
-    }
-
-    override fun getFirstName(): String? {
-        return null
-    }
-
-    override fun getLastName(): String? {
-        return null
-    }
-
-    override fun getEmail(): String? {
-        return null
-    }
-
-    override fun getEnabled(): Boolean {
-        return true
     }
 }

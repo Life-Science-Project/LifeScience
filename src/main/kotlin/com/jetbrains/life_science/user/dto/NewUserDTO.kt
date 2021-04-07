@@ -4,18 +4,18 @@ import javax.validation.constraints.NotBlank
 
 class NewUserDTO(
 
-    @NotBlank
-    var username: String,
+    @field:NotBlank
+    val username: String,
 
-    @NotBlank
-    var firstName: String,
+    @field:NotBlank
+    val firstName: String,
 
-    @NotBlank
-    var lastName: String,
+    @field:NotBlank
+    val lastName: String,
 
-    @NotBlank
-    var email: String,
+    @field:NotBlank
+    val email: String,
 
-    @NotBlank
-    var password: String
+    @field:NotBlank
+    val password: String
 )

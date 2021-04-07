@@ -1,15 +1,15 @@
 package com.jetbrains.life_science.user.entity
 
-interface UserInfo {
+interface NewUserInfo {
     fun getID(): Long
 
     fun getUsername(): String
 
-    fun getFirstName(): String?
+    fun getFirstName(): String
 
-    fun getLastName(): String?
+    fun getLastName(): String
 
-    fun getEmail(): String?
+    fun getEmail(): String
 
     fun getPassword(): String
 

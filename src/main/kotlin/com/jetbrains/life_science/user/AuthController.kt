@@ -13,7 +13,6 @@ import com.jetbrains.life_science.user.repository.UserRepository
 import com.jetbrains.life_science.user.service.UserServiceImpl
 import javax.validation.Valid
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -54,7 +53,7 @@ class AuthController(val userService: UserServiceImpl,
             SecurityContextHolder.getContext().authentication = authentication
             val jwt: String = jwtProvider.generateJwtToken(user.username)
             val authorities: List<GrantedAuthority> =
-                user.roles!!.map { role -> SimpleGrantedAuthority(role.name) }.toList()
+                user.roles.map { role -> SimpleGrantedAuthority(role.name) }.toList()
             return ResponseEntity.ok(JWTResponse(jwt, user.username, authorities))
         } else {
             throw UserNotFoundException("User not found!")

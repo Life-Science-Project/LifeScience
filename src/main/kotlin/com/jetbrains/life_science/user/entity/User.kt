@@ -10,23 +10,26 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @Column(name = "username")
-    var username: String,
+    @Column(
+        name = "username",
+        unique = true
+    )
+    val username: String,
 
     @Column(name = "first_name")
-    var firstName: String? = null,
+    val firstName: String,
 
     @Column(name = "last_name")
-    var lastName: String? = null,
+    val lastName: String,
 
     @Column(name = "email")
-    var email: String? = null,
+    val email: String,
 
     @Column(name = "password")
-    var password: String,
+    val password: String,
 
     @Column(name = "enabled")
-    var enabled: Boolean = false,
+    val enabled: Boolean = false,
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -34,5 +37,5 @@ class User(
         joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
         inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
     )
-    var roles: MutableCollection<Role>? = null
+    val roles: MutableCollection<Role>
 )

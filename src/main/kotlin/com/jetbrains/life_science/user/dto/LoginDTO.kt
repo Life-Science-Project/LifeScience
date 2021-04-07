@@ -4,9 +4,9 @@ import javax.validation.constraints.NotBlank
 
 class LoginDTO(
 
-    @NotBlank
-    var username: String,
+    @field:NotBlank
+    val username: String,
 
-    @NotBlank
-    var password: String
+    @field:NotBlank
+    val password: String
 )
