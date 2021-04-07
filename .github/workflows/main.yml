@@ -31,7 +31,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Lint
-        run: ./gradlew ktlintCheck
+        run: ./gradlew :backend:ktlintCheck
       - name: Build with Gradle
         run: ./gradlew build
       - name: Cleanup Gradle Cache

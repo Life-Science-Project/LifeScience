@@ -1,0 +1,28 @@
+plugins {
+    id "com.github.node-gradle.node" version "3.0.1"
+}
+apply plugin: 'java'
+apply plugin: "com.github.node-gradle.node"
+node {
+    version = "12.16.3"
+    download = true
+}
+task bundle(type: NpmTask, dependsOn: npmInstall) {
+    args = ['run', 'build']
+}
+task uiTest(type: NpmTask) {
+    environment = ['CI': 'true']
+    args = ['test']
+}
+task run(type: NpmTask) {
+    args = ['start']
+}
+task webjar(type: Jar) {
+    from(fileTree("build")) {
+        into "META-INF/resources"
+    }
+}
+//test.dependsOn(uiTest)
+jar.dependsOn(bundle)
+jar.finalizedBy('webjar')
+
