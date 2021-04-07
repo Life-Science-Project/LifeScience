@@ -2,7 +2,6 @@ package com.jetbrains.life_science.method.entity
 
 import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.section.entity.Section
-import org.hibernate.annotations.Cascade
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed
 import org.springframework.data.annotation.TypeAlias
@@ -29,7 +28,6 @@ class Method(
 
 ) {
 
-    @OneToOne
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OneToOne(cascade = [CascadeType.ALL])
     lateinit var generalInfo: Container
 }

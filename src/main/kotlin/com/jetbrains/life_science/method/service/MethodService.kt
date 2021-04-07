@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.method.service
 
 import com.jetbrains.life_science.method.entity.Method
-import com.jetbrains.life_science.method.entity.MethodInfo
 
 interface MethodService {
 

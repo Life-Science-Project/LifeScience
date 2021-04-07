@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.dto
 
-import com.jetbrains.life_science.article.entity.ArticleInfo
+import com.jetbrains.life_science.article.service.ArticleInfo
 
 class ArticleCreationDTOToInfoAdapter(
     val dto: ArticleCreationDTO

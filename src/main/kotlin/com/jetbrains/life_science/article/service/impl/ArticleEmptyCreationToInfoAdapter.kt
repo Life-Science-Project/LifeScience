@@ -1,6 +1,8 @@
-package com.jetbrains.life_science.article.entity
+package com.jetbrains.life_science.article.service.impl
 
-class ArticleInfoImpl(
+import com.jetbrains.life_science.article.service.ArticleInfo
+
+class ArticleEmptyCreationToInfoAdapter(
     override val containerId: Long
 ) : ArticleInfo {
 

@@ -1,8 +1,8 @@
 package com.jetbrains.life_science.search.dto
 
-import com.jetbrains.life_science.search.service.SearchInfo
+import com.jetbrains.life_science.search.service.SearchQueryInfo
 
-class SearchDTOToInfoAdapter(val dto: SearchDTO) : SearchInfo {
+class SearchQueryDTOToQueryInfoAdapter(val dto: SearchQueryDTO) : SearchQueryInfo {
 
     override val query: String by lazy { dto.query }
 

@@ -17,10 +17,10 @@ class Container(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long,
 
-    @FullTextField(name = "text")
     @Column(nullable = false)
     var name: String,
 
+    @FullTextField(name = "text")
     var description: String?,
 
     @ManyToOne(fetch = FetchType.LAZY)

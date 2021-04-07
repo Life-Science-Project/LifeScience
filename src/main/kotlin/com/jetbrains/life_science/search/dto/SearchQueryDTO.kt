@@ -1,7 +1,11 @@
 package com.jetbrains.life_science.search.dto
 
-data class SearchDTO(
+data class SearchQueryDTO(
+
     val query: String,
+
     val tags: List<String> = emptyList(),
+
     val exclusionTypes: List<String> = emptyList()
+
 )

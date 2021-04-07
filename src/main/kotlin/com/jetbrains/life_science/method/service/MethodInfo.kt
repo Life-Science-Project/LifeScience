@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.method.entity
+package com.jetbrains.life_science.method.service
 
 interface MethodInfo {
     val id: Long

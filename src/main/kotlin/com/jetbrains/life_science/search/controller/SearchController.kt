@@ -1,9 +1,10 @@
 package com.jetbrains.life_science.search.controller
 
-import com.jetbrains.life_science.search.dto.SearchDTO
-import com.jetbrains.life_science.search.dto.SearchDTOToInfoAdapter
+import com.jetbrains.life_science.search.dto.SearchQueryDTO
+import com.jetbrains.life_science.search.dto.SearchQueryDTOToQueryInfoAdapter
 import com.jetbrains.life_science.search.service.SearchService
 import com.jetbrains.life_science.search.units.SearchResult
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,7 +17,7 @@ class SearchController(
 ) {
 
     @PostMapping()
-    fun search(@RequestBody queryDTO: SearchDTO): List<SearchResult> {
-        return service.search(SearchDTOToInfoAdapter(queryDTO))
+    fun search(@Validated @RequestBody queryDTO: SearchQueryDTO): List<SearchResult> {
+        return service.search(SearchQueryDTOToQueryInfoAdapter(queryDTO))
     }
 }

@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.container.entity
+package com.jetbrains.life_science.container.service
 
 interface ContainerInfo {
 

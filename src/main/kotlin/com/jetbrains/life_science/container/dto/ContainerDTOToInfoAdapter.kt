@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.container.dto
 
-import com.jetbrains.life_science.container.entity.ContainerInfo
+import com.jetbrains.life_science.container.service.ContainerInfo
 
 class ContainerDTOToInfoAdapter(
     private val dto: ContainerDTO

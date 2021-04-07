@@ -1,11 +1,10 @@
 package com.jetbrains.life_science.method.service
 
-import com.jetbrains.life_science.article.entity.Article // ktlint-disable
+import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.repository.ArticleRepository
 import com.jetbrains.life_science.container.repository.ContainerRepository
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
 import com.jetbrains.life_science.exceptions.SectionNotFoundException
-import com.jetbrains.life_science.method.entity.MethodInfo
 import com.jetbrains.life_science.method.repository.MethodRepository
 import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Assertions.*
@@ -67,7 +66,8 @@ internal class MethodServiceImplTest {
         val generalInfo = method.generalInfo
 
         assertEquals(generalInfo.method.id, method.id)
-        assertEquals("General information", generalInfo.name)
+        assertEquals("method test", generalInfo.name)
+        assertEquals("General information", generalInfo.description)
 
         val argument = ArgumentCaptor.forClass(Article::class.java)
         verify(articleRepository, times(1)).save(argument.capture())

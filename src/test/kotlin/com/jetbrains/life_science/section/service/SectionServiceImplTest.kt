@@ -1,15 +1,11 @@
 package com.jetbrains.life_science.section.service
 
-import com.jetbrains.life_science.exceptions.SectionNotFoundException // ktlint-disable
+import com.jetbrains.life_science.exceptions.SectionNotFoundException
 import com.jetbrains.life_science.section.entity.SectionInfo
 import com.jetbrains.life_science.section.repository.SectionRepository
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertThrows
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

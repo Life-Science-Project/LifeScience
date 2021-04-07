@@ -1,9 +1,10 @@
-package com.jetbrains.life_science.article.service
+package com.jetbrains.life_science.article.service.impl
 
 import com.jetbrains.life_science.article.entity.Article
-import com.jetbrains.life_science.article.entity.ArticleInfo
 import com.jetbrains.life_science.article.factory.ArticleFactory
 import com.jetbrains.life_science.article.repository.ArticleRepository
+import com.jetbrains.life_science.article.service.ArticleInfo
+import com.jetbrains.life_science.article.service.ArticleService
 import com.jetbrains.life_science.container.service.ContainerService
 import com.jetbrains.life_science.exceptions.ArticleNotFoundException
 import org.springframework.beans.factory.annotation.Autowired

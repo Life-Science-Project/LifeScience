@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.container.service
 
 import com.jetbrains.life_science.article.repository.ArticleRepository
-import com.jetbrains.life_science.container.entity.ContainerInfo
 import com.jetbrains.life_science.container.repository.ContainerRepository
 import com.jetbrains.life_science.exceptions.ContainerNotFoundException
 import com.jetbrains.life_science.exceptions.GeneralInformationDeletionException
@@ -11,10 +10,10 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.junit.jupiter.api.assertThrows
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
@@ -133,8 +132,40 @@ internal class ContainerServiceImplTest {
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
+    internal fun `container update with wrong id test`() {
+
+        val info = mock<ContainerUpdateInfo> {
+            on { id } doReturn -1
+            on { description } doReturn "test"
+            on { name } doReturn "test name"
+        }
+
+        assertThrows<ContainerNotFoundException> { containerService.update(info) }
+    }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `container update test`() {
+
+        val info = mock<ContainerUpdateInfo> {
+            on { id } doReturn 2
+            on { description } doReturn "updated description"
+            on { name } doReturn "updated name"
+        }
+
+        containerService.update(info)
+
+        val container = containerRepository.getOne(2)
+        assertEquals("updated name", container.name)
+        assertEquals("updated description", container.description)
+    }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
     internal fun `container prepare deletion test`() {
-        containerService.prepareDeletionById(2)
+        containerService.clearArticles(2)
 
         verify(articleRepository, times(1)).deleteAllByContainerId(2)
         // Check that parent method was not deleted

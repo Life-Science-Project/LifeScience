@@ -1,11 +1,10 @@
 package com.jetbrains.life_science.method.service
 
-import com.jetbrains.life_science.article.entity.ArticleInfoImpl
 import com.jetbrains.life_science.article.service.ArticleService
+import com.jetbrains.life_science.article.service.impl.ArticleEmptyCreationToInfoAdapter
 import com.jetbrains.life_science.container.service.ContainerService
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
 import com.jetbrains.life_science.method.entity.Method
-import com.jetbrains.life_science.method.entity.MethodInfo
 import com.jetbrains.life_science.method.factory.MethodFactory
 import com.jetbrains.life_science.method.repository.MethodRepository
 import com.jetbrains.life_science.section.service.SectionService
@@ -27,15 +26,14 @@ class MethodServiceImpl(
         var method = methodFactory.createMethod(methodInfo, section)
         method = repository.save(method)
         val containerId = method.generalInfo.id
-        articleService.create(ArticleInfoImpl(containerId))
+        articleService.create(ArticleEmptyCreationToInfoAdapter(containerId))
         return method
     }
 
     @Transactional
     override fun deleteByID(id: Long) {
-        checkExistsById(id)
         val method = getMethod(id)
-        method.containers.forEach { containerService.prepareDeletionById(it.id) }
+        method.containers.forEach { containerService.clearArticles(it.id) }
         repository.delete(method)
     }
 

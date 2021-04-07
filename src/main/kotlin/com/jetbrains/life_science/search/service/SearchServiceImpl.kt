@@ -28,7 +28,7 @@ class SearchServiceImpl(
         searchUnits = unitSearchService.associateBy { service -> service.key }
     }
 
-    override fun search(data: SearchInfo): List<SearchResult> {
+    override fun search(data: SearchQueryInfo): List<SearchResult> {
         val response = makeRequest(data)
         return processAllHits(response)
     }
@@ -46,7 +46,7 @@ class SearchServiceImpl(
         return resultList
     }
 
-    private fun makeRequest(data: SearchInfo): SearchResponse {
+    private fun makeRequest(data: SearchQueryInfo): SearchResponse {
         val searchRequest = SearchRequest()
         val searchBuilder = SearchSourceBuilder()
         searchBuilder.query(QueryBuilders.matchQuery("text", data.query))

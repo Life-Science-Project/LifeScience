@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.section.entity
 
-import javax.persistence.* // ktlint-disable no-wildcard-imports
+import javax.persistence.*
 
 @Entity
 class Section(

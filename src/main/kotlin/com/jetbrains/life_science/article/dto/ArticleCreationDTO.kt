@@ -2,9 +2,9 @@ package com.jetbrains.life_science.article.dto
 
 import javax.validation.constraints.Positive
 
-data class ArticleCreationDTO(
+class ArticleCreationDTO(
 
-    @Positive
+    @field:Positive
     val containerId: Long,
 
     val text: String,

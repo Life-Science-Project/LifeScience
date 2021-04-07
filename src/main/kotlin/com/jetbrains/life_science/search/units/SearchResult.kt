@@ -5,5 +5,5 @@ abstract class SearchResult(
 
     val id: String,
 
-    val name: String
+    val text: String
 )

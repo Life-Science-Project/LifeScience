@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.search.service
 
-interface SearchInfo {
+interface SearchQueryInfo {
 
     val query: String
 

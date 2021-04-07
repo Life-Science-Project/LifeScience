@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank
 
 data class ArticleUpdateDTO(
 
-    @NotBlank
+    @field:NotBlank
     val id: String,
 
     val text: String

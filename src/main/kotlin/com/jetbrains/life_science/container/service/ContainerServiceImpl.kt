@@ -2,7 +2,6 @@ package com.jetbrains.life_science.container.service
 
 import com.jetbrains.life_science.article.service.ArticleService
 import com.jetbrains.life_science.container.entity.Container
-import com.jetbrains.life_science.container.entity.ContainerInfo
 import com.jetbrains.life_science.container.factory.ContainerFactory
 import com.jetbrains.life_science.container.repository.ContainerRepository
 import com.jetbrains.life_science.exceptions.ContainerNotFoundException
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ContainerServiceImpl(
-    val containerFactory: ContainerFactory,
+    val factory: ContainerFactory,
     val repository: ContainerRepository,
     val articleService: ArticleService
 ) : ContainerService {
@@ -24,7 +23,7 @@ class ContainerServiceImpl(
 
     override fun create(info: ContainerInfo): Container {
         val method = methodService.getMethod(info.methodId)
-        val container = containerFactory.create(info.name, info.description, method)
+        val container = factory.create(info.name, info.description, method)
         return repository.save(container)
     }
 
@@ -37,7 +36,10 @@ class ContainerServiceImpl(
         repository.delete(container)
     }
 
-    override fun prepareDeletionById(containerId: Long) {
+    /**
+     * Cleans the contents of the container before removing it
+     */
+    override fun clearArticles(containerId: Long) {
         checkExistsById(containerId)
         articleService.deleteByContainerId(containerId)
     }
@@ -52,5 +54,16 @@ class ContainerServiceImpl(
         if (!repository.existsById(id)) {
             throw ContainerNotFoundException("Container not found by id: $id")
         }
+    }
+
+    @Transactional
+    override fun update(into: ContainerUpdateInfo) {
+        val container = getById(into.id)
+        factory.setParams(container, into)
+    }
+
+    private fun getById(id: Long): Container {
+        return repository.findById(id)
+            .orElseThrow { throw ContainerNotFoundException("Container not found by id: $id") }
     }
 }
