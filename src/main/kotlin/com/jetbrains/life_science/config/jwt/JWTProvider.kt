@@ -2,7 +2,6 @@ package com.jetbrains.life_science.config.jwt
 
 import com.jetbrains.life_science.user.repository.UserRepository
 import io.jsonwebtoken.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -14,9 +13,6 @@ import java.util.Date
 class JWTProvider {
 
     private val logger: Logger = LoggerFactory.getLogger(JWTProvider::class.java)
-
-    @Autowired
-    lateinit var userRepository: UserRepository
 
     @Value("\${assm.app.jwtSecret}")
     lateinit var jwtSecret: String

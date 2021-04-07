@@ -5,7 +5,6 @@ import com.jetbrains.life_science.config.jwt.JWTAuthTokenFilter
 import com.jetbrains.life_science.user.service.UserDetailsServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.authentication.AuthenticationManager
@@ -20,13 +19,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class WebSecurityConfig : WebSecurityConfigurerAdapter() {
-
-    @Autowired
-    internal var userDetailsService: UserDetailsServiceImpl? = null
-
-    @Autowired
-    private val unauthorizedHandler: JWTAuthEntryPoint? = null
+class WebSecurityConfig(
+    var userDetailsService: UserDetailsServiceImpl,
+    val unauthorizedHandler: JWTAuthEntryPoint
+) : WebSecurityConfigurerAdapter() {
 
     @Bean
     fun bCryptPasswordEncoder(): BCryptPasswordEncoder {

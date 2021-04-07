@@ -2,7 +2,7 @@ package com.jetbrains.life_science.user
 
 import com.jetbrains.life_science.config.jwt.JWTProvider
 import com.jetbrains.life_science.config.jwt.JWTResponse
-import com.jetbrains.life_science.exceptions.UserAlreadyExistException
+import com.jetbrains.life_science.exceptions.UserAlreadyExistsException
 import com.jetbrains.life_science.exceptions.UserNotFoundException
 import com.jetbrains.life_science.user.dto.LoginDTO
 import com.jetbrains.life_science.user.dto.NewUserDTO
@@ -32,12 +32,14 @@ import java.util.*
 @CrossOrigin(origins = ["*"], maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
-class AuthController(val userService: UserServiceImpl,
-                     val authenticationManager: AuthenticationManager,
-                     val userRepository: UserRepository,
-                     val roleRepository: RoleRepository,
-                     val encoder: PasswordEncoder,
-                     var jwtProvider: JWTProvider) {
+class AuthController(
+    val userService: UserServiceImpl,
+    val authenticationManager: AuthenticationManager,
+    val userRepository: UserRepository,
+    val roleRepository: RoleRepository,
+    val encoder: PasswordEncoder,
+    var jwtProvider: JWTProvider
+) {
 
 
     @PostMapping("/signin")
@@ -67,10 +69,10 @@ class AuthController(val userService: UserServiceImpl,
 
         if (!userCandidate.isPresent) {
             if (usernameExists(newUser.username)) {
-                throw UserAlreadyExistException("Username is already taken!")
+                throw UserAlreadyExistsException("Username is already taken!")
             }
             if (emailExists(newUser.email)) {
-                throw UserAlreadyExistException("Email is already in use!")
+                throw UserAlreadyExistsException("Email is already in use!")
             }
 
             // Creating user's account
@@ -78,7 +80,7 @@ class AuthController(val userService: UserServiceImpl,
 
             return ResponseEntity(ResponseMessage("User registered successfully!"), HttpStatus.OK)
         } else {
-            throw UserAlreadyExistException("User is already exists!")
+            throw UserAlreadyExistsException("User is already exists!")
         }
     }
 

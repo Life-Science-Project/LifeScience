@@ -14,9 +14,11 @@ import org.springframework.stereotype.Component
 class JWTAuthEntryPoint : AuthenticationEntryPoint {
 
     @Throws(IOException::class, ServletException::class)
-    override fun commence(request: HttpServletRequest,
-                          response: HttpServletResponse,
-                          e: AuthenticationException) {
+    override fun commence(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        e: AuthenticationException
+    ) {
 
         logger.error("Unauthorized error. Message - {}", e.message)
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid credentials")

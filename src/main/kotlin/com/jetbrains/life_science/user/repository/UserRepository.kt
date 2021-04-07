@@ -2,9 +2,8 @@ package com.jetbrains.life_science.user.repository
 
 import com.jetbrains.life_science.user.entity.User
 import java.util.Optional
-import org.springframework.data.repository.query.Param
 import org.springframework.data.jpa.repository.JpaRepository
-import javax.transaction.Transactional
+import org.springframework.transaction.annotation.Transactional
 
 interface UserRepository : JpaRepository<User, Long> {
 
