@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.config.jwt
 
-import com.jetbrains.life_science.user.repository.UserRepository
 import io.jsonwebtoken.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
