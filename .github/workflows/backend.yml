@@ -1,4 +1,4 @@
-name: CI
+name: Backend CI
 
 on:
   push:
@@ -14,7 +14,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -31,9 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Lint
-        run: ./gradlew ktlintCheck
+        run: ./gradlew :backend:ktlintCheck
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -x :frontend:bundle -x :frontend:build
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.

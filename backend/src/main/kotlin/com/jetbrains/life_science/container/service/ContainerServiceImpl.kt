@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional
 class ContainerServiceImpl(
     val factory: ContainerFactory,
     val repository: ContainerRepository,
-    val articleService: ArticleService
+
 ) : ContainerService {
 
     @Autowired
     lateinit var methodService: MethodService
+
+    @Autowired
+    lateinit var articleService: ArticleService
 
     override fun create(info: ContainerInfo): Container {
         val method = methodService.getMethod(info.methodId)
