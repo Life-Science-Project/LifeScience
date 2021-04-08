@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":frontend"))
+    runtimeOnly(project(":frontend"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -55,6 +55,7 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
     }
+    dependsOn(":frontend:bundle")
 }
 
 allOpen {
@@ -85,4 +86,13 @@ ktlint {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.register<Copy>("copyFrontend") {
+    from("$rootDir/frontend/build")
+    into("$rootDir/backend/build/resources/main/static/.")
+}
+
+tasks.named("bootJar") {
+    dependsOn(":backend:copyFrontend")
 }
