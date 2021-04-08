@@ -89,5 +89,4 @@ class AuthController(
     private fun usernameExists(username: String): Boolean {
         return userRepository.findByUsername(username).isPresent
     }
-
 }
