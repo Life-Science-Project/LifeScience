@@ -17,4 +17,5 @@ task uiTest(type: NpmTask) {
 task run(type: NpmTask) {
     args = ['start']
 }
+build.dependsOn(bundle)
 test.dependsOn(uiTest)

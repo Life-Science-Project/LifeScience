@@ -32,7 +32,7 @@ jobs:
       - name: Lint
         run: ./gradlew :backend:ktlintCheck
       - name: Build with Gradle
-        run: ./gradlew build -x :frontend:bundle
+        run: ./gradlew build -x :frontend:bundle -x :frontend:build
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.
