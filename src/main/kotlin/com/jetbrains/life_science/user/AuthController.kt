@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
-
 @CrossOrigin(origins = ["*"], maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -40,7 +39,6 @@ class AuthController(
     val encoder: PasswordEncoder,
     var jwtProvider: JWTProvider
 ) {
-
 
     @PostMapping("/signin")
     fun authenticateUser(@Valid @RequestBody loginRequest: LoginDTO): ResponseEntity<*> {
