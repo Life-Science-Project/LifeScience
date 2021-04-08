@@ -1,11 +1,6 @@
 package com.jetbrains.life_science.section.entity
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.ManyToOne
-import javax.validation.constraints.NotBlank
+import javax.persistence.*
 
 @Entity
 class Section(
@@ -14,7 +9,7 @@ class Section(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long,
 
-    @NotBlank
+    @Column(nullable = false)
     var name: String,
 
     @ManyToOne

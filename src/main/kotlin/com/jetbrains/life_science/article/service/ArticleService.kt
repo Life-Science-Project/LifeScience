@@ -1,16 +1,16 @@
 package com.jetbrains.life_science.article.service
 
 import com.jetbrains.life_science.article.entity.Article
-import com.jetbrains.life_science.article.entity.ArticleInfo
 
 interface ArticleService {
-    fun addArticle(articleInfo: ArticleInfo): Article
 
-    fun deleteArticle(id: Long)
+    fun create(info: ArticleInfo)
 
-    fun getArticle(id: Long): Article
+    fun updateText(id: String, text: String)
 
-    fun searchArticle(query: String): List<Article>
+    fun delete(id: String)
 
-    fun editArticle(id: Long, text: String): Article
+    fun deleteByContainerId(containerId: Long)
+
+    fun findAllByContainerId(containerId: Long): List<Article>
 }
