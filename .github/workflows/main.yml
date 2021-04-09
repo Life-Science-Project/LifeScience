@@ -1,15 +1,11 @@
-name: Backend CI
+name: CI
 
 on:
   push:
-    paths-ignore:
-      - 'frontend/**'
-    branches-ignore:
+    branches:
       - master
   pull_request:
-    paths-ignore:
-      - 'frontend/**'
-    branches-ignore:
+    branches:
       - master
 
   # Allows you to run this workflow manually from the Actions tab
@@ -36,7 +32,7 @@ jobs:
       - name: Lint
         run: ./gradlew :backend:ktlintCheck
       - name: Build with Gradle
-        run: ./gradlew build -x :frontend:build
+        run: ./gradlew build -x :frontend:check
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
         # Restoring these files from a GitHub Actions cache might cause problems for future builds.

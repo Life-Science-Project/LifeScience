@@ -8,6 +8,7 @@ node {
     download = true
 }
 task bundle(type: NpmTask, dependsOn: npmInstall) {
+    environment = ['CI': '']
     args = ['run', 'build']
 }
 task uiTest(type: NpmTask) {
@@ -17,5 +18,5 @@ task uiTest(type: NpmTask) {
 task run(type: NpmTask) {
     args = ['start']
 }
-build.dependsOn(bundle)
+assemble.dependsOn(bundle)
 test.dependsOn(uiTest)

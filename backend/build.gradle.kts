@@ -58,7 +58,7 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
     }
-    dependsOn(":frontend:bundle")
+    dependsOn(":frontend:build")
 }
 
 allOpen {
