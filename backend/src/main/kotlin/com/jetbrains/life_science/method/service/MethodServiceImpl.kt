@@ -8,17 +8,24 @@ import com.jetbrains.life_science.method.entity.Method
 import com.jetbrains.life_science.method.factory.MethodFactory
 import com.jetbrains.life_science.method.repository.MethodRepository
 import com.jetbrains.life_science.section.service.SectionService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MethodServiceImpl(
     val repository: MethodRepository,
-    val sectionService: SectionService,
     val methodFactory: MethodFactory,
-    val articleService: ArticleService,
-    val containerService: ContainerService
 ) : MethodService {
+
+    @Autowired
+    lateinit var sectionService: SectionService
+
+    @Autowired
+    lateinit var articleService: ArticleService
+
+    @Autowired
+    lateinit var containerService: ContainerService
 
     @Transactional
     override fun create(methodInfo: MethodInfo): Method {
