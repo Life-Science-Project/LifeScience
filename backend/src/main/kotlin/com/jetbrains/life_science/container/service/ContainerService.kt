@@ -11,9 +11,14 @@ interface ContainerService {
     /**
      * Cleans the contents of the container before removing it
      */
-    fun clearArticles(containerId: Long)
+    fun initDeletion(containerId: Container)
 
     fun checkExistsById(id: Long)
 
     fun update(into: ContainerUpdateInfo)
+
+    /**
+     * Creates a search unit for container and an empty article, after it was stored id database
+     */
+    fun completeCreationGeneralInfo(container: Container)
 }

@@ -48,9 +48,6 @@ dependencies {
     implementation(group = "org.springframework.data", name = "spring-data-elasticsearch", version = "4.1.7")
 
     implementation(group = "org.postgresql", name = "postgresql")
-
-    implementation("org.hibernate.search:hibernate-search-mapper-orm:6.0.2.Final")
-    implementation("org.hibernate.search:hibernate-search-backend-elasticsearch:6.0.2.Final")
 }
 
 tasks.withType<KotlinCompile> {

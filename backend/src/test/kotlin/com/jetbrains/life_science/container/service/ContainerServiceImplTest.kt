@@ -1,7 +1,10 @@
 package com.jetbrains.life_science.container.service
 
 import com.jetbrains.life_science.article.repository.ArticleRepository
+import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.container.repository.ContainerRepository
+import com.jetbrains.life_science.container.search.repository.ContainerSearchUnitRepository
+import com.jetbrains.life_science.container.search.service.ContainerSearchUnitService
 import com.jetbrains.life_science.exceptions.ContainerNotFoundException
 import com.jetbrains.life_science.exceptions.GeneralInformationDeletionException
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
@@ -11,6 +14,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -32,6 +36,9 @@ internal class ContainerServiceImplTest {
     @Autowired
     lateinit var methodRepository: MethodRepository
 
+    @MockBean
+    lateinit var containerSearchUnitRepository: ContainerSearchUnitRepository
+
     @BeforeEach
     @Sql("/scripts/test_trunc_data.sql")
     internal fun setUp() {
@@ -48,6 +55,12 @@ internal class ContainerServiceImplTest {
             on { methodId } doReturn 1
             on { name } doReturn "test name"
         }
+
+        val createdMock = mock<Container>{
+            on { id } doReturn 10
+            on { description } doReturn "desc"
+        }
+
 
         val createdContainer = containerService.create(info)
 
@@ -83,21 +96,14 @@ internal class ContainerServiceImplTest {
     @Transactional
     @Sql("/scripts/test_common_data.sql")
     internal fun `container exists by id test`() {
-        val info = mock<ContainerInfo> {
-            on { id } doReturn 0
-            on { description } doReturn "test"
-            on { methodId } doReturn 1L
-            on { name } doReturn "test name"
-        }
-        val container = containerService.create(info)
-
-        containerService.checkExistsById(container.id)
+        containerService.checkExistsById(1L)
     }
 
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `container delete by id test`() {
+        Mockito.`when`(containerSearchUnitRepository.existsById(2)).doReturn(true)
         assertTrue(containerRepository.existsById(2L))
 
         containerService.deleteById(2)
@@ -147,6 +153,7 @@ internal class ContainerServiceImplTest {
     @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `container update test`() {
+        Mockito.`when`(containerSearchUnitRepository.existsById(2)).doReturn(true)
 
         val info = mock<ContainerUpdateInfo> {
             on { id } doReturn 2
@@ -165,7 +172,8 @@ internal class ContainerServiceImplTest {
     @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `container prepare deletion test`() {
-        containerService.clearArticles(2)
+        Mockito.`when`(containerSearchUnitRepository.existsById(2)).thenReturn(true)
+        containerService.initDeletion(containerRepository.getOne(2))
 
         verify(articleRepository, times(1)).deleteAllByContainerId(2)
         // Check that parent method was not deleted

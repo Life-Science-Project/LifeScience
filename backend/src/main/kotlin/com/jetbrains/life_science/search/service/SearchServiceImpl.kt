@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.search.service
 
-import com.jetbrains.life_science.search.units.SearchResult
-import com.jetbrains.life_science.search.units.UnitSearchService
+import com.jetbrains.life_science.search.result.SearchResult
+import com.jetbrains.life_science.search.result.UnitSearchService
 import com.jetbrains.life_science.utils.getLogger
 import com.jetbrains.life_science.utils.getOrThrow
 import org.elasticsearch.action.search.SearchRequest
