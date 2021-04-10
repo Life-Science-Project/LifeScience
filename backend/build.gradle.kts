@@ -58,7 +58,6 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
     }
-    dependsOn(":frontend:build")
 }
 
 allOpen {
@@ -92,10 +91,14 @@ tasks.withType<Test> {
 }
 
 tasks.register<Copy>("copyFrontend") {
+    dependsOn(":frontend:bundle")
+
     from("$rootDir/frontend/build")
     into("$rootDir/backend/build/resources/main/static/.")
 }
 
 tasks.named("bootJar") {
-    dependsOn(":backend:copyFrontend")
+    if (!ext.has("no_front") || !(ext.get("no_front") as Boolean)) {
+        dependsOn(":backend:copyFrontend")
+    }
 }
