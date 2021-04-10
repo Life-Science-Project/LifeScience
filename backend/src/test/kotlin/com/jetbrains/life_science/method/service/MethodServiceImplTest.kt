@@ -6,6 +6,7 @@ import com.jetbrains.life_science.container.repository.ContainerRepository
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
 import com.jetbrains.life_science.exceptions.SectionNotFoundException
 import com.jetbrains.life_science.method.repository.MethodRepository
+import com.jetbrains.life_science.method.search.repository.MethodSearchUnitRepository
 import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -37,6 +38,9 @@ internal class MethodServiceImplTest {
 
     @MockBean
     lateinit var messageSourceAccessor: MessageSourceAccessor
+
+    @MockBean
+    lateinit var methodSearchUnitRepository: MethodSearchUnitRepository
 
     @BeforeEach
     @Sql("/scripts/test_trunc_data.sql")
@@ -92,6 +96,9 @@ internal class MethodServiceImplTest {
     @Transactional
     @Sql("/scripts/test_common_data.sql")
     internal fun `delete method test`() {
+        Mockito.`when`(methodSearchUnitRepository.existsById(2)).thenReturn(true)
+        Mockito.`when`(methodSearchUnitRepository.existsById(3)).thenReturn(true)
+
         assertTrue(methodRepository.existsById(2))
         assertTrue(containerRepository.existsById(3))
 
