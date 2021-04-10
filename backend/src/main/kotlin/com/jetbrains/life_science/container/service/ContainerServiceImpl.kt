@@ -89,7 +89,7 @@ class ContainerServiceImpl(
         articleService.create(ArticleEmptyCreationToInfoAdapter(container.id))
     }
 
-    private fun getById(id: Long): Container {
+    override fun getById(id: Long): Container {
         return repository.findById(id)
             .orElseThrow { throw ContainerNotFoundException("Container not found by id: $id") }
     }

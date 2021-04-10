@@ -8,6 +8,8 @@ interface ContainerService {
 
     fun deleteById(id: Long)
 
+    fun getById(id: Long): Container
+
     /**
      * Cleans the contents of the container before removing it
      */
