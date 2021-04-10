@@ -15,8 +15,4 @@ task uiTest(type: NpmTask) {
     environment = ['CI': 'true']
     args = ['run', 'test']
 }
-task run(type: NpmTask) {
-    args = ['start']
-}
-assemble.dependsOn(bundle)
-test.dependsOn(uiTest)
+//test.dependsOn(uiTest)
