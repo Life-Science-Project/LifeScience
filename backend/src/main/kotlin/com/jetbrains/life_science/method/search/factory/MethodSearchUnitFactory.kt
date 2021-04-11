@@ -8,5 +8,4 @@ import org.springframework.stereotype.Component
 class MethodSearchUnitFactory {
 
     fun create(method: Method) = MethodSearchUnit(method.id, method.name)
-
 }

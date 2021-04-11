@@ -1,10 +1,9 @@
 package com.jetbrains.life_science.container.service
 
 import com.jetbrains.life_science.article.repository.ArticleRepository
-import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.container.repository.ContainerRepository
+import com.jetbrains.life_science.container.search.ContainerSearchUnit
 import com.jetbrains.life_science.container.search.repository.ContainerSearchUnitRepository
-import com.jetbrains.life_science.container.search.service.ContainerSearchUnitService
 import com.jetbrains.life_science.exceptions.ContainerNotFoundException
 import com.jetbrains.life_science.exceptions.GeneralInformationDeletionException
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.ArgumentCaptor
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -45,6 +45,10 @@ internal class ContainerServiceImplTest {
         reset(articleRepository)
     }
 
+    /**
+     * The test creates a container, and verifies
+     * that the container is created and the entity to be searched has also been created
+     */
     @Test
     @Transactional
     @Sql("/scripts/test_common_data.sql")
@@ -56,19 +60,18 @@ internal class ContainerServiceImplTest {
             on { name } doReturn "test name"
         }
 
-        val createdMock = mock<Container>{
-            on { id } doReturn 10
-            on { description } doReturn "desc"
-        }
-
-
         val createdContainer = containerService.create(info)
 
+        val argument = ArgumentCaptor.forClass(ContainerSearchUnit::class.java)
         val container = containerRepository.getOne(createdContainer.id)
+
+        verify(containerSearchUnitRepository, times(1)).save(argument.capture())
 
         assertEquals(1L, container.method.id)
         assertEquals("test name", container.name)
         assertEquals("test", container.description)
+        assertEquals(createdContainer.id, argument.value.id)
+        assertEquals("test", argument.value.description)
     }
 
     @Test
@@ -112,6 +115,8 @@ internal class ContainerServiceImplTest {
         verify(articleRepository, times(1)).deleteAllByContainerId(2)
         // Check that parent method was not deleted
         assertTrue(methodRepository.existsById(1))
+
+        verify(containerSearchUnitRepository, times(1)).deleteById(2)
     }
 
     @Test
@@ -166,6 +171,11 @@ internal class ContainerServiceImplTest {
         val container = containerRepository.getOne(2)
         assertEquals("updated name", container.name)
         assertEquals("updated description", container.description)
+
+        val argument = ArgumentCaptor.forClass(ContainerSearchUnit::class.java)
+        verify(containerSearchUnitRepository, times(1)).save(argument.capture())
+        assertEquals("updated description", argument.value.description)
+        assertEquals(2L, argument.value.id)
     }
 
     @Test
@@ -178,5 +188,7 @@ internal class ContainerServiceImplTest {
         verify(articleRepository, times(1)).deleteAllByContainerId(2)
         // Check that parent method was not deleted
         assertTrue(methodRepository.existsById(1))
+
+        verify(containerSearchUnitRepository, times(1)).deleteById(2L)
     }
 }
