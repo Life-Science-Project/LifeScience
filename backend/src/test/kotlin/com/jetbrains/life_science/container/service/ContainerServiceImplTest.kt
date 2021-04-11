@@ -4,7 +4,6 @@ import com.jetbrains.life_science.article.repository.ArticleRepository
 import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.container.repository.ContainerRepository
 import com.jetbrains.life_science.container.search.repository.ContainerSearchUnitRepository
-import com.jetbrains.life_science.container.search.service.ContainerSearchUnitService
 import com.jetbrains.life_science.exceptions.ContainerNotFoundException
 import com.jetbrains.life_science.exceptions.GeneralInformationDeletionException
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
@@ -56,11 +55,10 @@ internal class ContainerServiceImplTest {
             on { name } doReturn "test name"
         }
 
-        val createdMock = mock<Container>{
+        val createdMock = mock<Container> {
             on { id } doReturn 10
             on { description } doReturn "desc"
         }
-
 
         val createdContainer = containerService.create(info)
 
@@ -178,5 +176,24 @@ internal class ContainerServiceImplTest {
         verify(articleRepository, times(1)).deleteAllByContainerId(2)
         // Check that parent method was not deleted
         assertTrue(methodRepository.existsById(1))
+    }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `container get by existing id test`() {
+        val container = containerService.getById(3)
+        assertEquals(3, container.id)
+        assertEquals("desc 2", container.description)
+        assertEquals("name 2", container.name)
+        assertEquals(2, container.method.id)
+        assertTrue(container.method.containers.contains(container))
+    }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `container get by not existing id test`() {
+        assertThrows<ContainerNotFoundException> { containerService.getById(666) }
     }
 }

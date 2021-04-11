@@ -115,4 +115,22 @@ internal class MethodServiceImplTest {
     internal fun `delete method incorrect id test`() {
         assertThrows<MethodNotFoundException> { methodService.deleteByID(-1) }
     }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `get method by existing id test`() {
+        val method = methodService.getMethod(1)
+        assertEquals(1, method.id)
+        assertEquals("test method 1", method.name)
+        assertEquals(1, method.generalInfo.id)
+        method.containers.forEach { assertEquals(1, it.method.id) }
+    }
+
+    @Test
+    @Sql("/scripts/test_common_data.sql")
+    @Transactional
+    internal fun `get method by not existing id test`() {
+        assertThrows<MethodNotFoundException> { methodService.getMethod(666) }
+    }
 }
