@@ -6,5 +6,5 @@ class MethodView(
     val name: String,
     val sectionID: Long?,
     val generalInfo: ContainerView,
-    val containersId: List<Long>
+    val containersIds: List<Long>
 )
