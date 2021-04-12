@@ -8,5 +8,4 @@ import org.springframework.stereotype.Component
 class ContainerSearchUnitFactory {
 
     fun create(container: Container) = ContainerSearchUnit(container.id, container.description ?: "")
-
 }

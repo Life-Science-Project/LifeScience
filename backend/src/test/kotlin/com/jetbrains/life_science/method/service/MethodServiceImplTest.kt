@@ -3,9 +3,11 @@ package com.jetbrains.life_science.method.service
 import com.jetbrains.life_science.article.entity.Article
 import com.jetbrains.life_science.article.repository.ArticleRepository
 import com.jetbrains.life_science.container.repository.ContainerRepository
+import com.jetbrains.life_science.container.search.repository.ContainerSearchUnitRepository
 import com.jetbrains.life_science.exceptions.MethodNotFoundException
 import com.jetbrains.life_science.exceptions.SectionNotFoundException
 import com.jetbrains.life_science.method.repository.MethodRepository
+import com.jetbrains.life_science.method.search.MethodSearchUnit
 import com.jetbrains.life_science.method.search.repository.MethodSearchUnitRepository
 import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Assertions.*
@@ -42,10 +44,13 @@ internal class MethodServiceImplTest {
     @MockBean
     lateinit var methodSearchUnitRepository: MethodSearchUnitRepository
 
+    @MockBean
+    lateinit var containerSearchUnitRepository: ContainerSearchUnitRepository
+
     @BeforeEach
     @Sql("/scripts/test_trunc_data.sql")
     internal fun setUp() {
-        reset(articleRepository, messageSourceAccessor)
+        reset(articleRepository, messageSourceAccessor, methodSearchUnitRepository)
     }
 
     @Test
@@ -77,6 +82,13 @@ internal class MethodServiceImplTest {
         verify(articleRepository, times(1)).save(argument.capture())
 
         assertEquals(generalInfo.id, argument.value.containerId)
+
+        // Check search entity save
+        val methodSearchSaveArgument = ArgumentCaptor.forClass(MethodSearchUnit::class.java)
+        verify(methodSearchUnitRepository, times(1)).save(methodSearchSaveArgument.capture())
+
+        assertEquals(saved.id, methodSearchSaveArgument.value.id)
+        assertEquals("method test", methodSearchSaveArgument.value.name)
     }
 
     @Test
@@ -98,6 +110,7 @@ internal class MethodServiceImplTest {
     internal fun `delete method test`() {
         Mockito.`when`(methodSearchUnitRepository.existsById(2)).thenReturn(true)
         Mockito.`when`(methodSearchUnitRepository.existsById(3)).thenReturn(true)
+        Mockito.`when`(containerSearchUnitRepository.existsById(3)).thenReturn(true)
 
         assertTrue(methodRepository.existsById(2))
         assertTrue(containerRepository.existsById(3))
@@ -107,6 +120,8 @@ internal class MethodServiceImplTest {
         assertFalse(methodRepository.existsById(2))
         assertFalse(containerRepository.existsById(3))
         verify(articleRepository, times(1)).deleteAllByContainerId(3)
+        verify(methodSearchUnitRepository, times(1)).deleteById(2)
+        verify(containerSearchUnitRepository, times(1)).deleteById(3)
     }
 
     @Test
