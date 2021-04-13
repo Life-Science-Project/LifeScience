@@ -4,7 +4,7 @@ import './header.css'
 import registerIcon from '../../logos/register_icon.svg'
 import loginIcon from '../../logos/login_icon.svg'
 
-const Header = (user) => {
+const Header = (props) => {
     // const [authBlock, setAuthBlock] = useState((
     //     <div className="d-flex justify-content-between">
     //         <Link to="/login">
@@ -22,9 +22,9 @@ const Header = (user) => {
     //     </div>)
     // );
 
-    console.log(user);
+    console.log(props);
     let authBlock;
-    if (Object.entries(user.user).length === 0) {
+    if (Object.entries(props.user).length === 0) {
         authBlock = (<div className="d-flex justify-content-between">
             <Link to="/login">
                 <div className="d-flex align-items-center header__group">
@@ -43,7 +43,7 @@ const Header = (user) => {
         authBlock = (<div className="d-flex justify-content-between">
             <Link to="/register">
                 <div className="d-flex align-items-center header__group">
-                    <div className="header__group_link p-2 bd-highlight">{user.user.username}</div>
+                    <div className="header__group_link p-2 bd-highlight">{props.user.username}</div>
                     <img src={registerIcon} className="header__group_icon"/>
                 </div>
             </Link>

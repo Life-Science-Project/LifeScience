@@ -4,12 +4,12 @@ import '../Register/register.css';
 import axios from "axios";
 import {Redirect} from "react-router";
 
-const Login = (loggedUserStateUpdater) => {
+const Login = (props) => {
     const [status, setStatus] = useState(false);
     const {register, handleSubmit, errors} = useForm();
     const onSubmit = data => {
         axios.post('http://localhost:8080/api/auth/signin', data).then(resp => {
-            loggedUserStateUpdater.loggedUserStateUpdater(resp.data);
+            props.loggedUserStateUpdater(resp.data);
             setStatus(true);
         });
     }
