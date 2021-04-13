@@ -28,7 +28,7 @@ const Login = ({loggedUserStateUpdater}) => {
                     <input type="text" placeholder="Username" name="username"
                            ref={register({required: true, minLength: 6, maxLength: 24})}
                            className={"auth__form_field"}/>
-                    <input type="text" placeholder="Password" name="password"
+                    <input type="password" placeholder="Password" name="password"
                            ref={register({required: true, minLength: 6, maxLength: 24})}
                            className={"auth__form_field"}/>
 
