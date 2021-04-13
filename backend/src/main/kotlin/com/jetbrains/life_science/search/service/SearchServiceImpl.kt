@@ -2,8 +2,8 @@ package com.jetbrains.life_science.search.service
 
 import com.jetbrains.life_science.search.result.SearchResult
 import com.jetbrains.life_science.search.result.UnitSearchService
-import com.jetbrains.life_science.utils.getLogger
-import com.jetbrains.life_science.utils.getOrThrow
+import com.jetbrains.life_science.util.getLogger
+import com.jetbrains.life_science.util.getOrThrow
 import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.client.RequestOptions

@@ -2,8 +2,8 @@ package com.jetbrains.life_science.user
 
 import com.jetbrains.life_science.config.jwt.JWTProvider
 import com.jetbrains.life_science.config.jwt.JWTResponse
-import com.jetbrains.life_science.exceptions.UserAlreadyExistsException
-import com.jetbrains.life_science.exceptions.UserNotFoundException
+import com.jetbrains.life_science.exception.UserAlreadyExistsException
+import com.jetbrains.life_science.exception.UserNotFoundException
 import com.jetbrains.life_science.user.dto.LoginDTO
 import com.jetbrains.life_science.user.dto.NewUserDTO
 import com.jetbrains.life_science.user.dto.NewUserDTOToInfoAdapter

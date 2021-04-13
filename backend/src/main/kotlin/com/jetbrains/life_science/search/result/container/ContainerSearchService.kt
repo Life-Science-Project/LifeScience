@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.search.result.container
 
 import com.jetbrains.life_science.search.result.UnitSearchService
-import com.jetbrains.life_science.utils.getOrThrow
+import com.jetbrains.life_science.util.getOrThrow
 import org.springframework.stereotype.Service
 
 @Service

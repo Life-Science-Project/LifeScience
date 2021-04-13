@@ -10,4 +10,8 @@ class ArticleFactory {
     fun create(info: ArticleInfo): Article {
         return Article(info.containerId, info.text, info.tags, info.references)
     }
+
+    fun copy(origin: Article): Article {
+        return Article(origin.containerId, origin.text, origin.tags, origin.references)
+    }
 }
