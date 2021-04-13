@@ -4,9 +4,8 @@ import com.jetbrains.life_science.method.entity.Method
 
 interface MethodService {
 
-    fun create(methodInfo: MethodInfo): Method
+    fun create(info: MethodInfo)
 
-    fun deleteByID(id: Long)
+    fun getById(id: Long): Method
 
-    fun getMethod(id: Long): Method
 }

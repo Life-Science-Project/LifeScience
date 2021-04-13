@@ -2,14 +2,7 @@ package com.jetbrains.life_science.method.dto
 
 import com.jetbrains.life_science.method.service.MethodInfo
 
-class MethodDTOToInfoAdapter(private val methodDTO: MethodDTO) : MethodInfo {
-
-    override val id: Long
-        get() = 0
-
-    override val name: String
-        get() = methodDTO.name
-
+class MethodDTOToInfoAdapter(val dto: MethodDTO) : MethodInfo {
     override val sectionId: Long
-        get() = methodDTO.sectionID
+        get() = dto.sectionId
 }
