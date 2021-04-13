@@ -11,6 +11,8 @@ interface ContainerService {
 
     fun deleteById(id: Long)
 
+    fun getById(id: Long): Container
+
     fun checkExistsById(id: Long)
 
     fun update(into: ContainerUpdateInfo)

@@ -12,5 +12,7 @@ interface MethodVersionService {
 
     fun createCopy(methodId: Long)
 
+    fun getPublishedVersion(methodId: Long): MethodVersion
+
     fun getById(id: Long): MethodVersion
 }

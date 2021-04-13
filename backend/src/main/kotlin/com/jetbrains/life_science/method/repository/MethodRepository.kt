@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface MethodRepository : JpaRepository<Method, Long>
+interface MethodRepository : JpaRepository<Method, Long> {
+    fun findAllBySectionId(sectionId: Long): List<Method>
+}

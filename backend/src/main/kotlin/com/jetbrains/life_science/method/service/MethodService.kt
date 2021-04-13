@@ -7,4 +7,6 @@ interface MethodService {
     fun create(info: MethodInfo)
 
     fun getById(id: Long): Method
+
+    fun getBySectionId(sectionId: Long): List<Method>
 }
