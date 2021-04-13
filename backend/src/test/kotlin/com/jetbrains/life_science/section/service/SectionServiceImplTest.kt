@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.section.service
 
-import com.jetbrains.life_science.exceptions.SectionNotFoundException
+import com.jetbrains.life_science.exception.SectionNotFoundException
 import com.jetbrains.life_science.section.entity.SectionInfo
 import com.jetbrains.life_science.section.repository.SectionRepository
 import com.nhaarman.mockitokotlin2.doReturn

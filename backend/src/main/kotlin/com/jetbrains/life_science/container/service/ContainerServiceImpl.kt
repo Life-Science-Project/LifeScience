@@ -5,7 +5,7 @@ import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.container.factory.ContainerFactory
 import com.jetbrains.life_science.container.repository.ContainerRepository
 import com.jetbrains.life_science.container.search.service.ContainerSearchUnitService
-import com.jetbrains.life_science.exceptions.ContainerNotFoundException
+import com.jetbrains.life_science.exception.ContainerNotFoundException
 import com.jetbrains.life_science.version.entity.MethodVersion
 import com.jetbrains.life_science.version.service.MethodVersionService
 import org.springframework.beans.factory.annotation.Autowired

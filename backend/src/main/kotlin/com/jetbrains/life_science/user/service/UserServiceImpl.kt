@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.user.service
 
-import com.jetbrains.life_science.exceptions.UserNotFoundException
+import com.jetbrains.life_science.exception.UserNotFoundException
 import com.jetbrains.life_science.user.entity.NewUserInfo
 import com.jetbrains.life_science.user.entity.User
 import com.jetbrains.life_science.user.factory.UserFactory

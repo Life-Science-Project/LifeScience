@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.exceptions
+package com.jetbrains.life_science.exception
 
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler

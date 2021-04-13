@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.version.search.service
 
-import com.jetbrains.life_science.exceptions.search_unit.MethodSearchUnitNotFoundException
+import com.jetbrains.life_science.exception.search_unit.MethodSearchUnitNotFoundException
 import com.jetbrains.life_science.version.entity.MethodVersion
 import com.jetbrains.life_science.version.search.factory.MethodSearchUnitFactory
 import com.jetbrains.life_science.version.search.repository.MethodVersionSearchUnitRepository

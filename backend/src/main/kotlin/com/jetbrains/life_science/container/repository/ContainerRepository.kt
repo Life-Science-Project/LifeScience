@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ContainerRepository : JpaRepository<Container, Long> {
 
-    fun findAllByMethod(methodId: MethodVersion): List<Container>
+    fun findAllByMethod(methodVersion: MethodVersion): List<Container>
 }

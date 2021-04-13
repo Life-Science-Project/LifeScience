@@ -7,7 +7,7 @@ import com.jetbrains.life_science.article.service.ArticleInfo
 import com.jetbrains.life_science.article.service.ArticleService
 import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.container.service.ContainerService
-import com.jetbrains.life_science.exceptions.ArticleNotFoundException
+import com.jetbrains.life_science.exception.ArticleNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

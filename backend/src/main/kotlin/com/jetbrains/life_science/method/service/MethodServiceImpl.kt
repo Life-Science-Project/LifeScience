@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.method.service
 
-import com.jetbrains.life_science.exceptions.MethodNotFoundException
+import com.jetbrains.life_science.exception.MethodNotFoundException
 import com.jetbrains.life_science.method.entity.Method
 import com.jetbrains.life_science.method.factory.MethodFactory
 import com.jetbrains.life_science.method.repository.MethodRepository

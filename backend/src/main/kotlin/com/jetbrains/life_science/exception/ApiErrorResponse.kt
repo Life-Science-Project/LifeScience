@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.exceptions
+package com.jetbrains.life_science.exception
 
 import java.time.LocalDateTime
 

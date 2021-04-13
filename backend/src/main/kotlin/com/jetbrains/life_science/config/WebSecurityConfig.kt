@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class WebSecurityConfig(
     var userDetailsService: UserDetailsServiceImpl,
     val unauthorizedHandler: JWTAuthEntryPoint,
-    val jWTAuthTokenFilter: JWTAuthTokenFilter
+    val jwtAuthTokenFilter: JWTAuthTokenFilter
 ) : WebSecurityConfigurerAdapter() {
 
     @Bean
@@ -50,6 +50,6 @@ class WebSecurityConfig(
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-        http.addFilterBefore(jWTAuthTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
     }
 }

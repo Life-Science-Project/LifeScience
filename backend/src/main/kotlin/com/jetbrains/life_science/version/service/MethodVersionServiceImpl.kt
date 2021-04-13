@@ -1,10 +1,10 @@
 package com.jetbrains.life_science.version.service
 
 import com.jetbrains.life_science.container.service.ContainerService
-import com.jetbrains.life_science.exceptions.MethodVersionNotFoundException
-import com.jetbrains.life_science.exceptions.PublishedVersionNotFoundException
+import com.jetbrains.life_science.exception.MethodVersionNotFoundException
+import com.jetbrains.life_science.exception.PublishedVersionNotFoundException
 import com.jetbrains.life_science.method.service.MethodService
-import com.jetbrains.life_science.version.adapters.ContainerEmptyCreationToInfoAdapter
+import com.jetbrains.life_science.version.adapter.ContainerEmptyCreationToInfoAdapter
 import com.jetbrains.life_science.version.entity.MethodVersion
 import com.jetbrains.life_science.version.entity.State
 import com.jetbrains.life_science.version.factory.MethodVersionFactory
@@ -40,14 +40,14 @@ class MethodVersionServiceImpl(
     }
 
     private fun getPublishedVersion(methodId: Long): MethodVersion {
-        return repository.findByMainMethod_IdAndState(methodId, State.PUBLISHED)
+        return repository.findByMainMethodIdAndState(methodId, State.PUBLISHED)
             ?: throw PublishedVersionNotFoundException("published version to method $methodId not found")
     }
 
     @Transactional
     override fun approve(id: Long) {
         val currentVersion = getVersionById(id)
-        val lastPublished = repository.findByMainMethod_IdAndState(currentVersion.mainMethod.id, State.PUBLISHED)
+        val lastPublished = repository.findByMainMethodIdAndState(currentVersion.mainMethod.id, State.PUBLISHED)
         currentVersion.state = State.PUBLISHED
         if (lastPublished != null) {
             lastPublished.state = State.ARCHIVED
