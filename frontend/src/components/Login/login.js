@@ -1,15 +1,17 @@
-import React, {Fragment, useState} from "react";
+import React, {useState} from "react";
 import {useForm} from 'react-hook-form';
 import '../Register/register.css';
 import axios from "axios";
 import {Redirect} from "react-router";
 
-const Login = (props) => {
+const Login = ({loggedUserStateUpdater}) => {
     const [status, setStatus] = useState(false);
     const {register, handleSubmit, errors} = useForm();
     const onSubmit = data => {
         axios.post('http://localhost:8080/api/auth/signin', data).then(resp => {
-            props.loggedUserStateUpdater(resp.data);
+            loggedUserStateUpdater(resp.data);
+            // Save auth-data to localStorage to retrieve on app restart
+            localStorage.setItem('auth-data', JSON.stringify(resp.data));
             setStatus(true);
         });
     }

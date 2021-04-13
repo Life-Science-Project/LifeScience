@@ -1,12 +1,15 @@
-import React, {Fragment, useState} from "react";
+import React, {useState} from "react";
 import {useForm} from 'react-hook-form';
 import './register.css';
 import axios from "axios";
 import {Redirect} from "react-router";
 
 const Register = () => {
+    // Used to redirect user to the home page after successful registration.
     const [status, setStatus] = useState(false);
+
     const {register, handleSubmit, errors} = useForm();
+
     const onSubmit = data => {
         axios.post('http://localhost:8080/api/auth/signup', {
             "username": data.firstName,
@@ -20,6 +23,7 @@ const Register = () => {
             }
         });
     }
+    // TODO: handle errors
     console.log(errors);
 
     if (status) {
