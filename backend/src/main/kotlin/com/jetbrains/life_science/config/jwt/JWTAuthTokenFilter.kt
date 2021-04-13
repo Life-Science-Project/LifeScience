@@ -1,22 +1,21 @@
 package com.jetbrains.life_science.config.jwt
 
 import com.jetbrains.life_science.user.service.UserDetailsServiceImpl
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
+import org.springframework.stereotype.Component
+import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
-
 import javax.servlet.FilterChain
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-import org.slf4j.LoggerFactory
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
-import org.springframework.web.filter.OncePerRequestFilter
-
+@Component
 class JWTAuthTokenFilter(
-    private val tokenProvider: JWTProvider? = null,
-    private val userDetailsService: UserDetailsServiceImpl? = null
+    private val tokenProvider: JWTProvider,
+    private val userDetailsService: UserDetailsServiceImpl
 ) : OncePerRequestFilter() {
 
     @Throws(ServletException::class, IOException::class)
@@ -26,20 +25,17 @@ class JWTAuthTokenFilter(
         filterChain: FilterChain
     ) {
         try {
-
             val jwt = getJwt(request)
-            if (jwt != null && tokenProvider!!.validateJwtToken(jwt)) {
+            if (jwt != null && tokenProvider.validateJwtToken(jwt)) {
                 val username = tokenProvider.getUserNameFromJwtToken(jwt)
 
-                val userDetails = userDetailsService!!.loadUserByUsername(username)
+                val userDetails = userDetailsService.loadUserByUsername(username)
                 val authentication = UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.authorities
                 )
                 authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
 
                 SecurityContextHolder.getContext().authentication = authentication
-            } else {
-                logger.error("Can NOT validate JwtToken")
             }
         } catch (e: Exception) {
             logger.error("Can NOT set user authentication -> Message: {}", e)
@@ -54,9 +50,5 @@ class JWTAuthTokenFilter(
         return if (authHeader != null && authHeader.startsWith("Bearer ")) {
             authHeader.substring(7)
         } else null
-    }
-
-    companion object {
-        private val logger = LoggerFactory.getLogger(JWTAuthTokenFilter::class.java)
     }
 }

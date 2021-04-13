@@ -2,7 +2,9 @@ package com.jetbrains.life_science.method.repository
 
 import com.jetbrains.life_science.method.entity.Method
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
-interface MethodRepository: JpaRepository<Method, Long> {
+@Repository
+interface MethodRepository : JpaRepository<Method, Long> {
     fun findAllBySectionId(sectionId: Long): List<Method>
 }

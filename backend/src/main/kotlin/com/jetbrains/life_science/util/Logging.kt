@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.utils
+package com.jetbrains.life_science.util
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

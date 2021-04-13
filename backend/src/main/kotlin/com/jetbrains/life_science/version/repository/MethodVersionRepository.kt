@@ -4,8 +4,7 @@ import com.jetbrains.life_science.version.entity.MethodVersion
 import com.jetbrains.life_science.version.entity.State
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface MethodVersionRepository: JpaRepository<MethodVersion, Long> {
+interface MethodVersionRepository : JpaRepository<MethodVersion, Long> {
 
-    fun findByMainMethod_IdAndState(id: Long, state: State): MethodVersion?
-
+    fun findByMainMethodIdAndState(id: Long, state: State): MethodVersion?
 }

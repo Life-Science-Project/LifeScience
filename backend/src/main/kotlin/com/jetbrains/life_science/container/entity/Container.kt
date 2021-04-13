@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.container.entity
 
-import com.jetbrains.life_science.method.entity.Method
 import com.jetbrains.life_science.version.entity.MethodVersion
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction

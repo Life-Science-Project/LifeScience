@@ -1,3 +1,3 @@
-package com.jetbrains.life_science.exceptions
+package com.jetbrains.life_science.exception
 
 class GeneralInformationDeletionException(message: String) : RuntimeException(message)

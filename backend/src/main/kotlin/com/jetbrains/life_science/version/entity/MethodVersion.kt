@@ -20,6 +20,9 @@ class MethodVersion(
     @ManyToOne
     val mainMethod: Method,
 
+    @ManyToOne
+    val author: User,
+
     @OneToMany(mappedBy = "method", cascade = [CascadeType.ALL])
     var containers: MutableList<Container> = mutableListOf()
 

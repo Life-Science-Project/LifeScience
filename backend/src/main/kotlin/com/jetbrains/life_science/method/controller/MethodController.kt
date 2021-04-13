@@ -29,5 +29,4 @@ class MethodController(
     fun create(@Validated @RequestBody dto: MethodDTO) {
         service.create(MethodDTOToInfoAdapter(dto))
     }
-
 }

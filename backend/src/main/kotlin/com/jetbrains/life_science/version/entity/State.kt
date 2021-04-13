@@ -9,5 +9,4 @@ enum class State {
     ARCHIVED,
 
     PUBLISHED
-
 }

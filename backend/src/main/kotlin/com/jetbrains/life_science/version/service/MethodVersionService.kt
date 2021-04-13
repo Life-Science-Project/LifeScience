@@ -1,11 +1,10 @@
 package com.jetbrains.life_science.version.service
 
 import com.jetbrains.life_science.version.entity.MethodVersion
-import com.jetbrains.life_science.version.entity.State
 
 interface MethodVersionService {
 
-    fun createBlack(info: MethodVersionInfo): MethodVersion
+    fun createBlank(info: MethodVersionInfo): MethodVersion
 
     fun getVersionById(id: Long): MethodVersion
 
@@ -14,4 +13,6 @@ interface MethodVersionService {
     fun createCopy(methodId: Long)
 
     fun getPublishedVersion(methodId: Long): MethodVersion
+
+    fun getById(id: Long): MethodVersion
 }

@@ -4,7 +4,8 @@ import com.jetbrains.life_science.article.service.ArticleService
 import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.container.factory.ContainerFactory
 import com.jetbrains.life_science.container.repository.ContainerRepository
-import com.jetbrains.life_science.exceptions.ContainerNotFoundException
+import com.jetbrains.life_science.container.search.service.ContainerSearchUnitService
+import com.jetbrains.life_science.exception.ContainerNotFoundException
 import com.jetbrains.life_science.version.entity.MethodVersion
 import com.jetbrains.life_science.version.service.MethodVersionService
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class ContainerServiceImpl(
     val factory: ContainerFactory,
-    val repository: ContainerRepository
+    val repository: ContainerRepository,
+    val searchService: ContainerSearchUnitService
 ) : ContainerService {
 
     @Autowired
@@ -45,6 +47,14 @@ class ContainerServiceImpl(
     override fun createCopiesByMethod(method: MethodVersion, newMethod: MethodVersion) {
         val containers = repository.findAllByMethod(method)
         containers.forEach { container -> createCopy(container, newMethod) }
+    }
+
+    override fun deleteSearchUnits(oldContainers: List<Container>) {
+        oldContainers.forEach { searchService.delete(it.id) }
+    }
+
+    override fun createSearchUnits(newContainers: List<Container>) {
+        newContainers.forEach { searchService.create(it) }
     }
 
     private fun createCopy(origin: Container, newMethod: MethodVersion) {
