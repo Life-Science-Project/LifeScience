@@ -26,7 +26,7 @@ class MethodVersionController(
 
     @PostMapping("/create/blank")
     fun createBlank(@Validated @RequestBody dto: MethodVersionDTO, principal: Principal) {
-        val user = userService.getUserByName(principal.name)
+        val user = userService.getByName(principal.name)
         service.createBlank(MethodVersionDTOToInfoAdapter(dto, user))
     }
 

@@ -20,12 +20,12 @@ class UserServiceImpl(
         userRepository.save(user)
     }
 
-    override fun getUserByName(name: String): User {
+    override fun getByName(name: String): User {
         return userRepository.findByUsername(name)
             .orElseThrow { UserNotFoundException("user with name $name not found") }
     }
 
-    override fun getUserById(id: Long): User {
+    override fun getById(id: Long): User {
         return userRepository.findById(id)
             .orElseThrow { UserNotFoundException("user with id $id not found") }
     }
