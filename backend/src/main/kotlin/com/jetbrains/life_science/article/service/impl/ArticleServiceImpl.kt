@@ -5,6 +5,7 @@ import com.jetbrains.life_science.article.factory.ArticleFactory
 import com.jetbrains.life_science.article.repository.ArticleRepository
 import com.jetbrains.life_science.article.service.ArticleInfo
 import com.jetbrains.life_science.article.service.ArticleService
+import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.container.service.ContainerService
 import com.jetbrains.life_science.exceptions.ArticleNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,6 +26,17 @@ class ArticleServiceImpl(
 
     override fun findAllByContainerId(containerId: Long): List<Article> {
         return repository.findAllByContainerId(containerId)
+    }
+
+    override fun createCopiesByContainer(origin: Container, newContainer: Container) {
+        val articles = repository.findAllByContainerId(origin.id)
+        articles.forEach { originArticle -> copy(originArticle, newContainer) }
+    }
+
+    private fun copy(originArticle: Article, newContainer: Container) {
+        val copy = factory.copy(originArticle)
+        copy.containerId = newContainer.id
+        repository.save(copy)
     }
 
     override fun create(info: ArticleInfo) {

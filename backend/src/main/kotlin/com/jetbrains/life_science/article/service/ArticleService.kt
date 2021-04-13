@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.article.service
 
 import com.jetbrains.life_science.article.entity.Article
+import com.jetbrains.life_science.container.entity.Container
 
 interface ArticleService {
 
@@ -13,4 +14,6 @@ interface ArticleService {
     fun deleteByContainerId(containerId: Long)
 
     fun findAllByContainerId(containerId: Long): List<Article>
+
+    fun createCopiesByContainer(origin: Container, copy: Container)
 }

@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.container.entity
 
 import com.jetbrains.life_science.method.entity.Method
+import com.jetbrains.life_science.version.entity.MethodVersion
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 import javax.persistence.*
@@ -20,5 +21,5 @@ class Container(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "method_id", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    val method: Method
+    var method: MethodVersion
 )

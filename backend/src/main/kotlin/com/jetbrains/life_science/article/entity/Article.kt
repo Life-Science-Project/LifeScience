@@ -10,7 +10,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType
 @Document(indexName = "article", createIndex = true)
 class Article(
 
-    val containerId: Long,
+    var containerId: Long,
 
     @Field(type = FieldType.Text)
     var text: String,
