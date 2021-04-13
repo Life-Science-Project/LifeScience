@@ -3,7 +3,6 @@ package com.jetbrains.life_science.container.factory
 import com.jetbrains.life_science.container.entity.Container
 import com.jetbrains.life_science.container.service.ContainerCreationInfo
 import com.jetbrains.life_science.container.service.ContainerUpdateInfo
-import com.jetbrains.life_science.method.entity.Method
 import com.jetbrains.life_science.version.entity.MethodVersion
 import org.springframework.stereotype.Component
 

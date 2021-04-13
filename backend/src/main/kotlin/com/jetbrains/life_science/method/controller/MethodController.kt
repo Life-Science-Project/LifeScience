@@ -3,7 +3,6 @@ package com.jetbrains.life_science.method.controller
 import com.jetbrains.life_science.method.dto.MethodDTO
 import com.jetbrains.life_science.method.dto.MethodDTOToInfoAdapter
 import com.jetbrains.life_science.method.service.MethodService
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Validate
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,5 +19,4 @@ class MethodController(
     fun create(@Validated @RequestBody dto: MethodDTO) {
         service.create(MethodDTOToInfoAdapter(dto))
     }
-
 }
