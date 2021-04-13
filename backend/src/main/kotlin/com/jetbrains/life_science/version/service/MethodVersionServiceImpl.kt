@@ -39,9 +39,10 @@ class MethodVersionServiceImpl(
         containerService.createCopiesByMethod(publishedVersion, copy)
     }
 
-    private fun getPublishedVersion(methodId: Long) =
-        (repository.findByMainMethod_IdAndState(methodId, State.PUBLISHED)
-            ?: throw PublishedVersionNotFoundException("published version to method $methodId not found"))
+    private fun getPublishedVersion(methodId: Long): MethodVersion {
+        return repository.findByMainMethod_IdAndState(methodId, State.PUBLISHED)
+            ?: throw PublishedVersionNotFoundException("published version to method $methodId not found")
+    }
 
     @Transactional
     override fun approve(id: Long) {
@@ -57,6 +58,11 @@ class MethodVersionServiceImpl(
         containerService.createSearchUnits(currentVersion.containers)
     }
 
+    override fun getById(id: Long): MethodVersion {
+        checkExistsById(id)
+        return repository.getOne(id)
+    }
+
     @Transactional
     override fun getVersionById(id: Long): MethodVersion {
         return repository.findById(id)
@@ -68,5 +74,4 @@ class MethodVersionServiceImpl(
             throw MethodVersionNotFoundException(id)
         }
     }
-
 }

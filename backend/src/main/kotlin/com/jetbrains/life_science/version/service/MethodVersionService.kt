@@ -11,4 +11,6 @@ interface MethodVersionService {
     fun approve(id: Long)
 
     fun createCopy(methodId: Long)
+
+    fun getById(id: Long): MethodVersion
 }
