@@ -25,4 +25,8 @@ class MethodServiceImpl(
     override fun getById(id: Long): Method {
         return repository.findById(id).orElseThrow { MethodNotFoundException(id) }
     }
+
+    override fun getBySectionId(sectionId: Long): List<Method> {
+        return repository.findAllBySectionId(sectionId)
+    }
 }

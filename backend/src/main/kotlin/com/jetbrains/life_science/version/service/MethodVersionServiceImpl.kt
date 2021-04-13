@@ -37,9 +37,11 @@ class MethodVersionServiceImpl(
         containerService.createCopiesByMethod(publishedVersion, copy)
     }
 
-    private fun getPublishedVersion(methodId: Long) =
-        (repository.findByMainMethod_IdAndState(methodId, State.PUBLISHED)
+    @Transactional
+    override fun getPublishedVersion(methodId: Long): MethodVersion {
+        return (repository.findByMainMethod_IdAndState(methodId, State.PUBLISHED)
             ?: throw PublishedVersionNotFoundException("published version to method $methodId not found"))
+    }
 
     @Transactional
     override fun approve(id: Long) {

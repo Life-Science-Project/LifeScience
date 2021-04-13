@@ -8,4 +8,6 @@ interface MethodService {
 
     fun getById(id: Long): Method
 
+    fun getBySectionId(sectionId: Long): List<Method>
+
 }
