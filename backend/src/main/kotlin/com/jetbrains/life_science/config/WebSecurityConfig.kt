@@ -5,22 +5,23 @@ import com.jetbrains.life_science.config.jwt.JWTAuthTokenFilter
 import com.jetbrains.life_science.user.service.UserDetailsServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 class WebSecurityConfig(
     var userDetailsService: UserDetailsServiceImpl,
-    val unauthorizedHandler: JWTAuthEntryPoint
+    val unauthorizedHandler: JWTAuthEntryPoint,
+    val jWTAuthTokenFilter: JWTAuthTokenFilter
 ) : WebSecurityConfigurerAdapter() {
 
     @Bean
@@ -28,12 +29,6 @@ class WebSecurityConfig(
         return BCryptPasswordEncoder()
     }
 
-    @Bean
-    fun authenticationJwtTokenFilter(): JWTAuthTokenFilter {
-        return JWTAuthTokenFilter()
-    }
-
-    @Throws(Exception::class)
     override fun configure(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder
             .userDetailsService(userDetailsService)
@@ -41,20 +36,20 @@ class WebSecurityConfig(
     }
 
     @Bean
-    @Throws(Exception::class)
     override fun authenticationManagerBean(): AuthenticationManager {
         return super.authenticationManagerBean()
     }
 
-    @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http.csrf().disable().authorizeRequests()
+            .antMatchers("/api/auth/**").permitAll()
+            .antMatchers("/api/**").fullyAuthenticated()
             .antMatchers("/**").permitAll()
             .anyRequest().authenticated()
             .and()
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
+        http.addFilterBefore(jWTAuthTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
     }
 }

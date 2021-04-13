@@ -9,6 +9,7 @@ import com.jetbrains.life_science.version.entity.MethodVersion
 import com.jetbrains.life_science.version.entity.State
 import com.jetbrains.life_science.version.factory.MethodVersionFactory
 import com.jetbrains.life_science.version.repository.MethodVersionRepository
+import com.jetbrains.life_science.version.search.service.MethodVersionSearchUnitService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -17,11 +18,12 @@ class MethodVersionServiceImpl(
     val repository: MethodVersionRepository,
     val factory: MethodVersionFactory,
     val methodService: MethodService,
-    val containerService: ContainerService
+    val containerService: ContainerService,
+    val searchService: MethodVersionSearchUnitService
 ) : MethodVersionService {
 
     @Transactional
-    override fun createBlack(info: MethodVersionInfo): MethodVersion {
+    override fun createBlank(info: MethodVersionInfo): MethodVersion {
         val method = methodService.getById(info.methodId)
         var methodVersion = factory.create(info, method)
         methodVersion = repository.save(methodVersion)
@@ -43,10 +45,16 @@ class MethodVersionServiceImpl(
 
     @Transactional
     override fun approve(id: Long) {
-        val version = getVersionById(id)
-        version.state = State.PUBLISHED
-        val lastPublished = repository.findByMainMethod_IdAndState(version.mainMethod.id, State.PUBLISHED)
-        lastPublished?.state = State.ARCHIVED
+        val currentVersion = getVersionById(id)
+        val lastPublished = repository.findByMainMethod_IdAndState(currentVersion.mainMethod.id, State.PUBLISHED)
+        currentVersion.state = State.PUBLISHED
+        if (lastPublished != null) {
+            lastPublished.state = State.ARCHIVED
+            searchService.deleteSearchUnitById(lastPublished.id)
+            containerService.deleteSearchUnits(lastPublished.containers)
+        }
+        searchService.createSearchUnit(currentVersion)
+        containerService.createSearchUnits(currentVersion.containers)
     }
 
     @Transactional

@@ -16,4 +16,8 @@ interface ContainerService {
     fun update(into: ContainerUpdateInfo)
 
     fun createCopiesByMethod(method: MethodVersion, newMethod: MethodVersion)
+
+    fun deleteSearchUnits(oldContainers: List<Container>)
+
+    fun createSearchUnits(newContainers: List<Container>)
 }
