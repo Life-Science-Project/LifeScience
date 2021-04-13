@@ -32,5 +32,4 @@ class MethodVersionController(
     fun approve(@PathVariable id: Long) {
         service.approve(id)
     }
-
 }

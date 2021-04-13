@@ -24,5 +24,4 @@ class UserServiceImpl(
         return userRepository.findByUsername(name)
             .orElseThrow { UserNotFoundException("user with name $name not found") }
     }
-
 }

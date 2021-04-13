@@ -7,5 +7,4 @@ interface MethodVersionSearchUnitService {
     fun createSearchUnit(version: MethodVersion)
 
     fun deleteSearchUnitById(id: Long)
-
 }

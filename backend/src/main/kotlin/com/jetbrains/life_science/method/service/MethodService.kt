@@ -7,5 +7,4 @@ interface MethodService {
     fun create(info: MethodInfo)
 
     fun getById(id: Long): Method
-
 }

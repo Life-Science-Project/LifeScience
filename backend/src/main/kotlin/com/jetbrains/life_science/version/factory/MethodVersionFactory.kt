@@ -22,5 +22,4 @@ class MethodVersionFactory {
             author = methodVersion.author
         )
     }
-
 }
