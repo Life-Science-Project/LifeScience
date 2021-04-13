@@ -17,7 +17,7 @@ class MethodReviewServiceImpl(
 
     override fun addReview(info: MethodReviewInfo): MethodReview {
         val methodVersion = methodVersionService.getById(info.methodId)
-        val user = userService.getById(info.authorId)
+        val user = userService.getUserById(info.authorId)
         return repository.save(factory.create(info, methodVersion, user))
     }
 }

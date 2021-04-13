@@ -24,4 +24,9 @@ class UserServiceImpl(
         return userRepository.findByUsername(name)
             .orElseThrow { UserNotFoundException("user with name $name not found") }
     }
+
+    override fun getUserById(id: Long): User {
+        return userRepository.findById(id)
+            .orElseThrow { UserNotFoundException("user with id $id not found") }
+    }
 }
