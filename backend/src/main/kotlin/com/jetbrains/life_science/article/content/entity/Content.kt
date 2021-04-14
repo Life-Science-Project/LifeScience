@@ -10,9 +10,6 @@ import org.springframework.data.elasticsearch.annotations.FieldType
 @TypeAlias("Content")
 class Content(
 
-    @Id
-    val id: String? = null,
-
     var sectionId: Long,
 
     @Field(type = FieldType.Text)
@@ -22,7 +19,10 @@ class Content(
     var tags: MutableList<String>,
 
     @Field
-    var references: MutableList<String>
+    var references: MutableList<String>,
+
+    @Id
+    val id: String? = null
 
 ) {
     @Field(name = "_entity_type")

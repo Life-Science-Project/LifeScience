@@ -2,8 +2,6 @@ package com.jetbrains.life_science.article.section.controller
 
 import com.jetbrains.life_science.article.section.dto.SectionDTO
 import com.jetbrains.life_science.article.section.dto.SectionDTOToInfoAdapter
-import com.jetbrains.life_science.article.section.dto.SectionDTOToUpdateInfoAdapter
-import com.jetbrains.life_science.article.section.dto.SectionUpdateDTO
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.article.section.view.SectionViewMapper
@@ -52,7 +50,7 @@ class SectionController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PostMapping
+    @PutMapping
     fun updateSection(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
