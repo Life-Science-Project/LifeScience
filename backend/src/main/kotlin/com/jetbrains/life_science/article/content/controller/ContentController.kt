@@ -1,10 +1,10 @@
-package com.jetbrains.life_science.content.controller
+package com.jetbrains.life_science.article.content.controller
 
-import com.jetbrains.life_science.content.dto.ContentCreationDTO
-import com.jetbrains.life_science.content.dto.ContentCreationDTOToInfoAdapter
-import com.jetbrains.life_science.content.dto.ContentUpdateDTO
-import com.jetbrains.life_science.content.service.ContentService
-import com.jetbrains.life_science.content.view.ContentView
+import com.jetbrains.life_science.article.content.dto.ContentCreationDTO
+import com.jetbrains.life_science.article.content.dto.ContentCreationDTOToInfoAdapter
+import com.jetbrains.life_science.article.content.dto.ContentUpdateDTO
+import com.jetbrains.life_science.article.content.service.ContentService
+import com.jetbrains.life_science.article.content.view.ContentView
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated

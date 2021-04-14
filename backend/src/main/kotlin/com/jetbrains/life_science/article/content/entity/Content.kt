@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.content.entity
+package com.jetbrains.life_science.article.content.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.TypeAlias

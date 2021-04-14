@@ -54,8 +54,12 @@ class ArticleVersionController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping("/{versionId}/approve")
-    fun approve(@PathVariable articleId: Long, @PathVariable versionId: Long) {
+    @PatchMapping("/{versionId}/approve")
+    fun approve(
+        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
+        principal: Principal
+    ) {
         service.approve(versionId)
     }
 }

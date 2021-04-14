@@ -1,7 +1,7 @@
-package com.jetbrains.life_science.content.factory
+package com.jetbrains.life_science.article.content.factory
 
-import com.jetbrains.life_science.content.entity.Content
-import com.jetbrains.life_science.content.service.ContentInfo
+import com.jetbrains.life_science.article.content.entity.Content
+import com.jetbrains.life_science.article.content.service.ContentInfo
 import org.springframework.stereotype.Component
 
 @Component

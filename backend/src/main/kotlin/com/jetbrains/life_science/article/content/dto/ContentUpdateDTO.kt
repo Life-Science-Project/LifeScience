@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.content.dto
+package com.jetbrains.life_science.article.content.dto
 
 import javax.validation.constraints.NotBlank
 

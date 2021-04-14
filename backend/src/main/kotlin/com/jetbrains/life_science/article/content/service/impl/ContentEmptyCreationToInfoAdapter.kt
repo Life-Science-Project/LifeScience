@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.content.service.impl
+package com.jetbrains.life_science.article.content.service.impl
 
-import com.jetbrains.life_science.content.service.ContentInfo
+import com.jetbrains.life_science.article.content.service.ContentInfo
 
 class ContentEmptyCreationToInfoAdapter(
     override val sectionId: Long

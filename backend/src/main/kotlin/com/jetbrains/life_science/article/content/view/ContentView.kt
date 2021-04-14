@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.content.view
+package com.jetbrains.life_science.article.content.view
 
 class ContentView(
     val text: String,

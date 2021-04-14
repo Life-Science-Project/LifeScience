@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.content.service
+package com.jetbrains.life_science.article.content.service
 
-import com.jetbrains.life_science.content.entity.Content
+import com.jetbrains.life_science.article.content.entity.Content
 import com.jetbrains.life_science.article.section.entity.Section
 
 interface ContentService {

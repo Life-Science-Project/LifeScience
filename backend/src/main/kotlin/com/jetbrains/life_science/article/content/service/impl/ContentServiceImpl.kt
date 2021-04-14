@@ -1,10 +1,10 @@
-package com.jetbrains.life_science.content.service.impl
+package com.jetbrains.life_science.article.content.service.impl
 
-import com.jetbrains.life_science.content.entity.Content
-import com.jetbrains.life_science.content.factory.ContentFactory
-import com.jetbrains.life_science.content.repository.ContentRepository
-import com.jetbrains.life_science.content.service.ContentInfo
-import com.jetbrains.life_science.content.service.ContentService
+import com.jetbrains.life_science.article.content.entity.Content
+import com.jetbrains.life_science.article.content.factory.ContentFactory
+import com.jetbrains.life_science.article.content.repository.ContentRepository
+import com.jetbrains.life_science.article.content.service.ContentInfo
+import com.jetbrains.life_science.article.content.service.ContentService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.ContainerNotFoundException

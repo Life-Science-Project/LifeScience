@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.section.service
 
-import com.jetbrains.life_science.content.service.ContentService
+import com.jetbrains.life_science.article.content.service.ContentService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.factory.SectionFactory
 import com.jetbrains.life_science.article.section.repository.SectionRepository

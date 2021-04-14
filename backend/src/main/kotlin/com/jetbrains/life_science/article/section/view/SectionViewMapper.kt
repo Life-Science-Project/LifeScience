@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.article.section.view
 
-import com.jetbrains.life_science.content.service.ContentService
-import com.jetbrains.life_science.content.view.ContentViewMapper
+import com.jetbrains.life_science.article.content.service.ContentService
+import com.jetbrains.life_science.article.content.view.ContentViewMapper
 import com.jetbrains.life_science.article.section.entity.Section
 import org.springframework.stereotype.Component
 
