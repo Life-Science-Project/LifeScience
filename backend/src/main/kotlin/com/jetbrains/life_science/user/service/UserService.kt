@@ -7,5 +7,7 @@ interface UserService {
 
     fun saveUser(newUserInfo: NewUserInfo)
 
-    fun getUserByName(name: String): User
+    fun getByName(name: String): User
+
+    fun getById(id: Long): User
 }
