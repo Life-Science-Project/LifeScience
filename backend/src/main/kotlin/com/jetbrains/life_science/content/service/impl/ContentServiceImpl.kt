@@ -5,8 +5,8 @@ import com.jetbrains.life_science.content.factory.ContentFactory
 import com.jetbrains.life_science.content.repository.ContentRepository
 import com.jetbrains.life_science.content.service.ContentInfo
 import com.jetbrains.life_science.content.service.ContentService
-import com.jetbrains.life_science.section.entity.Section
-import com.jetbrains.life_science.section.service.SectionService
+import com.jetbrains.life_science.article.section.entity.Section
+import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.ContainerNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
