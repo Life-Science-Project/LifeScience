@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.user.entity
 
 interface UserInfo {
-    fun getID(): Long
+    fun getId(): Long
 
     fun getUsername(): String
 

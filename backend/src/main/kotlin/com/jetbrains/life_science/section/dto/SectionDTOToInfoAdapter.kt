@@ -1,18 +1,20 @@
 package com.jetbrains.life_science.section.dto
 
-import com.jetbrains.life_science.section.entity.SectionInfo
+import com.jetbrains.life_science.section.service.SectionInfo
 
-class SectionDTOToInfoAdapter(private val sectionDTO: SectionDTO) : SectionInfo {
+class SectionDTOToInfoAdapter(
+    private val dto: SectionDTO
+) : SectionInfo {
 
-    override fun getID(): Long {
-        return 0
-    }
+    override val id: Long
+        get() = 0
 
-    override fun getName(): String {
-        return sectionDTO.name
-    }
+    override val name: String
+        get() = dto.name
 
-    override fun getParentID(): Long? {
-        return sectionDTO.parentID
-    }
+    override val description: String
+        get() = dto.description
+
+    override val articleVersionId: Long
+        get() = dto.articleVersionId
 }

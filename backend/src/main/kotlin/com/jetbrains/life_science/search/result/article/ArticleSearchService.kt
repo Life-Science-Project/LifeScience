@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class ArticleSearchService : UnitSearchService("Article") {
 
     override fun process(id: String, response: Map<String, Any>): ArticleSearchResult {
-        val text = response.getOrThrow("text") { "Text not found" }.toString()
-        return ArticleSearchResult(id, text)
+        val name = response.getOrThrow("name") { "Name not found" }.toString()
+        return ArticleSearchResult(id, name)
     }
 }

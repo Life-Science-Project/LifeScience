@@ -1,10 +1,15 @@
 package com.jetbrains.life_science.section.dto
 
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Positive
 
-class SectionDTO(
+data class SectionDTO(
+
     @field:NotBlank
     val name: String,
 
-    val parentID: Long?,
+    @field:Positive
+    val articleVersionId: Long,
+
+    val description: String = ""
 )
