@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.category.service
 
 import com.jetbrains.life_science.exception.SectionNotFoundException
-import com.jetbrains.life_science.category.entity.CategoryInfo
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock

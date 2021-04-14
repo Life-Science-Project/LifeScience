@@ -1,10 +1,10 @@
 package com.jetbrains.life_science.category.dto
 
-import com.jetbrains.life_science.category.entity.CategoryInfo
+import com.jetbrains.life_science.category.service.CategoryInfo
 
 class CategoryDTOToInfoAdapter(private val categoryDTO: CategoryDTO) : CategoryInfo {
 
-    override fun getID(): Long {
+    override fun getId(): Long {
         return 0
     }
 
@@ -13,6 +13,6 @@ class CategoryDTOToInfoAdapter(private val categoryDTO: CategoryDTO) : CategoryI
     }
 
     override fun getParentID(): Long? {
-        return categoryDTO.parentID
+        return categoryDTO.parentId
     }
 }

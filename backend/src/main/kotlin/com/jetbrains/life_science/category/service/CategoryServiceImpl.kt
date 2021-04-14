@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.category.service
 
 import com.jetbrains.life_science.category.entity.Category
-import com.jetbrains.life_science.category.entity.CategoryInfo
 import com.jetbrains.life_science.category.factory.CategoryFactory
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.exception.CategoryNotFoundException

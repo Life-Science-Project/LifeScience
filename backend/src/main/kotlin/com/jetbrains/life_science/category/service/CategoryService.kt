@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.category.service
 
 import com.jetbrains.life_science.category.entity.Category
-import com.jetbrains.life_science.category.entity.CategoryInfo
 
 interface CategoryService {
 

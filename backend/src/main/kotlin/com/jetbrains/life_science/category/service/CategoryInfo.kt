@@ -1,7 +1,7 @@
-package com.jetbrains.life_science.category.entity
+package com.jetbrains.life_science.category.service
 
 interface CategoryInfo {
-    fun getID(): Long
+    fun getId(): Long
 
     fun getName(): String
 

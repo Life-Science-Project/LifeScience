@@ -6,5 +6,5 @@ class CategoryDTO(
     @field:NotBlank
     val name: String,
 
-    val parentID: Long?,
+    val parentId: Long?,
 )
