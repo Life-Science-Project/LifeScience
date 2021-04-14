@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class UserFactory {
     fun createUser(newUserInfo: NewUserInfo, roles: MutableCollection<Role>): User {
         return User(
-            newUserInfo.getID(), newUserInfo.getUsername(), newUserInfo.getFirstName(), newUserInfo.getLastName(),
+            newUserInfo.getId(), newUserInfo.getUsername(), newUserInfo.getFirstName(), newUserInfo.getLastName(),
             newUserInfo.getEmail(), newUserInfo.getPassword(), newUserInfo.getEnabled(), roles
         )
     }

@@ -5,5 +5,5 @@ interface CategoryInfo {
 
     fun getName(): String
 
-    fun getParentID(): Long?
+    fun getParentId(): Long?
 }

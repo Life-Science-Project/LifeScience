@@ -32,7 +32,7 @@ internal class CategoryServiceImplTest {
     internal fun `add category without parent`() {
         val mock = mock<CategoryInfo> {
             on { getName() } doReturn "sample category"
-            on { getParentID() } doReturn null
+            on { getParentId() } doReturn null
         }
 
         val category = categoryService.createCategory(mock)
@@ -48,7 +48,7 @@ internal class CategoryServiceImplTest {
     internal fun `add category with parent`() {
         val mock = mock<CategoryInfo> {
             on { getName() } doReturn "sample category"
-            on { getParentID() } doReturn 1L
+            on { getParentId() } doReturn 1L
         }
 
         val category = categoryService.createCategory(mock)

@@ -12,7 +12,7 @@ class CategoryDTOToInfoAdapter(private val categoryDTO: CategoryDTO) : CategoryI
         return categoryDTO.name
     }
 
-    override fun getParentID(): Long? {
+    override fun getParentId(): Long? {
         return categoryDTO.parentId
     }
 }

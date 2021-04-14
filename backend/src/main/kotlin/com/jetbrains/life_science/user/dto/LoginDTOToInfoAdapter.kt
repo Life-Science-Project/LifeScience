@@ -4,7 +4,7 @@ import com.jetbrains.life_science.user.entity.LoginInfo
 
 class LoginDTOToInfoAdapter(private val loginDTO: LoginDTO) : LoginInfo {
 
-    override fun getID(): Long {
+    override fun getId(): Long {
         return 0
     }
 

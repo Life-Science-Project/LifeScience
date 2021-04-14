@@ -13,28 +13,28 @@ class CategoryServiceImpl(
 ) : CategoryService {
 
     override fun createCategory(categoryInfo: CategoryInfo): Category {
-        val parent = categoryInfo.getParentID()?.let {
+        val parent = categoryInfo.getParentId()?.let {
             categoryRepository.getOne(it)
         }
         return categoryRepository.save(categoryFactory.createSection(categoryInfo, parent))
     }
 
     override fun deleteCategory(id: Long) {
-        existByID(id)
+        existById(id)
         categoryRepository.deleteById(id)
     }
 
     override fun getCategory(id: Long): Category {
-        existByID(id)
+        existById(id)
         return categoryRepository.getOne(id)
     }
 
     override fun getChildren(id: Long): List<Category> {
-        existByID(id)
+        existById(id)
         return categoryRepository.findAllByParentId(id)
     }
 
-    private fun existByID(id: Long) {
+    private fun existById(id: Long) {
         if (!categoryRepository.existsById(id)) {
             throw CategoryNotFoundException("Category not found with id: $id")
         }

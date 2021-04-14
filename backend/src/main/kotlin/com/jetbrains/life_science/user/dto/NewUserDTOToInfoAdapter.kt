@@ -8,7 +8,7 @@ class NewUserDTOToInfoAdapter(
     private val encoder: PasswordEncoder
 ) : NewUserInfo {
 
-    override fun getID(): Long {
+    override fun getId(): Long {
         return 0
     }
 
