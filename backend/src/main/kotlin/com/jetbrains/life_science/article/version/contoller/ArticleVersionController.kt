@@ -12,32 +12,50 @@ import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
-@RequestMapping("/api/versions")
+@RequestMapping("/api/articles/{articleId}/versions")
 class ArticleVersionController(
     val service: ArticleVersionService,
     val mapper: ArticleVersionViewMapper,
     val userService: UserService
 ) {
-    @GetMapping("/{articleId}")
-    fun getApprovedVersion(@PathVariable articleId: Long): ArticleVersionView {
-        val version = service.getPublishedVersion(articleId)
-        return mapper.createView(version)
+
+    @GetMapping
+    fun getVersions(@PathVariable articleId: Long): List<ArticleVersionView> {
+        // TODO(#54): implement method
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
-    @PostMapping("/create/blank")
-    fun createBlank(@Validated @RequestBody dto: ArticleVersionDTO, principal: Principal) {
+    @GetMapping("/{versionId}")
+    fun getVersion(@PathVariable articleId: Long, @PathVariable versionId: Long): ArticleVersionView {
+        // TODO(#54): implement method
+        throw UnsupportedOperationException("Not yet implemented")
+    }
+
+    @PostMapping
+    fun createVersion(
+        @PathVariable articleId: Long,
+        @Validated @RequestBody dto: ArticleVersionDTO,
+        principal: Principal
+    ): ArticleVersionView {
         val user = userService.getByName(principal.name)
         service.createBlank(ArticleVersionDTOToInfoAdapter(dto, user))
+        // TODO(#54): add return value
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
-    @PostMapping("/create/copy/{articleId}")
-    fun createCopy(@PathVariable articleId: Long) {
-        service.createCopy(articleId)
+    @PutMapping
+    fun updateVersion(
+        @PathVariable articleId: Long,
+        @Validated @RequestBody dto: ArticleVersionDTO,
+        principal: Principal
+    ): ArticleVersionView {
+        // TODO(#54): add return value
+        throw UnsupportedOperationException("Not yet implemented")
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping("/approve/{id}")
-    fun approve(@PathVariable id: Long) {
-        service.approve(id)
+    @PutMapping("/{versionId}/approve")
+    fun approve(@PathVariable articleId: Long, @PathVariable versionId: Long) {
+        service.approve(versionId)
     }
 }

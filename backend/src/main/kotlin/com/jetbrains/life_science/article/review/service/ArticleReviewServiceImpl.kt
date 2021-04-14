@@ -17,7 +17,7 @@ class ArticleReviewServiceImpl(
 
     override fun addReview(info: ArticleReviewInfo): ArticleReview {
         val articleVersion = articleVersionService.getById(info.articleVersionId)
-        val user = userService.getById(info.authorId)
+        val user = userService.getById(info.reviewerId)
         return repository.save(factory.create(info, articleVersion, user))
     }
 }

@@ -22,5 +22,5 @@ class ArticleReview(
     var comment: String,
 
     @ManyToOne
-    var author: User
+    var reviewer: User
 )
