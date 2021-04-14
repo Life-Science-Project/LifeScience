@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.version.contoller
+package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.user.service.UserService
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
@@ -6,6 +6,7 @@ import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAda
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
+import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -21,14 +22,14 @@ class ArticleVersionController(
 
     @GetMapping
     fun getVersions(@PathVariable articleId: Long): List<ArticleVersionView> {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        return service.getByArticleId(articleId).map { mapper.createView(it) }
     }
 
     @GetMapping("/{versionId}")
     fun getVersion(@PathVariable articleId: Long, @PathVariable versionId: Long): ArticleVersionView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            service.getById(versionId)
+        )
     }
 
     @PostMapping
@@ -38,9 +39,11 @@ class ArticleVersionController(
         principal: Principal
     ): ArticleVersionView {
         val user = userService.getByName(principal.name)
-        service.createBlank(ArticleVersionDTOToInfoAdapter(dto, user))
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            service.createBlank(
+                ArticleVersionDTOToInfoAdapter(dto, user)
+            )
+        )
     }
 
     @PutMapping
@@ -59,7 +62,8 @@ class ArticleVersionController(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         principal: Principal
-    ) {
+    ): ResponseEntity<Void> {
         service.approve(versionId)
+        return ResponseEntity.ok().build()
     }
 }

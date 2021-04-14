@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.category.view
 
-class CategoryChildrenView(
+class CategorySubcategoryView(
     val id: Long?,
     val name: String
 )

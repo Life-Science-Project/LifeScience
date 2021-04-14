@@ -7,7 +7,8 @@ class SectionDTOToUpdateInfoAdapter(
 ) : SectionUpdateInfo {
 
     override val id: Long
-        get() = dto.id
+        get() = 0
+    //TODO???
 
     override val name: String
         get() = dto.name

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ArticleReviewViewMapper {
-    fun createReview(articleReview: ArticleReview): ArticleReviewView {
+    fun createView(articleReview: ArticleReview): ArticleReviewView {
         return ArticleReviewView(
             articleReview.id,
             articleReview.articleVersion.id,

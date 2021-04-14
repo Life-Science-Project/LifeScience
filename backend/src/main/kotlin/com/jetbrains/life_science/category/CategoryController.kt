@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.category
 
+import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.category.dto.CategoryDTO
 import com.jetbrains.life_science.category.dto.CategoryDTOToInfoAdapter
 import com.jetbrains.life_science.category.service.CategoryService
@@ -15,6 +16,7 @@ import javax.validation.Valid
 @RequestMapping("/api/categories")
 class CategoryController(
     val service: CategoryService,
+    val articleService: ArticleService,
     val mapper: CategoryViewMapper
 ) {
 
@@ -28,16 +30,20 @@ class CategoryController(
     fun getCategory(@PathVariable categoryId: Long): CategoryView {
         val category = service.getCategory(categoryId)
         val children = service.getChildren(categoryId)
-        // TODO(#54): add articles to category view
-        return mapper.createView(category, children)
+        val articles = articleService.getByCategoryId(categoryId)
+        return mapper.createView(category, children, articles)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
     fun createCategory(@RequestBody @Valid categoryDTO: CategoryDTO, principal: Principal): CategoryView {
-        service.createCategory(CategoryDTOToInfoAdapter(categoryDTO))
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            service.createCategory(
+                CategoryDTOToInfoAdapter(categoryDTO)
+            ),
+            listOf(),
+            listOf()
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -50,8 +56,7 @@ class CategoryController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{categoryId}")
     fun deleteCategory(@PathVariable categoryId: Long, principal: Principal): ResponseEntity<Void> {
-        // TODO(#54): implement method
-        // return ResponseEntity.ok().build()
-        throw UnsupportedOperationException("Not yet implemented")
+        service.deleteCategory(categoryId)
+        return ResponseEntity.ok().build()
     }
 }

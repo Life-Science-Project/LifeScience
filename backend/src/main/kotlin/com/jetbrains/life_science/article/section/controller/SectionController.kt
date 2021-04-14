@@ -2,8 +2,6 @@ package com.jetbrains.life_science.article.section.controller
 
 import com.jetbrains.life_science.article.section.dto.SectionDTO
 import com.jetbrains.life_science.article.section.dto.SectionDTOToInfoAdapter
-import com.jetbrains.life_science.article.section.dto.SectionDTOToUpdateInfoAdapter
-import com.jetbrains.life_science.article.section.dto.SectionUpdateDTO
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.article.section.view.SectionViewMapper
@@ -25,8 +23,7 @@ class SectionController(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long
     ): List<SectionView> {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        return service.getByVersionId(versionId).map { sectionViewMapper.createView(it) }
     }
 
     @GetMapping("/{sectionId}")
@@ -46,13 +43,15 @@ class SectionController(
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        service.create(SectionDTOToInfoAdapter(dto))
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        return sectionViewMapper.createView(
+            service.create(
+                SectionDTOToInfoAdapter(dto)
+            )
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PostMapping
+    @PutMapping
     fun updateSection(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,

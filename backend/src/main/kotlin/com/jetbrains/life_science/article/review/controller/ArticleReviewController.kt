@@ -4,6 +4,7 @@ import com.jetbrains.life_science.article.review.dto.ArticleReviewDTO
 import com.jetbrains.life_science.article.review.dto.ArticleReviewDTOToInfoAdapter
 import com.jetbrains.life_science.article.review.service.ArticleReviewService
 import com.jetbrains.life_science.article.review.view.ArticleReviewView
+import com.jetbrains.life_science.article.review.view.ArticleReviewViewMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
@@ -13,7 +14,8 @@ import java.security.Principal
 @RestController
 @RequestMapping("/api/articles/{articleId}/versions/{versionId}/reviews")
 class ArticleReviewController(
-    val service: ArticleReviewService
+    val service: ArticleReviewService,
+    val mapper: ArticleReviewViewMapper,
 ) {
 
     @GetMapping
@@ -22,8 +24,8 @@ class ArticleReviewController(
         @PathVariable versionId: Long,
         principal: Principal // only if the version belongs to this user, or the user is admin/moderator
     ): List<ArticleReviewView> {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        TODO("only if the version belongs to this user, or the user is admin/moderator")
+        return service.getAllByVersionId(versionId).map { mapper.createView(it) }
     }
 
     @GetMapping("/{reviewId}")
@@ -33,8 +35,10 @@ class ArticleReviewController(
         @PathVariable reviewId: Long,
         principal: Principal // only if the version belongs to this user, or the user is admin/moderator
     ): ArticleReviewView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        TODO("only if the version belongs to this user, or the user is admin/moderator")
+        return mapper.createView(
+            service.getById(reviewId)
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -45,9 +49,11 @@ class ArticleReviewController(
         @Validated @RequestBody dto: ArticleReviewDTO,
         principal: Principal
     ): ArticleReviewView {
-        service.addReview(ArticleReviewDTOToInfoAdapter(dto))
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            service.addReview(
+                ArticleReviewDTOToInfoAdapter(dto)
+            )
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -69,8 +75,7 @@ class ArticleReviewController(
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
     ): ResponseEntity<Void> {
-        // TODO(#54): implement method
-        // return ResponseEntity.ok().build()
-        throw UnsupportedOperationException("Not yet implemented")
+        service.deleteReview(reviewId)
+        return ResponseEntity.ok().build()
     }
 }

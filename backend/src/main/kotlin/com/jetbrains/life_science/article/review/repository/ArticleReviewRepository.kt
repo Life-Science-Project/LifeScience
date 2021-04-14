@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ArticleReviewRepository : JpaRepository<ArticleReview, Long>
+interface ArticleReviewRepository : JpaRepository<ArticleReview, Long> {
+    fun findAllByArticleVersionId(versionId: Long): List<ArticleReview>
+}

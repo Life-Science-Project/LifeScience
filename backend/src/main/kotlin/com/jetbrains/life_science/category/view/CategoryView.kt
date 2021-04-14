@@ -1,9 +1,11 @@
 package com.jetbrains.life_science.category.view
 
-// TODO(#54): add articles
+import com.jetbrains.life_science.article.master.view.ArticleView
+
 class CategoryView(
     val id: Long?,
     val parentId: Long?,
     val name: String,
-    val children: List<CategoryChildrenView> // TODO(#54): maybe children -> subcategories?
+    val subcategories: List<CategorySubcategoryView>,
+    val articles: List<ArticleView>
 )

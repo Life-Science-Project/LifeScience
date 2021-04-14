@@ -32,9 +32,9 @@ class ArticleController(
 
     @PostMapping
     fun createArticle(@Validated @RequestBody dto: ArticleDTO, principal: Principal): ArticleView {
-        articleService.create(ArticleDTOToInfoAdapter(dto))
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            articleService.create(ArticleDTOToInfoAdapter(dto))
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")

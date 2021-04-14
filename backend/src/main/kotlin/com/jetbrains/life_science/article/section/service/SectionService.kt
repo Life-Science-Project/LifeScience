@@ -13,6 +13,8 @@ interface SectionService {
 
     fun getById(id: Long): Section
 
+    fun getByVersionId(versionId: Long): List<Section>
+
     fun checkExistsById(id: Long)
 
     fun update(into: SectionUpdateInfo)

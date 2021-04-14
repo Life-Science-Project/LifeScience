@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository
 interface SectionRepository : JpaRepository<Section, Long> {
 
     fun findAllByArticle(articleVersion: ArticleVersion): List<Section>
+
+    fun findAllByArticleId(articleVersionId: Long): List<Section>
 }

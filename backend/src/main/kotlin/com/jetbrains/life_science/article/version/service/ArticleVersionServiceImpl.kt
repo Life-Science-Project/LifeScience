@@ -52,7 +52,7 @@ class ArticleVersionServiceImpl(
 
     @Transactional
     override fun approve(id: Long) {
-        val currentVersion = getVersionById(id)
+        val currentVersion = getById(id)
         val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, State.PUBLISHED)
         currentVersion.state = State.PUBLISHED
         if (lastPublished != null) {
@@ -69,10 +69,8 @@ class ArticleVersionServiceImpl(
         return repository.getOne(id)
     }
 
-    @Transactional
-    override fun getVersionById(id: Long): ArticleVersion {
-        return repository.findById(id)
-            .orElseThrow { ArticleVersionNotFoundException("Article version with id: $id not found") }
+    override fun getByArticleId(articleId: Long): List<ArticleVersion> {
+        return repository.findAllByMainArticleId(articleId)
     }
 
     private fun checkExistsById(id: Long) {

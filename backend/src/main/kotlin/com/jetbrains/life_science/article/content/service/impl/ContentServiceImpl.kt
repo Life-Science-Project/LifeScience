@@ -28,6 +28,11 @@ class ContentServiceImpl(
         return repository.findAllBySectionId(sectionId)
     }
 
+    override fun findById(contentId: String): Content {
+        checkArticleExists(contentId)
+        return repository.findById(contentId).get()
+    }
+
     override fun createCopiesBySection(origin: Section, newSection: Section) {
         val articles = repository.findAllBySectionId(origin.id)
         articles.forEach { originArticle -> copy(originArticle, newSection) }
@@ -39,15 +44,21 @@ class ContentServiceImpl(
         repository.save(copy)
     }
 
-    override fun create(info: ContentInfo) {
+    override fun create(info: ContentInfo): Content {
         sectionService.checkExistsById(info.sectionId)
         val article = factory.create(info)
-        repository.save(article)
+        return repository.save(article)
     }
 
-    override fun updateText(id: String, text: String) {
+    override fun update(id: String, info: ContentInfo): Content {
+        checkArticleExists(id)
+        return create(info)
+    }
+
+    override fun updateText(id: String, text: String): Content {
         checkArticleExists(id)
         repository.updateText(id, text)
+        return repository.findById(id).get()
     }
 
     override fun delete(id: String) {

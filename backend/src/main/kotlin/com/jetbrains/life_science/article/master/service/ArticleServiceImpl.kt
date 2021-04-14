@@ -16,10 +16,10 @@ class ArticleServiceImpl(
 ) : ArticleService {
 
     @Transactional
-    override fun create(info: ArticleInfo) {
+    override fun create(info: ArticleInfo): Article {
         val category = categoryService.getCategory(info.categoryId)
         val article = factory.create(category)
-        repository.save(article)
+        return repository.save(article)
     }
 
     override fun getById(id: Long): Article {

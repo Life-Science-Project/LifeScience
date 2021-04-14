@@ -27,7 +27,7 @@ class SectionServiceImpl(
 
     @Transactional
     override fun create(info: SectionInfo): Section {
-        val article = articleVersionService.getVersionById(info.articleVersionId)
+        val article = articleVersionService.getById(info.articleVersionId)
         var section = factory.create(info.name, info.description, article)
         // Creating row in database
         section = repository.save(section)
@@ -84,5 +84,9 @@ class SectionServiceImpl(
     override fun getById(id: Long): Section {
         return repository.findById(id)
             .orElseThrow { throw SectionNotFoundException("Section not found by id: $id") }
+    }
+
+    override fun getByVersionId(versionId: Long): List<Section> {
+        return repository.findAllByArticleId(versionId)
     }
 }

@@ -4,6 +4,7 @@ import com.jetbrains.life_science.article.content.dto.ContentDTO
 import com.jetbrains.life_science.article.content.dto.ContentDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.service.ContentService
 import com.jetbrains.life_science.article.content.view.ContentView
+import com.jetbrains.life_science.article.content.view.ContentViewMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
@@ -13,7 +14,8 @@ import java.security.Principal
 @RestController
 @RequestMapping("/api/articles/{articleId}/versions/{versionId}/contents")
 class ContentController(
-    val contentService: ContentService
+    val contentService: ContentService,
+    val mapper: ContentViewMapper
 ) {
 
     @GetMapping
@@ -29,10 +31,11 @@ class ContentController(
     fun getContent(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
-        @PathVariable contentId: Long,
+        @PathVariable contentId: String,
     ): ContentView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            contentService.findById(contentId)
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -43,21 +46,27 @@ class ContentController(
         @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
-        contentService.create(ContentDTOToInfoAdapter(dto))
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            contentService.create(
+                ContentDTOToInfoAdapter(dto)
+            )
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping
+    @PutMapping("/{contentId}")
     fun updateContent(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
+        @PathVariable contentId: String,
         @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            contentService.update(
+                contentId, ContentDTOToInfoAdapter(dto)
+            )
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -69,9 +78,9 @@ class ContentController(
         @RequestBody text: String,
         principal: Principal
     ): ContentView {
-        contentService.updateText(contentId, text)
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        return mapper.createView(
+            contentService.updateText(contentId, text)
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")

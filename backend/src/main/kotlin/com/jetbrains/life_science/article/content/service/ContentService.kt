@@ -5,15 +5,19 @@ import com.jetbrains.life_science.article.section.entity.Section
 
 interface ContentService {
 
-    fun create(info: ContentInfo)
+    fun create(info: ContentInfo): Content
 
-    fun updateText(id: String, text: String)
+    fun update(id: String, info: ContentInfo): Content
+
+    fun updateText(id: String, text: String): Content
 
     fun delete(id: String)
 
     fun deleteBySectionId(sectionId: Long)
 
     fun findAllBySectionId(sectionId: Long): List<Content>
+
+    fun findById(contentId: String): Content
 
     fun createCopiesBySection(origin: Section, newSection: Section)
 }
