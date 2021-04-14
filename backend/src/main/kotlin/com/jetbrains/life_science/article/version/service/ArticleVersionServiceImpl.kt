@@ -27,11 +27,11 @@ class ArticleVersionServiceImpl(
 
     @Transactional
     override fun createBlank(info: ArticleVersionInfo): ArticleVersion {
-        val method = articleService.getById(info.articleId)
-        var methodVersion = factory.create(info, method)
-        methodVersion = repository.save(methodVersion)
-        sectionService.createBlankByVersion(SectionEmptyCreationToInfoAdapter(methodVersion))
-        return methodVersion
+        val article = articleService.getById(info.articleId)
+        var articleVersion = factory.create(info, article)
+        articleVersion = repository.save(articleVersion)
+        sectionService.createBlankByVersion(SectionEmptyCreationToInfoAdapter(articleVersion))
+        return articleVersion
     }
 
     @Transactional
@@ -46,7 +46,7 @@ class ArticleVersionServiceImpl(
     override fun getPublishedVersion(articleId: Long): ArticleVersion {
         return (
             repository.findByMainArticleIdAndState(articleId, State.PUBLISHED)
-                ?: throw PublishedVersionNotFoundException("published version to method $articleId not found")
+                ?: throw PublishedVersionNotFoundException("published version to article: $articleId not found")
             )
     }
 

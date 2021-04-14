@@ -18,9 +18,9 @@ class ArticleVersionController(
     val mapper: ArticleVersionViewMapper,
     val userService: UserService
 ) {
-    @GetMapping("/{methodId}")
-    fun getApprovedVersion(@PathVariable methodId: Long): ArticleVersionView {
-        val version = service.getPublishedVersion(methodId)
+    @GetMapping("/{articleId}")
+    fun getApprovedVersion(@PathVariable articleId: Long): ArticleVersionView {
+        val version = service.getPublishedVersion(articleId)
         return mapper.createView(version)
     }
 
@@ -30,9 +30,9 @@ class ArticleVersionController(
         service.createBlank(ArticleVersionDTOToInfoAdapter(dto, user))
     }
 
-    @PostMapping("/create/copy/{methodId}")
-    fun createCopy(@PathVariable methodId: Long) {
-        service.createCopy(methodId)
+    @PostMapping("/create/copy/{articleId}")
+    fun createCopy(@PathVariable articleId: Long) {
+        service.createCopy(articleId)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")

@@ -1,9 +1,9 @@
 insert into category
 values (1, 'root', null);
 insert into category
-values (2, 'child section 1', 1);
+values (2, 'child category 1', 1);
 insert into category
-values (3, 'child section 2', 1);
+values (3, 'child category 2', 1);
 
 insert into article (id, category_id)
 values (1, 1);

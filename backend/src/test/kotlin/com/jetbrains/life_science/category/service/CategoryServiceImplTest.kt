@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.category.service
 
-import com.jetbrains.life_science.exception.SectionNotFoundException
 import com.jetbrains.life_science.category.repository.CategoryRepository
+import com.jetbrains.life_science.exception.CategoryNotFoundException
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.jupiter.api.Assertions.*
@@ -29,41 +29,41 @@ internal class CategoryServiceImplTest {
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
-    internal fun `add section without parent`() {
+    internal fun `add category without parent`() {
         val mock = mock<CategoryInfo> {
-            on { getName() } doReturn "sample section"
+            on { getName() } doReturn "sample category"
             on { getParentID() } doReturn null
         }
 
-        val section = categoryService.createCategory(mock)
-        val savedSection = categoryRepository.findById(section.id).orElseThrow()
+        val category = categoryService.createCategory(mock)
+        val savedcategory = categoryRepository.findById(category.id).orElseThrow()
 
-        assertEquals("sample section", savedSection.name)
-        assertNull(savedSection.parent)
+        assertEquals("sample category", savedcategory.name)
+        assertNull(savedcategory.parent)
     }
 
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
-    internal fun `add section with parent`() {
+    internal fun `add category with parent`() {
         val mock = mock<CategoryInfo> {
-            on { getName() } doReturn "sample section"
+            on { getName() } doReturn "sample category"
             on { getParentID() } doReturn 1L
         }
 
-        val section = categoryService.createCategory(mock)
-        val savedSection = categoryRepository.findById(section.id).orElseThrow()
+        val category = categoryService.createCategory(mock)
+        val savedcategory = categoryRepository.findById(category.id).orElseThrow()
 
-        assertEquals("sample section", savedSection.name)
-        assertNotNull(section.parent)
-        assertEquals("root", section.parent?.name)
-        assertEquals(1, section.parent?.id)
+        assertEquals("sample category", savedcategory.name)
+        assertNotNull(category.parent)
+        assertEquals("root", category.parent?.name)
+        assertEquals(1, category.parent?.id)
     }
 
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
-    internal fun `delete a section`() {
+    internal fun `delete a category`() {
         categoryService.deleteCategory(3)
         assertFalse(categoryRepository.existsById(3))
     }
@@ -71,44 +71,44 @@ internal class CategoryServiceImplTest {
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
-    internal fun `delete a non-existent section`() {
-        assertThrows(SectionNotFoundException::class.java) { categoryService.deleteCategory(-1L) }
+    internal fun `delete a non-existent category`() {
+        assertThrows(CategoryNotFoundException::class.java) { categoryService.deleteCategory(-1L) }
     }
 
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
-    internal fun `get section test`() {
-        val section = categoryService.getCategory(1L)
-        assertEquals(1L, section.id)
-        assertEquals("root", section.name)
+    internal fun `get category test`() {
+        val category = categoryService.getCategory(1L)
+        assertEquals(1L, category.id)
+        assertEquals("root", category.name)
     }
 
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
-    internal fun `get a non-existent section`() {
-        assertThrows(SectionNotFoundException::class.java) { categoryService.getCategory(-1L) }
+    internal fun `get a non-existent category`() {
+        assertThrows(CategoryNotFoundException::class.java) { categoryService.getCategory(-1L) }
     }
 
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
-    internal fun `get children of a section`() {
+    internal fun `get children of a category`() {
         val children = categoryService.getChildren(1)
         assertEquals(2, children.size)
 
         assertEquals(2, children[0].id)
-        assertEquals("child section 1", children[0].name)
+        assertEquals("child category 1", children[0].name)
 
         assertEquals(3, children[1].id)
-        assertEquals("child section 2", children[1].name)
+        assertEquals("child category 2", children[1].name)
     }
 
     @Test
     @Sql("/scripts/test_common_data.sql")
     @Transactional
-    internal fun `get children of a non-existent section`() {
-        assertThrows(SectionNotFoundException::class.java) { categoryService.getChildren(-1L) }
+    internal fun `get children of a non-existent category`() {
+        assertThrows(CategoryNotFoundException::class.java) { categoryService.getChildren(-1L) }
     }
 }
