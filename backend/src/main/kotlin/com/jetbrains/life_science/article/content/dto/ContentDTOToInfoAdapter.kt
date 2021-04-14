@@ -2,8 +2,8 @@ package com.jetbrains.life_science.article.content.dto
 
 import com.jetbrains.life_science.article.content.service.ContentInfo
 
-class ContentCreationDTOToInfoAdapter(
-    val dto: ContentCreationDTO
+class ContentDTOToInfoAdapter(
+    val dto: ContentDTO
 ) : ContentInfo {
 
     override val id: Long?

@@ -52,14 +52,39 @@ class SectionController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping
+    @PostMapping
     fun updateSection(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
-        @Validated @RequestBody dto: SectionUpdateDTO,
+        @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        service.update(SectionDTOToUpdateInfoAdapter(dto))
+        // TODO(#54): add return value
+        throw UnsupportedOperationException("Not yet implemented")
+    }
+
+    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
+    @PatchMapping("/{sectionId}/name")
+    fun updateSectionName(
+        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
+        @RequestBody name: String,
+        principal: Principal
+    ): SectionView {
+        // TODO(#54): add return value
+        throw UnsupportedOperationException("Not yet implemented")
+    }
+
+    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
+    @PatchMapping("/{sectionId}/description")
+    fun updateSectionDescription(
+        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
+        @RequestBody description: String,
+        principal: Principal
+    ): SectionView {
         // TODO(#54): add return value
         throw UnsupportedOperationException("Not yet implemented")
     }

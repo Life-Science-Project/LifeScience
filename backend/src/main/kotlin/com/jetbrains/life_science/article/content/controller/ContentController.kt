@@ -1,8 +1,7 @@
 package com.jetbrains.life_science.article.content.controller
 
-import com.jetbrains.life_science.article.content.dto.ContentCreationDTO
-import com.jetbrains.life_science.article.content.dto.ContentCreationDTOToInfoAdapter
-import com.jetbrains.life_science.article.content.dto.ContentUpdateDTO
+import com.jetbrains.life_science.article.content.dto.ContentDTO
+import com.jetbrains.life_science.article.content.dto.ContentDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.service.ContentService
 import com.jetbrains.life_science.article.content.view.ContentView
 import org.springframework.http.ResponseEntity
@@ -41,23 +40,36 @@ class ContentController(
     fun createContent(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
-        @Validated @RequestBody dto: ContentCreationDTO,
+        @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
-        contentService.create(ContentCreationDTOToInfoAdapter(dto))
+        contentService.create(ContentDTOToInfoAdapter(dto))
         // TODO(#54): add return value
         throw UnsupportedOperationException("Not yet implemented")
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping
+    @PutMapping
     fun updateContent(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
-        @Validated @RequestBody dto: ContentUpdateDTO,
+        @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
-        contentService.updateText(dto.id, dto.text)
+        // TODO(#54): implement method
+        throw UnsupportedOperationException("Not yet implemented")
+    }
+
+    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
+    @PatchMapping("/{contentId}/text")
+    fun updateContentText(
+        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
+        @PathVariable contentId: String,
+        @RequestBody text: String,
+        principal: Principal
+    ): ContentView {
+        contentService.updateText(contentId, text)
         // TODO(#54): add return value
         throw UnsupportedOperationException("Not yet implemented")
     }

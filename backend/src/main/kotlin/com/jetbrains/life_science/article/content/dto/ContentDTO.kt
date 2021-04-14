@@ -2,7 +2,7 @@ package com.jetbrains.life_science.article.content.dto
 
 import javax.validation.constraints.Positive
 
-class ContentCreationDTO(
+class ContentDTO(
 
     @field:Positive
     val sectionId: Long,

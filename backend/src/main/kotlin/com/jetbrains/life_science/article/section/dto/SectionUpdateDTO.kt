@@ -5,9 +5,6 @@ import javax.validation.constraints.Positive
 
 data class SectionUpdateDTO(
 
-    @field:Positive
-    val id: Long,
-
     @field:NotBlank
     val name: String,
 
