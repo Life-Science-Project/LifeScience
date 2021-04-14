@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/section")
+@RequestMapping("/api/sections")
 class SectionController(
     val service: SectionService,
     val sectionViewMapper: SectionViewMapper
