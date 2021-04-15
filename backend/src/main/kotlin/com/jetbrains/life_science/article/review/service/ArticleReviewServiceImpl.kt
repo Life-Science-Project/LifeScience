@@ -38,7 +38,7 @@ class ArticleReviewServiceImpl(
 
     private fun checkReviewExists(id: Long) {
         if (!repository.existsById(id)) {
-            throw ArticleReviewNotFoundException("Content not found by id: $id")
+            throw ArticleReviewNotFoundException("Review not found by id: $id")
         }
     }
 }
