@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.category
+package com.jetbrains.life_science.category.controller
 
 import com.jetbrains.life_science.category.dto.CategoryDTO
 import com.jetbrains.life_science.category.dto.CategoryDTOToInfoAdapter
