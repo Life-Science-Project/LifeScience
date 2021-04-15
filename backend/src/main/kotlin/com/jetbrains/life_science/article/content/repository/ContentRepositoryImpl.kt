@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.article.content.repository
 
-import com.jetbrains.life_science.article.content.entity.Content
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.elasticsearch.action.update.UpdateRequest

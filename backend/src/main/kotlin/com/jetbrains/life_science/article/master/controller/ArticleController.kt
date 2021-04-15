@@ -25,9 +25,10 @@ class ArticleController(
     }
 
     @GetMapping("/{articleId}")
-    fun getArticle(@PathVariable articleId: Long): List<ArticleView> {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+    fun getArticle(@PathVariable articleId: Long): ArticleView {
+        return mapper.createView(
+            articleService.getById(articleId)
+        )
     }
 
     @PostMapping
