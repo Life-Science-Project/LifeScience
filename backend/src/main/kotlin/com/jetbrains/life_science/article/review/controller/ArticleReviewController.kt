@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
-@RequestMapping("/api/articles/{articleId}/versions/{versionId}/reviews")
+@RequestMapping("/api/articles/versions/{versionId}/reviews")
 class ArticleReviewController(
     val service: ArticleReviewService,
     val mapper: ArticleReviewViewMapper,
@@ -20,7 +20,6 @@ class ArticleReviewController(
 
     @GetMapping
     fun getReviews(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         principal: Principal // only if the version belongs to this user, or the user is admin/moderator
     ): List<ArticleReviewView> {
@@ -30,7 +29,6 @@ class ArticleReviewController(
 
     @GetMapping("/{reviewId}")
     fun getReview(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
         principal: Principal // only if the version belongs to this user, or the user is admin/moderator
@@ -44,7 +42,6 @@ class ArticleReviewController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
     fun createReview(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @Validated @RequestBody dto: ArticleReviewDTO,
         principal: Principal
@@ -59,7 +56,6 @@ class ArticleReviewController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping
     fun updateReview(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @Validated @RequestBody dto: ArticleReviewDTO,
         principal: Principal
@@ -71,7 +67,6 @@ class ArticleReviewController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{reviewId}")
     fun deleteReview(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
     ): ResponseEntity<Void> {

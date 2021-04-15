@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
-@RequestMapping("/api/articles/{articleId}/versions/{versionId}/sections")
+@RequestMapping("/api/articles/versions/{versionId}/sections")
 class SectionController(
     val service: SectionService,
     val sectionViewMapper: SectionViewMapper
@@ -20,7 +20,6 @@ class SectionController(
 
     @GetMapping
     fun getSections(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long
     ): List<SectionView> {
         return service.getByVersionId(versionId).map { sectionViewMapper.createView(it) }
@@ -28,7 +27,6 @@ class SectionController(
 
     @GetMapping("/{sectionId}")
     fun getSection(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @PathVariable sectionId: Long
     ): SectionView {
@@ -38,7 +36,6 @@ class SectionController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
     fun createSection(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
@@ -53,7 +50,6 @@ class SectionController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping
     fun updateSection(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
@@ -65,7 +61,6 @@ class SectionController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/{sectionId}/name")
     fun updateSectionName(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @PathVariable sectionId: Long,
         @RequestBody name: String,
@@ -78,7 +73,6 @@ class SectionController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/{sectionId}/description")
     fun updateSectionDescription(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @PathVariable sectionId: Long,
         @RequestBody description: String,
@@ -91,7 +85,6 @@ class SectionController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{sectionId}")
     fun deleteSection(
-        @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         @PathVariable sectionId: Long,
         principal: Principal
