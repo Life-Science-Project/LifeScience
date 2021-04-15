@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
-@RequestMapping("/api/articles/{articleId}/versions/{versionId}/contents")
+@RequestMapping("/api/articles/versions/sections/{sectionId}/contents")
 class ContentController(
     val contentService: ContentService
 ) {
 
     @GetMapping
     fun getContents(
-        @PathVariable articleId: Long,
-        @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
     ): List<ContentView> {
         // TODO(#54): implement method
         throw UnsupportedOperationException("Not yet implemented")
@@ -27,8 +26,7 @@ class ContentController(
 
     @GetMapping("/{contentId}")
     fun getContent(
-        @PathVariable articleId: Long,
-        @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
         @PathVariable contentId: Long,
     ): ContentView {
         // TODO(#54): implement method
@@ -38,8 +36,7 @@ class ContentController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
     fun createContent(
-        @PathVariable articleId: Long,
-        @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
         @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
@@ -51,8 +48,7 @@ class ContentController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping
     fun updateContent(
-        @PathVariable articleId: Long,
-        @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
         @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
@@ -63,8 +59,7 @@ class ContentController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/{contentId}/text")
     fun updateContentText(
-        @PathVariable articleId: Long,
-        @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
         @PathVariable contentId: String,
         @RequestBody text: String,
         principal: Principal
@@ -77,8 +72,7 @@ class ContentController(
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{contentId}")
     fun deleteContent(
-        @PathVariable articleId: Long,
-        @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
         @PathVariable contentId: String,
         principal: Principal
     ): ResponseEntity<Void> {

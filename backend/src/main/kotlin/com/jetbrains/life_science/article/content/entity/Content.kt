@@ -24,7 +24,4 @@ class Content(
     @Id
     val id: String? = null
 
-) {
-    @Field(name = "_entity_type")
-    val type: String = "Content"
-}
+)
