@@ -6,8 +6,6 @@ interface ArticleVersionService {
 
     fun createBlank(info: ArticleVersionInfo): ArticleVersion
 
-    fun getVersionById(id: Long): ArticleVersion
-
     fun approve(id: Long)
 
     fun createCopy(articleId: Long)
@@ -15,4 +13,6 @@ interface ArticleVersionService {
     fun getPublishedVersion(articleId: Long): ArticleVersion
 
     fun getById(id: Long): ArticleVersion
+
+    fun getByArticleId(articleId: Long): List<ArticleVersion>
 }

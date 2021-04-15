@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.version.adapter
 
-import com.jetbrains.life_science.section.service.SectionCreationInfo
+import com.jetbrains.life_science.article.section.service.SectionCreationInfo
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 
 class SectionEmptyCreationToInfoAdapter(

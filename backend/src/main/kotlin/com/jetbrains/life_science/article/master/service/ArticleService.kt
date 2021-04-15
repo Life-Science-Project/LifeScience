@@ -4,7 +4,7 @@ import com.jetbrains.life_science.article.master.entity.Article
 
 interface ArticleService {
 
-    fun create(info: ArticleInfo)
+    fun create(info: ArticleInfo): Article
 
     fun getById(id: Long): Article
 

@@ -1,0 +1,92 @@
+package com.jetbrains.life_science.article.section.service
+
+import com.jetbrains.life_science.article.content.service.ContentService
+import com.jetbrains.life_science.article.section.entity.Section
+import com.jetbrains.life_science.article.section.factory.SectionFactory
+import com.jetbrains.life_science.article.section.repository.SectionRepository
+import com.jetbrains.life_science.article.section.search.service.SectionSearchUnitService
+import com.jetbrains.life_science.exception.SectionNotFoundException
+import com.jetbrains.life_science.article.version.entity.ArticleVersion
+import com.jetbrains.life_science.article.version.service.ArticleVersionService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+@Service
+class SectionServiceImpl(
+    val factory: SectionFactory,
+    val repository: SectionRepository,
+    val searchService: SectionSearchUnitService
+) : SectionService {
+
+    @Autowired
+    lateinit var articleVersionService: ArticleVersionService
+
+    @Autowired
+    lateinit var contentService: ContentService
+
+    @Transactional
+    override fun create(info: SectionInfo): Section {
+        val article = articleVersionService.getById(info.articleVersionId)
+        var section = factory.create(info.name, info.description, article)
+        // Creating row in database
+        section = repository.save(section)
+        return section
+    }
+
+    @Transactional
+    override fun deleteById(id: Long) {
+        checkExistsById(id)
+        val section = repository.findById(id).orElseThrow()
+        contentService.deleteBySectionId(id)
+        // Deleting row in database
+        repository.delete(section)
+    }
+
+    @Transactional
+    override fun createCopiesByArticle(article: ArticleVersion, newArticle: ArticleVersion) {
+        val sections = repository.findAllByArticle(article)
+        sections.forEach { section -> createCopy(section, newArticle) }
+    }
+
+    override fun deleteSearchUnits(oldSections: List<Section>) {
+        oldSections.forEach { searchService.delete(it.id) }
+    }
+
+    override fun createSearchUnits(newSections: List<Section>) {
+        newSections.forEach { searchService.create(it) }
+    }
+
+    private fun createCopy(origin: Section, newArticle: ArticleVersion) {
+        val copy = factory.copy(origin)
+        copy.article = newArticle
+        contentService.createCopiesBySection(origin, copy)
+        repository.save(copy)
+    }
+
+    override fun createBlankByVersion(info: SectionCreationInfo): Section {
+        val section = factory.createByVersion(info)
+        return repository.save(section)
+    }
+
+    override fun checkExistsById(id: Long) {
+        if (!repository.existsById(id)) {
+            throw SectionNotFoundException("Section not found by id: $id")
+        }
+    }
+
+    @Transactional
+    override fun update(into: SectionUpdateInfo) {
+        val section = getById(into.id)
+        factory.setParams(section, into)
+    }
+
+    override fun getById(id: Long): Section {
+        return repository.findById(id)
+            .orElseThrow { throw SectionNotFoundException("Section not found by id: $id") }
+    }
+
+    override fun getByVersionId(versionId: Long): List<Section> {
+        return repository.findAllByArticleId(versionId)
+    }
+}

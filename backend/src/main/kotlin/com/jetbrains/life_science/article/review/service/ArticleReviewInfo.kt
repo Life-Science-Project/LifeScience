@@ -5,5 +5,5 @@ interface ArticleReviewInfo {
 
     val comment: String
 
-    val authorId: Long
+    val reviewerId: Long
 }

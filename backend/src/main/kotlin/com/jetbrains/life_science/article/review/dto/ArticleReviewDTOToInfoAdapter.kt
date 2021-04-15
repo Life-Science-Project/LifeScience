@@ -9,6 +9,6 @@ class ArticleReviewDTOToInfoAdapter(
         get() = dto.articleVersionId
     override val comment: String
         get() = dto.comment
-    override val authorId: Long
+    override val reviewerId: Long
         get() = dto.authorId
 }
