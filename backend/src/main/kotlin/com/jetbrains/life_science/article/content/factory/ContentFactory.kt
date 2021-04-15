@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component
 class ContentFactory {
 
     fun create(info: ContentInfo): Content {
-        return Content(null, info.sectionId, info.text, info.tags, info.references)
+        return Content(info.sectionId, info.text, info.tags, info.references)
     }
 
     fun copy(origin: Content): Content {
-        return Content(origin.id, origin.sectionId, origin.text, origin.tags, origin.references)
+        return Content(origin.sectionId, origin.text, origin.tags, origin.references, origin.id)
     }
 }
