@@ -45,7 +45,7 @@ class SectionServiceImpl(
 
     @Transactional
     override fun createCopiesByArticle(article: ArticleVersion, newArticle: ArticleVersion) {
-        val sections = repository.findAllByArticle(article)
+        val sections = repository.findAllByArticleVersion(article)
         sections.forEach { section -> createCopy(section, newArticle) }
     }
 
@@ -59,14 +59,9 @@ class SectionServiceImpl(
 
     private fun createCopy(origin: Section, newArticle: ArticleVersion) {
         val copy = factory.copy(origin)
-        copy.article = newArticle
+        copy.articleVersion = newArticle
         paragraphService.createCopiesBySection(origin, copy)
         repository.save(copy)
-    }
-
-    override fun createBlankByVersion(info: SectionCreationInfo): Section {
-        val section = factory.createByVersion(info)
-        return repository.save(section)
     }
 
     override fun checkExistsById(id: Long) {
@@ -81,6 +76,6 @@ class SectionServiceImpl(
     }
 
     override fun getByVersionId(versionId: Long): List<Section> {
-        return repository.findAllByArticleId(versionId)
+        return repository.findAllByArticleVersionId(versionId)
     }
 }

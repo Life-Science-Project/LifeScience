@@ -18,7 +18,7 @@ class Section(
     var description: String?,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id", nullable = false)
+    @JoinColumn(name = "article_version_id", nullable = false)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    var article: ArticleVersion
+    var articleVersion: ArticleVersion
 )
