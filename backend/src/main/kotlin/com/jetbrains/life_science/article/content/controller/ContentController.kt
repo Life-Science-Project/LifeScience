@@ -5,7 +5,6 @@ import com.jetbrains.life_science.article.content.dto.ContentDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.service.ContentService
 import com.jetbrains.life_science.article.content.view.ContentView
 import com.jetbrains.life_science.article.content.view.ContentViewMapper
-import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -80,8 +79,7 @@ class ContentController(
         @PathVariable sectionId: Long,
         @PathVariable contentId: String,
         principal: Principal
-    ): ResponseEntity<Void> {
+    ) {
         contentService.delete(contentId)
-        return ResponseEntity.ok().build()
     }
 }

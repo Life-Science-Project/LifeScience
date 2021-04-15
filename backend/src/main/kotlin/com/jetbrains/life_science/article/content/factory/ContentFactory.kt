@@ -12,6 +12,6 @@ class ContentFactory {
     }
 
     fun copy(origin: Content): Content {
-        return Content(origin.sectionId, origin.text, origin.tags, origin.references, origin.id)
+        return Content(origin.sectionId, origin.text, origin.tags, origin.references, null)
     }
 }

@@ -5,7 +5,6 @@ import com.jetbrains.life_science.article.section.dto.SectionDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.article.section.view.SectionViewMapper
-import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -88,8 +87,7 @@ class SectionController(
         @PathVariable versionId: Long,
         @PathVariable sectionId: Long,
         principal: Principal
-    ): ResponseEntity<Void> {
+    ) {
         service.deleteById(sectionId)
-        return ResponseEntity.ok().build()
     }
 }

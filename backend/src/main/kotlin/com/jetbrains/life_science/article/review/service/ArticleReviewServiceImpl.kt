@@ -5,7 +5,7 @@ import com.jetbrains.life_science.article.review.factory.ArticleReviewFactory
 import com.jetbrains.life_science.article.review.repository.ArticleReviewRepository
 import com.jetbrains.life_science.user.service.UserService
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
-import com.jetbrains.life_science.exception.ContainerNotFoundException
+import com.jetbrains.life_science.exception.ArticleReviewNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -38,7 +38,7 @@ class ArticleReviewServiceImpl(
 
     private fun checkReviewExists(id: Long) {
         if (!repository.existsById(id)) {
-            throw ContainerNotFoundException("Content not found by id: $id")
+            throw ArticleReviewNotFoundException("Content not found by id: $id")
         }
     }
 }

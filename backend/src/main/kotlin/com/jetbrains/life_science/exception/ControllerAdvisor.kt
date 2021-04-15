@@ -34,6 +34,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return notFoundResponse("Article")
     }
 
+    @ExceptionHandler(ArticleReviewNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleArticleReviewNotFound(ex: ArticleReviewNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Article review")
+    }
+
     private fun notFoundResponse(entity: String): ApiErrorResponse {
         return ApiErrorResponse("$entity not found")
     }

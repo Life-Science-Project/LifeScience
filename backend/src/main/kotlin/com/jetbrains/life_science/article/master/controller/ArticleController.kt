@@ -18,12 +18,6 @@ class ArticleController(
     val mapper: ArticleViewMapper
 ) {
 
-    @GetMapping
-    fun getArticles(): List<ArticleView> {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
-    }
-
     @GetMapping("/{articleId}")
     fun getArticle(@PathVariable articleId: Long): ArticleView {
         return mapper.createView(
