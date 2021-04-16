@@ -6,6 +6,7 @@ import com.jetbrains.life_science.article.review.service.ArticleReviewService
 import com.jetbrains.life_science.article.review.view.ArticleReviewView
 import com.jetbrains.life_science.article.review.view.ArticleReviewViewMapper
 import com.jetbrains.life_science.exception.ArticleReviewNotFoundException
+import com.jetbrains.life_science.user.service.UserService
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -15,27 +16,28 @@ import java.security.Principal
 @RequestMapping("/api/articles/versions/{versionId}/reviews")
 class ArticleReviewController(
     val service: ArticleReviewService,
+    val userService: UserService,
     val mapper: ArticleReviewViewMapper,
 ) {
 
     @GetMapping
     fun getReviews(
         @PathVariable versionId: Long,
-        principal: Principal // only if the version belongs to this user, or the user is admin/moderator
+        principal: Principal
     ): List<ArticleReviewView> {
-        TODO("only if the version belongs to this user, or the user is admin/moderator")
-        return service.getAllByVersionId(versionId).map { mapper.createView(it) }
+        val user = userService.getByName(principal.name)
+        return service.getAllByVersionId(versionId, user).map { mapper.createView(it) }
     }
 
     @GetMapping("/{reviewId}")
     fun getReview(
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
-        principal: Principal // only if the version belongs to this user, or the user is admin/moderator
+        principal: Principal
     ): ArticleReviewView {
-        TODO("only if the version belongs to this user, or the user is admin/moderator")
+        val user = userService.getByName(principal.name)
         return mapper.createView(
-            service.getById(reviewId)
+            service.getById(reviewId, user)
         )
     }
 
@@ -64,13 +66,16 @@ class ArticleReviewController(
         @Validated @RequestBody dto: ArticleReviewDTO,
         principal: Principal
     ): ArticleReviewView {
-        if (versionId != dto.articleVersionId) {
+        val user = userService.getByName(principal.name)
+        val review = service.getById(reviewId, user)
+        if (versionId != review.articleVersion.id) {
             throw ArticleReviewNotFoundException("Review's dto article version id and request article version id doesn't match")
         }
         return mapper.createView(
             service.updateById(
                 reviewId,
-                ArticleReviewDTOToInfoAdapter(dto)
+                ArticleReviewDTOToInfoAdapter(dto),
+                user
             )
         )
     }
@@ -80,8 +85,10 @@ class ArticleReviewController(
     fun deleteReview(
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
+        principal: Principal
     ) {
-        val review = service.getById(reviewId)
+        val user = userService.getByName(principal.name)
+        val review = service.getById(reviewId, user)
         if (versionId != review.articleVersion.id) {
             throw ArticleReviewNotFoundException("Review's article version id and request article version id doesn't match")
         }
