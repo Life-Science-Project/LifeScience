@@ -7,6 +7,7 @@ import com.jetbrains.life_science.user.service.UserService
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.ArticleReviewNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ArticleReviewServiceImpl(
@@ -36,11 +37,13 @@ class ArticleReviewServiceImpl(
         return repository.getOne(reviewId)
     }
 
+    @Transactional
     override fun updateById(reviewId: Long, reviewInfo: ArticleReviewInfo): ArticleReview {
-        checkReviewExists(reviewId)
-        val articleVersion = articleVersionService.getById(reviewInfo.articleVersionId)
+        val review = getById(reviewId)
+        val version = articleVersionService.getById(reviewInfo.articleVersionId)
         val user = userService.getById(reviewInfo.reviewerId)
-        return repository.save(factory.create(reviewInfo, articleVersion, user, reviewId))
+        factory.setParams(review, reviewInfo, version, user)
+        return review
     }
 
     private fun checkReviewExists(id: Long) {

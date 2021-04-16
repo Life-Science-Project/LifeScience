@@ -8,6 +8,7 @@ import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.ContentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ContentServiceImpl(
@@ -48,11 +49,11 @@ class ContentServiceImpl(
         return repository.save(content)
     }
 
+    @Transactional
     override fun update(id: String, info: ContentInfo): Content {
-        checkArticleExists(id)
-        sectionService.checkExistsById(info.sectionId)
-        val content = factory.create(info, id)
-        return repository.save(content)
+        val content = findById(id)
+        factory.setParams(content, info)
+        return content
     }
 
     override fun updateText(id: String, text: String): Content {

@@ -2,7 +2,7 @@ package com.jetbrains.life_science.article.section.factory
 
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionCreationInfo
-import com.jetbrains.life_science.article.section.service.SectionUpdateInfo
+import com.jetbrains.life_science.article.section.service.SectionInfo
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import org.springframework.stereotype.Component
 
@@ -12,16 +12,17 @@ class SectionFactory {
         return Section(0, name, description, article)
     }
 
-    fun setParams(section: Section, info: SectionUpdateInfo) {
-        section.name = info.name
-        section.description = info.description
-    }
-
     fun copy(section: Section): Section {
         return Section(0, section.name, section.description, section.article)
     }
 
     fun createByVersion(info: SectionCreationInfo): Section {
         return Section(0, info.name, info.description, info.article)
+    }
+
+    fun setParams(section: Section, info: SectionInfo, version: ArticleVersion) {
+        section.description = info.description
+        section.article = version
+        section.name = info.name
     }
 }

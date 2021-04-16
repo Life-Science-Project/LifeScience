@@ -17,7 +17,7 @@ interface SectionService {
 
     fun checkExistsById(id: Long)
 
-    fun update(into: SectionUpdateInfo)
+    fun update(sectionId: Long, info: SectionInfo): Section
 
     fun createCopiesByArticle(article: ArticleVersion, newArticle: ArticleVersion)
 

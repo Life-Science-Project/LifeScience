@@ -76,14 +76,16 @@ class SectionServiceImpl(
     }
 
     @Transactional
-    override fun update(into: SectionUpdateInfo) {
-        val section = getById(into.id)
-        factory.setParams(section, into)
+    override fun update(sectionId: Long, info: SectionInfo): Section {
+        val section = getById(sectionId)
+        val version = articleVersionService.getById(info.articleVersionId)
+        factory.setParams(section, info, version)
+        return section
     }
 
     override fun getById(id: Long): Section {
-        return repository.findById(id)
-            .orElseThrow { throw SectionNotFoundException("Section not found by id: $id") }
+        checkExistsById(id)
+        return repository.getOne(id)
     }
 
     override fun getByVersionId(versionId: Long): List<Section> {

@@ -13,15 +13,15 @@ class ArticleVersion(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    val name: String,
+    var name: String,
 
     var state: State,
 
     @ManyToOne
-    val mainArticle: Article,
+    var mainArticle: Article,
 
     @ManyToOne
-    val author: User,
+    var author: User,
 
     @OneToMany(mappedBy = "article", cascade = [CascadeType.ALL])
     var sections: MutableList<Section> = mutableListOf()

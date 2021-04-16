@@ -31,11 +31,12 @@ class ArticleServiceImpl(
         return repository.findAllByCategoryId(categoryId)
     }
 
+    @Transactional
     override fun updateById(articleId: Long, info: ArticleInfo): Article {
-        existById(articleId)
+        val article = getById(articleId)
         val category = categoryService.getCategory(info.categoryId)
-        val article = factory.create(category, articleId)
-        return repository.save(article)
+        factory.setParams(article, info, category)
+        return article
     }
 
     override fun deleteById(articleId: Long) {

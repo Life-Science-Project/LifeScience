@@ -6,7 +6,7 @@ import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAda
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import org.springframework.http.ResponseEntity
+import com.jetbrains.life_science.exception.ArticleNotFoundException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -27,8 +27,12 @@ class ArticleVersionController(
 
     @GetMapping("/{versionId}")
     fun getVersion(@PathVariable articleId: Long, @PathVariable versionId: Long): ArticleVersionView {
+        val version = service.getById(versionId)
+        if (articleId != version.mainArticle.id) {
+            throw ArticleNotFoundException("ArticleVersion's article id and request article id doesn't match")
+        }
         return mapper.createView(
-            service.getById(versionId)
+            version
         )
     }
 
@@ -38,6 +42,9 @@ class ArticleVersionController(
         @Validated @RequestBody dto: ArticleVersionDTO,
         principal: Principal
     ): ArticleVersionView {
+        if (articleId != dto.articleId) {
+            throw ArticleNotFoundException("ArticleVersion's dto article id and request article id doesn't match")
+        }
         val user = userService.getByName(principal.name)
         return mapper.createView(
             service.createBlank(
@@ -46,14 +53,24 @@ class ArticleVersionController(
         )
     }
 
-    @PutMapping
+    @PutMapping("/{articleVersionId}")
     fun updateVersion(
         @PathVariable articleId: Long,
+        @PathVariable articleVersionId: Long,
         @Validated @RequestBody dto: ArticleVersionDTO,
         principal: Principal
     ): ArticleVersionView {
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        val articleVersion = service.getById(articleVersionId)
+        if (articleId != articleVersion.mainArticle.id) {
+            throw ArticleNotFoundException("ArticleVersion's article id and request article id doesn't match")
+        }
+        val user = userService.getByName(principal.name)
+        return mapper.createView(
+            service.updateById(
+                articleVersionId,
+                ArticleVersionDTOToInfoAdapter(dto, user),
+            )
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -62,8 +79,7 @@ class ArticleVersionController(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
         principal: Principal
-    ): ResponseEntity<Void> {
+    ) {
         service.approve(versionId)
-        return ResponseEntity.ok().build()
     }
 }

@@ -5,6 +5,7 @@ import com.jetbrains.life_science.article.section.dto.SectionDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.article.section.view.SectionViewMapper
+import com.jetbrains.life_science.exception.SectionNotFoundException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -39,6 +40,9 @@ class SectionController(
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
+        if (versionId != dto.articleVersionId) {
+            throw SectionNotFoundException("Section's dto article version id and request article version id doesn't match")
+        }
         return sectionViewMapper.createView(
             service.create(
                 SectionDTOToInfoAdapter(dto)
@@ -47,14 +51,23 @@ class SectionController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping
+    @PutMapping("/{sectionId}")
     fun updateSection(
         @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        val version = service.getById(sectionId)
+        if (versionId != version.article.id) {
+            throw SectionNotFoundException("Section's article version id and request article version id doesn't match")
+        }
+        return sectionViewMapper.createView(
+            service.update(
+                sectionId,
+                SectionDTOToInfoAdapter(dto)
+            )
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -88,6 +101,10 @@ class SectionController(
         @PathVariable sectionId: Long,
         principal: Principal
     ) {
+        val section = service.getById(sectionId)
+        if (versionId != section.article.id) {
+            throw SectionNotFoundException("Section's dto article version id and request article version id doesn't match")
+        }
         service.deleteById(sectionId)
     }
 }

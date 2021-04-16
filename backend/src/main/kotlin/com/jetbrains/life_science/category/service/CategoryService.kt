@@ -11,4 +11,6 @@ interface CategoryService {
     fun getCategory(id: Long): Category
 
     fun getChildren(id: Long): List<Category>
+
+    fun updateCategory(id: Long, categoryInfo: CategoryInfo): Category
 }
