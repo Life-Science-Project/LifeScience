@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.article.version.search.service
 
+import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.exception.search_unit.ArticleSearchUnitNotFoundException
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.search.factory.ArticleSearchUnitFactory
@@ -19,6 +20,12 @@ class ArticleVersionSearchUnitServiceImpl(
     override fun deleteSearchUnitById(id: Long) {
         checkExistsById(id)
         repository.deleteById(id)
+    }
+
+    override fun update(version: ArticleVersion) {
+        checkExistsById(version.id)
+        val searchUnit = factory.create(version)
+        repository.save(searchUnit)
     }
 
     private fun checkExistsById(id: Long) {

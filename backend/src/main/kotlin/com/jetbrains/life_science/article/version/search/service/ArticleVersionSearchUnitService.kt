@@ -7,4 +7,6 @@ interface ArticleVersionSearchUnitService {
     fun createSearchUnit(version: ArticleVersion)
 
     fun deleteSearchUnitById(id: Long)
+
+    fun update(version: ArticleVersion)
 }

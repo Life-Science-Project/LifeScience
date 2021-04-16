@@ -80,6 +80,7 @@ class SectionServiceImpl(
         val section = getById(sectionId)
         val version = articleVersionService.getById(info.articleVersionId)
         factory.setParams(section, info, version)
+        searchService.update(section)
         return section
     }
 
