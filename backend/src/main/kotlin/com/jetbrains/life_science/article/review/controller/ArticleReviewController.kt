@@ -6,8 +6,6 @@ import com.jetbrains.life_science.article.review.service.ArticleReviewService
 import com.jetbrains.life_science.article.review.view.ArticleReviewView
 import com.jetbrains.life_science.article.review.view.ArticleReviewViewMapper
 import com.jetbrains.life_science.exception.ArticleReviewNotFoundException
-import com.jetbrains.life_science.exception.ContentNotFoundException
-import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -72,7 +70,8 @@ class ArticleReviewController(
         return mapper.createView(
             service.updateById(
                 reviewId,
-                ArticleReviewDTOToInfoAdapter(dto))
+                ArticleReviewDTOToInfoAdapter(dto)
+            )
         )
     }
 

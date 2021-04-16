@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.article.version.search.service
 
-import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.exception.search_unit.ArticleSearchUnitNotFoundException
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.search.factory.ArticleSearchUnitFactory

@@ -30,7 +30,7 @@ class ContentController(
         @PathVariable sectionId: Long,
         @PathVariable contentId: String,
     ): ContentView {
-        val content =  contentService.findById(contentId)
+        val content = contentService.findById(contentId)
         if (sectionId != content.sectionId) {
             throw ContentNotFoundException("Content's section id and request section id doesn't match")
         }
@@ -69,7 +69,8 @@ class ContentController(
         return mapper.createView(
             contentService.update(
                 contentId,
-                ContentDTOToInfoAdapter(dto))
+                ContentDTOToInfoAdapter(dto)
+            )
         )
     }
 
