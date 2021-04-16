@@ -62,10 +62,10 @@ class ArticleReviewServiceImpl(
     }
 
     private fun checkAccess(reviewer: User, author: User, user: User): Boolean {
-        return reviewer.id == user.id
-            || author.id == user.id
-            || user.roles.any {
-            it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
-        }
+        return reviewer.id == user.id ||
+            author.id == user.id ||
+            user.roles.any {
+                it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
+            }
     }
 }
