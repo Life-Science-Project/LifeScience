@@ -5,6 +5,7 @@ import com.jetbrains.life_science.article.content.dto.ContentDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.service.ContentService
 import com.jetbrains.life_science.article.content.view.ContentView
 import com.jetbrains.life_science.article.content.view.ContentViewMapper
+import com.jetbrains.life_science.exception.ContentNotFoundException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -21,8 +22,7 @@ class ContentController(
     fun getContents(
         @PathVariable sectionId: Long,
     ): List<ContentView> {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        return contentService.findAllBySectionId(sectionId).map { mapper.createView(it) }
     }
 
     @GetMapping("/{contentId}")
@@ -30,9 +30,11 @@ class ContentController(
         @PathVariable sectionId: Long,
         @PathVariable contentId: String,
     ): ContentView {
-        return mapper.createView(
-            contentService.findById(contentId)
-        )
+        val content =  contentService.findById(contentId)
+        if (sectionId != content.sectionId) {
+            throw ContentNotFoundException("Content's section id and request section id doesn't match")
+        }
+        return mapper.createView(content)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -42,6 +44,9 @@ class ContentController(
         @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
+        if (sectionId != dto.sectionId) {
+            throw ContentNotFoundException("Content's dto section id and request section id doesn't match")
+        }
         return mapper.createView(
             contentService.create(
                 ContentDTOToInfoAdapter(dto)
@@ -50,14 +55,22 @@ class ContentController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping
+    @PutMapping("/{contentId}")
     fun updateContent(
         @PathVariable sectionId: Long,
+        @PathVariable contentId: String,
         @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        val content = contentService.findById(contentId)
+        if (sectionId != content.sectionId) {
+            throw ContentNotFoundException("Content's dto section id and request section id doesn't match")
+        }
+        return mapper.createView(
+            contentService.update(
+                contentId,
+                ContentDTOToInfoAdapter(dto))
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -68,6 +81,7 @@ class ContentController(
         @RequestBody text: String,
         principal: Principal
     ): ContentView {
+        TODO("Do we need patch endpoints?")
         return mapper.createView(
             contentService.updateText(contentId, text)
         )
@@ -80,6 +94,10 @@ class ContentController(
         @PathVariable contentId: String,
         principal: Principal
     ) {
+        val content = contentService.findById(contentId)
+        if (sectionId != content.sectionId) {
+            throw ContentNotFoundException("Content's section id and request section id doesn't match")
+        }
         contentService.delete(contentId)
     }
 }

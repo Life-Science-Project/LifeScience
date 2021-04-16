@@ -23,10 +23,29 @@ class ArticleServiceImpl(
     }
 
     override fun getById(id: Long): Article {
-        return repository.findById(id).orElseThrow { ArticleNotFoundException("article with id $id not found") }
+        existById(id)
+        return repository.findById(id).get()
     }
 
     override fun getByCategoryId(categoryId: Long): List<Article> {
         return repository.findAllByCategoryId(categoryId)
+    }
+
+    override fun updateById(articleId: Long, info: ArticleInfo): Article {
+        existById(articleId)
+        val category = categoryService.getCategory(info.categoryId)
+        val article = factory.create(category, articleId)
+        return repository.save(article)
+    }
+
+    override fun deleteById(articleId: Long) {
+        existById(articleId)
+        repository.deleteById(articleId)
+    }
+
+    private fun existById(articleId: Long) {
+        if (!repository.existsById(articleId)) {
+            throw ArticleNotFoundException("Article not found by id: $articleId")
+        }
     }
 }

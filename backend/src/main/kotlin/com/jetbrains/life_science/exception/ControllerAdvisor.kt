@@ -16,9 +16,9 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return notFoundResponse("Section")
     }
 
-    @ExceptionHandler(ContainerNotFoundException::class)
+    @ExceptionHandler(ContentNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleContentNotFound(ex: ContainerNotFoundException, request: WebRequest): ApiErrorResponse {
+    fun handleContentNotFound(ex: ContentNotFoundException, request: WebRequest): ApiErrorResponse {
         return notFoundResponse("Content")
     }
 

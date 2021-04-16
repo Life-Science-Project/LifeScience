@@ -36,6 +36,13 @@ class ArticleReviewServiceImpl(
         return repository.getOne(reviewId)
     }
 
+    override fun updateById(reviewId: Long, reviewInfo: ArticleReviewInfo): ArticleReview {
+        checkReviewExists(reviewId)
+        val articleVersion = articleVersionService.getById(reviewInfo.articleVersionId)
+        val user = userService.getById(reviewInfo.reviewerId)
+        return repository.save(factory.create(reviewInfo, articleVersion, user, reviewId))
+    }
+
     private fun checkReviewExists(id: Long) {
         if (!repository.existsById(id)) {
             throw ArticleReviewNotFoundException("Review not found by id: $id")

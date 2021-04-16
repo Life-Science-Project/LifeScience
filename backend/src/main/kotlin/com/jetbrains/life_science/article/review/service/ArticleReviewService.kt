@@ -11,4 +11,6 @@ interface ArticleReviewService {
     fun getAllByVersionId(articleVersionId: Long): List<ArticleReview>
 
     fun getById(reviewId: Long): ArticleReview
+
+    fun updateById(reviewId: Long, reviewInfo: ArticleReviewInfo): ArticleReview
 }

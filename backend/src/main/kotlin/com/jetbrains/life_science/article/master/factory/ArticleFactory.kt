@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class ArticleFactory {
 
-    fun create(category: Category): Article {
-        return Article(0, category)
+    fun create(category: Category, articleId: Long = 0): Article {
+        return Article(articleId, category)
     }
 }

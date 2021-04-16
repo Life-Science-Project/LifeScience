@@ -5,7 +5,7 @@ import com.jetbrains.life_science.article.content.factory.ContentFactory
 import com.jetbrains.life_science.article.content.repository.ContentRepository
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
-import com.jetbrains.life_science.exception.ContainerNotFoundException
+import com.jetbrains.life_science.exception.ContentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -44,13 +44,15 @@ class ContentServiceImpl(
 
     override fun create(info: ContentInfo): Content {
         sectionService.checkExistsById(info.sectionId)
-        val article = factory.create(info)
-        return repository.save(article)
+        val content = factory.create(info)
+        return repository.save(content)
     }
 
     override fun update(id: String, info: ContentInfo): Content {
         checkArticleExists(id)
-        return create(info)
+        sectionService.checkExistsById(info.sectionId)
+        val content = factory.create(info, id)
+        return repository.save(content)
     }
 
     override fun updateText(id: String, text: String): Content {
@@ -66,7 +68,7 @@ class ContentServiceImpl(
 
     private fun checkArticleExists(id: String) {
         if (!repository.existsById(id)) {
-            throw ContainerNotFoundException("Content not found by id: $id")
+            throw ContentNotFoundException("Content not found by id: $id")
         }
     }
 }

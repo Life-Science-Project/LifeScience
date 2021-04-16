@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ArticleReviewFactory {
-    fun create(info: ArticleReviewInfo, articleVersion: ArticleVersion, user: User): ArticleReview {
-        return ArticleReview(0, articleVersion, info.comment, user)
+    fun create(info: ArticleReviewInfo, articleVersion: ArticleVersion, user: User, reviewId: Long = 0): ArticleReview {
+        return ArticleReview(reviewId, articleVersion, info.comment, user)
     }
 }

@@ -5,6 +5,8 @@ import com.jetbrains.life_science.article.review.dto.ArticleReviewDTOToInfoAdapt
 import com.jetbrains.life_science.article.review.service.ArticleReviewService
 import com.jetbrains.life_science.article.review.view.ArticleReviewView
 import com.jetbrains.life_science.article.review.view.ArticleReviewViewMapper
+import com.jetbrains.life_science.exception.ArticleReviewNotFoundException
+import com.jetbrains.life_science.exception.ContentNotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
@@ -46,6 +48,9 @@ class ArticleReviewController(
         @Validated @RequestBody dto: ArticleReviewDTO,
         principal: Principal
     ): ArticleReviewView {
+        if (versionId != dto.articleVersionId) {
+            throw ArticleReviewNotFoundException("Review's dto article version id and request article version id doesn't match")
+        }
         return mapper.createView(
             service.addReview(
                 ArticleReviewDTOToInfoAdapter(dto)
@@ -54,14 +59,21 @@ class ArticleReviewController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping
+    @PutMapping("/{reviewId}")
     fun updateReview(
         @PathVariable versionId: Long,
+        @PathVariable reviewId: Long,
         @Validated @RequestBody dto: ArticleReviewDTO,
         principal: Principal
     ): ArticleReviewView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        if (versionId != dto.articleVersionId) {
+            throw ArticleReviewNotFoundException("Review's dto article version id and request article version id doesn't match")
+        }
+        return mapper.createView(
+            service.updateById(
+                reviewId,
+                ArticleReviewDTOToInfoAdapter(dto))
+        )
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -69,8 +81,11 @@ class ArticleReviewController(
     fun deleteReview(
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
-    ): ResponseEntity<Void> {
+    ) {
+        val review = service.getById(reviewId)
+        if (versionId != review.articleVersion.id) {
+            throw ArticleReviewNotFoundException("Review's article version id and request article version id doesn't match")
+        }
         service.deleteReview(reviewId)
-        return ResponseEntity.ok().build()
     }
 }
