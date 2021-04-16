@@ -3,7 +3,7 @@ package com.jetbrains.life_science.article.section.search.service
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.search.factory.SectionSearchUnitFactory
 import com.jetbrains.life_science.article.section.search.repository.SectionSearchUnitRepository
-import com.jetbrains.life_science.exception.search_unit.ContainerSearchUnitNotFoundException
+import com.jetbrains.life_science.exception.search_unit.SectionSearchUnitNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -30,7 +30,7 @@ class SectionSearchUnitServiceImpl(
 
     private fun checkExistsById(id: Long) {
         if (!repository.existsById(id)) {
-            throw ContainerSearchUnitNotFoundException("Container search unit with id $id not found")
+            throw SectionSearchUnitNotFoundException("Section search unit with id $id not found")
         }
     }
 }
