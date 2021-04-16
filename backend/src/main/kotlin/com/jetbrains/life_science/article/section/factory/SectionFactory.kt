@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.article.section.factory
 
 import com.jetbrains.life_science.article.section.entity.Section
-import com.jetbrains.life_science.article.section.service.SectionCreationInfo
 import com.jetbrains.life_science.article.section.service.SectionInfo
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import org.springframework.stereotype.Component
@@ -13,16 +12,12 @@ class SectionFactory {
     }
 
     fun copy(section: Section): Section {
-        return Section(0, section.name, section.description, section.article)
+        return Section(0, section.name, section.description, section.articleVersion)
     }
 
-    fun createByVersion(info: SectionCreationInfo): Section {
-        return Section(0, info.name, info.description, info.article)
-    }
-
-    fun setParams(section: Section, info: SectionInfo, version: ArticleVersion) {
-        section.description = info.description
-        section.article = version
-        section.name = info.name
+    fun setParams(origin: Section, info: SectionInfo, version: ArticleVersion) {
+        origin.description = info.description
+        origin.articleVersion = version
+        origin.name = info.name
     }
 }

@@ -23,7 +23,7 @@ class ArticleVersion(
     @ManyToOne
     var author: User,
 
-    @OneToMany(mappedBy = "article", cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "articleVersion", cascade = [CascadeType.ALL])
     var sections: MutableList<Section> = mutableListOf()
 
 )

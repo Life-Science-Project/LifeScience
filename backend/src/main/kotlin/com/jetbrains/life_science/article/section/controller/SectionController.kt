@@ -59,7 +59,7 @@ class SectionController(
         principal: Principal
     ): SectionView {
         val version = service.getById(sectionId)
-        if (versionId != version.article.id) {
+        if (versionId != version.articleVersion.id) {
             throw SectionNotFoundException("Section's article version id and request article version id doesn't match")
         }
         return sectionViewMapper.createView(
@@ -102,7 +102,7 @@ class SectionController(
         principal: Principal
     ) {
         val section = service.getById(sectionId)
-        if (versionId != section.article.id) {
+        if (versionId != section.articleVersion.id) {
             throw SectionNotFoundException("Section's dto article version id and request article version id doesn't match")
         }
         service.deleteById(sectionId)

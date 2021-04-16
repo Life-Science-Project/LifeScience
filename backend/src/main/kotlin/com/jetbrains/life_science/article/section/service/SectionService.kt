@@ -5,8 +5,6 @@ import com.jetbrains.life_science.article.version.entity.ArticleVersion
 
 interface SectionService {
 
-    fun createBlankByVersion(info: SectionCreationInfo): Section
-
     fun create(info: SectionInfo): Section
 
     fun deleteById(id: Long)

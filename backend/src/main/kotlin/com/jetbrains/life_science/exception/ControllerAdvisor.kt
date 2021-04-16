@@ -16,10 +16,10 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return notFoundResponse("Section")
     }
 
-    @ExceptionHandler(ContentNotFoundException::class)
+    @ExceptionHandler(ParagraphNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleContentNotFound(ex: ContentNotFoundException, request: WebRequest): ApiErrorResponse {
-        return notFoundResponse("Content")
+    fun handleParagraphNotFound(ex: ParagraphNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Paragraph")
     }
 
     @ExceptionHandler(ArticleVersionNotFoundException::class)
@@ -34,10 +34,10 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return notFoundResponse("Article")
     }
 
-    @ExceptionHandler(ArticleReviewNotFoundException::class)
+    @ExceptionHandler(ReviewNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleArticleReviewNotFound(ex: ArticleReviewNotFoundException, request: WebRequest): ApiErrorResponse {
-        return notFoundResponse("Article review")
+    fun handleReviewNotFound(ex: ReviewNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Review")
     }
 
     private fun notFoundResponse(entity: String): ApiErrorResponse {

@@ -14,6 +14,4 @@ class Category(
 
     @ManyToOne
     var parent: Category? = null,
-
-    // TODO(#54): add OneToMany List<Article> mappedBy=category
 )
