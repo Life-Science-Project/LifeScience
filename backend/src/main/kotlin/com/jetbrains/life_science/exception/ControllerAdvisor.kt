@@ -40,6 +40,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return notFoundResponse("Review")
     }
 
+    @ExceptionHandler(UserAlreadyExistsException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleUserAlreadyExists(ex: UserAlreadyExistsException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse("User already exists")
+    }
+
     private fun notFoundResponse(entity: String): ApiErrorResponse {
         return ApiErrorResponse("$entity not found")
     }

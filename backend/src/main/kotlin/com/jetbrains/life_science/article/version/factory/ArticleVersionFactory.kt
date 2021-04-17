@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class ArticleVersionFactory {
 
     fun create(info: ArticleVersionInfo, article: Article): ArticleVersion {
-        return ArticleVersion(0, info.name, State.EDITING, article, info.user)
+        return ArticleVersion(0, info.name, State.EDITING, article, info.userCredentials)
     }
 
     fun createCopy(articleVersion: ArticleVersion): ArticleVersion {

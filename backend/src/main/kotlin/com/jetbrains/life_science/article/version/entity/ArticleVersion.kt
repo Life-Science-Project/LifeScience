@@ -2,7 +2,7 @@ package com.jetbrains.life_science.article.version.entity
 
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.master.entity.Article
-import com.jetbrains.life_science.user.entity.User
+import com.jetbrains.life_science.user.credentials.entity.UserCredentials
 import javax.persistence.*
 
 @Entity
@@ -21,7 +21,7 @@ class ArticleVersion(
     val mainArticle: Article,
 
     @ManyToOne
-    val author: User,
+    val author: UserCredentials,
 
     @OneToMany(mappedBy = "articleVersion", cascade = [CascadeType.ALL])
     var sections: MutableList<Section> = mutableListOf()

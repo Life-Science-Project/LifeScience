@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.config.jwt
 
-import com.jetbrains.life_science.user.service.UserDetailsServiceImpl
+import com.jetbrains.life_science.user.credentials.service.UserDetailsServiceImpl
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource

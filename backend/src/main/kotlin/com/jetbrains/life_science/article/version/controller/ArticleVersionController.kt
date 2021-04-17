@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.version.controller
 
-import com.jetbrains.life_science.user.service.UserService
+import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAdapter
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
@@ -17,7 +17,7 @@ import java.security.Principal
 class ArticleVersionController(
     val service: ArticleVersionService,
     val mapper: ArticleVersionViewMapper,
-    val userService: UserService
+    val userCredentialsService: UserCredentialsService
 ) {
 
     @GetMapping
@@ -38,7 +38,7 @@ class ArticleVersionController(
         @Validated @RequestBody dto: ArticleVersionDTO,
         principal: Principal
     ): ArticleVersionView {
-        val user = userService.getByName(principal.name)
+        val user = userCredentialsService.getByEmail(principal.name)
         return mapper.createView(
             service.createBlank(
                 ArticleVersionDTOToInfoAdapter(dto, user)
