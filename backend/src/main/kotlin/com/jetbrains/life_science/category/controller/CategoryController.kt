@@ -53,8 +53,7 @@ class CategoryController(
         principal: Principal
     ): CategoryView {
         val category = service.updateCategory(
-            categoryId,
-            CategoryDTOToInfoAdapter(categoryDTO)
+            CategoryDTOToInfoAdapter(categoryDTO, categoryId)
         )
         return mapper.createView(
             category,

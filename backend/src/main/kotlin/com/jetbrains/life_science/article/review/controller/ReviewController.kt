@@ -66,8 +66,7 @@ class ArticleReviewController(
         val review = service.getById(reviewId, user)
         checkIdEquality(versionId, review.articleVersion.id)
         val updatedReview = service.updateById(
-            reviewId,
-            ReviewDTOToInfoAdapter(dto),
+            ReviewDTOToInfoAdapter(dto, reviewId),
             user
         )
         return mapper.createView(updatedReview)

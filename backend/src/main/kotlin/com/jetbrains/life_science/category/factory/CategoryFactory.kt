@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component
 @Component
 class CategoryFactory {
     fun createSection(categoryInfo: CategoryInfo, parent: Category?): Category {
-        return Category(categoryInfo.getId(), categoryInfo.getName(), parent)
+        return Category(categoryInfo.id, categoryInfo.name, parent)
     }
 
     fun setParams(category: Category, categoryInfo: CategoryInfo, parent: Category?) {
-        category.name = categoryInfo.getName()
+        category.name = categoryInfo.name
         category.parent = parent
     }
 }

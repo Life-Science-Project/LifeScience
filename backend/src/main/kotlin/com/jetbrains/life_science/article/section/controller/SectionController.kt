@@ -59,8 +59,7 @@ class SectionController(
         val version = service.getById(sectionId)
         checkIdEquality(versionId, version.articleVersion.id)
         val updatedSection = service.update(
-            sectionId,
-            SectionDTOToInfoAdapter(dto)
+            SectionDTOToInfoAdapter(dto, sectionId)
         )
         return sectionViewMapper.createView(updatedSection)
     }

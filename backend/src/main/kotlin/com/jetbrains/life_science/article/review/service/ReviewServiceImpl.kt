@@ -38,7 +38,7 @@ class ReviewServiceImpl(
 
     override fun getById(reviewId: Long, user: User): Review {
         checkReviewExists(reviewId)
-        val review = repository.getOne(reviewId)
+        val review = repository.findById(reviewId).get()
         if (checkAccess(review.reviewer, review.articleVersion.author, user)) {
             return review
         } else {
@@ -47,8 +47,8 @@ class ReviewServiceImpl(
     }
 
     @Transactional
-    override fun updateById(reviewId: Long, reviewInfo: ReviewInfo, user: User): Review {
-        val review = getById(reviewId, user)
+    override fun updateById(reviewInfo: ReviewInfo, user: User): Review {
+        val review = getById(reviewInfo.id, user)
         val version = articleVersionService.getById(reviewInfo.articleVersionId)
         val reviewer = userService.getById(reviewInfo.reviewerId)
         factory.setParams(review, reviewInfo, version, reviewer)

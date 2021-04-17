@@ -7,7 +7,7 @@ interface ParagraphService {
 
     fun create(info: ParagraphInfo): Paragraph
 
-    fun update(id: String, info: ParagraphInfo): Paragraph
+    fun update(info: ParagraphInfo): Paragraph
 
     fun updateText(id: String, text: String): Paragraph
 
@@ -17,7 +17,7 @@ interface ParagraphService {
 
     fun findAllBySectionId(sectionId: Long): List<Paragraph>
 
-    fun findById(paragraphId: String): Paragraph
+    fun findById(paragraphId: String?): Paragraph
 
     fun createCopiesBySection(origin: Section, newSection: Section)
 }

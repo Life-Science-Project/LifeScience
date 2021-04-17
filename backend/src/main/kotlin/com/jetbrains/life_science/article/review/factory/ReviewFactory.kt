@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 class ReviewFactory {
     fun create(info: ReviewInfo, articleVersion: ArticleVersion, user: User): Review {
-        return Review(0, articleVersion, info.comment, user)
+        return Review(info.id, articleVersion, info.comment, user)
     }
 
     fun setParams(articleReview: Review, info: ReviewInfo, version: ArticleVersion, reviewer: User) {

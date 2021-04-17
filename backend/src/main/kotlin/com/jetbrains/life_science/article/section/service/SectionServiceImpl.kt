@@ -71,8 +71,8 @@ class SectionServiceImpl(
     }
 
     @Transactional
-    override fun update(sectionId: Long, info: SectionInfo): Section {
-        val section = getById(sectionId)
+    override fun update(info: SectionInfo): Section {
+        val section = getById(info.id)
         val version = articleVersionService.getById(info.articleVersionId)
         factory.setParams(section, info, version)
         return section
@@ -80,7 +80,7 @@ class SectionServiceImpl(
 
     override fun getById(id: Long): Section {
         checkExistsById(id)
-        return repository.getOne(id)
+        return repository.findById(id).get()
     }
 
     override fun getByVersionId(versionId: Long): List<Section> {

@@ -37,7 +37,7 @@ class ParagraphController(
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
-    fun createContent(
+    fun createParagraph(
         @PathVariable sectionId: Long,
         @Validated @RequestBody dto: ParagraphDTO,
         principal: Principal
@@ -51,7 +51,7 @@ class ParagraphController(
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping("/{paragraphId}")
-    fun updateContent(
+    fun updateParagraph(
         @PathVariable sectionId: Long,
         @PathVariable paragraphId: String,
         @Validated @RequestBody dto: ParagraphDTO,
@@ -60,15 +60,14 @@ class ParagraphController(
         val paragraph = paragraphService.findById(paragraphId)
         checkIdEquality(sectionId, paragraph.sectionId)
         val updatedParagraph = paragraphService.update(
-            paragraphId,
-            ParagraphDTOToInfoAdapter(dto)
+            ParagraphDTOToInfoAdapter(dto, paragraphId)
         )
         return mapper.createView(updatedParagraph)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{paragraphId}")
-    fun deleteContent(
+    fun deleteParagraph(
         @PathVariable sectionId: Long,
         @PathVariable paragraphId: String,
         principal: Principal

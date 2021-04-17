@@ -59,8 +59,7 @@ class ArticleVersionController(
         checkIdEquality(articleId, articleVersion.mainArticle.id)
         val user = userService.getByName(principal.name)
         val updatedVersion = service.updateById(
-            versionId,
-            ArticleVersionDTOToInfoAdapter(dto, user),
+            ArticleVersionDTOToInfoAdapter(dto, user, versionId),
         )
         return mapper.createView(updatedVersion)
     }

@@ -14,8 +14,9 @@ class CategoryServiceImpl(
 ) : CategoryService {
 
     override fun createCategory(categoryInfo: CategoryInfo): Category {
-        val parent = categoryInfo.getParentId()?.let {
-            categoryRepository.getOne(it)
+        val parent = categoryInfo.parentId?.let {
+            existById(it)
+            categoryRepository.findById(it).get()
         }
         return categoryRepository.save(categoryFactory.createSection(categoryInfo, parent))
     }
@@ -27,7 +28,7 @@ class CategoryServiceImpl(
 
     override fun getCategory(id: Long): Category {
         existById(id)
-        return categoryRepository.getOne(id)
+        return categoryRepository.findById(id).get()
     }
 
     override fun getChildren(id: Long): List<Category> {
@@ -36,9 +37,9 @@ class CategoryServiceImpl(
     }
 
     @Transactional
-    override fun updateCategory(id: Long, categoryInfo: CategoryInfo): Category {
-        val category = getCategory(id)
-        val parent = categoryInfo.getParentId()?.let { getCategory(it) }
+    override fun updateCategory(categoryInfo: CategoryInfo): Category {
+        val category = getCategory(categoryInfo.id)
+        val parent = categoryInfo.parentId?.let { getCategory(it) }
         categoryFactory.setParams(category, categoryInfo, parent)
         return category
     }

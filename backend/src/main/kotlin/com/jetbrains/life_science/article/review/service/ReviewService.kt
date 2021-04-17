@@ -13,5 +13,5 @@ interface ReviewService {
 
     fun getById(reviewId: Long, user: User): Review
 
-    fun updateById(reviewId: Long, reviewInfo: ReviewInfo, user: User): Review
+    fun updateById(reviewInfo: ReviewInfo, user: User): Review
 }

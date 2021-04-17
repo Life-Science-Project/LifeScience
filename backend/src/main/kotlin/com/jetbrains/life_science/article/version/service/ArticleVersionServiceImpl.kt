@@ -64,7 +64,7 @@ class ArticleVersionServiceImpl(
 
     override fun getById(id: Long): ArticleVersion {
         checkExistsById(id)
-        return repository.getOne(id)
+        return repository.findById(id).get()
     }
 
     override fun getByArticleId(articleId: Long): List<ArticleVersion> {
@@ -72,8 +72,8 @@ class ArticleVersionServiceImpl(
     }
 
     @Transactional
-    override fun updateById(articleVersionId: Long, info: ArticleVersionInfo): ArticleVersion {
-        val version = getById(articleVersionId)
+    override fun updateById(info: ArticleVersionInfo): ArticleVersion {
+        val version = getById(info.id)
         val article = articleService.getById(info.articleId)
         factory.setParams(version, info, article)
         return version

@@ -32,8 +32,8 @@ class ArticleServiceImpl(
     }
 
     @Transactional
-    override fun updateById(articleId: Long, info: ArticleInfo): Article {
-        val article = getById(articleId)
+    override fun updateById(info: ArticleInfo): Article {
+        val article = getById(info.id)
         val category = categoryService.getCategory(info.categoryId)
         factory.setParams(article, category)
         return article

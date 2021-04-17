@@ -2,17 +2,14 @@ package com.jetbrains.life_science.category.dto
 
 import com.jetbrains.life_science.category.service.CategoryInfo
 
-class CategoryDTOToInfoAdapter(private val categoryDTO: CategoryDTO) : CategoryInfo {
+class CategoryDTOToInfoAdapter(
+    private val categoryDTO: CategoryDTO,
+    override val id: Long = 0
+) : CategoryInfo {
 
-    override fun getId(): Long {
-        return 0
-    }
+    override val name: String
+        get() = categoryDTO.name
 
-    override fun getName(): String {
-        return categoryDTO.name
-    }
-
-    override fun getParentId(): Long? {
-        return categoryDTO.parentId
-    }
+    override val parentId: Long?
+        get() = categoryDTO.parentId
 }

@@ -39,8 +39,7 @@ class ArticleController(
         principal: Principal
     ): ArticleView {
         val updatedArticle = articleService.updateById(
-            articleId,
-            ArticleDTOToInfoAdapter(dto)
+            ArticleDTOToInfoAdapter(dto, articleId)
         )
         return mapper.createView(updatedArticle)
     }
