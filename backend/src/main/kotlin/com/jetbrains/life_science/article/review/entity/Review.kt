@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.article.review.entity
 
+import com.jetbrains.life_science.user.credentials.entity.UserCredentials
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
-import com.jetbrains.life_science.user.details.entity.User
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -22,5 +22,5 @@ class Review(
     var comment: String,
 
     @ManyToOne
-    var reviewer: User
+    var reviewer: UserCredentials
 )

@@ -8,7 +8,5 @@ enum class AcademicDegree {
 
     MASTER,
 
-    PROFESSIONAL,
-
-    NONE
+    PROFESSIONAL
 }

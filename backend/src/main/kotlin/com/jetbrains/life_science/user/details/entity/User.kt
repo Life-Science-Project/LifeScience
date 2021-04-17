@@ -19,10 +19,10 @@ class User(
     val lastName: String,
 
     @Enumerated
-    val doctorDegree: DoctorDegree = DoctorDegree.NONE,
+    val doctorDegree: DoctorDegree? = null,
 
     @Enumerated
-    val academicDegree: AcademicDegree = AcademicDegree.NONE,
+    val academicDegree: AcademicDegree? = null,
 
     @ManyToMany
     val organisations: MutableList<Organisation>,

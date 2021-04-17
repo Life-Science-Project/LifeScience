@@ -4,12 +4,15 @@ import com.jetbrains.life_science.user.credentials.entity.LoginInfo
 
 class LoginDTOToInfoAdapter(private val loginDTO: LoginDTO) : LoginInfo {
 
-    override val id: Long
-        get() = 0
+    override fun getId(): Long {
+        return 0
+    }
 
-    override val email: String
-        get() = loginDTO.email
+    override fun getEmail(): String {
+        return loginDTO.email
+    }
 
-    override val password: String
-        get() = loginDTO.password
+    override fun getPassword(): String {
+        return loginDTO.password
+    }
 }
