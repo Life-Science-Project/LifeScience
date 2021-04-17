@@ -30,7 +30,8 @@ class SectionController(
         @PathVariable versionId: Long,
         @PathVariable sectionId: Long
     ): SectionView {
-        return sectionViewMapper.createView(service.getById(sectionId))
+        val section = service.getById(sectionId)
+        return sectionViewMapper.createView(section)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -40,14 +41,11 @@ class SectionController(
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        if (versionId != dto.articleVersionId) {
-            throw SectionNotFoundException("Section's dto article version id and request article version id doesn't match")
-        }
-        return sectionViewMapper.createView(
-            service.create(
-                SectionDTOToInfoAdapter(dto)
-            )
+        checkIdEquality(versionId, dto.articleVersionId)
+        val section = service.create(
+            SectionDTOToInfoAdapter(dto)
         )
+        return sectionViewMapper.createView(section)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -59,39 +57,12 @@ class SectionController(
         principal: Principal
     ): SectionView {
         val version = service.getById(sectionId)
-        if (versionId != version.articleVersion.id) {
-            throw SectionNotFoundException("Section's article version id and request article version id doesn't match")
-        }
-        return sectionViewMapper.createView(
-            service.update(
-                sectionId,
-                SectionDTOToInfoAdapter(dto)
-            )
+        checkIdEquality(versionId, version.articleVersion.id)
+        val updatedSection = service.update(
+            sectionId,
+            SectionDTOToInfoAdapter(dto)
         )
-    }
-
-    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{sectionId}/name")
-    fun updateSectionName(
-        @PathVariable versionId: Long,
-        @PathVariable sectionId: Long,
-        @RequestBody name: String,
-        principal: Principal
-    ): SectionView {
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
-    }
-
-    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{sectionId}/description")
-    fun updateSectionDescription(
-        @PathVariable versionId: Long,
-        @PathVariable sectionId: Long,
-        @RequestBody description: String,
-        principal: Principal
-    ): SectionView {
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        return sectionViewMapper.createView(updatedSection)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -102,9 +73,16 @@ class SectionController(
         principal: Principal
     ) {
         val section = service.getById(sectionId)
-        if (versionId != section.articleVersion.id) {
-            throw SectionNotFoundException("Section's dto article version id and request article version id doesn't match")
-        }
+        checkIdEquality(versionId, section.articleVersion.id)
         service.deleteById(sectionId)
+    }
+
+    private fun checkIdEquality(
+        versionId: Long,
+        entityId: Long
+    ) {
+        if (versionId != entityId) {
+            throw SectionNotFoundException("Section's article version id and request article version id doesn't match")
+        }
     }
 }

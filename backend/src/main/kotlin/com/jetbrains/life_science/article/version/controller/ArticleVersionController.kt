@@ -28,9 +28,7 @@ class ArticleVersionController(
     @GetMapping("/{versionId}")
     fun getVersion(@PathVariable articleId: Long, @PathVariable versionId: Long): ArticleVersionView {
         val version = service.getById(versionId)
-        if (articleId != version.mainArticle.id) {
-            throw ArticleNotFoundException("ArticleVersion's article id and request article id doesn't match")
-        }
+        checkIdEquality(articleId, version.mainArticle.id)
         return mapper.createView(
             version
         )
@@ -42,35 +40,29 @@ class ArticleVersionController(
         @Validated @RequestBody dto: ArticleVersionDTO,
         principal: Principal
     ): ArticleVersionView {
-        if (articleId != dto.articleId) {
-            throw ArticleNotFoundException("ArticleVersion's dto article id and request article id doesn't match")
-        }
+        checkIdEquality(articleId, dto.articleId)
         val user = userService.getByName(principal.name)
-        return mapper.createView(
-            service.createBlank(
-                ArticleVersionDTOToInfoAdapter(dto, user)
-            )
+        val createdVersion = service.createBlank(
+            ArticleVersionDTOToInfoAdapter(dto, user)
         )
+        return mapper.createView(createdVersion)
     }
 
-    @PutMapping("/{articleVersionId}")
+    @PutMapping("/{versionId}")
     fun updateVersion(
         @PathVariable articleId: Long,
-        @PathVariable articleVersionId: Long,
+        @PathVariable versionId: Long,
         @Validated @RequestBody dto: ArticleVersionDTO,
         principal: Principal
     ): ArticleVersionView {
-        val articleVersion = service.getById(articleVersionId)
-        if (articleId != articleVersion.mainArticle.id) {
-            throw ArticleNotFoundException("ArticleVersion's article id and request article id doesn't match")
-        }
+        val articleVersion = service.getById(versionId)
+        checkIdEquality(articleId, articleVersion.mainArticle.id)
         val user = userService.getByName(principal.name)
-        return mapper.createView(
-            service.updateById(
-                articleVersionId,
-                ArticleVersionDTOToInfoAdapter(dto, user),
-            )
+        val updatedVersion = service.updateById(
+            versionId,
+            ArticleVersionDTOToInfoAdapter(dto, user),
         )
+        return mapper.createView(updatedVersion)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -81,5 +73,14 @@ class ArticleVersionController(
         principal: Principal
     ) {
         service.approve(versionId)
+    }
+
+    private fun checkIdEquality(
+        articleId: Long,
+        entityId: Long
+    ) {
+        if (articleId != entityId) {
+            throw ArticleNotFoundException("ArticleVersion's article id and request article id doesn't match")
+        }
     }
 }

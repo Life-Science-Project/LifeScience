@@ -36,9 +36,8 @@ class ArticleReviewController(
         principal: Principal
     ): ReviewView {
         val user = userService.getByName(principal.name)
-        return mapper.createView(
-            service.getById(reviewId, user)
-        )
+        val review = service.getById(reviewId, user)
+        return mapper.createView(review)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -48,14 +47,11 @@ class ArticleReviewController(
         @Validated @RequestBody dto: ReviewDTO,
         principal: Principal
     ): ReviewView {
-        if (versionId != dto.articleVersionId) {
-            throw ReviewNotFoundException("Review's dto article version id and request article version id doesn't match")
-        }
-        return mapper.createView(
-            service.addReview(
-                ReviewDTOToInfoAdapter(dto)
-            )
+        checkIdEquality(versionId, dto.articleVersionId)
+        val review = service.addReview(
+            ReviewDTOToInfoAdapter(dto)
         )
+        return mapper.createView(review)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -68,16 +64,13 @@ class ArticleReviewController(
     ): ReviewView {
         val user = userService.getByName(principal.name)
         val review = service.getById(reviewId, user)
-        if (versionId != review.articleVersion.id) {
-            throw ReviewNotFoundException("Review's dto article version id and request article version id doesn't match")
-        }
-        return mapper.createView(
-            service.updateById(
-                reviewId,
-                ReviewDTOToInfoAdapter(dto),
-                user
-            )
+        checkIdEquality(versionId, review.articleVersion.id)
+        val updatedReview = service.updateById(
+            reviewId,
+            ReviewDTOToInfoAdapter(dto),
+            user
         )
+        return mapper.createView(updatedReview)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -89,9 +82,13 @@ class ArticleReviewController(
     ) {
         val user = userService.getByName(principal.name)
         val review = service.getById(reviewId, user)
-        if (versionId != review.articleVersion.id) {
+        checkIdEquality(versionId, review.articleVersion.id)
+        service.deleteReview(reviewId)
+    }
+
+    private fun checkIdEquality(versionId: Long, entityId: Long) {
+        if (versionId != entityId) {
             throw ReviewNotFoundException("Review's article version id and request article version id doesn't match")
         }
-        service.deleteReview(reviewId)
     }
 }

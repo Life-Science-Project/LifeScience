@@ -38,12 +38,11 @@ class ArticleController(
         @Validated @RequestBody dto: ArticleDTO,
         principal: Principal
     ): ArticleView {
-        return mapper.createView(
-            articleService.updateById(
-                articleId,
-                ArticleDTOToInfoAdapter(dto)
-            )
+        val updatedArticle = articleService.updateById(
+            articleId,
+            ArticleDTOToInfoAdapter(dto)
         )
+        return mapper.createView(updatedArticle)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")

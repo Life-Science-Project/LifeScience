@@ -8,7 +8,6 @@ import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.ParagraphNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ParagraphServiceImpl(
@@ -49,11 +48,10 @@ class ParagraphServiceImpl(
         return repository.save(paragraph)
     }
 
-    @Transactional
     override fun update(id: String, info: ParagraphInfo): Paragraph {
         val paragraph = findById(id)
         factory.setParams(paragraph, info)
-        return paragraph
+        return repository.save(paragraph)
     }
 
     override fun updateText(id: String, text: String): Paragraph {

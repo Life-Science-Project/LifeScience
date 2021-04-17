@@ -8,11 +8,23 @@ import org.springframework.stereotype.Component
 class ParagraphFactory {
 
     fun create(info: ParagraphInfo): Paragraph {
-        return Paragraph(info.sectionId, info.text, info.tags, info.references, null)
+        return Paragraph(
+            sectionId = info.sectionId,
+            text = info.text,
+            tags = info.tags,
+            references = info.references,
+            id = null
+        )
     }
 
     fun copy(origin: Paragraph): Paragraph {
-        return Paragraph(origin.sectionId, origin.text, origin.tags, origin.references, null)
+        return Paragraph(
+            sectionId = origin.sectionId,
+            text = origin.text,
+            tags = origin.tags,
+            references = origin.references,
+            id = null
+        )
     }
 
     fun setParams(origin: Paragraph, info: ParagraphInfo) {

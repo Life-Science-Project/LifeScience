@@ -76,12 +76,11 @@ class ArticleVersionServiceImpl(
         val version = getById(articleVersionId)
         val article = articleService.getById(info.articleId)
         factory.setParams(version, info, article)
-        searchService.update(version)
         return version
     }
 
     private fun checkExistsById(id: Long) {
-        if (repository.existsById(id)) {
+        if (!repository.existsById(id)) {
             throw ArticleVersionNotFoundException("Article version with id: $id not found")
         }
     }

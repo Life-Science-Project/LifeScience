@@ -25,15 +25,13 @@ class ParagraphController(
         return paragraphService.findAllBySectionId(sectionId).map { mapper.createView(it) }
     }
 
-    @GetMapping("/{contentId}")
+    @GetMapping("/{paragraphId}")
     fun getParagraph(
         @PathVariable sectionId: Long,
-        @PathVariable contentId: String,
+        @PathVariable paragraphId: String,
     ): ParagraphView {
-        val paragraph = paragraphService.findById(contentId)
-        if (sectionId != paragraph.sectionId) {
-            throw ParagraphNotFoundException("Paragraph's section id and request section id doesn't match")
-        }
+        val paragraph = paragraphService.findById(paragraphId)
+        checkIdEquality(sectionId, paragraph.sectionId)
         return mapper.createView(paragraph)
     }
 
@@ -44,61 +42,48 @@ class ParagraphController(
         @Validated @RequestBody dto: ParagraphDTO,
         principal: Principal
     ): ParagraphView {
-        if (sectionId != dto.sectionId) {
-            throw ParagraphNotFoundException("Paragraph's dto section id and request section id doesn't match")
-        }
-        return mapper.createView(
-            paragraphService.create(
-                ParagraphDTOToInfoAdapter(dto)
-            )
+        checkIdEquality(sectionId, dto.sectionId)
+        val paragraph = paragraphService.create(
+            ParagraphDTOToInfoAdapter(dto)
         )
+        return mapper.createView(paragraph)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping("/{contentId}")
+    @PutMapping("/{paragraphId}")
     fun updateContent(
         @PathVariable sectionId: Long,
-        @PathVariable contentId: String,
+        @PathVariable paragraphId: String,
         @Validated @RequestBody dto: ParagraphDTO,
         principal: Principal
     ): ParagraphView {
-        val paragraph = paragraphService.findById(contentId)
-        if (sectionId != paragraph.sectionId) {
-            throw ParagraphNotFoundException("Paragraph's dto section id and request section id doesn't match")
-        }
-        return mapper.createView(
-            paragraphService.update(
-                contentId,
-                ParagraphDTOToInfoAdapter(dto)
-            )
+        val paragraph = paragraphService.findById(paragraphId)
+        checkIdEquality(sectionId, paragraph.sectionId)
+        val updatedParagraph = paragraphService.update(
+            paragraphId,
+            ParagraphDTOToInfoAdapter(dto)
         )
+        return mapper.createView(updatedParagraph)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{contentId}/text")
-    fun updateContentText(
-        @PathVariable sectionId: Long,
-        @PathVariable contentId: String,
-        @RequestBody text: String,
-        principal: Principal
-    ): ParagraphView {
-        TODO("Do we need patch endpoints?")
-        return mapper.createView(
-            paragraphService.updateText(contentId, text)
-        )
-    }
-
-    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @DeleteMapping("/{contentId}")
+    @DeleteMapping("/{paragraphId}")
     fun deleteContent(
         @PathVariable sectionId: Long,
-        @PathVariable contentId: String,
+        @PathVariable paragraphId: String,
         principal: Principal
     ) {
-        val paragraph = paragraphService.findById(contentId)
-        if (sectionId != paragraph.sectionId) {
+        val paragraph = paragraphService.findById(paragraphId)
+        checkIdEquality(sectionId, paragraph.sectionId)
+        paragraphService.delete(paragraphId)
+    }
+
+    private fun checkIdEquality(
+        sectionId: Long,
+        entityId: Long
+    ) {
+        if (sectionId != entityId) {
             throw ParagraphNotFoundException("Paragraph's section id and request section id doesn't match")
         }
-        paragraphService.delete(contentId)
     }
 }
