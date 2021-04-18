@@ -1,11 +1,11 @@
 package com.jetbrains.life_science.article.version.dto
 
-import com.jetbrains.life_science.user.credentials.entity.UserCredentials
 import com.jetbrains.life_science.article.version.service.ArticleVersionInfo
+import com.jetbrains.life_science.user.details.entity.User
 
 class ArticleVersionDTOToInfoAdapter(
     val dto: ArticleVersionDTO,
-    override val userCredentials: UserCredentials
+    override val user: User
 ) : ArticleVersionInfo {
 
     override val articleId: Long

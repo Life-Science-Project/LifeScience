@@ -38,10 +38,10 @@ class ArticleVersionController(
         @Validated @RequestBody dto: ArticleVersionDTO,
         principal: Principal
     ): ArticleVersionView {
-        val user = userCredentialsService.getByEmail(principal.name)
+        val credentials = userCredentialsService.getByEmail(principal.name)
         return mapper.createView(
             service.createBlank(
-                ArticleVersionDTOToInfoAdapter(dto, user)
+                ArticleVersionDTOToInfoAdapter(dto, credentials.user)
             )
         )
     }

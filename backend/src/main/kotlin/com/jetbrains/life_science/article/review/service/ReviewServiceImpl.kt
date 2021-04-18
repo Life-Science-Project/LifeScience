@@ -6,6 +6,7 @@ import com.jetbrains.life_science.article.review.repository.ReviewRepository
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.ReviewNotFoundException
+import com.jetbrains.life_science.user.details.service.UserService
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,12 +14,13 @@ class ReviewServiceImpl(
     val repository: ReviewRepository,
     val factory: ReviewFactory,
     val articleVersionService: ArticleVersionService,
-    val userCredentialsService: UserCredentialsService
+    val userCredentialsService: UserCredentialsService,
+    val userService: UserService
 ) : ReviewService {
 
     override fun addReview(info: ReviewInfo): Review {
         val articleVersion = articleVersionService.getById(info.articleVersionId)
-        val user = userCredentialsService.getById(info.reviewerId)
+        val user = userCredentialsService.getById(info.reviewerId).user
         return repository.save(factory.create(info, articleVersion, user))
     }
 
