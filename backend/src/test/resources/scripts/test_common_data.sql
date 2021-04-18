@@ -10,10 +10,15 @@ values (1, 1);
 insert into article (id, category_id)
 values (2, 2);
 
-insert into user_credential (id, password, username)
-VALUES (1, 'password', 'sample');
-insert into user_credential (id, password, username)
-VALUES (2, 'password2', 'sample2');
+insert into user_details (id, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
+values (1, 0, 0, 'alex1', 'ln alex', '123', '222');
+insert into user_details (id, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
+values (2, 0, 0, 'alex1', 'ln alex', '123', '222');
+
+insert into user_credential (id, password, username, user_id)
+values (1, 'password', 'sample', 1);
+insert into user_credential (id, password, username, user_id)
+values (2, 'password2', 'sample2', 2);
 
 insert into article_version (id, name, state, author_id, main_article_id)
 values (1, 'master 1', 3, 1, 1);
