@@ -27,15 +27,11 @@ class UserCredentialsServiceImpl(
     }
 
     override fun createUser(userInfo: NewUserInfo): UserCredentials {
-        checkUserNotExistsByEmail(userInfo.email)
+        if (userCredentialsRepository.existsByEmail(userInfo.email)) {
+            throw UserAlreadyExistsException("user with email ${userInfo.email} already exists")
+        }
         val roles = mutableListOf(roleRepository.findByName("ROLE_USER"))
         val user = userCredentialsFactory.createUser(userInfo, roles)
         return userCredentialsRepository.save(user)
-    }
-
-    fun checkUserNotExistsByEmail(email: String) {
-        if (userCredentialsRepository.existsByEmail(email)) {
-            throw UserAlreadyExistsException("user with email $email already exists")
-        }
     }
 }
