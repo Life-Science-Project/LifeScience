@@ -1,9 +1,9 @@
 package com.jetbrains.life_science.user.credentials.entity
 
 interface LoginInfo {
-    fun getId(): Long
+    val id: Long
 
-    fun getEmail(): String
+    val email: String
 
-    fun getPassword(): String
+    val password: String
 }

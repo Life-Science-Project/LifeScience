@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.version.service
 
-import com.jetbrains.life_science.user.credentials.entity.UserCredentials
+import com.jetbrains.life_science.user.details.entity.User
 
 interface ArticleVersionInfo {
 
@@ -10,5 +10,5 @@ interface ArticleVersionInfo {
 
     val name: String
 
-    val userCredentials: UserCredentials
+    val user: User
 }
