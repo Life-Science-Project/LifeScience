@@ -21,6 +21,12 @@ class ArticleVersionSearchUnitServiceImpl(
         repository.deleteById(id)
     }
 
+    override fun update(version: ArticleVersion) {
+        checkExistsById(version.id)
+        val searchUnit = factory.create(version)
+        repository.save(searchUnit)
+    }
+
     private fun checkExistsById(id: Long) {
         if (!repository.existsById(id)) {
             throw ArticleSearchUnitNotFoundException("Article version search unit not found with id: $id")

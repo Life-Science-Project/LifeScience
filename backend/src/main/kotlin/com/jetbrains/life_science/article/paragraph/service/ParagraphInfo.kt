@@ -2,7 +2,7 @@ package com.jetbrains.life_science.article.paragraph.service
 
 interface ParagraphInfo {
 
-    val id: Long?
+    val id: String?
 
     val sectionId: Long
 

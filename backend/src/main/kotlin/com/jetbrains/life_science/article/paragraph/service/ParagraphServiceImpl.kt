@@ -26,7 +26,10 @@ class ParagraphServiceImpl(
         return repository.findAllBySectionId(sectionId)
     }
 
-    override fun findById(paragraphId: String): Paragraph {
+    override fun findById(paragraphId: String?): Paragraph {
+        if (paragraphId == null) {
+            throw ParagraphNotFoundException("Paragraph not found by id: $paragraphId")
+        }
         checkArticleExists(paragraphId)
         return repository.findById(paragraphId).get()
     }
@@ -44,13 +47,14 @@ class ParagraphServiceImpl(
 
     override fun create(info: ParagraphInfo): Paragraph {
         sectionService.checkExistsById(info.sectionId)
-        val article = factory.create(info)
-        return repository.save(article)
+        val paragraph = factory.create(info)
+        return repository.save(paragraph)
     }
 
-    override fun update(id: String, info: ParagraphInfo): Paragraph {
-        checkArticleExists(id)
-        return create(info)
+    override fun update(info: ParagraphInfo): Paragraph {
+        val paragraph = findById(info.id)
+        factory.setParams(paragraph, info)
+        return repository.save(paragraph)
     }
 
     override fun updateText(id: String, text: String): Paragraph {

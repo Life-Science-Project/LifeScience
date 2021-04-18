@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component
 @Component
 class ParagraphViewMapper {
     fun createView(paragraph: Paragraph): ParagraphView {
-        return ParagraphView(paragraph.text, paragraph.references)
+        return ParagraphView(paragraph.id, paragraph.text, paragraph.references)
     }
 }

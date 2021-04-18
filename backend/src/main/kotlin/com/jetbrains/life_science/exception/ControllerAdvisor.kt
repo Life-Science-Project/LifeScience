@@ -25,7 +25,7 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ExceptionHandler(ArticleVersionNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleArticleVersionNotFound(ex: ArticleVersionNotFoundException, request: WebRequest): ApiErrorResponse {
-        return notFoundResponse("Article")
+        return notFoundResponse("Article version")
     }
 
     @ExceptionHandler(ArticleNotFoundException::class)

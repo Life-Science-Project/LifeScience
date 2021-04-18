@@ -5,6 +5,7 @@ import com.jetbrains.life_science.article.section.dto.SectionDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.article.section.view.SectionViewMapper
+import com.jetbrains.life_science.exception.SectionNotFoundException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -29,7 +30,8 @@ class SectionController(
         @PathVariable versionId: Long,
         @PathVariable sectionId: Long
     ): SectionView {
-        return sectionViewMapper.createView(service.getById(sectionId))
+        val section = service.getById(sectionId)
+        return sectionViewMapper.createView(section)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -39,46 +41,27 @@ class SectionController(
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        return sectionViewMapper.createView(
-            service.create(
-                SectionDTOToInfoAdapter(dto)
-            )
+        checkIdEquality(versionId, dto.articleVersionId)
+        val section = service.create(
+            SectionDTOToInfoAdapter(dto)
         )
+        return sectionViewMapper.createView(section)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping
+    @PutMapping("/{sectionId}")
     fun updateSection(
         @PathVariable versionId: Long,
+        @PathVariable sectionId: Long,
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
-    }
-
-    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{sectionId}/name")
-    fun updateSectionName(
-        @PathVariable versionId: Long,
-        @PathVariable sectionId: Long,
-        @RequestBody name: String,
-        principal: Principal
-    ): SectionView {
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
-    }
-
-    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{sectionId}/description")
-    fun updateSectionDescription(
-        @PathVariable versionId: Long,
-        @PathVariable sectionId: Long,
-        @RequestBody description: String,
-        principal: Principal
-    ): SectionView {
-        // TODO(#54): add return value
-        throw UnsupportedOperationException("Not yet implemented")
+        val version = service.getById(sectionId)
+        checkIdEquality(versionId, version.articleVersion.id)
+        val updatedSection = service.update(
+            SectionDTOToInfoAdapter(dto, sectionId)
+        )
+        return sectionViewMapper.createView(updatedSection)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -88,6 +71,17 @@ class SectionController(
         @PathVariable sectionId: Long,
         principal: Principal
     ) {
+        val section = service.getById(sectionId)
+        checkIdEquality(versionId, section.articleVersion.id)
         service.deleteById(sectionId)
+    }
+
+    private fun checkIdEquality(
+        versionId: Long,
+        entityId: Long
+    ) {
+        if (versionId != entityId) {
+            throw SectionNotFoundException("Section's article version id and request article version id doesn't match")
+        }
     }
 }

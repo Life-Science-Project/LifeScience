@@ -5,7 +5,8 @@ import com.jetbrains.life_science.article.review.dto.ReviewDTOToInfoAdapter
 import com.jetbrains.life_science.article.review.service.ReviewService
 import com.jetbrains.life_science.article.review.view.ReviewView
 import com.jetbrains.life_science.article.review.view.ReviewViewMapper
-import org.springframework.http.ResponseEntity
+import com.jetbrains.life_science.exception.ReviewNotFoundException
+import com.jetbrains.life_science.user.service.UserService
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -13,9 +14,10 @@ import java.security.Principal
 
 @RestController
 @RequestMapping("/api/articles/versions/{versionId}/reviews")
-class ReviewController(
-    val reviewService: ReviewService,
-    val reviewMapper: ReviewViewMapper,
+class ArticleReviewController(
+    val service: ReviewService,
+    val userService: UserService,
+    val mapper: ReviewViewMapper,
 ) {
 
     @GetMapping
@@ -23,8 +25,8 @@ class ReviewController(
         @PathVariable versionId: Long,
         principal: Principal
     ): List<ReviewView> {
-        // TODO: only if the version belongs to this user, or the user is admin/moderator
-        return reviewService.getAllByVersionId(versionId).map { reviewMapper.createView(it) }
+        val user = userService.getByName(principal.name)
+        return service.getAllByVersionId(versionId, user).map { mapper.createView(it) }
     }
 
     @GetMapping("/{reviewId}")
@@ -33,10 +35,9 @@ class ReviewController(
         @PathVariable reviewId: Long,
         principal: Principal
     ): ReviewView {
-        // TODO: only if the version belongs to this user, or the user is admin/moderator
-        return reviewMapper.createView(
-            reviewService.getById(reviewId)
-        )
+        val user = userService.getByName(principal.name)
+        val review = service.getById(reviewId, user)
+        return mapper.createView(review)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -46,22 +47,29 @@ class ReviewController(
         @Validated @RequestBody dto: ReviewDTO,
         principal: Principal
     ): ReviewView {
-        return reviewMapper.createView(
-            reviewService.addReview(
-                ReviewDTOToInfoAdapter(dto)
-            )
+        checkIdEquality(versionId, dto.articleVersionId)
+        val review = service.addReview(
+            ReviewDTOToInfoAdapter(dto)
         )
+        return mapper.createView(review)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping
+    @PutMapping("/{reviewId}")
     fun updateReview(
         @PathVariable versionId: Long,
+        @PathVariable reviewId: Long,
         @Validated @RequestBody dto: ReviewDTO,
         principal: Principal
     ): ReviewView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        val user = userService.getByName(principal.name)
+        val review = service.getById(reviewId, user)
+        checkIdEquality(versionId, review.articleVersion.id)
+        val updatedReview = service.updateById(
+            ReviewDTOToInfoAdapter(dto, reviewId),
+            user
+        )
+        return mapper.createView(updatedReview)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -69,8 +77,17 @@ class ReviewController(
     fun deleteReview(
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
-    ): ResponseEntity<Void> {
-        reviewService.deleteReview(reviewId)
-        return ResponseEntity.ok().build()
+        principal: Principal
+    ) {
+        val user = userService.getByName(principal.name)
+        val review = service.getById(reviewId, user)
+        checkIdEquality(versionId, review.articleVersion.id)
+        service.deleteReview(reviewId)
+    }
+
+    private fun checkIdEquality(versionId: Long, entityId: Long) {
+        if (versionId != entityId) {
+            throw ReviewNotFoundException("Review's article version id and request article version id doesn't match")
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.jetbrains.life_science.category.factory.CategoryFactory
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.exception.CategoryNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CategoryServiceImpl(
@@ -13,8 +14,9 @@ class CategoryServiceImpl(
 ) : CategoryService {
 
     override fun createCategory(categoryInfo: CategoryInfo): Category {
-        val parent = categoryInfo.getParentId()?.let {
-            categoryRepository.getOne(it)
+        val parent = categoryInfo.parentId?.let {
+            existById(it)
+            categoryRepository.findById(it).get()
         }
         return categoryRepository.save(categoryFactory.createSection(categoryInfo, parent))
     }
@@ -26,12 +28,20 @@ class CategoryServiceImpl(
 
     override fun getCategory(id: Long): Category {
         existById(id)
-        return categoryRepository.getOne(id)
+        return categoryRepository.findById(id).get()
     }
 
     override fun getChildren(id: Long): List<Category> {
         existById(id)
         return categoryRepository.findAllByParentId(id)
+    }
+
+    @Transactional
+    override fun updateCategory(categoryInfo: CategoryInfo): Category {
+        val category = getCategory(categoryInfo.id)
+        val parent = categoryInfo.parentId?.let { getCategory(it) }
+        categoryFactory.setParams(category, categoryInfo, parent)
+        return category
     }
 
     private fun existById(id: Long) {

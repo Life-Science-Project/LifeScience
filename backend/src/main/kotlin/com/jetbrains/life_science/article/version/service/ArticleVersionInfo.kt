@@ -4,6 +4,8 @@ import com.jetbrains.life_science.user.details.entity.User
 
 interface ArticleVersionInfo {
 
+    val id: Long
+
     val articleId: Long
 
     val name: String

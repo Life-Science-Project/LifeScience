@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.article.review.service
 
 import com.jetbrains.life_science.article.review.entity.Review
+import com.jetbrains.life_science.user.entity.User
 
 interface ReviewService {
 
@@ -8,7 +9,9 @@ interface ReviewService {
 
     fun deleteReview(reviewId: Long)
 
-    fun getAllByVersionId(articleVersionId: Long): List<Review>
+    fun getAllByVersionId(articleVersionId: Long, user: User): List<Review>
 
-    fun getById(reviewId: Long): Review
+    fun getById(reviewId: Long, user: User): Review
+
+    fun updateById(reviewInfo: ReviewInfo, user: User): Review
 }

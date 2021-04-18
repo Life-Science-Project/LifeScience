@@ -64,15 +64,23 @@ class ArticleVersionServiceImpl(
 
     override fun getById(id: Long): ArticleVersion {
         checkExistsById(id)
-        return repository.getOne(id)
+        return repository.findById(id).get()
     }
 
     override fun getByArticleId(articleId: Long): List<ArticleVersion> {
         return repository.findAllByMainArticleId(articleId)
     }
 
+    @Transactional
+    override fun updateById(info: ArticleVersionInfo): ArticleVersion {
+        val version = getById(info.id)
+        val article = articleService.getById(info.articleId)
+        factory.setParams(version, info, article)
+        return version
+    }
+
     private fun checkExistsById(id: Long) {
-        if (repository.existsById(id)) {
+        if (!repository.existsById(id)) {
             throw ArticleVersionNotFoundException("Article version with id: $id not found")
         }
     }
