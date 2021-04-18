@@ -5,7 +5,8 @@ import com.jetbrains.life_science.article.version.service.ArticleVersionInfo
 
 class ArticleVersionDTOToInfoAdapter(
     val dto: ArticleVersionDTO,
-    override val user: User
+    override val user: User,
+    override val id: Long = 0
 ) : ArticleVersionInfo {
 
     override val articleId: Long

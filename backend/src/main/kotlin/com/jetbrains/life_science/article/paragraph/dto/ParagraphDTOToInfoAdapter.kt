@@ -3,11 +3,9 @@ package com.jetbrains.life_science.article.paragraph.dto
 import com.jetbrains.life_science.article.paragraph.service.ParagraphInfo
 
 class ParagraphDTOToInfoAdapter(
-    val dto: ParagraphDTO
+    val dto: ParagraphDTO,
+    override val id: String? = null
 ) : ParagraphInfo {
-
-    override val id: Long?
-        get() = null
 
     override val sectionId: Long
         get() = dto.sectionId

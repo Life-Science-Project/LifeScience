@@ -16,7 +16,7 @@ class SearchController(
     val service: SearchService
 ) {
 
-    @PostMapping()
+    @PostMapping
     fun search(@Validated @RequestBody queryDTO: SearchQueryDTO): List<SearchResult> {
         return service.search(SearchQueryDTOToQueryInfoAdapter(queryDTO))
     }

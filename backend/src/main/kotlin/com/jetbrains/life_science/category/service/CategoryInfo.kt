@@ -1,9 +1,9 @@
 package com.jetbrains.life_science.category.service
 
 interface CategoryInfo {
-    fun getId(): Long
+    val id: Long
 
-    fun getName(): String
+    val name: String
 
-    fun getParentId(): Long?
+    val parentId: Long?
 }

@@ -5,6 +5,7 @@ import com.jetbrains.life_science.article.paragraph.dto.ParagraphDTOToInfoAdapte
 import com.jetbrains.life_science.article.paragraph.service.ParagraphService
 import com.jetbrains.life_science.article.paragraph.view.ParagraphView
 import com.jetbrains.life_science.article.paragraph.view.ParagraphViewMapper
+import com.jetbrains.life_science.exception.ParagraphNotFoundException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -14,15 +15,14 @@ import java.security.Principal
 @RequestMapping("/api/articles/versions/sections/{sectionId}/paragraphs")
 class ParagraphController(
     val paragraphService: ParagraphService,
-    val paragraphMapper: ParagraphViewMapper
+    val mapper: ParagraphViewMapper
 ) {
 
     @GetMapping
     fun getParagraphs(
         @PathVariable sectionId: Long,
     ): List<ParagraphView> {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+        return paragraphService.findAllBySectionId(sectionId).map { mapper.createView(it) }
     }
 
     @GetMapping("/{paragraphId}")
@@ -30,9 +30,9 @@ class ParagraphController(
         @PathVariable sectionId: Long,
         @PathVariable paragraphId: String,
     ): ParagraphView {
-        return paragraphMapper.createView(
-            paragraphService.findById(paragraphId)
-        )
+        val paragraph = paragraphService.findById(paragraphId)
+        checkIdEquality(sectionId, paragraph.sectionId)
+        return mapper.createView(paragraph)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -42,35 +42,27 @@ class ParagraphController(
         @Validated @RequestBody dto: ParagraphDTO,
         principal: Principal
     ): ParagraphView {
-        return paragraphMapper.createView(
-            paragraphService.create(
-                ParagraphDTOToInfoAdapter(dto)
-            )
+        checkIdEquality(sectionId, dto.sectionId)
+        val paragraph = paragraphService.create(
+            ParagraphDTOToInfoAdapter(dto)
         )
+        return mapper.createView(paragraph)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping
+    @PutMapping("/{paragraphId}")
     fun updateParagraph(
         @PathVariable sectionId: Long,
+        @PathVariable paragraphId: String,
         @Validated @RequestBody dto: ParagraphDTO,
         principal: Principal
     ): ParagraphView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
-    }
-
-    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{paragraphId}/text")
-    fun updateParagraphText(
-        @PathVariable sectionId: Long,
-        @PathVariable paragraphId: String,
-        @RequestBody text: String,
-        principal: Principal
-    ): ParagraphView {
-        return paragraphMapper.createView(
-            paragraphService.updateText(paragraphId, text)
+        val paragraph = paragraphService.findById(paragraphId)
+        checkIdEquality(sectionId, paragraph.sectionId)
+        val updatedParagraph = paragraphService.update(
+            ParagraphDTOToInfoAdapter(dto, paragraphId)
         )
+        return mapper.createView(updatedParagraph)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -80,6 +72,17 @@ class ParagraphController(
         @PathVariable paragraphId: String,
         principal: Principal
     ) {
+        val paragraph = paragraphService.findById(paragraphId)
+        checkIdEquality(sectionId, paragraph.sectionId)
         paragraphService.delete(paragraphId)
+    }
+
+    private fun checkIdEquality(
+        sectionId: Long,
+        entityId: Long
+    ) {
+        if (sectionId != entityId) {
+            throw ParagraphNotFoundException("Paragraph's section id and request section id doesn't match")
+        }
     }
 }

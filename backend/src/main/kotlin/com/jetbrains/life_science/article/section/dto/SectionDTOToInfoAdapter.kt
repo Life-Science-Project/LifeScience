@@ -3,11 +3,9 @@ package com.jetbrains.life_science.article.section.dto
 import com.jetbrains.life_science.article.section.service.SectionInfo
 
 class SectionDTOToInfoAdapter(
-    private val dto: SectionDTO
+    private val dto: SectionDTO,
+    override val id: Long = 0
 ) : SectionInfo {
-
-    override val id: Long
-        get() = 0
 
     override val name: String
         get() = dto.name

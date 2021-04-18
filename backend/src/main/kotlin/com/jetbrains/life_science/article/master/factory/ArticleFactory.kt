@@ -10,4 +10,8 @@ class ArticleFactory {
     fun create(category: Category): Article {
         return Article(0, category)
     }
+
+    fun setParams(article: Article, category: Category) {
+        article.category = category
+    }
 }

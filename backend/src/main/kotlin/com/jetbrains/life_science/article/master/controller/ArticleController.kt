@@ -5,7 +5,6 @@ import com.jetbrains.life_science.article.master.dto.ArticleDTOToInfoAdapter
 import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
-import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -33,17 +32,21 @@ class ArticleController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping
-    fun updateArticle(@Validated @RequestBody dto: ArticleDTO, principal: Principal): ArticleView {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+    @PutMapping("/{articleId}")
+    fun updateArticle(
+        @PathVariable articleId: Long,
+        @Validated @RequestBody dto: ArticleDTO,
+        principal: Principal
+    ): ArticleView {
+        val updatedArticle = articleService.updateById(
+            ArticleDTOToInfoAdapter(dto, articleId)
+        )
+        return mapper.createView(updatedArticle)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{articleId}")
-    fun deleteArticle(@PathVariable articleId: Long, principal: Principal): ResponseEntity<Void> {
-        // TODO(#54): implement method
-        // return ResponseEntity.ok().build()
-        throw UnsupportedOperationException("Not yet implemented")
+    fun deleteArticle(@PathVariable articleId: Long, principal: Principal) {
+        articleService.deleteById(articleId)
     }
 }
