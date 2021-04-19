@@ -57,7 +57,9 @@ class WebSecurityConfig(
     }
 
     override fun configure(http: HttpSecurity) {
-        http.csrf().disable().authorizeRequests()
+        http.cors().and()
+            .csrf().disable()
+            .authorizeRequests()
             .antMatchers(
                 "/api/articles/versions/*/reviews/**",
                 "/api/articles/*/versions/**"
