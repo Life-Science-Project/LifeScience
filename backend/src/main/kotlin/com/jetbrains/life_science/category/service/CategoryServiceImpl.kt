@@ -44,6 +44,10 @@ class CategoryServiceImpl(
         return category
     }
 
+    override fun getRootCategories(): List<Category> {
+        return categoryRepository.findAllByParentIsNull()
+    }
+
     private fun existById(id: Long) {
         if (!categoryRepository.existsById(id)) {
             throw CategoryNotFoundException("Category not found with id: $id")

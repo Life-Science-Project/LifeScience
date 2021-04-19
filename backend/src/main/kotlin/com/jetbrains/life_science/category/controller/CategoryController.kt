@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.category.controller
 
-import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.category.dto.CategoryDTO
 import com.jetbrains.life_science.category.dto.CategoryDTOToInfoAdapter
 import com.jetbrains.life_science.category.service.CategoryService
@@ -14,35 +13,29 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/categories")
 class CategoryController(
-    val service: CategoryService,
-    val articleService: ArticleService,
+    val categoryService: CategoryService,
     val mapper: CategoryViewMapper
 ) {
 
-    @GetMapping
-    fun getCategories(): List<CategoryView> {
-        // TODO(#54): implement method
-        throw UnsupportedOperationException("Not yet implemented")
+    @GetMapping("/root")
+    fun getRootCategories(): List<CategoryView> {
+        val rootCategories = categoryService.getRootCategories()
+        return rootCategories.map { mapper.createView(it) }
     }
 
     @GetMapping("/{categoryId}")
     fun getCategory(@PathVariable categoryId: Long): CategoryView {
-        val category = service.getCategory(categoryId)
-        val children = service.getChildren(categoryId)
-        val articles = articleService.getByCategoryId(categoryId)
-        return mapper.createView(category, children, articles)
+        val category = categoryService.getCategory(categoryId)
+        return mapper.createView(category)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
     fun createCategory(@RequestBody @Valid categoryDTO: CategoryDTO, principal: Principal): CategoryView {
-        return mapper.createView(
-            service.createCategory(
-                CategoryDTOToInfoAdapter(categoryDTO)
-            ),
-            listOf(),
-            listOf()
+        val category = categoryService.createCategory(
+            CategoryDTOToInfoAdapter(categoryDTO)
         )
+        return mapper.createView(category)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -52,19 +45,15 @@ class CategoryController(
         @RequestBody @Valid categoryDTO: CategoryDTO,
         principal: Principal
     ): CategoryView {
-        val category = service.updateCategory(
+        val category = categoryService.updateCategory(
             CategoryDTOToInfoAdapter(categoryDTO, categoryId)
         )
-        return mapper.createView(
-            category,
-            service.getChildren(categoryId),
-            articleService.getByCategoryId(categoryId)
-        )
+        return mapper.createView(category)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{categoryId}")
     fun deleteCategory(@PathVariable categoryId: Long, principal: Principal) {
-        service.deleteCategory(categoryId)
+        categoryService.deleteCategory(categoryId)
     }
 }

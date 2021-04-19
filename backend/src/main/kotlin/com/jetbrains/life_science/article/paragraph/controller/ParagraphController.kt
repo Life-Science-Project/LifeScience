@@ -28,7 +28,7 @@ class ParagraphController(
     @GetMapping("/{paragraphId}")
     fun getParagraph(
         @PathVariable sectionId: Long,
-        @PathVariable paragraphId: String,
+        @PathVariable paragraphId: String
     ): ParagraphView {
         val paragraph = paragraphService.findById(paragraphId)
         checkIdEquality(sectionId, paragraph.sectionId)
