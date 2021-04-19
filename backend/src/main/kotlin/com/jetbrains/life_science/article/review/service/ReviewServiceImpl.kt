@@ -66,9 +66,9 @@ class ReviewServiceImpl(
 
     private fun checkAccess(reviewer: User, author: User, userCredentials: UserCredentials): Boolean {
         return reviewer.id == userCredentials.user.id ||
-                author.id == userCredentials.user.id ||
-                userCredentials.roles.any {
-                    it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
-                }
+            author.id == userCredentials.user.id ||
+            userCredentials.roles.any {
+                it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
+            }
     }
 }

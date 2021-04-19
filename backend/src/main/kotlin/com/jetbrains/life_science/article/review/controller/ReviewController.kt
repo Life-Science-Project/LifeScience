@@ -7,7 +7,6 @@ import com.jetbrains.life_science.article.review.view.ReviewView
 import com.jetbrains.life_science.article.review.view.ReviewViewMapper
 import com.jetbrains.life_science.exception.ReviewNotFoundException
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
-import com.jetbrains.life_science.user.details.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
