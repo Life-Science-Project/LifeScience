@@ -3,11 +3,13 @@ package com.jetbrains.life_science.article.review.service
 import com.jetbrains.life_science.article.review.entity.Review
 import com.jetbrains.life_science.article.review.factory.ReviewFactory
 import com.jetbrains.life_science.article.review.repository.ReviewRepository
-import com.jetbrains.life_science.user.service.UserService
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
-import com.jetbrains.life_science.user.entity.User
-import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.exception.ReviewNotFoundException
+import com.jetbrains.life_science.user.credentials.entity.UserCredentials
+import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
+import com.jetbrains.life_science.user.details.entity.User
+import com.jetbrains.life_science.user.details.service.UserService
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,12 +18,13 @@ class ReviewServiceImpl(
     val repository: ReviewRepository,
     val factory: ReviewFactory,
     val articleVersionService: ArticleVersionService,
+    val userCredentialsService: UserCredentialsService,
     val userService: UserService
 ) : ReviewService {
 
     override fun addReview(info: ReviewInfo): Review {
         val articleVersion = articleVersionService.getById(info.articleVersionId)
-        val user = userService.getById(info.reviewerId)
+        val user = userCredentialsService.getById(info.reviewerId).user
         return repository.save(factory.create(info, articleVersion, user))
     }
 
@@ -30,13 +33,13 @@ class ReviewServiceImpl(
         repository.deleteById(reviewId)
     }
 
-    override fun getAllByVersionId(articleVersionId: Long, user: User): List<Review> {
+    override fun getAllByVersionId(articleVersionId: Long, user: UserCredentials): List<Review> {
         return repository.findAllByArticleVersionId(articleVersionId).filter {
             checkAccess(it.reviewer, it.articleVersion.author, user)
         }
     }
 
-    override fun getById(reviewId: Long, user: User): Review {
+    override fun getById(reviewId: Long, user: UserCredentials): Review {
         checkReviewExists(reviewId)
         val review = repository.findById(reviewId).get()
         if (checkAccess(review.reviewer, review.articleVersion.author, user)) {
@@ -47,7 +50,7 @@ class ReviewServiceImpl(
     }
 
     @Transactional
-    override fun updateById(reviewInfo: ReviewInfo, user: User): Review {
+    override fun updateById(reviewInfo: ReviewInfo, user: UserCredentials): Review {
         val review = getById(reviewInfo.id, user)
         val version = articleVersionService.getById(reviewInfo.articleVersionId)
         val reviewer = userService.getById(reviewInfo.reviewerId)
@@ -61,10 +64,10 @@ class ReviewServiceImpl(
         }
     }
 
-    private fun checkAccess(reviewer: User, author: User, user: User): Boolean {
-        return reviewer.id == user.id ||
-            author.id == user.id ||
-            user.roles.any {
+    private fun checkAccess(reviewer: User, author: User, userCredentials: UserCredentials): Boolean {
+        return reviewer.id == userCredentials.user.id ||
+            author.id == userCredentials.user.id ||
+            userCredentials.roles.any {
                 it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
             }
     }

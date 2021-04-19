@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.version.service
 
-import com.jetbrains.life_science.user.entity.User
+import com.jetbrains.life_science.user.details.entity.User
 
 interface ArticleVersionInfo {
 

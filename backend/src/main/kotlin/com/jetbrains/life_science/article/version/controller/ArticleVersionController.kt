@@ -1,12 +1,13 @@
 package com.jetbrains.life_science.article.version.controller
 
-import com.jetbrains.life_science.user.service.UserService
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAdapter
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.exception.ArticleNotFoundException
+import com.jetbrains.life_science.user.details.service.UserService
+import com.jetbrains.life_science.util.email
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -41,7 +42,7 @@ class ArticleVersionController(
         principal: Principal
     ): ArticleVersionView {
         checkIdEquality(articleId, dto.articleId)
-        val user = userService.getByName(principal.name)
+        val user = userService.getByEmail(principal.email)
         val createdVersion = service.createBlank(
             ArticleVersionDTOToInfoAdapter(dto, user)
         )
@@ -57,7 +58,7 @@ class ArticleVersionController(
     ): ArticleVersionView {
         val articleVersion = service.getById(versionId)
         checkIdEquality(articleId, articleVersion.mainArticle.id)
-        val user = userService.getByName(principal.name)
+        val user = userService.getByEmail(principal.email)
         val updatedVersion = service.updateById(
             ArticleVersionDTOToInfoAdapter(dto, user, versionId),
         )

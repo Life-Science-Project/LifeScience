@@ -1,7 +1,13 @@
 truncate table section cascade;
-truncate table article_version cascade ;
+truncate table article_version cascade;
 truncate table article cascade;
 truncate table category cascade;
 truncate table users_roles;
-truncate table users cascade ;
-truncate table roles cascade ;
+truncate table user_credential cascade;
+truncate table user_details cascade;
+truncate table roles cascade;
+truncate table user_details_organisations;
+truncate table organisation cascade;
+truncate table user_details_positions cascade;
+truncate table position cascade;
+truncate table user_details cascade;

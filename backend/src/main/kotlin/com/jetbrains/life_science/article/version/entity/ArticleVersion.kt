@@ -2,7 +2,7 @@ package com.jetbrains.life_science.article.version.entity
 
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.master.entity.Article
-import com.jetbrains.life_science.user.entity.User
+import com.jetbrains.life_science.user.details.entity.User
 import javax.persistence.*
 
 @Entity

@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.article.version.dto
 
-import com.jetbrains.life_science.user.entity.User
 import com.jetbrains.life_science.article.version.service.ArticleVersionInfo
+import com.jetbrains.life_science.user.details.entity.User
 
 class ArticleVersionDTOToInfoAdapter(
     val dto: ArticleVersionDTO,
