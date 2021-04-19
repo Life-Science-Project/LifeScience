@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.category.entity
 
+import com.jetbrains.life_science.article.master.entity.Article
 import javax.persistence.*
 
 @Entity
@@ -14,4 +15,10 @@ class Category(
 
     @ManyToOne
     var parent: Category? = null,
+
+    @OneToMany(mappedBy = "parent")
+    val subCategories: MutableList<Category>,
+
+    @OneToMany(mappedBy = "category")
+    val articles: MutableList<Article>,
 )

@@ -5,6 +5,7 @@ import com.jetbrains.life_science.config.jwt.JWTAuthTokenFilter
 import com.jetbrains.life_science.user.credentials.service.UserDetailsServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -42,6 +43,11 @@ class WebSecurityConfig(
 
     override fun configure(http: HttpSecurity) {
         http.csrf().disable().authorizeRequests()
+            .antMatchers(
+                "/api/articles/versions/*/reviews/**",
+                "/api/articles/*/versions/**"
+            ).fullyAuthenticated()
+            .antMatchers(HttpMethod.GET).permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/api/**").fullyAuthenticated()
             .antMatchers("/**").permitAll()

@@ -7,6 +7,7 @@ import com.jetbrains.life_science.article.paragraph.view.ParagraphView
 import com.jetbrains.life_science.article.paragraph.view.ParagraphViewMapper
 import com.jetbrains.life_science.exception.ParagraphNotFoundException
 import org.springframework.security.access.annotation.Secured
+import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -28,7 +29,7 @@ class ParagraphController(
     @GetMapping("/{paragraphId}")
     fun getParagraph(
         @PathVariable sectionId: Long,
-        @PathVariable paragraphId: String,
+        @PathVariable paragraphId: String
     ): ParagraphView {
         val paragraph = paragraphService.findById(paragraphId)
         checkIdEquality(sectionId, paragraph.sectionId)
