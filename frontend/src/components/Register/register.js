@@ -11,7 +11,7 @@ const Register = () => {
     const {register, handleSubmit, errors} = useForm();
 
     const onSubmit = data => {
-        axios.post('https://life-science-2021.herokuapp.com//api/auth/signup', {
+        axios.post('https://life-science-2021.herokuapp.com/api/auth/signup', {
             "username": data.username,
             "firstName": data.firstName,
             "lastName": data.lastName,
