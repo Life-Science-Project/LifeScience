@@ -8,10 +8,6 @@
     width: 15vw;
 }
 
-.section-list-item {
-    margin-top: 10px;
-}
-
 .section-link {
     color: #343a40;
 }
@@ -33,4 +29,8 @@
     margin-top: 30px;
     margin-left: 40px;
 
+}
+
+.list-item {
+    margin-top: 10px;
 }
