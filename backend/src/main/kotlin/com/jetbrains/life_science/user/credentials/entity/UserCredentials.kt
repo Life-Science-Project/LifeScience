@@ -30,6 +30,6 @@ class UserCredentials(
 
 ) {
 
-    @OneToOne(cascade = [CascadeType.PERSIST])
+    @OneToOne(cascade = [CascadeType.PERSIST], fetch = FetchType.LAZY)
     lateinit var user: User
 }

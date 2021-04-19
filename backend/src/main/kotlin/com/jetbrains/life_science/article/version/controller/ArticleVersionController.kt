@@ -1,12 +1,13 @@
 package com.jetbrains.life_science.article.version.controller
 
-import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAdapter
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.exception.ArticleNotFoundException
+import com.jetbrains.life_science.user.details.service.UserService
+import com.jetbrains.life_science.util.email
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -17,7 +18,7 @@ import java.security.Principal
 class ArticleVersionController(
     val service: ArticleVersionService,
     val mapper: ArticleVersionViewMapper,
-    val userCredentialsService: UserCredentialsService
+    val userService: UserService
 ) {
 
     @GetMapping
@@ -40,11 +41,10 @@ class ArticleVersionController(
         @Validated @RequestBody dto: ArticleVersionDTO,
         principal: Principal
     ): ArticleVersionView {
-        val credentials = userCredentialsService.getByEmail(principal.name)
-        return mapper.createView(
-            service.createBlank(
-                ArticleVersionDTOToInfoAdapter(dto, credentials.user)
-            )
+        checkIdEquality(articleId, dto.articleId)
+        val user = userService.getByEmail(principal.email)
+        val createdVersion = service.createBlank(
+            ArticleVersionDTOToInfoAdapter(dto, user)
         )
         return mapper.createView(createdVersion)
     }
@@ -58,7 +58,7 @@ class ArticleVersionController(
     ): ArticleVersionView {
         val articleVersion = service.getById(versionId)
         checkIdEquality(articleId, articleVersion.mainArticle.id)
-        val user = userService.getByName(principal.name)
+        val user = userService.getByEmail(principal.email)
         val updatedVersion = service.updateById(
             ArticleVersionDTOToInfoAdapter(dto, user, versionId),
         )

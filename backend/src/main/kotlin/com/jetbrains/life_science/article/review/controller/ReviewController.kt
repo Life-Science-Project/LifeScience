@@ -6,7 +6,9 @@ import com.jetbrains.life_science.article.review.service.ReviewService
 import com.jetbrains.life_science.article.review.view.ReviewView
 import com.jetbrains.life_science.article.review.view.ReviewViewMapper
 import com.jetbrains.life_science.exception.ReviewNotFoundException
-import com.jetbrains.life_science.user.service.UserService
+import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
+import com.jetbrains.life_science.user.details.service.UserService
+import com.jetbrains.life_science.util.email
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -16,7 +18,7 @@ import java.security.Principal
 @RequestMapping("/api/articles/versions/{versionId}/reviews")
 class ArticleReviewController(
     val service: ReviewService,
-    val userService: UserService,
+    val userCredentialsService: UserCredentialsService,
     val mapper: ReviewViewMapper,
 ) {
 
@@ -25,7 +27,7 @@ class ArticleReviewController(
         @PathVariable versionId: Long,
         principal: Principal
     ): List<ReviewView> {
-        val user = userService.getByName(principal.name)
+        val user = userCredentialsService.getByEmail(principal.email)
         return service.getAllByVersionId(versionId, user).map { mapper.createView(it) }
     }
 
@@ -35,7 +37,7 @@ class ArticleReviewController(
         @PathVariable reviewId: Long,
         principal: Principal
     ): ReviewView {
-        val user = userService.getByName(principal.name)
+        val user = userCredentialsService.getByEmail(principal.email)
         val review = service.getById(reviewId, user)
         return mapper.createView(review)
     }
@@ -62,7 +64,7 @@ class ArticleReviewController(
         @Validated @RequestBody dto: ReviewDTO,
         principal: Principal
     ): ReviewView {
-        val user = userService.getByName(principal.name)
+        val user = userCredentialsService.getByEmail(principal.email)
         val review = service.getById(reviewId, user)
         checkIdEquality(versionId, review.articleVersion.id)
         val updatedReview = service.updateById(
@@ -79,7 +81,7 @@ class ArticleReviewController(
         @PathVariable reviewId: Long,
         principal: Principal
     ) {
-        val user = userService.getByName(principal.name)
+        val user = userCredentialsService.getByEmail(principal.email)
         val review = service.getById(reviewId, user)
         checkIdEquality(versionId, review.articleVersion.id)
         service.deleteReview(reviewId)
