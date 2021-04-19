@@ -8,7 +8,7 @@ const Login = ({loggedUserStateUpdater}) => {
     const [status, setStatus] = useState(false);
     const {register, handleSubmit, errors} = useForm();
     const onSubmit = data => {
-        axios.post('http://localhost:8080/api/auth/signin', data).then(resp => {
+        axios.post('https://life-science-2021.herokuapp.com/api/auth/signin', data).then(resp => {
             loggedUserStateUpdater(resp.data);
             // Save auth-data to localStorage to retrieve on app restart
             localStorage.setItem('auth-data', JSON.stringify(resp.data));
