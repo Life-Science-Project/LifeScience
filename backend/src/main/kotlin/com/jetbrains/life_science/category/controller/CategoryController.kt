@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.category.controller
 
-import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.category.dto.CategoryDTO
 import com.jetbrains.life_science.category.dto.CategoryDTOToInfoAdapter
 import com.jetbrains.life_science.category.service.CategoryService

@@ -7,7 +7,6 @@ import com.jetbrains.life_science.article.paragraph.view.ParagraphView
 import com.jetbrains.life_science.article.paragraph.view.ParagraphViewMapper
 import com.jetbrains.life_science.exception.ParagraphNotFoundException
 import org.springframework.security.access.annotation.Secured
-import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
