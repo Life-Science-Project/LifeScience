@@ -1,54 +1,76 @@
 import React from "react";
 import './mainPage.css'
-import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
-import PropTypes from 'prop-types';
 import axios from "axios";
 import Section from "./Section/section";
-import {get} from "react-hook-form";
+import {Link} from "react-router-dom";
+import {Redirect} from "react-router";
 
 
-class Main extends React.Component {
-    constructor(props) {
-        super(props);
+export default class Main extends React.Component {
+    state = {
+        isFetched : false,
+        category : {
+        }
     }
 
+    constructor(props) {
+        super(props);
+        this.setState({id: props.match.params.id})
+    }
+
+    componentDidMount() {
+        this.initialize();
+    }
+
+    initialize() {
+        const id = this.state.id;
+        const uri = 'http://localhost:8080/api/categories/';
+        if (id === undefined) {
+            axios.get(uri + 'root').then(res => {
+                const category = res.data[0];
+                this.setState({isFetched: true, category: category});
+            })
+        } else {
+            axios.get(uri + id).then(res => {
+                const category = res.data;
+                this.setState({isFetched: true, category: category});
+            })
+        }
+    }
+
+    /*shouldComponentUpdate(nextProps, nextState, nextContext) {
+        //alert(JSON.stringify(nextState.id));
+        return this.state.id !== this.state.category.id
+    }*/
+
+    /*componentDidUpdate(prevProps, prevState, snapshot) {
+        this.initialize();
+    }*/
+
     render() {
-        return(
-            <div>
-                <div className="section_name">
-                    {this.props.section.name}
-                </div>
-                <div className="sections_container">
-                    {this.props.section.children.map((section) => <Section section={section}/>)}
-                </div>
+        //this.initialize();
+        return(<div>
+                {this.state.isFetched ? (<div>
+                                <div className="section_name">
+                                    {this.state.category.name}
+                                </div>
+                                <div className="sections_container">
+                                    {this.state.category.subcategories.map((section) => {/* <Section section={section}/>*/
+                                    return this.section(section)})}
+                                </div>
+                </div>) : <div> Loading... </div>}
             </div>
         );
     }
-}
 
-Main.propTypes = {
-    section: PropTypes.exact({
-        id: PropTypes.number,
-        parentID: PropTypes.number,
-        name: PropTypes.string,
-        children: PropTypes.arrayOf(PropTypes.exact({
-                id: PropTypes.number,
-                name: PropTypes.string
-            }
-        ))
-    }).isRequired
-};
-
-Main.defaultProps = {
-    section: {
-        id: 0,
-        parentID: 0,
-        name: "Main",
-        children:
-            [{id: 1, name: "Biological System methods"},
-                {id: 2, name: "molecular methods"},
-                {id: 3, name: "In silico Methods"}]
+    section(sec) {
+        return(
+            <div className="section_container">
+                <Redirect to={"/main/" + sec.id}/>
+                <Link to={"/main/" + sec.id} onClick={() => this.setState({id: sec.id})}>
+                    {sec.name}
+                </Link>
+            </div>
+        )
     }
-};
-
-export default Main;
+}

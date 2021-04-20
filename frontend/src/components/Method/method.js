@@ -48,7 +48,6 @@ const Method = ({link, name, sections}) => {
                 </Switch>
             </div>
         </Router>
-
     )
 }
 
