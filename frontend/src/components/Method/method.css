@@ -34,3 +34,13 @@
 .list-item {
     margin-top: 10px;
 }
+
+.paragraph {
+    margin-top: 10px;
+    white-space:pre-wrap;
+}
+
+.method-form-elem {
+    margin-top: 10px;
+    width: 20vw;
+}

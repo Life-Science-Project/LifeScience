@@ -1,6 +1,6 @@
 import React from "react";
 
-const Protocol = ({paragraphs}) => {
+const Equipment = ({paragraphs}) => {
     return (
         <div className="section-content">
             {
@@ -14,4 +14,4 @@ const Protocol = ({paragraphs}) => {
     )
 }
 
-export default Protocol
+export default Equipment

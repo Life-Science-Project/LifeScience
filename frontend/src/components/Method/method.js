@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './method.css'
 import {
     BrowserRouter as Router,
@@ -11,17 +11,82 @@ import GeneralInformation from "./Sections/GeneralInformation/general-informatio
 import Protocol from "./Sections/Protocol/protocol";
 import Application from "./Sections/Application/application";
 import Advantages from "./Sections/AdvantagesDisadvantages/advantages-disadvantages";
-import Collaboration from "../FindCollaboration/collaboration";
+import Collaboration from "./Sections/FindCollaboration/collaboration";
+import Page from "../Page/Page";
+import Equipment from "./Sections/Equipment/equipment";
+import Troubleshooting from "./Sections/Troubleshooting/troubleshooting";
+import Education from "./Sections/Education/education";
 
 const sectionFunctions = [
     (section) => (<GeneralInformation {...section}/>),
-    (section) => (<Protocol {...section}/>),
-    (section) => (<Application {...section}/>),
-    (section) => (<Advantages {...section}/>),
-    (section) => (<Collaboration {...section}/>)
+    (section) => (<Protocol paragraphs={section.paragraphs}/>),
+    (section) => (<Equipment paragraphs={section.paragraphs}/>),
+    (section) => (<Application/>),
+    (section) => (<Advantages/>),
+    (section) => (<Troubleshooting paragraphs={section.paragraphs}/>),
+    (section) => (<Collaboration {...section}/>),
+    (section) => (<Education/>)
 ]
 
-const Method = ({link, name, sections}) => {
+const URL_API = "https://life-science-2021.herokuapp.com/api";
+const URL_ARTICLES = URL_API + "/articles"
+const GENERAL_INFO_LINK = "/general-information"
+
+const buildSectionUrl = (versionId, sectionId) => URL_ARTICLES
+    + "/versions/" + versionId + "/sections/" + sectionId
+
+const Method = ({link, articleId}) => {
+
+    const [name, setName] = useState("")
+    const [sections, setSections] = useState([])
+
+    const getJson = async (url) => {
+        const response = await fetch(url);
+        return await response.json();
+    }
+
+    const fetchVersionId = async () => {
+        return await getJson('https://life-science-2021.herokuapp.com/api/articles/' + articleId)
+    }
+
+    const fetchSection = async (versionId, sectionId) => {
+        return await getJson(buildSectionUrl(versionId, sectionId))
+    }
+
+    const toLinkPart = (str) => str.replace(/\s+/g, '-').toLowerCase();
+
+    useEffect(() => {
+        const getMethodData = async () => {
+            let response;
+            try {
+                response = await fetchVersionId()
+            } catch (e) {
+                console.log(e)
+                return
+            }
+            const pageName = response.version.name;
+            const versionId = response.id
+            const sectionIds = response.version.sectionsIds
+            const fetchedSections = [];
+            for (const sectionId of sectionIds) {
+                let section;
+                try {
+                    section = await fetchSection(versionId, sectionId)
+                } catch (e) {
+                    console.log(e)
+                    return
+                }
+                section.link = link + "/" + toLinkPart(section.name);
+                fetchedSections.push(section)
+            }
+            setSections(fetchedSections)
+            setName(pageName)
+        }
+
+        getMethodData()
+    }, [])
+
+
     return (
         <Router>
             <div className="method-name">
@@ -42,7 +107,7 @@ const Method = ({link, name, sections}) => {
                 </ul>
                 <Switch>
                     {
-                        <Redirect exact from={link} to={link + "/general"}/>
+                        <Redirect exact from={link} to={link + GENERAL_INFO_LINK}/>
                     }
                 </Switch>
                 <Switch>
@@ -65,8 +130,9 @@ const Method = ({link, name, sections}) => {
 
 
 Method.defaultProps = {
+    articleId: 1,
     link: "/bradford-assay",
-    name: "Bradford Assay",
+    name: "Bradford Assay from default props",
     sections: [
         {
             link: "/bradford-assay/general",
