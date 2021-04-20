@@ -2,13 +2,16 @@ package com.jetbrains.life_science.user.details.service
 
 import com.jetbrains.life_science.exception.UserNotFoundException
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
+import com.jetbrains.life_science.user.details.entity.AddDetailsInfo
 import com.jetbrains.life_science.user.details.entity.User
+import com.jetbrains.life_science.user.details.factory.UserFactory
 import com.jetbrains.life_science.user.details.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
     val userCredentialsService: UserCredentialsService,
+    val userFactory: UserFactory,
     val userRepository: UserRepository
 ) : UserService {
 
@@ -18,5 +21,9 @@ class UserServiceImpl(
 
     override fun getById(id: Long): User {
         return userRepository.findById(id).orElseThrow { UserNotFoundException("user not found by id $id") }
+    }
+
+    override fun update(info: AddDetailsInfo, user: User): User {
+        return userRepository.save(userFactory.setParams(user, info))
     }
 }
