@@ -1,0 +1,11 @@
+.section_name {
+    margin: 2rem 2rem 0.5rem 2rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    color: #343a40;
+    font-size: 1.5rem;
+}
+
+.sections_container {
+    margin: 0.5rem 1rem;
+}
