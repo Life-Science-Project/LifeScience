@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.paragraph.entity
+package com.jetbrains.life_science.article.content.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.TypeAlias
@@ -6,9 +6,9 @@ import org.springframework.data.elasticsearch.annotations.Document
 import org.springframework.data.elasticsearch.annotations.Field
 import org.springframework.data.elasticsearch.annotations.FieldType
 
-@Document(indexName = "paragraph", createIndex = true)
-@TypeAlias("Paragraph")
-class Paragraph(
+@Document(indexName = "content", createIndex = true)
+@TypeAlias("Content")
+class Content(
 
     var sectionId: Long,
 

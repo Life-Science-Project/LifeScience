@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.article.paragraph.view
+package com.jetbrains.life_science.article.content.view
 
-class ParagraphView(
+class ContentView(
     val id: String?,
     val text: String,
     val references: List<String>

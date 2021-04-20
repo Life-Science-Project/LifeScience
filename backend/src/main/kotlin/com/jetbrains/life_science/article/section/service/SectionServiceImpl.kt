@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.section.service
 
-import com.jetbrains.life_science.article.paragraph.service.ParagraphService
+import com.jetbrains.life_science.article.content.service.ContentService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.factory.SectionFactory
 import com.jetbrains.life_science.article.section.repository.SectionRepository
@@ -23,7 +23,7 @@ class SectionServiceImpl(
     lateinit var articleVersionService: ArticleVersionService
 
     @Autowired
-    lateinit var paragraphService: ParagraphService
+    lateinit var contentService: ContentService
 
     @Transactional
     override fun create(info: SectionInfo): Section {
@@ -38,7 +38,7 @@ class SectionServiceImpl(
     override fun deleteById(id: Long) {
         checkExistsById(id)
         val section = repository.findById(id).orElseThrow()
-        paragraphService.deleteBySectionId(id)
+        contentService.deleteBySectionId(id)
         // Deleting row in database
         repository.delete(section)
     }
@@ -60,7 +60,7 @@ class SectionServiceImpl(
     private fun createCopy(origin: Section, newArticle: ArticleVersion) {
         val copy = factory.copy(origin)
         copy.articleVersion = newArticle
-        paragraphService.createCopiesBySection(origin, copy)
+        contentService.createCopiesBySection(origin, copy)
         repository.save(copy)
     }
 

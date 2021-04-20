@@ -1,14 +1,14 @@
-package com.jetbrains.life_science.article.paragraph.factory
+package com.jetbrains.life_science.article.content.factory
 
-import com.jetbrains.life_science.article.paragraph.entity.Paragraph
-import com.jetbrains.life_science.article.paragraph.service.ParagraphInfo
+import com.jetbrains.life_science.article.content.entity.Content
+import com.jetbrains.life_science.article.content.service.ContentInfo
 import org.springframework.stereotype.Component
 
 @Component
-class ParagraphFactory {
+class ContentFactory {
 
-    fun create(info: ParagraphInfo): Paragraph {
-        return Paragraph(
+    fun create(info: ContentInfo): Content {
+        return Content(
             sectionId = info.sectionId,
             text = info.text,
             tags = info.tags,
@@ -17,8 +17,8 @@ class ParagraphFactory {
         )
     }
 
-    fun copy(origin: Paragraph): Paragraph {
-        return Paragraph(
+    fun copy(origin: Content): Content {
+        return Content(
             sectionId = origin.sectionId,
             text = origin.text,
             tags = origin.tags,
@@ -27,7 +27,7 @@ class ParagraphFactory {
         )
     }
 
-    fun setParams(origin: Paragraph, info: ParagraphInfo) {
+    fun setParams(origin: Content, info: ContentInfo) {
         origin.text = info.text
         origin.tags = info.tags
         origin.sectionId = info.sectionId

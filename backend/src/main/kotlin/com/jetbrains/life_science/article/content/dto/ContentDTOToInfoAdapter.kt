@@ -1,11 +1,11 @@
-package com.jetbrains.life_science.article.paragraph.dto
+package com.jetbrains.life_science.article.content.dto
 
-import com.jetbrains.life_science.article.paragraph.service.ParagraphInfo
+import com.jetbrains.life_science.article.content.service.ContentInfo
 
-class ParagraphDTOToInfoAdapter(
-    val dto: ParagraphDTO,
+class ContentDTOToInfoAdapter(
+    val dto: ContentDTO,
     override val id: String? = null
-) : ParagraphInfo {
+) : ContentInfo {
 
     override val sectionId: Long
         get() = dto.sectionId
