@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CategoryFactory {
-    fun createSection(categoryInfo: CategoryInfo, parent: Category?): Category {
+    fun createCategory(categoryInfo: CategoryInfo, parent: Category?): Category {
         return Category(categoryInfo.id, categoryInfo.name, parent, mutableListOf(), mutableListOf())
     }
 

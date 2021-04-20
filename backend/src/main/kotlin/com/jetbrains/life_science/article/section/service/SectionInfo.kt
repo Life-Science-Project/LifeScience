@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.article.section.service
 
+import com.jetbrains.life_science.article.section.parameter.service.ParameterInfo
+
 interface SectionInfo {
 
     val id: Long
@@ -9,4 +11,6 @@ interface SectionInfo {
     val description: String
 
     val articleVersionId: Long
+
+    val parameters: List<ParameterInfo>
 }

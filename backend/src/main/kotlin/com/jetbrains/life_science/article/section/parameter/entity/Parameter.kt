@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.section.parameters.entity
+package com.jetbrains.life_science.article.section.parameter.entity
 
 import com.jetbrains.life_science.article.section.entity.Section
 import javax.persistence.Column
@@ -6,10 +6,10 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.OneToOne
+import javax.persistence.ManyToOne
 
 @Entity
-class Parameters(
+class Parameter(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -17,6 +17,6 @@ class Parameters(
     @Column(nullable = false)
     var name: String,
 
-    @OneToOne
-    var section: Section,
+    @Column(nullable = false)
+    var defaultValue: String,
 )

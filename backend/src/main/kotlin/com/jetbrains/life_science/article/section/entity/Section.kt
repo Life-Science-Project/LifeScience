@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.section.entity
 
-import com.jetbrains.life_science.article.section.parameters.entity.Parameters
+import com.jetbrains.life_science.article.section.parameter.entity.Parameter
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
@@ -23,6 +23,6 @@ class Section(
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     var articleVersion: ArticleVersion,
 
-    @OneToOne
-    var parameters: Parameters
+    @OneToMany
+    var parameters: MutableList<Parameter>
 )
