@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ContentRepository : ElasticsearchRepository<Content, String>, ContentRepositoryCustom {
 
-    fun findAllBySectionId(sectionId: Long): List<Content>
+    fun findBySectionId(sectionId: Long): Content?
 
     fun deleteAllBySectionId(sectionId: Long)
+
+    fun existsBySectionId(sectionId: Long): Boolean
 }

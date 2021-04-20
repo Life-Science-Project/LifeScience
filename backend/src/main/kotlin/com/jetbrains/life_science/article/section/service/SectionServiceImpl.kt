@@ -60,7 +60,7 @@ class SectionServiceImpl(
     private fun createCopy(origin: Section, newArticle: ArticleVersion) {
         val copy = factory.copy(origin)
         copy.articleVersion = newArticle
-        contentService.createCopiesBySection(origin, copy)
+        contentService.createCopyBySection(origin, copy)
         repository.save(copy)
     }
 

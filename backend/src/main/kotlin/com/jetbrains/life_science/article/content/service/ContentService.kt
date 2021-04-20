@@ -15,9 +15,9 @@ interface ContentService {
 
     fun deleteBySectionId(sectionId: Long)
 
-    fun findAllBySectionId(sectionId: Long): List<Content>
+    fun findBySectionId(sectionId: Long): Content?
 
     fun findById(contentId: String?): Content
 
-    fun createCopiesBySection(origin: Section, newSection: Section)
+    fun createCopyBySection(origin: Section, newSection: Section)
 }

@@ -21,8 +21,8 @@ class ContentController(
     @GetMapping
     fun getParagraphs(
         @PathVariable sectionId: Long,
-    ): List<ContentView> {
-        return contentService.findAllBySectionId(sectionId).map { mapper.createView(it) }
+    ): ContentView? {
+        return contentService.findBySectionId(sectionId)?.let { mapper.createView(it) }
     }
 
     @GetMapping("/{contentId}")

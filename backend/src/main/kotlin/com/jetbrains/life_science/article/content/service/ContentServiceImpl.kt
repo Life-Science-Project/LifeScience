@@ -5,6 +5,7 @@ import com.jetbrains.life_science.article.content.factory.ContentFactory
 import com.jetbrains.life_science.article.content.repository.ContentRepository
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
+import com.jetbrains.life_science.exception.ContentAlreadyExistsException
 import com.jetbrains.life_science.exception.ContentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -22,8 +23,8 @@ class ContentServiceImpl(
         repository.deleteAllBySectionId(sectionId)
     }
 
-    override fun findAllBySectionId(sectionId: Long): List<Content> {
-        return repository.findAllBySectionId(sectionId)
+    override fun findBySectionId(sectionId: Long): Content? {
+        return repository.findBySectionId(sectionId)
     }
 
     override fun findById(contentId: String?): Content {
@@ -34,9 +35,9 @@ class ContentServiceImpl(
         return repository.findById(contentId).get()
     }
 
-    override fun createCopiesBySection(origin: Section, newSection: Section) {
-        val articles = repository.findAllBySectionId(origin.id)
-        articles.forEach { originArticle -> copy(originArticle, newSection) }
+    override fun createCopyBySection(origin: Section, newSection: Section) {
+        val content = repository.findBySectionId(origin.id)
+        content?.let { copy(it, newSection) }
     }
 
     private fun copy(originContent: Content, newSection: Section) {
@@ -47,6 +48,9 @@ class ContentServiceImpl(
 
     override fun create(info: ContentInfo): Content {
         sectionService.checkExistsById(info.sectionId)
+        if (repository.existsBySectionId(info.sectionId)) {
+            throw ContentAlreadyExistsException("Content already exists is section with id: ${info.sectionId}")
+        }
         val content = factory.create(info)
         return repository.save(content)
     }
