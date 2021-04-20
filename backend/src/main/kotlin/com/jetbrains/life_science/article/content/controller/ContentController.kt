@@ -19,14 +19,14 @@ class ContentController(
 ) {
 
     @GetMapping
-    fun getParagraphs(
+    fun getContents(
         @PathVariable sectionId: Long,
     ): ContentView? {
         return contentService.findBySectionId(sectionId)?.let { mapper.createView(it) }
     }
 
     @GetMapping("/{contentId}")
-    fun getParagraph(
+    fun getContent(
         @PathVariable sectionId: Long,
         @PathVariable contentId: String
     ): ContentView {
@@ -37,7 +37,7 @@ class ContentController(
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
-    fun createParagraph(
+    fun createContent(
         @PathVariable sectionId: Long,
         @Validated @RequestBody dto: ContentDTO,
         principal: Principal
@@ -49,7 +49,7 @@ class ContentController(
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping("/{contentId}")
-    fun updateParagraph(
+    fun updateContent(
         @PathVariable sectionId: Long,
         @PathVariable contentId: String,
         @Validated @RequestBody dto: ContentDTO,
@@ -57,15 +57,15 @@ class ContentController(
     ): ContentView {
         val content = contentService.findById(contentId)
         checkIdEquality(sectionId, content.sectionId)
-        val updatedParagraph = contentService.update(
+        val updatedContent = contentService.update(
             ContentDTOToInfoAdapter(dto, contentId)
         )
-        return mapper.createView(updatedParagraph)
+        return mapper.createView(updatedContent)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{contentId}")
-    fun deleteParagraph(
+    fun deleteContent(
         @PathVariable sectionId: Long,
         @PathVariable contentId: String,
         principal: Principal
@@ -80,7 +80,7 @@ class ContentController(
         entityId: Long
     ) {
         if (sectionId != entityId) {
-            throw ContentNotFoundException("Paragraph's section id and request section id doesn't match")
+            throw ContentNotFoundException("Content's section id and request section id doesn't match")
         }
     }
 }

@@ -18,8 +18,8 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(ContentNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleParagraphNotFound(ex: ContentNotFoundException, request: WebRequest): ApiErrorResponse {
-        return notFoundResponse("Paragraph")
+    fun handleContentNotFound(ex: ContentNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Content")
     }
 
     @ExceptionHandler(ArticleVersionNotFoundException::class)

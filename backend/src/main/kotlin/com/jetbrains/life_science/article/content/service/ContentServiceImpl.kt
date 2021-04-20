@@ -29,7 +29,7 @@ class ContentServiceImpl(
 
     override fun findById(contentId: String?): Content {
         if (contentId == null) {
-            throw ContentNotFoundException("Paragraph not found by id: $contentId")
+            throw ContentNotFoundException("Content not found by id: $contentId")
         }
         checkArticleExists(contentId)
         return repository.findById(contentId).get()
