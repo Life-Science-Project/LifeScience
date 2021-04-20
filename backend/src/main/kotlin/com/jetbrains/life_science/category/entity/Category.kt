@@ -21,4 +21,6 @@ class Category(
 
     @OneToMany(mappedBy = "category")
     val articles: MutableList<Article>,
+
+    val orderNumber: Int
 )

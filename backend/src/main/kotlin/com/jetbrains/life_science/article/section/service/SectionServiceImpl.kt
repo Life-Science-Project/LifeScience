@@ -28,7 +28,7 @@ class SectionServiceImpl(
     @Transactional
     override fun create(info: SectionInfo): Section {
         val article = articleVersionService.getById(info.articleVersionId)
-        var section = factory.create(info.name, info.description, article)
+        var section = factory.create(info, article)
         // Creating row in database
         section = repository.save(section)
         return section

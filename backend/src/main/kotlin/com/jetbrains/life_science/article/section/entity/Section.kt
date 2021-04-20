@@ -24,5 +24,7 @@ class Section(
     var articleVersion: ArticleVersion,
 
     @OneToMany
-    var parameters: MutableList<Parameter>
+    var parameters: MutableList<Parameter>,
+
+    val orderNumber: Int
 )

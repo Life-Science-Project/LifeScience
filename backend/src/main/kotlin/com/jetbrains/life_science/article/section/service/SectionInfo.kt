@@ -13,4 +13,6 @@ interface SectionInfo {
     val articleVersionId: Long
 
     val parameters: List<ParameterInfo>
+
+    val order: Int
 }
