@@ -10,4 +10,6 @@ interface UserCredentialsService {
     fun getById(id: Long): UserCredentials
 
     fun createUser(userInfo: NewUserInfo): UserCredentials
+
+    fun delete(id: Long)
 }

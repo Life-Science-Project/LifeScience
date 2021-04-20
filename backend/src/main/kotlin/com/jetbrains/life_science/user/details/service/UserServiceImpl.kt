@@ -24,6 +24,10 @@ class UserServiceImpl(
         return userRepository.findById(id).orElseThrow { UserNotFoundException("User not found by id $id") }
     }
 
+    override fun delete(user: User) {
+        userRepository.delete(user)
+    }
+
     @Transactional
     override fun update(info: AddDetailsInfo, user: User): User {
         return userFactory.setParams(user, info)
