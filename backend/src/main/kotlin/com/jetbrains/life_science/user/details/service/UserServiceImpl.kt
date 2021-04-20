@@ -20,7 +20,7 @@ class UserServiceImpl(
     }
 
     override fun getById(id: Long): User {
-        return userRepository.findById(id).orElseThrow { UserNotFoundException("user not found by id $id") }
+        return userRepository.findById(id).orElseThrow { UserNotFoundException("User not found by id $id") }
     }
 
     override fun update(info: AddDetailsInfo, user: User): User {
