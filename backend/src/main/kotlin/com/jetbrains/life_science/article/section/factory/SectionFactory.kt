@@ -10,12 +10,26 @@ import org.springframework.stereotype.Component
 class SectionFactory(
     val parameterFactory: ParameterFactory
 ) {
-    fun create(name: String, description: String, article: ArticleVersion): Section {
-        return Section(0, name, description, article, mutableListOf())
+    fun create(info: SectionInfo, article: ArticleVersion): Section {
+        return Section(
+            id = 0,
+            name = info.name,
+            description = info.description,
+            articleVersion = article,
+            parameters = mutableListOf(),
+            orderNumber = info.order
+        )
     }
 
     fun copy(section: Section): Section {
-        return Section(0, section.name, section.description, section.articleVersion, section.parameters)
+        return Section(
+            id = 0,
+            name = section.name,
+            description = section.description,
+            articleVersion = section.articleVersion,
+            parameters = section.parameters,
+            orderNumber = section.orderNumber
+        )
     }
 
     fun setParams(origin: Section, info: SectionInfo, version: ArticleVersion) {

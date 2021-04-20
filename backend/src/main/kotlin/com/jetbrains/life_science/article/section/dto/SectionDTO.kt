@@ -14,5 +14,7 @@ data class SectionDTO(
 
     val description: String = "",
 
-    val parameters: List<ParameterDTO>
+    val parameters: List<ParameterDTO>,
+
+    val order: Int
 )

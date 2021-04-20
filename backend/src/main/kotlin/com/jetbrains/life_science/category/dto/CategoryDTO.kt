@@ -7,4 +7,6 @@ class CategoryDTO(
     val name: String,
 
     val parentId: Long?,
+
+    val order: Int
 )

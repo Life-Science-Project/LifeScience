@@ -5,5 +5,6 @@ import com.jetbrains.life_science.article.paragraph.view.ParagraphView
 class SectionView(
     val name: String,
     val description: String?,
-    val paragraphs: List<ParagraphView>
+    val paragraphs: List<ParagraphView>,
+    val order: Int
 )

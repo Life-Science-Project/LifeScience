@@ -12,12 +12,13 @@ class SectionViewMapper(
 ) {
     fun createView(section: Section): SectionView {
         return SectionView(
-            section.name,
-            section.description,
-            paragraphService.findAllBySectionId(section.id)
+            name = section.name,
+            description = section.description,
+            paragraphs = paragraphService.findAllBySectionId(section.id)
                 .map {
                     paragraphViewMapper.createView(it)
-                }
+                },
+            order = section.orderNumber
         )
     }
 }
