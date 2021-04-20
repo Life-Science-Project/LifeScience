@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.article.paragraph.service
+package com.jetbrains.life_science.article.content.service
 
-interface ParagraphInfo {
+interface ContentInfo {
 
     val id: String?
 

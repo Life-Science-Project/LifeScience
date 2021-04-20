@@ -1,8 +1,8 @@
-package com.jetbrains.life_science.article.paragraph.dto
+package com.jetbrains.life_science.article.content.dto
 
 import javax.validation.constraints.Positive
 
-class ParagraphDTO(
+class ContentDTO(
 
     @field:Positive
     val sectionId: Long,
