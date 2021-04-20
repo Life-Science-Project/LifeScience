@@ -18,13 +18,13 @@ import Troubleshooting from "./Sections/Troubleshooting/troubleshooting";
 import Education from "./Sections/Education/education";
 
 const sectionFunctions = [
-    (section) => (<GeneralInformation {...section}/>),
-    (section) => (<Protocol paragraphs={section.paragraphs}/>),
-    (section) => (<Equipment paragraphs={section.paragraphs}/>),
+    (section) => (<GeneralInformation contents={section.contents}/>),
+    (section) => (<Page text={section.contents.text}/>),
+    (section) => (<Page text={section.contents.text}/>),
     (section) => (<Application/>),
     (section) => (<Advantages/>),
-    (section) => (<Troubleshooting paragraphs={section.paragraphs}/>),
-    (section) => (<Collaboration {...section}/>),
+    (section) => (<Page text={section.contents.text}/>),
+    (section) => (<Collaboration/>),
     (section) => (<Education/>)
 ]
 
