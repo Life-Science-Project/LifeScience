@@ -18,7 +18,7 @@ class CategoryServiceImpl(
             existById(it)
             categoryRepository.findById(it).get()
         }
-        return categoryRepository.save(categoryFactory.createSection(categoryInfo, parent))
+        return categoryRepository.save(categoryFactory.createCategory(categoryInfo, parent))
     }
 
     override fun deleteCategory(id: Long) {
