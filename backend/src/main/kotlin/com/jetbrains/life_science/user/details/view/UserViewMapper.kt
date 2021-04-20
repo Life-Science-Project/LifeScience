@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component
 class UserViewMapper {
     fun createView(user: User): UserView {
         return UserView(
-            user.id,
-            user.firstName,
-            user.lastName,
-            user.doctorDegree,
-            user.academicDegree,
-            user.organisations,
-            user.orcid,
-            user.researchId
+            id = user.id,
+            firstName = user.firstName,
+            lastName = user.lastName,
+            doctorDegree = user.doctorDegree,
+            academicDegree = user.academicDegree,
+            organisations = user.organisations,
+            orcid = user.orcid,
+            researchId = user.researchId
         )
     }
 }

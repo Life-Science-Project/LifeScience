@@ -6,11 +6,12 @@ import com.jetbrains.life_science.user.details.service.UserService
 import com.jetbrains.life_science.user.details.view.UserView
 import com.jetbrains.life_science.user.details.view.UserViewMapper
 import com.jetbrains.life_science.util.email
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 class UserController(
     val userService: UserService,
     val mapper: UserViewMapper
@@ -24,9 +25,9 @@ class UserController(
         return mapper.createView(user)
     }
 
-    @PostMapping("/add_details")
+    @PostMapping("/update")
     fun addDetails(
-        @RequestBody addDetailsDTO: AddDetailsDTO,
+        @Validated @RequestBody addDetailsDTO: AddDetailsDTO,
         principal: Principal
     ) {
         userService.update(
