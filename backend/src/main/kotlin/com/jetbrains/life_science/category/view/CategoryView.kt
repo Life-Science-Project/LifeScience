@@ -6,6 +6,7 @@ class CategoryView(
     val id: Long?,
     val parentId: Long?,
     val name: String,
+    val order: Int,
     val subcategories: List<CategorySubcategoryView>,
     val articles: List<ArticleView>
 )
