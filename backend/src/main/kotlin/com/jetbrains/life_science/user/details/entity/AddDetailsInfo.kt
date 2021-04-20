@@ -14,4 +14,6 @@ interface AddDetailsInfo {
     val orcid: String?
 
     val researchId: String?
+
+    val user: User
 }

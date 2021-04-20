@@ -9,7 +9,7 @@ interface UserService {
 
     fun getById(id: Long): User
 
-    fun update(info: AddDetailsInfo, user: User): User
+    fun update(info: AddDetailsInfo): User
 
     fun delete(user: User)
 }

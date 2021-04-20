@@ -28,14 +28,17 @@ class UserController(
         return mapper.createView(user)
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     fun addDetails(
         @Validated @RequestBody addDetailsDTO: AddDetailsDTO,
         principal: Principal
     ) {
-        userService.update(
-            AddDetailsDTOToInfoAdapter(addDetailsDTO),
-            userService.getByEmail(principal.email)
+        userService.
+        update(
+            AddDetailsDTOToInfoAdapter(
+                addDetailsDTO,
+                userService.getByEmail(principal.email)
+            )
         )
     }
 

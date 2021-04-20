@@ -29,7 +29,7 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun update(info: AddDetailsInfo, user: User): User {
-        return userFactory.setParams(user, info)
+    override fun update(info: AddDetailsInfo): User {
+        return userFactory.setParams(info)
     }
 }

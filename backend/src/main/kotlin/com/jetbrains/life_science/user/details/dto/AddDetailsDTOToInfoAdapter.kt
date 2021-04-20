@@ -3,10 +3,12 @@ package com.jetbrains.life_science.user.details.dto
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.details.entity.AddDetailsInfo
+import com.jetbrains.life_science.user.details.entity.User
 import com.jetbrains.life_science.user.organisation.entity.Organisation
 
 class AddDetailsDTOToInfoAdapter(
     private val dto: AddDetailsDTO,
+    override val user: User
 ) : AddDetailsInfo {
 
     override val doctorDegree: DoctorDegree

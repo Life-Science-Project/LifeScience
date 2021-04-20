@@ -16,7 +16,8 @@ class UserFactory {
         )
     }
 
-    fun setParams(user: User, addInfo: AddDetailsInfo): User {
+    fun setParams(addInfo: AddDetailsInfo): User {
+        val user = addInfo.user
         user.academicDegree = addInfo.academicDegree
         user.doctorDegree = addInfo.doctorDegree
         user.orcid = addInfo.orcid
