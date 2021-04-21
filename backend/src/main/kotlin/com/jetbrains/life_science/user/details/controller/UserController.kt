@@ -56,7 +56,6 @@ class UserController(
         val user = userCredentialsService.getById(userId).user
         if (checkAccess(user, principal)) {
             userCredentialsService.delete(userId)
-            userService.delete(user)
         } else {
             throw AccessDeniedException("You haven't got enough permissions to delete this user")
         }
