@@ -66,9 +66,8 @@ class UserController(
 
     private fun checkAccess(user: User, principal: Principal): Boolean {
         val credentials = userCredentialsService.getByEmail(principal.email)
-        return user.id == credentials.user.id ||
-                credentials.roles.any {
-                    it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
-                }
+        return user.id == credentials.user.id || credentials.roles.any {
+            it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
+        }
     }
 }
