@@ -5,7 +5,7 @@ import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.organisation.entity.Organisation
 
 class UserView(
-    val id: Long,
+    val userDetailsId: Long,
 
     val firstName: String,
 

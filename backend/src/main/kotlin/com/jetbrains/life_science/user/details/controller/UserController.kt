@@ -9,7 +9,6 @@ import com.jetbrains.life_science.user.details.view.UserView
 import com.jetbrains.life_science.user.details.view.UserViewMapper
 import com.jetbrains.life_science.util.email
 import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -31,7 +30,7 @@ class UserController(
     fun getUser(
         @PathVariable userId: Long,
     ): UserView {
-        val user = userService.getById(userId)
+        val user = userCredentialsService.getById(userId).user
         return mapper.createView(user)
     }
 
@@ -41,7 +40,7 @@ class UserController(
         @PathVariable userId: Long,
         principal: Principal
     ) {
-        val user = userService.getByEmail(principal.email)
+        val user = userCredentialsService.getById(userId).user
         if (checkAccess(user, principal)) {
             userService.update(AddDetailsDTOToInfoAdapter(addDetailsDTO, user))
         } else {
@@ -49,7 +48,6 @@ class UserController(
         }
     }
 
-    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{userId}")
     fun deleteUser(
         @PathVariable userId: Long,
