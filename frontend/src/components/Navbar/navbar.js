@@ -12,7 +12,7 @@ const Navbar = () => {
                     {/*    <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>*/}
                     {/*</NavLink>*/}
                     <NavLink path="/" name="Home"/>
-                    <NavLink path="/main" name="Main"/>
+                    <NavLink path="/categories" name="Categories"/>
                     <NavLink path="/link2" name="Link2"/>
                     <NavLink path="/bradford-assay" name="Bradford"/>
                 </ul>

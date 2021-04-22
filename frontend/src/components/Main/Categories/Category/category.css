@@ -1,4 +1,4 @@
-.section_container {
+.category_container {
     border: #343a40;
     border-radius: 0.5rem;
     padding: 1rem;
@@ -7,6 +7,17 @@
     background-color: lightgray;
     font-size: 1rem;
 }
+
+.method_container {
+    border: cadetblue;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1rem;
+    text-align: center;
+    background-color: lightgray;
+    font-size: 1rem;
+}
+
 a {
     color: #343a40;
 }

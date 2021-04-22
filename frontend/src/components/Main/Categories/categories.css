@@ -1,4 +1,4 @@
-.section_name {
+.category_name {
     margin: 2rem 2rem 0.5rem 2rem;
     font-weight: bold;
     padding: 0.5rem;
@@ -7,6 +7,8 @@
     text-transform: uppercase;
 }
 
-.sections_container {
+
+
+.categories_container, .articles_container {
     margin: 0.5rem 1rem;
 }
