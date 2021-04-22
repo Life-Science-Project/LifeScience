@@ -124,7 +124,6 @@ const Method = ({link, articleId}) => {
                 </Switch>
             </div>
         </Router>
-
     )
 }
 
