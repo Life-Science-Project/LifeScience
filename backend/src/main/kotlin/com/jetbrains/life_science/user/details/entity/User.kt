@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.user.details.entity
 
+import com.jetbrains.life_science.article.master.entity.Article
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.organisation.entity.Organisation
@@ -29,6 +30,9 @@ class User(
 
     @ManyToMany
     val positions: MutableList<Position>,
+
+    @ManyToMany
+    val favouriteArticles: MutableList<Article>,
 
     var orcid: String? = null,
 

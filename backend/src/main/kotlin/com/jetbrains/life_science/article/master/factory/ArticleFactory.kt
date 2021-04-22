@@ -8,7 +8,12 @@ import org.springframework.stereotype.Component
 class ArticleFactory {
 
     fun create(category: Category): Article {
-        return Article(0, category, mutableListOf())
+        return Article(
+            id = 0,
+            category = category,
+            versions = mutableListOf(),
+            users = mutableListOf()
+        )
     }
 
     fun setParams(article: Article, category: Category) {

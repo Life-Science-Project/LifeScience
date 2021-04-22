@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ArticleRepository : JpaRepository<Article, Long> {
     fun findAllByCategoryId(categoryId: Long): List<Article>
+    fun findAllByUsersId(userId: Long): List<Article>
 }
