@@ -34,7 +34,7 @@ class UserServiceImpl(
     @Transactional
     override fun addFavourite(user: User, articleId: Long): User {
         val article = articleService.getById(articleId)
-        if (!user.favouriteArticles.any { it.id == article.id }) {
+        if (!user.favouriteArticles.any { it.id == articleId }) {
             user.favouriteArticles.add(article)
             article.users.add(user)
         }
