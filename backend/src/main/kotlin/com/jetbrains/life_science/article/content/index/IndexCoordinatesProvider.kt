@@ -5,5 +5,4 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
 interface IndexCoordinatesProvider {
 
     val indexCoordinates: IndexCoordinates
-
 }

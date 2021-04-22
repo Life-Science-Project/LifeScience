@@ -81,5 +81,4 @@ class ContentVersionController(
             throw ContentNotFoundException("Content's section id and request section id doesn't match")
         }
     }
-
 }

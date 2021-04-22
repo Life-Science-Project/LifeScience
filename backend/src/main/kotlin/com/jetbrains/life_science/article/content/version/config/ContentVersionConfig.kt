@@ -20,5 +20,4 @@ class ContentVersionConfig(
     }
 
     override val indexCoordinates = IndexCoordinates.of(contentVersionIndexName)
-
 }

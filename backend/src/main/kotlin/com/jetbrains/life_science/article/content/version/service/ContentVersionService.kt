@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.article.content.version.service
 
-import com.jetbrains.life_science.article.content.master.dto.ContentDtoToInfoAdapter
 import com.jetbrains.life_science.article.content.master.entity.Content
 import com.jetbrains.life_science.article.content.master.service.ContentInfo
 

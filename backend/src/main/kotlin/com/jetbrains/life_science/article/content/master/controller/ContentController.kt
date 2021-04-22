@@ -30,7 +30,6 @@ class ContentController(
         return mapper.createView(content)
     }
 
-
     private fun checkIdEquality(
         sectionId: Long,
         entityId: Long
@@ -39,6 +38,4 @@ class ContentController(
             throw ContentNotFoundException("Content's section id and request section id doesn't match")
         }
     }
-
-
 }

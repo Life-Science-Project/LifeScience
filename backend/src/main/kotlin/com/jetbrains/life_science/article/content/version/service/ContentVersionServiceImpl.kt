@@ -6,7 +6,6 @@ import com.jetbrains.life_science.article.content.master.service.ContentInfo
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.ContentNotFoundException
-import com.jetbrains.life_science.exception.SectionNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -48,5 +47,4 @@ class ContentVersionServiceImpl(
     override fun delete(contentId: String) {
         repository.deleteById(contentId)
     }
-
 }
