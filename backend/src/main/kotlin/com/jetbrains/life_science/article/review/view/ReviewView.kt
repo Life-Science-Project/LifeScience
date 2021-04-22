@@ -4,5 +4,5 @@ class ReviewView(
     val id: Long,
     val articleVersionId: Long,
     val comment: String,
-    val reviewerId: Long // TODO: add UserView
+    val reviewerId: Long
 )

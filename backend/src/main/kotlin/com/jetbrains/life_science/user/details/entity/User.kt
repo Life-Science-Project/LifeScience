@@ -19,19 +19,19 @@ class User(
     val lastName: String,
 
     @Enumerated
-    val doctorDegree: DoctorDegree = DoctorDegree.NONE,
+    var doctorDegree: DoctorDegree = DoctorDegree.NONE,
 
     @Enumerated
-    val academicDegree: AcademicDegree = AcademicDegree.NONE,
+    var academicDegree: AcademicDegree = AcademicDegree.NONE,
 
     @ManyToMany
-    val organisations: MutableList<Organisation>,
+    var organisations: MutableList<Organisation>,
 
     @ManyToMany
     val positions: MutableList<Position>,
 
-    val orcid: String? = null,
+    var orcid: String? = null,
 
-    val researchId: String? = null
+    var researchId: String? = null
 
 )
