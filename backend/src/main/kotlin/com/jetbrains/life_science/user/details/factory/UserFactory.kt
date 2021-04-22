@@ -12,7 +12,8 @@ class UserFactory {
             firstName = firstName,
             lastName = lastName,
             organisations = mutableListOf(),
-            positions = mutableListOf()
+            positions = mutableListOf(),
+            favouriteArticles = mutableListOf()
         )
     }
 

@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.user.details.service
 
+import com.jetbrains.life_science.article.master.service.ArticleService
+import com.jetbrains.life_science.exception.ArticleNotFoundException
 import com.jetbrains.life_science.exception.UserNotFoundException
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.user.details.entity.AddDetailsInfo
@@ -13,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 class UserServiceImpl(
     val userCredentialsService: UserCredentialsService,
     val userFactory: UserFactory,
-    val userRepository: UserRepository
+    val userRepository: UserRepository,
+    val articleService: ArticleService
 ) : UserService {
 
     override fun getByEmail(email: String): User {
@@ -26,6 +29,27 @@ class UserServiceImpl(
 
     override fun delete(user: User) {
         userRepository.delete(user)
+    }
+
+    @Transactional
+    override fun addFavourite(user: User, articleId: Long): User {
+        val article = articleService.getById(articleId)
+        if (!user.favouriteArticles.any { it.id == articleId }) {
+            user.favouriteArticles.add(article)
+            article.users.add(user)
+        }
+        return user
+    }
+
+    @Transactional
+    override fun removeFavourite(user: User, articleId: Long) {
+        val article = articleService.getById(articleId)
+        if (!user.favouriteArticles.any { it.id == articleId }) {
+            throw ArticleNotFoundException("Article not found in favourites")
+        } else {
+            user.favouriteArticles.remove(article)
+            article.users.remove(user)
+        }
     }
 
     @Transactional
