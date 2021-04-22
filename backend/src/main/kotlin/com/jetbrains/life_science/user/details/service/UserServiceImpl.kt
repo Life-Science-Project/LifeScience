@@ -5,7 +5,6 @@ import com.jetbrains.life_science.exception.ArticleNotFoundException
 import com.jetbrains.life_science.exception.UserNotFoundException
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.user.details.entity.AddDetailsInfo
-import com.jetbrains.life_science.user.details.entity.FavouriteInfo
 import com.jetbrains.life_science.user.details.entity.User
 import com.jetbrains.life_science.user.details.factory.UserFactory
 import com.jetbrains.life_science.user.details.repository.UserRepository
@@ -33,23 +32,23 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun addFavourite(info: FavouriteInfo): User {
-        val article = articleService.getById(info.articleId)
-        if (!info.user.favouriteArticles.contains(article)) {
-            info.user.favouriteArticles.add(article)
-            article.users.add(info.user)
+    override fun addFavourite(user: User, articleId: Long): User {
+        val article = articleService.getById(articleId)
+        if (!user.favouriteArticles.contains(article)) {
+            user.favouriteArticles.add(article)
+            article.users.add(user)
         }
-        return info.user
+        return user
     }
 
     @Transactional
-    override fun removeFavourite(info: FavouriteInfo) {
-        val article = articleService.getById(info.articleId)
-        if (!info.user.favouriteArticles.contains(article)) {
+    override fun removeFavourite(user: User, articleId: Long) {
+        val article = articleService.getById(articleId)
+        if (!user.favouriteArticles.contains(article)) {
             throw ArticleNotFoundException("Article not found in favourites")
         } else {
-            info.user.favouriteArticles.remove(article)
-            article.users.remove(info.user)
+            user.favouriteArticles.remove(article)
+            article.users.remove(user)
         }
     }
 

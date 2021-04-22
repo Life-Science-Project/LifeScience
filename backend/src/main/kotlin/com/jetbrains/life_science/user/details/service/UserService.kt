@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.user.details.service
 
 import com.jetbrains.life_science.user.details.entity.AddDetailsInfo
-import com.jetbrains.life_science.user.details.entity.FavouriteInfo
 import com.jetbrains.life_science.user.details.entity.User
 
 interface UserService {
@@ -14,7 +13,7 @@ interface UserService {
 
     fun delete(user: User)
 
-    fun addFavourite(info: FavouriteInfo): User
+    fun addFavourite(user: User, articleId: Long): User
 
-    fun removeFavourite(info: FavouriteInfo)
+    fun removeFavourite(user: User, articleId: Long)
 }

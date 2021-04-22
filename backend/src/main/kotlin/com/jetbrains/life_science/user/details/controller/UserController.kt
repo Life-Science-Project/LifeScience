@@ -5,7 +5,6 @@ import com.jetbrains.life_science.article.master.view.ArticleViewMapper
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.user.details.dto.AddDetailsDTO
 import com.jetbrains.life_science.user.details.dto.AddDetailsDTOToInfoAdapter
-import com.jetbrains.life_science.user.details.dto.FavouriteDataToInfoAdapter
 import com.jetbrains.life_science.user.details.entity.User
 import com.jetbrains.life_science.user.details.service.UserService
 import com.jetbrains.life_science.user.details.view.UserView
@@ -79,7 +78,7 @@ class UserController(
     ): UserView {
         val user = userService.getById(userId)
         if (checkAccess(user, principal)) {
-            val updatedUser = userService.addFavourite(FavouriteDataToInfoAdapter(user, articleId))
+            val updatedUser = userService.addFavourite(user, articleId)
             return mapper.createView(updatedUser)
         } else {
             throw AccessDeniedException("You haven't got enough permissions to add this favourite")
@@ -94,7 +93,7 @@ class UserController(
     ) {
         val user = userService.getById(userId)
         if (checkAccess(user, principal)) {
-            userService.removeFavourite(FavouriteDataToInfoAdapter(user, articleId))
+            userService.removeFavourite(user, articleId)
         } else {
             throw AccessDeniedException("You haven't got enough permissions to delete this favourite")
         }
