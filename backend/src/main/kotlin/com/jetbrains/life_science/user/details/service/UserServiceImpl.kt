@@ -34,7 +34,7 @@ class UserServiceImpl(
     @Transactional
     override fun addFavourite(user: User, articleId: Long): User {
         val article = articleService.getById(articleId)
-        if (!user.favouriteArticles.contains(article)) {
+        if (!user.favouriteArticles.any { it.id == article.id }) {
             user.favouriteArticles.add(article)
             article.users.add(user)
         }
@@ -44,7 +44,7 @@ class UserServiceImpl(
     @Transactional
     override fun removeFavourite(user: User, articleId: Long) {
         val article = articleService.getById(articleId)
-        if (!user.favouriteArticles.contains(article)) {
+        if (!user.favouriteArticles.any { it.id == articleId }) {
             throw ArticleNotFoundException("Article not found in favourites")
         } else {
             user.favouriteArticles.remove(article)
