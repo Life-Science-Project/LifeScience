@@ -33,6 +33,10 @@ class UserCredentialsServiceImpl(
         return userCredentialsRepository.save(user)
     }
 
+    override fun delete(id: Long) {
+        userCredentialsRepository.delete(getById(id))
+    }
+
     fun checkUserNotExistsByEmail(email: String) {
         if (userCredentialsRepository.existsByEmail(email)) {
             throw UserAlreadyExistsException("user with email $email already exists")

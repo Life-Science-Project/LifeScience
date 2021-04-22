@@ -27,7 +27,9 @@ function App() {
             <Route path="/register" component={Register}/>
             <Route path="/login" render={() => <Login loggedUserStateUpdater={(user) => setLoggedUser(user)}/>}/>
             <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
-            <Route path="/bradford-assay" component={Method}/>
+            <Route path="/bradford-assay">
+                <Method link="/bradford-assay" articleId={1}/>
+            </Route>
         </Router>
     );
 };

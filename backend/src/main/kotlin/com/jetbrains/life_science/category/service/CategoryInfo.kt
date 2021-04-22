@@ -6,4 +6,6 @@ interface CategoryInfo {
     val name: String
 
     val parentId: Long?
+
+    val order: Int
 }

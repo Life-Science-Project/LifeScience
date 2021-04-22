@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.user.details.entity
 
+import com.jetbrains.life_science.article.master.entity.Article
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.organisation.entity.Organisation
@@ -19,19 +20,22 @@ class User(
     val lastName: String,
 
     @Enumerated
-    val doctorDegree: DoctorDegree = DoctorDegree.NONE,
+    var doctorDegree: DoctorDegree = DoctorDegree.NONE,
 
     @Enumerated
-    val academicDegree: AcademicDegree = AcademicDegree.NONE,
+    var academicDegree: AcademicDegree = AcademicDegree.NONE,
 
     @ManyToMany
-    val organisations: MutableList<Organisation>,
+    var organisations: MutableList<Organisation>,
 
     @ManyToMany
     val positions: MutableList<Position>,
 
-    val orcid: String? = null,
+    @ManyToMany
+    val favouriteArticles: MutableList<Article>,
 
-    val researchId: String? = null
+    var orcid: String? = null,
+
+    var researchId: String? = null
 
 )

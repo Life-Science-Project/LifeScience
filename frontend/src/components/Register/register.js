@@ -3,6 +3,7 @@ import {useForm} from 'react-hook-form';
 import './register.css';
 import axios from "axios";
 import {Redirect} from "react-router";
+import {rootUrl} from "../../constants";
 
 const Register = () => {
     // Used to redirect user to the home page after successful registration.
@@ -11,14 +12,13 @@ const Register = () => {
     const {register, handleSubmit, errors} = useForm();
 
     const onSubmit = data => {
-        axios.post('http://localhost:8080/api/auth/signup', {
-            "username": data.username,
+        axios.post(rootUrl + '/api/auth/signup', {
             "firstName": data.firstName,
             "lastName": data.lastName,
             "email": data.email,
             "password": data.password
         }).then(resp => {
-            if (resp.data.message === "User registered successfully!") {
+            if (resp.status === 200) {
                 setStatus(true);
             }
         });
@@ -39,16 +39,13 @@ const Register = () => {
                     <input type="text" placeholder="Last name" name="lastName"
                            ref={register({required: true, maxLength: 100})}
                            className={"auth__form_field"}/>
-                    <input type="text" placeholder="Username" name="username"
-                           ref={register({required: true, minLength: 6, maxLength: 12})}
-                           className={"auth__form_field"}/>
                     <input type="text" placeholder="Email" name="email"
                            ref={register({required: true, pattern: /^\S+@\S+$/i})}
                            className={"auth__form_field"}/>
-                    <input type="tel" placeholder="Mobile number" name="mobile"
-                           ref={register({required: true, minLength: 6, maxLength: 12})}
-                           className={"auth__form_field"}/>
                     <input type="password" placeholder="Password" name="password"
+                           ref={register({required: true, minLength: 6, maxLength: 24})}
+                           className={"auth__form_field"}/>
+                    <input type="password" placeholder="Confirm Password" name="confirmPassword"
                            ref={register({required: true, minLength: 6, maxLength: 24})}
                            className={"auth__form_field"}/>
 

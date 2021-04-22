@@ -1,9 +1,10 @@
 package com.jetbrains.life_science.article.section.view
 
-import com.jetbrains.life_science.article.paragraph.view.ParagraphView
+import com.jetbrains.life_science.article.content.view.ContentView
 
 class SectionView(
     val name: String,
     val description: String?,
-    val paragraphs: List<ParagraphView>
+    val contents: ContentView?,
+    val order: Int
 )
