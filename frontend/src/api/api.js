@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const instance = axios.create({
     withCredentials: true,
-    baseURL: 'http://localhost:8080/api/'
+    baseURL: 'https://life-science-2021.herokuapp.com/api/'
 });
 
 export const ResultCodesEnum = {
