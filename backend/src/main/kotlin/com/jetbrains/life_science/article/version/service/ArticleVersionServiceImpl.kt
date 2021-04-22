@@ -59,7 +59,7 @@ class ArticleVersionServiceImpl(
             sectionService.deleteSearchUnits(lastPublished.sections)
         }
         searchService.createSearchUnit(currentVersion)
-        sectionService.createSearchUnits(currentVersion.sections)
+        sectionService.moveToMaster(currentVersion.sections)
     }
 
     override fun getById(id: Long): ArticleVersion {

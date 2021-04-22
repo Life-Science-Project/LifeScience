@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.content.repository
+package com.jetbrains.life_science.article.content.master.repository
 
 interface ContentRepositoryCustom {
 

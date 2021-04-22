@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.content.service
+package com.jetbrains.life_science.article.content.master.service
 
 interface ContentInfo {
 

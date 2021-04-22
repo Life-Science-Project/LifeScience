@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.section.service
 
-import com.jetbrains.life_science.article.content.service.ContentService
+import com.jetbrains.life_science.article.content.master.service.ContentService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.factory.SectionFactory
 import com.jetbrains.life_science.article.section.repository.SectionRepository
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 class SectionServiceImpl(
     val factory: SectionFactory,
     val repository: SectionRepository,
-    val searchService: SectionSearchUnitService
+    val searchService: SectionSearchUnitService,
 ) : SectionService {
 
     @Autowired
@@ -53,8 +53,11 @@ class SectionServiceImpl(
         oldSections.forEach { searchService.delete(it.id) }
     }
 
-    override fun createSearchUnits(newSections: List<Section>) {
-        newSections.forEach { searchService.create(it) }
+    override fun moveToMaster(newSections: List<Section>) {
+        newSections.forEach { section ->
+            searchService.create(section)
+            contentService.moveToMasterBySectionId(section.id)
+        }
     }
 
     private fun createCopy(origin: Section, newArticle: ArticleVersion) {

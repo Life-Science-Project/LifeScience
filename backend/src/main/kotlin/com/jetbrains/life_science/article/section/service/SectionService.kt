@@ -21,5 +21,5 @@ interface SectionService {
 
     fun deleteSearchUnits(oldSections: List<Section>)
 
-    fun createSearchUnits(newSections: List<Section>)
+    fun moveToMaster(newSections: List<Section>)
 }
