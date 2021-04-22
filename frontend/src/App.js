@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
 import Login from "./components/Login/login";
 import Method from "./components/Method/method";
+import ProfilePage from "./components/ProfilePage/profilePage";
 
 function App() {
     // Fetch auth-data from local storage in case user was already logged in
@@ -28,6 +29,7 @@ function App() {
             <Route path="/bradford-assay">
                 <Method link="/bradford-assay" articleId={1}/>
             </Route>
+            <Route exact={true} path="/my-account" render={() => <ProfilePage user={loggedUser}/>}/>
         </Router>
     );
 }

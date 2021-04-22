@@ -27,7 +27,7 @@ const Header = ({user}) => {
     } else {
         authBlock = (<div className="d-flex justify-content-between">
             {/*TODO: profile page link*/}
-            <Link to="/profilePage">
+            <Link to="/my-account">
                 <div className="d-flex align-items-center header__group">
                     <div className="header__group_link p-2 bd-highlight">{user.username}</div>
                     {/*TODO: proper userpage icon*/}
