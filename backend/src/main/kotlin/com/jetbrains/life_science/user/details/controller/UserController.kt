@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.user.details.controller
 
+import com.jetbrains.life_science.article.master.view.ArticleView
+import com.jetbrains.life_science.article.master.view.ArticleViewMapper
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.user.details.dto.AddDetailsDTO
 import com.jetbrains.life_science.user.details.dto.AddDetailsDTOToInfoAdapter
@@ -18,7 +20,8 @@ import java.security.Principal
 class UserController(
     val userService: UserService,
     val userCredentialsService: UserCredentialsService,
-    val mapper: UserViewMapper
+    val mapper: UserViewMapper,
+    val articleMapper: ArticleViewMapper,
 ) {
 
     @GetMapping()
@@ -58,6 +61,41 @@ class UserController(
             userCredentialsService.delete(userId)
         } else {
             throw AccessDeniedException("You haven't got enough permissions to delete this user")
+        }
+    }
+
+    @GetMapping("{userId}/favourites/")
+    fun getFavourites(@PathVariable userId: Long): List<ArticleView> {
+        val user = userService.getById(userId)
+        return user.favouriteArticles.map { articleMapper.createView(it) }
+    }
+
+    @PutMapping("{userId}/favourites/{articleId}")
+    fun addFavourite(
+        @PathVariable userId: Long,
+        @PathVariable articleId: Long,
+        principal: Principal
+    ): UserView {
+        val user = userService.getById(userId)
+        if (checkAccess(user, principal)) {
+            val updatedUser = userService.addFavourite(user, articleId)
+            return mapper.createView(updatedUser)
+        } else {
+            throw AccessDeniedException("You haven't got enough permissions to add this favourite")
+        }
+    }
+
+    @DeleteMapping("{userId}/favourites/{articleId}")
+    fun removeFavourite(
+        @PathVariable userId: Long,
+        @PathVariable articleId: Long,
+        principal: Principal
+    ) {
+        val user = userService.getById(userId)
+        if (checkAccess(user, principal)) {
+            userService.removeFavourite(user, articleId)
+        } else {
+            throw AccessDeniedException("You haven't got enough permissions to delete this favourite")
         }
     }
 
