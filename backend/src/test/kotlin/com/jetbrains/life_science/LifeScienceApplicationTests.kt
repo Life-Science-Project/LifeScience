@@ -1,6 +1,6 @@
 package com.jetbrains.life_science
 
-import com.jetbrains.life_science.article.content.version.config.ContentVersionConfig
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 class LifeScienceApplicationTests {
 
     @MockBean
-    lateinit var contentVersionConfig: ContentVersionConfig
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     @Test
     fun contextLoads() {

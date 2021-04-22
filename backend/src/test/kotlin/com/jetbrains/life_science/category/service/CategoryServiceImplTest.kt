@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.category.service
 
-import com.jetbrains.life_science.article.content.version.config.ContentVersionConfig
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.exception.CategoryNotFoundException
 import com.nhaarman.mockitokotlin2.doReturn
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 internal class CategoryServiceImplTest {
 
     @MockBean
-    lateinit var contentVersionConfig: ContentVersionConfig
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     @Autowired
     lateinit var categoryService: CategoryService

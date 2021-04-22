@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.article.content.version.repository
 
-import com.jetbrains.life_science.article.content.index.IndexCoordinatesProvider
 import com.jetbrains.life_science.article.content.master.entity.Content
+import com.jetbrains.life_science.util.elastic.CustomIndexElasticsearchRepository
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.query.Criteria
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery
@@ -9,11 +9,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class ContentVersionRepositoryImpl(
-    indexCoordinatesProvider: IndexCoordinatesProvider,
     val elasticsearchOperations: ElasticsearchOperations
-) : ContentVersionRepository {
-
-    private val indexCoordinates = indexCoordinatesProvider.indexCoordinates
+) : ContentVersionRepository, CustomIndexElasticsearchRepository("content_version") {
 
     override fun findAllBySectionId(sectionId: Long): List<Content> {
         val criteria = Criteria("sectionId").`is`(sectionId)
