@@ -32,6 +32,7 @@ const UserPage = (props) => {
                         {props.user.organisations.map(comp => <li>{comp.name}</li>)}
                     </ul>
                 </div>
+                //TODO
             </div>
         </div>
     )
