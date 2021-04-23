@@ -25,7 +25,7 @@ function App() {
             <Navbar/>
             <Route exact={true} path="/" component={Home}/>
             <Route path="/register" component={Register}/>
-            <Route path="/login" render={() => <Login loggedUserStateUpdater={(user) => setLoggedUser(user)}/>}/>
+            <Route path="/login" render={() => <Login />}/>
             <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
             <Route path="/bradford-assay">
                 <Method link="/bradford-assay" articleId={1}/>

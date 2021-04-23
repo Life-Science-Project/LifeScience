@@ -4,6 +4,7 @@ import './register.css';
 import axios from "axios";
 import {Redirect} from "react-router";
 import {rootUrl} from "../../constants";
+import {signInUserThunk} from "../../redux/auth-reducer";
 
 const Register = () => {
     // Used to redirect user to the home page after successful registration.

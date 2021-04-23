@@ -20,7 +20,7 @@ const authReducer = (state = initialState, action) => {
         case SIGN_UP:
             return {
                 ...state,
-                //TODO
+                status: true
             }
         default:
             return state;
@@ -32,9 +32,13 @@ export const signInUser = (_user) => {
 }
 
 export const signInUserThunk = (input) => async (dispatch) => {
+    console.log("here")
     let response = await authApi.signInUser(input);
     let result;
-    //TODO get result from response
+    if (response.status === 200) {
+        result = response.data;
+    }
+    console.log(result)
     dispatch(signInUser(result))
 }
 
@@ -45,7 +49,7 @@ export const signUpUser = (_user) => {
 export const signUpUserThunk = (input) => async (dispatch) => {
     let response = await authApi.signUpUser(input);
     let result;
-    //TODO get result from response
+    // TODO
     dispatch(signInUser(result))
 }
 

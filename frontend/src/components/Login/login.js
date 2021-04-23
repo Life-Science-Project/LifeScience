@@ -1,33 +1,21 @@
 import React, {useState} from "react";
 import {useForm} from 'react-hook-form';
 import '../Register/register.css';
-import axios from "axios";
-import {Redirect} from "react-router";
+import {Redirect, withRouter} from "react-router";
 import '../../constants.js';
-import {rootUrl} from "../../constants";
+import {connect} from "react-redux";
+import {signInUserThunk} from "../../redux/auth-reducer";
 
-const Login = ({loggedUserStateUpdater}) => {
-    const [status, setStatus] = useState(false);
+const Login = ({signInUserThunk, isAuthorized}) => {
     const {register, handleSubmit, errors} = useForm();
-    const onSubmit = data => {
-        axios.post(rootUrl + '/api/auth/signin', data).then(resp => {
-            if (resp.status === 200) {
-                loggedUserStateUpdater(resp.data);
-                // Save auth-data to localStorage to retrieve on app restart
-                localStorage.setItem('auth-data', JSON.stringify(resp.data));
-                setStatus(true);
-            }
-        });
-    }
-    console.log(errors);
 
-    if (status) {
+    if (isAuthorized) {
         return <Redirect to={{pathname: "/"}}/>;
     } else {
         return (
             <div className={"auth__form"}>
                 <h1 className={"auth__form_header d-flex justify-content-center"}>Login</h1>
-                <form onSubmit={handleSubmit(onSubmit)}
+                <form onSubmit={handleSubmit(signInUserThunk)}
                       className="d-flex justify-content-center flex-column auth__form_fields">
                     <input type="text" placeholder="Email" name="email"
                            ref={register({required: true, pattern: /^\S+@\S+$/i})}
@@ -43,4 +31,12 @@ const Login = ({loggedUserStateUpdater}) => {
     }
 }
 
-export default Login;
+let mapStateToProps = (state) => {
+    return ({
+        isAuthorized: state.auth.isAuthorized
+    })
+};
+
+let WithDataContainerComponent = withRouter(Login);
+
+export default connect(mapStateToProps, {signInUserThunk})(WithDataContainerComponent);
