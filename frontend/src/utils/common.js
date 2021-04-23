@@ -13,3 +13,12 @@ export const isEmpty = (array) => {
 export const getField = (obj, field) => {
     return obj[field];
 };
+
+export const getLineWithSetLen = (length, firstStr) => {
+    let res = firstStr.concat('');
+    let counter = length - firstStr.length;
+    while (counter-- !== 0) {
+        res = res.concat(' ');
+    }
+    return res;
+} ;

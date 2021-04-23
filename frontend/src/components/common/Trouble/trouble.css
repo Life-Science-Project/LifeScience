@@ -1,0 +1,10 @@
+.trouble_container {
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.trouble_message {
+    text-decoration: darkred;
+    text-align: center;
+    overflow: auto;
+}
