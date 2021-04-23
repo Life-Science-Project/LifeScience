@@ -8,6 +8,23 @@ import {signInUserThunk} from "../../redux/auth-reducer";
 
 const Login = ({signInUserThunk, isAuthorized}) => {
     const {register, handleSubmit, errors} = useForm();
+    git
+    const validateEmail = () => {
+        if (errors.email && errors.email.type === "required") {
+            return (<span class="error">Email is required</span>);
+        } else if (errors.email && errors.email.type === "pattern") {
+            return (<span class="error">Invalid email</span>)
+        }
+    };
+    const validatePassword = () => {
+        if (errors.password && errors.password.type === "required") {
+            return (<span class="error">Password is required</span>);
+        } else if (errors.password && errors.password.type === "minLength") {
+            return (<span class="error">Password is too short</span>)
+        } else if (errors.password && errors.password.type === "maxLength") {
+            return (<span class="error">Password is too long</span>)
+        }
+    }
 
     if (isAuthorized) {
         return <Redirect to={{pathname: "/"}}/>;
@@ -20,10 +37,11 @@ const Login = ({signInUserThunk, isAuthorized}) => {
                     <input type="text" placeholder="Email" name="email"
                            ref={register({required: true, pattern: /^\S+@\S+$/i})}
                            className={"auth__form_field"}/>
+                    {validateEmail()}
                     <input type="password" placeholder="Password" name="password"
                            ref={register({required: true, minLength: 6, maxLength: 24})}
                            className={"auth__form_field"}/>
-
+                    {validatePassword()}
                     <input type="submit" className={"auth__form_submit btn btn-success btn-lg"}/>
                 </form>
             </div>
