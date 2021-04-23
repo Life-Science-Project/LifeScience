@@ -9,6 +9,7 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.factory.ArticleVersionFactory
 import com.jetbrains.life_science.article.version.repository.ArticleVersionRepository
 import com.jetbrains.life_science.article.version.search.service.ArticleVersionSearchUnitService
+import com.jetbrains.life_science.exception.OperationDeniedException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -54,6 +55,9 @@ class ArticleVersionServiceImpl(
         val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, State.PUBLISHED)
         currentVersion.state = State.PUBLISHED
         if (lastPublished != null) {
+            if (lastPublished.id == currentVersion.id) {
+                throw OperationDeniedException("Version is already published")
+            }
             lastPublished.state = State.ARCHIVED
             searchService.deleteSearchUnitById(lastPublished.id)
             sectionService.deleteSearchUnits(lastPublished.sections)

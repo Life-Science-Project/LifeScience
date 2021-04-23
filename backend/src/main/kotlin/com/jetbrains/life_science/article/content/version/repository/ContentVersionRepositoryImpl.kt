@@ -22,7 +22,7 @@ class ContentVersionRepositoryImpl(
     override fun deleteAllBySectionId(sectionId: Long) {
         val criteria = Criteria("sectionId").`is`(sectionId)
         val query = CriteriaQuery(criteria)
-        elasticsearchOperations.delete(query, indexCoordinates)
+        elasticsearchOperations.delete(query, Content::class.java, indexCoordinates)
     }
 
     override fun saveVersion(content: Content): Content {

@@ -6,7 +6,7 @@ import com.jetbrains.life_science.article.content.master.view.ContentView
 import com.jetbrains.life_science.article.content.master.view.ContentViewMapper
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.service.SectionService
-import com.jetbrains.life_science.exception.AccessDeniedException
+import com.jetbrains.life_science.exception.OperationDeniedException
 import com.jetbrains.life_science.exception.ContentNotFoundException
 import com.jetbrains.life_science.user.details.service.UserService
 import com.jetbrains.life_science.util.email
@@ -69,7 +69,7 @@ class ContentVersionController(
         val user = userService.getByEmail(principal.email)
         val sectionOwner = section.articleVersion.author
         if (user.id != sectionOwner.id) {
-            throw AccessDeniedException("Section $sectionId not belongs to user ${principal.email}")
+            throw OperationDeniedException("Section $sectionId not belongs to user ${principal.email}")
         }
     }
 
