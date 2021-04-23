@@ -6,9 +6,10 @@ import '../../constants.js';
 import {connect} from "react-redux";
 import {signInUserThunk} from "../../redux/auth-reducer";
 
-const Login = ({signInUserThunk, isAuthorized}) => {
+const Login = ({signInUserThunk, isAuthorized, errorMsg}) => {
     const {register, handleSubmit, errors} = useForm();
-    git
+    console.log(errorMsg)
+    console.log(isAuthorized)
     const validateEmail = () => {
         if (errors.email && errors.email.type === "required") {
             return (<span class="error">Email is required</span>);
@@ -42,6 +43,7 @@ const Login = ({signInUserThunk, isAuthorized}) => {
                            ref={register({required: true, minLength: 6, maxLength: 24})}
                            className={"auth__form_field"}/>
                     {validatePassword()}
+                    {!errorMsg.isEmpty && <span>{errorMsg}</span>}
                     <input type="submit" className={"auth__form_submit btn btn-success btn-lg"}/>
                 </form>
             </div>
@@ -51,7 +53,8 @@ const Login = ({signInUserThunk, isAuthorized}) => {
 
 let mapStateToProps = (state) => {
     return ({
-        isAuthorized: state.auth.isAuthorized
+        isAuthorized: state.auth.isAuthorized,
+        errorMsg: state.auth.errorMsg
     })
 };
 

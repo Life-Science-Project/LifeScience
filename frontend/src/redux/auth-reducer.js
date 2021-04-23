@@ -5,7 +5,8 @@ const SIGN_UP = 'signup';
 
 let initialState = {
     user: null,
-    isAuthorized: false
+    isAuthorized: false,
+    errorMsg: ""
 }
 
 const authReducer = (state = initialState, action) => {
@@ -15,7 +16,8 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.user,
-                isAuthorized: true
+                isAuthorized: true,
+                errorMsg: action.errorMsg
             };
         case SIGN_UP:
             return {
@@ -27,19 +29,20 @@ const authReducer = (state = initialState, action) => {
     }
 }
 
-export const signInUser = (_user) => {
-    return {type: SIGN_IN, user: _user};
+export const signInUser = ([_user, _errorMsg]) => {
+    return {type: SIGN_IN, user: _user, errorMsg: _errorMsg};
 }
 
 export const signInUserThunk = (input) => async (dispatch) => {
-    console.log("here")
     let response = await authApi.signInUser(input);
-    let result;
+    let result, errorMsg = "";
     if (response.status === 200) {
         result = response.data;
+    } else {
+        errorMsg = "Invalid login or password";
+        result = null;
     }
-    console.log(result)
-    dispatch(signInUser(result))
+    dispatch(signInUser([result, errorMsg]))
 }
 
 export const signUpUser = (_user) => {
@@ -49,7 +52,10 @@ export const signUpUser = (_user) => {
 export const signUpUserThunk = (input) => async (dispatch) => {
     let response = await authApi.signUpUser(input);
     let result;
-    // TODO
+    if (response.status === 200) {
+        signInUserThunk({email: input.email, password: input.password});
+        return;
+    }
     dispatch(signInUser(result))
 }
 
