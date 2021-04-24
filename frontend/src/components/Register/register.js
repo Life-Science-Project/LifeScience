@@ -1,39 +1,20 @@
 import React, {useState} from "react";
 import {useForm} from 'react-hook-form';
 import './register.css';
-import axios from "axios";
-import {Redirect} from "react-router";
-import {rootUrl} from "../../constants";
-import {signInUserThunk} from "../../redux/auth-reducer";
+import {Redirect, withRouter} from "react-router";
+import {signUpUserThunk} from "../../redux/auth-reducer";
+import {connect} from "react-redux";
 
-const Register = () => {
-    // Used to redirect user to the home page after successful registration.
-    const [status, setStatus] = useState(false);
-
+const Register = ({signUpUserThunk, isAuthorized, errorMsg}) => {
     const {register, handleSubmit, errors} = useForm();
 
-    const onSubmit = data => {
-        axios.post(rootUrl + '/api/auth/signup', {
-            "firstName": data.firstName,
-            "lastName": data.lastName,
-            "email": data.email,
-            "password": data.password
-        }).then(resp => {
-            if (resp.status === 200) {
-                setStatus(true);
-            }
-        });
-    }
-    // TODO: handle errors
-    console.log(errors);
-
-    if (status) {
+    if (isAuthorized) {
         return <Redirect to={{pathname: "/"}}/>;
     } else {
         return (
             <div className={"auth__form"}>
                 <h1 className={"auth__form_header d-flex justify-content-center"}>Register</h1>
-                <form onSubmit={handleSubmit(onSubmit)}
+                <form onSubmit={handleSubmit(signUpUserThunk)}
                       className="d-flex justify-content-center flex-column auth__form_fields">
                     <input type="text" placeholder="First name" name="firstName"
                            ref={register({required: true, maxLength: 80})} className={"auth__form_field"}/>
@@ -57,4 +38,13 @@ const Register = () => {
     }
 }
 
-export default Register;
+let mapStateToProps = (state) => {
+    return ({
+        isAuthorized: state.auth.isAuthorized,
+        errorMsg: state.auth.errorMsg
+    })
+};
+
+let WithDataContainerComponent = withRouter(Register);
+
+export default connect(mapStateToProps, {signUpUserThunk})(WithDataContainerComponent);

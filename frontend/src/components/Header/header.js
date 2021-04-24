@@ -58,4 +58,4 @@ let mapStateToProps = (state) => {
 // TODO don't use connect
 let WithDataContainerComponent = withRouter(Header);
 
-export default connect(mapStateToProps, {Header})(WithDataContainerComponent);
+export default connect(mapStateToProps)(WithDataContainerComponent);
