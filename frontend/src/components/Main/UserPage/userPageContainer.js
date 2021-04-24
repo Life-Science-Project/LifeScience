@@ -12,8 +12,4 @@ class UserPageContainer extends React.Component {
     refreshState() {
         //TODO
     }
-
-
-
-
 };
