@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {useForm} from 'react-hook-form';
 import './register.css';
 import {Redirect, withRouter} from "react-router";
