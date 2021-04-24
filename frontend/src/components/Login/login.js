@@ -8,8 +8,7 @@ import {signInUserThunk} from "../../redux/auth-reducer";
 
 const Login = ({signInUserThunk, isAuthorized, errorMsg}) => {
     const {register, handleSubmit, errors} = useForm();
-    console.log(errorMsg)
-    console.log(isAuthorized)
+
     const validateEmail = () => {
         if (errors.email && errors.email.type === "required") {
             return (<span class="error">Email is required</span>);

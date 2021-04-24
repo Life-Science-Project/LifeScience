@@ -21,7 +21,7 @@ function App() {
 
     return (
         <Router>
-            <Header user={loggedUser}/>
+            <Header/>
             <Navbar/>
             <Route exact={true} path="/" component={UserPage}/>
             <Route path="/register" component={Register}/>
