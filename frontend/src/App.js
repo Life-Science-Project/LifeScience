@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar/navbar";
 import Method from "./components/Method/method";
 import Login from "./components/Login/login";
 import CategoriesContainer from "./components/Main/Categories/categoriesContainer";
+import Home from "./components/Main/HomePage/homePage";
 import UserPage from "./components/Main/UserPage/userPage";
 
 function App() {
@@ -21,11 +22,12 @@ function App() {
 
     return (
         <Router>
-            <Header user={loggedUser}/>
+            <Header/>
             <Navbar/>
-            <Route exact={true} path="/" component={UserPage}/>
+            <Route exact={true} path="/" component={Home}/>
+            <Route exact={true} path="/userPage" component={UserPage}/>
             <Route path="/register" component={Register}/>
-            <Route path="/login" render={() => <Login loggedUserStateUpdater={(user) => setLoggedUser(user)}/>}/>
+            <Route path="/login" render={() => <Login />}/>
             <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
             <Route path="/bradford-assay">
                 <Method link="/bradford-assay" articleId={1}/>
