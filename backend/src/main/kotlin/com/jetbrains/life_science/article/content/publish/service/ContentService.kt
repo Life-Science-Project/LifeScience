@@ -1,6 +1,7 @@
-package com.jetbrains.life_science.article.content.service
+package com.jetbrains.life_science.article.content.publish.service
 
-import com.jetbrains.life_science.article.content.entity.Content
+import com.jetbrains.life_science.article.content.master.entity.Content
+import com.jetbrains.life_science.article.content.master.service.ContentInfo
 import com.jetbrains.life_science.article.section.entity.Section
 
 interface ContentService {
@@ -8,8 +9,6 @@ interface ContentService {
     fun create(info: ContentInfo): Content
 
     fun update(info: ContentInfo): Content
-
-    fun updateText(id: String, text: String): Content
 
     fun delete(id: String)
 
@@ -20,4 +19,6 @@ interface ContentService {
     fun findById(contentId: String?): Content
 
     fun createCopyBySection(origin: Section, newSection: Section)
+
+    fun publishBySectionId(sectionId: Long)
 }

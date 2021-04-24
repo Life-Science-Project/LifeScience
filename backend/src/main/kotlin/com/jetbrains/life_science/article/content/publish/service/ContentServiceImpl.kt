@@ -1,8 +1,10 @@
-package com.jetbrains.life_science.article.content.service
+package com.jetbrains.life_science.article.content.master.service
 
-import com.jetbrains.life_science.article.content.entity.Content
-import com.jetbrains.life_science.article.content.factory.ContentFactory
-import com.jetbrains.life_science.article.content.repository.ContentRepository
+import com.jetbrains.life_science.article.content.master.entity.Content
+import com.jetbrains.life_science.article.content.master.factory.ContentFactory
+import com.jetbrains.life_science.article.content.master.repository.ContentRepository
+import com.jetbrains.life_science.article.content.publish.service.ContentService
+import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.ContentAlreadyExistsException
@@ -13,8 +15,11 @@ import org.springframework.stereotype.Service
 @Service
 class ContentServiceImpl(
     val repository: ContentRepository,
-    val factory: ContentFactory,
+    val factory: ContentFactory
 ) : ContentService {
+
+    @Autowired
+    lateinit var contentVersionService: ContentVersionService
 
     @Autowired
     lateinit var sectionService: SectionService
@@ -29,10 +34,19 @@ class ContentServiceImpl(
 
     override fun findById(contentId: String?): Content {
         if (contentId == null) {
-            throw ContentNotFoundException("Content not found by id: $contentId")
+            throw ContentNotFoundException("Content not found by null id")
         }
         checkArticleExists(contentId)
         return repository.findById(contentId).get()
+    }
+
+    override fun publishBySectionId(sectionId: Long) {
+        val content = contentVersionService.findBySectionId(sectionId)
+        if (content != null) {
+            val copy = factory.copy(content)
+            repository.save(copy)
+        }
+        contentVersionService.deleteBySectionId(sectionId)
     }
 
     override fun createCopyBySection(origin: Section, newSection: Section) {
@@ -59,12 +73,6 @@ class ContentServiceImpl(
         val content = findById(info.id)
         factory.setParams(content, info)
         return repository.save(content)
-    }
-
-    override fun updateText(id: String, text: String): Content {
-        checkArticleExists(id)
-        repository.updateText(id, text)
-        return repository.findById(id).get()
     }
 
     override fun delete(id: String) {

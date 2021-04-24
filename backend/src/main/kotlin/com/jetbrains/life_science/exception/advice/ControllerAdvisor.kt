@@ -1,11 +1,12 @@
-package com.jetbrains.life_science.exception
+package com.jetbrains.life_science.exception.advice
 
-import org.springframework.web.bind.annotation.RestControllerAdvice
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import org.springframework.web.context.request.WebRequest
+import com.jetbrains.life_science.exception.*
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.context.request.WebRequest
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @RestControllerAdvice
 class ControllerAdvisor : ResponseEntityExceptionHandler() {
@@ -44,6 +45,18 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleUserAlreadyExists(ex: UserAlreadyExistsException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse("User already exists")
+    }
+
+    @ExceptionHandler(ContentIsNotEditableException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleContentIsNotEditable(ex: ContentIsNotEditableException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
+    @ExceptionHandler(IllegalAccessException::class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    fun handleIllegalAccess(ex: IllegalAccessException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
     }
 
     private fun notFoundResponse(entity: String): ApiErrorResponse {

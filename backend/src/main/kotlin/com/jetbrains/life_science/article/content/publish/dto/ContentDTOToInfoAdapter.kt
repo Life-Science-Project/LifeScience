@@ -1,6 +1,7 @@
-package com.jetbrains.life_science.article.content.dto
+package com.jetbrains.life_science.article.content.publish.dto
 
-import com.jetbrains.life_science.article.content.service.ContentInfo
+import com.jetbrains.life_science.article.content.master.dto.ContentDTO
+import com.jetbrains.life_science.article.content.master.service.ContentInfo
 
 class ContentDTOToInfoAdapter(
     val dto: ContentDTO,

@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.category.service
 
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.exception.CategoryNotFoundException
 import com.nhaarman.mockitokotlin2.doReturn
@@ -9,11 +10,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 internal class CategoryServiceImplTest {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     @Autowired
     lateinit var categoryService: CategoryService
