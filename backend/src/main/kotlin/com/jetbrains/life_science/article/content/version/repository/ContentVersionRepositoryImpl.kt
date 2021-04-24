@@ -12,20 +12,19 @@ class ContentVersionRepositoryImpl(
     val elasticsearchOperations: ElasticsearchOperations
 ) : ContentVersionRepository, CustomIndexElasticsearchRepository("content_version") {
 
-    override fun findAllBySectionId(sectionId: Long): List<Content> {
+    override fun findBySectionId(sectionId: Long): Content? {
         val criteria = Criteria("sectionId").`is`(sectionId)
         val query = CriteriaQuery(criteria)
-        return elasticsearchOperations.search(query, Content::class.java, indexCoordinates)
-            .map { it.content }.toList()
+        return elasticsearchOperations.searchOne(query, Content::class.java, indexCoordinates)?.content
     }
 
-    override fun deleteAllBySectionId(sectionId: Long) {
+    override fun deleteBySectionId(sectionId: Long) {
         val criteria = Criteria("sectionId").`is`(sectionId)
         val query = CriteriaQuery(criteria)
         elasticsearchOperations.delete(query, Content::class.java, indexCoordinates)
     }
 
-    override fun saveVersion(content: Content): Content {
+    override fun save(content: Content): Content {
         return elasticsearchOperations.save(content, indexCoordinates)
     }
 
@@ -33,7 +32,7 @@ class ContentVersionRepositoryImpl(
         elasticsearchOperations.delete(id, indexCoordinates)
     }
 
-    override fun getVersion(id: String): Content? {
+    override fun findById(id: String): Content? {
         return elasticsearchOperations.get(id, Content::class.java, indexCoordinates)
     }
 }

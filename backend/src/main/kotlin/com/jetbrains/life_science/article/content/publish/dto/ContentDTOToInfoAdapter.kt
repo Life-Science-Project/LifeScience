@@ -1,8 +1,9 @@
-package com.jetbrains.life_science.article.content.master.dto
+package com.jetbrains.life_science.article.content.publish.dto
 
+import com.jetbrains.life_science.article.content.master.dto.ContentDTO
 import com.jetbrains.life_science.article.content.master.service.ContentInfo
 
-class ContentDtoToInfoAdapter(
+class ContentDTOToInfoAdapter(
     val dto: ContentDTO,
     override val id: String? = null
 ) : ContentInfo {

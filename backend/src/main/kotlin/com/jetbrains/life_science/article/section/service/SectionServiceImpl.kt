@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.section.service
 
-import com.jetbrains.life_science.article.content.master.service.ContentService
+import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.factory.SectionFactory
 import com.jetbrains.life_science.article.section.repository.SectionRepository
@@ -53,10 +53,10 @@ class SectionServiceImpl(
         oldSections.forEach { searchService.delete(it.id) }
     }
 
-    override fun moveToMaster(newSections: List<Section>) {
+    override fun publish(newSections: List<Section>) {
         newSections.forEach { section ->
             searchService.create(section)
-            contentService.moveToMasterBySectionId(section.id)
+            contentService.publishBySectionId(section.id)
         }
     }
 

@@ -13,7 +13,7 @@ interface ContentVersionService {
 
     fun delete(contentId: String)
 
-    fun findAllBySectionId(sectionId: Long): List<Content>
+    fun findBySectionId(sectionId: Long): Content?
 
-    fun deleteAllBySectionId(sectionId: Long)
+    fun deleteBySectionId(sectionId: Long)
 }

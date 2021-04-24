@@ -3,6 +3,7 @@ package com.jetbrains.life_science.article.content.master.service
 import com.jetbrains.life_science.article.content.master.entity.Content
 import com.jetbrains.life_science.article.content.master.factory.ContentFactory
 import com.jetbrains.life_science.article.content.master.repository.ContentRepository
+import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
@@ -39,13 +40,13 @@ class ContentServiceImpl(
         return repository.findById(contentId).get()
     }
 
-    override fun moveToMasterBySectionId(sectionId: Long) {
-        val contentList = contentVersionService.findAllBySectionId(sectionId)
-        contentList.forEach { content ->
+    override fun publishBySectionId(sectionId: Long) {
+        val content = contentVersionService.findBySectionId(sectionId)
+        if (content != null) {
             val copy = factory.copy(content)
             repository.save(copy)
         }
-        contentVersionService.deleteAllBySectionId(sectionId)
+        contentVersionService.deleteBySectionId(sectionId)
     }
 
     override fun createCopyBySection(origin: Section, newSection: Section) {

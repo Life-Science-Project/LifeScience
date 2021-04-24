@@ -4,13 +4,13 @@ import com.jetbrains.life_science.article.content.master.entity.Content
 
 interface ContentVersionRepository {
 
-    fun saveVersion(content: Content): Content
+    fun save(content: Content): Content
 
-    fun getVersion(id: String): Content?
+    fun findById(id: String): Content?
 
     fun deleteById(id: String)
 
-    fun findAllBySectionId(sectionId: Long): List<Content>
+    fun findBySectionId(sectionId: Long): Content?
 
-    fun deleteAllBySectionId(sectionId: Long)
+    fun deleteBySectionId(sectionId: Long)
 }

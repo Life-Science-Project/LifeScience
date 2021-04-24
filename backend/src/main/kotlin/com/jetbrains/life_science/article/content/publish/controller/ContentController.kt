@@ -1,15 +1,16 @@
-package com.jetbrains.life_science.article.content.master.controller
+package com.jetbrains.life_science.article.content.publish.controller
 
 import com.jetbrains.life_science.article.content.master.dto.ContentDTO
-import com.jetbrains.life_science.article.content.master.dto.ContentDtoToInfoAdapter
-import com.jetbrains.life_science.article.content.master.service.ContentService
 import com.jetbrains.life_science.article.content.master.view.ContentView
-import com.jetbrains.life_science.article.content.master.view.ContentViewMapper
+import com.jetbrains.life_science.article.content.publish.view.ContentViewMapper
+import com.jetbrains.life_science.article.content.publish.dto.ContentDTOToInfoAdapter
+import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.entity.State
+import com.jetbrains.life_science.exception.ContentIsNotEditableException
 import com.jetbrains.life_science.exception.ContentNotFoundException
-import com.jetbrains.life_science.exception.OperationDeniedException
+import com.jetbrains.life_science.exception.IllegalAccessException
 import com.jetbrains.life_science.user.details.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.validation.annotation.Validated
@@ -50,8 +51,8 @@ class ContentController(
         principal: Principal
     ): ContentView {
         checkIdEquality(sectionId, dto.sectionId)
-        checkAccess(principal, sectionId)
-        val content = contentVersionService.create(ContentDtoToInfoAdapter(dto))
+        checkAccessToEdit(principal, sectionId)
+        val content = contentVersionService.create(ContentDTOToInfoAdapter(dto))
         return viewMapper.createView(content)
     }
 
@@ -62,12 +63,12 @@ class ContentController(
         @Validated @RequestBody dto: ContentDTO,
         principal: Principal
     ): ContentView {
-        checkAccess(principal, sectionId)
+        checkAccessToEdit(principal, sectionId)
         val content = contentVersionService.findById(contentId)
         checkIdEquality(sectionId, content.sectionId)
         checkIdEquality(sectionId, dto.sectionId)
         val updatedContent = contentVersionService.update(
-            ContentDtoToInfoAdapter(dto, contentId)
+            ContentDTOToInfoAdapter(dto, contentId)
         )
         return viewMapper.createView(updatedContent)
     }
@@ -78,21 +79,21 @@ class ContentController(
         @PathVariable contentId: String,
         principal: Principal
     ) {
-        checkAccess(principal, sectionId)
+        checkAccessToEdit(principal, sectionId)
         val content = contentVersionService.findById(contentId)
         checkIdEquality(sectionId, content.sectionId)
         contentVersionService.delete(contentId)
     }
 
-    private fun checkAccess(principal: Principal, sectionId: Long) {
+    private fun checkAccessToEdit(principal: Principal, sectionId: Long) {
         val section = sectionService.getById(sectionId)
         val user = userService.getByEmail(principal.email)
         val sectionOwner = section.articleVersion.author
         if (user.id != sectionOwner.id) {
-            throw OperationDeniedException("Section $sectionId not belongs to user ${principal.email}")
+            throw IllegalAccessException("Section $sectionId not belongs to user ${principal.email}")
         }
         if (section.articleVersion.state != State.EDITING) {
-            throw OperationDeniedException("Content is not editable")
+            throw ContentIsNotEditableException("Content is not editable")
         }
     }
 
