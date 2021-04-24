@@ -5,8 +5,13 @@ import PropTypes from 'prop-types';
 import {byField} from "../../../utils/common";
 import Category from "./Category/category";
 import Article from "./Category/article";
+import Trouble from "../../common/Trouble/trouble";
 
 const Categories = (props) => {
+    if (props.trouble !== undefined && props.trouble !== null) {
+        return <Trouble trouble={props.trouble}/>
+    }
+
     if (props.category === null || props.category === undefined) {
         return <Preloader/>;
     }
@@ -20,7 +25,7 @@ const Categories = (props) => {
                 {props.category.subcategories.sort(byField('order')).map(category => <Category category={category}/>)}
             </div>
             <div className="articles_container">
-                {props.category.articles.map(article => <Article category={article}/>)}
+                {props.category.articles.map(article => <Article article={article}/>)}
             </div>
         </div>
     );
