@@ -1,4 +1,4 @@
-insert into category
+insert into category (id, name, order_number, parent_id)
 values (1, 'root', 1, null);
 insert into category
 values (2, 'child category 1', 2, 1);
@@ -16,9 +16,25 @@ insert into user_details (id, academic_degree, doctor_degree, first_name, last_n
 values (2, 0, 0, 'alex1', 'ln alex', '123', '222');
 
 insert into user_credential (id, password, username, user_id)
-values (1, 'password', 'sample', 1);
+values (1, 'admin', 'admin', 1);
 insert into user_credential (id, password, username, user_id)
-values (2, 'password2', 'sample2', 2);
+values (2, 'user', 'user', 2);
+
+insert into roles (id, name)
+values (1, 'ROLE_USER');
+insert into roles (id, name)
+values (2, 'ROLE_ADMIN');
+insert into roles (id, name)
+values (3, 'ROLE_MODERATOR');
+
+insert into users_roles(user_id, role_id)
+values (1, 1);
+insert into users_roles(user_id, role_id)
+values (1, 2);
+insert into users_roles(user_id, role_id)
+values (1, 3);
+insert into users_roles(user_id, role_id)
+values (2, 1);
 
 insert into article_version (id, name, state, author_id, main_article_id)
 values (1, 'master 1', 3, 1, 1);

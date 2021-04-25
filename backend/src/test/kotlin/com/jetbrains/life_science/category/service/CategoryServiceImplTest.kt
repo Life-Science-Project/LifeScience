@@ -6,7 +6,6 @@ import com.jetbrains.life_science.exception.CategoryNotFoundException
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -15,6 +14,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
+@Sql("/scripts/add_test_data.sql")
 internal class CategoryServiceImplTest {
 
     @MockBean
@@ -26,13 +26,7 @@ internal class CategoryServiceImplTest {
     @Autowired
     lateinit var categoryRepository: CategoryRepository
 
-    @BeforeEach
-    @Sql("/scripts/test_trunc_data.sql")
-    internal fun setUp() {
-    }
-
     @Test
-    @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `add category without parent`() {
         val mock = mock<CategoryInfo> {
@@ -48,9 +42,10 @@ internal class CategoryServiceImplTest {
     }
 
     @Test
-    @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `add category with parent`() {
+        println(2)
+        println(categoryRepository.findAll().map { it.name })
         val mock = mock<CategoryInfo> {
             on { name } doReturn "sample category"
             on { parentId } doReturn 1L
@@ -66,7 +61,6 @@ internal class CategoryServiceImplTest {
     }
 
     @Test
-    @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `delete a category`() {
         categoryService.deleteCategory(3)
@@ -74,14 +68,12 @@ internal class CategoryServiceImplTest {
     }
 
     @Test
-    @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `delete a non-existent category`() {
         assertThrows(CategoryNotFoundException::class.java) { categoryService.deleteCategory(-1L) }
     }
 
     @Test
-    @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `get category test`() {
         val category = categoryService.getCategory(1L)
@@ -90,14 +82,12 @@ internal class CategoryServiceImplTest {
     }
 
     @Test
-    @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `get a non-existent category`() {
         assertThrows(CategoryNotFoundException::class.java) { categoryService.getCategory(-1L) }
     }
 
     @Test
-    @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `get children of a category`() {
         val children = categoryService.getChildren(1)
@@ -111,7 +101,6 @@ internal class CategoryServiceImplTest {
     }
 
     @Test
-    @Sql("/scripts/test_common_data.sql")
     @Transactional
     internal fun `get children of a non-existent category`() {
         assertThrows(CategoryNotFoundException::class.java) { categoryService.getChildren(-1L) }

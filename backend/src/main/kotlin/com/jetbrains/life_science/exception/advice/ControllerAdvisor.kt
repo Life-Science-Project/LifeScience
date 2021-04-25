@@ -11,6 +11,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 class ControllerAdvisor : ResponseEntityExceptionHandler() {
 
+    @ExceptionHandler(CategoryNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleCategoryNotFound(ex: CategoryNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Category")
+    }
+
     @ExceptionHandler(SectionNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleSectionNotFound(ex: SectionNotFoundException, request: WebRequest): ApiErrorResponse {
