@@ -3,6 +3,7 @@ import React, {useState} from "react";
 
 const NewArticle = () => {
     const [sections, setSections] = useState([]);
+    const [generalInformation, setGeneralInformation] = useState("");
 
     // Костыль страшного характера, лучше не трогать
     const [k, setK] = useState(0);
@@ -21,6 +22,7 @@ const NewArticle = () => {
     };
 
     const newSectionStatus = () => {
+        if (generalInformation.length === 0) return false;
         if (sections.length === 0) return true;
         const lastSection = sections[sections.length - 1];
         return lastSection.name.length > 0 && lastSection.content.length > 0;
@@ -40,12 +42,18 @@ const NewArticle = () => {
         setK(k + 1);
     };
 
+    const handleGeneralInformationUpdate = (e) => {
+        setGeneralInformation(e.target.value);
+    };
+
     return (
         <form className="new-article-form">
             <div className="form-group row">
                 <h1 className="col-sm-2 col-form-label">General Information</h1>
                 <div className="col-sm-10">
                     <textarea type="email" className="form-control new-article-form--textarea" id="inputEmail3"
+                              value={generalInformation}
+                              onChange={handleGeneralInformationUpdate}
                               placeholder="Text"/>
                 </div>
             </div>
