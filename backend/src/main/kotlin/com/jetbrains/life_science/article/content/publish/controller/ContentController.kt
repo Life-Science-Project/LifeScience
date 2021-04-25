@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.article.content.publish.controller
 
-import com.jetbrains.life_science.article.content.master.dto.ContentDTO
-import com.jetbrains.life_science.article.content.master.view.ContentView
+import com.jetbrains.life_science.article.content.publish.dto.ContentDTO
+import com.jetbrains.life_science.article.content.publish.view.ContentView
 import com.jetbrains.life_science.article.content.publish.view.ContentViewMapper
 import com.jetbrains.life_science.article.content.publish.dto.ContentDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.publish.service.ContentService

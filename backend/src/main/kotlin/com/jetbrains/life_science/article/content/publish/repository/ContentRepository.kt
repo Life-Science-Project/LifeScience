@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.article.content.master.repository
+package com.jetbrains.life_science.article.content.publish.repository
 
-import com.jetbrains.life_science.article.content.master.entity.Content
+import com.jetbrains.life_science.article.content.publish.entity.Content
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import org.springframework.stereotype.Repository
 

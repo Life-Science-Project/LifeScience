@@ -1,9 +1,8 @@
-package com.jetbrains.life_science.article.content.master.service
+package com.jetbrains.life_science.article.content.publish.service
 
-import com.jetbrains.life_science.article.content.master.entity.Content
-import com.jetbrains.life_science.article.content.master.factory.ContentFactory
-import com.jetbrains.life_science.article.content.master.repository.ContentRepository
-import com.jetbrains.life_science.article.content.publish.service.ContentService
+import com.jetbrains.life_science.article.content.publish.entity.Content
+import com.jetbrains.life_science.article.content.publish.factory.ContentFactory
+import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService

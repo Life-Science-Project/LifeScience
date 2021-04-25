@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.content.master.dto
+package com.jetbrains.life_science.article.content.publish.dto
 
 import javax.validation.constraints.Positive
 
