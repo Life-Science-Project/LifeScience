@@ -22,4 +22,6 @@ interface SectionService {
     fun deleteSearchUnits(oldSections: List<Section>)
 
     fun publish(newSections: List<Section>)
+
+    fun archive(sections: List<Section>)
 }

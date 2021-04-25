@@ -75,6 +75,16 @@ class ArticleVersionController(
         service.approve(versionId)
     }
 
+    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
+    @PatchMapping("/{versionId}/approve")
+    fun archive(
+        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
+        principal: Principal
+    ) {
+        service.archive(versionId)
+    }
+
     private fun checkIdEquality(
         articleId: Long,
         entityId: Long

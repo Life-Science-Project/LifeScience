@@ -16,4 +16,6 @@ interface ContentVersionService {
     fun findBySectionId(sectionId: Long): Content?
 
     fun deleteBySectionId(sectionId: Long)
+
+    fun archiveBySectionId(sectionId: Long)
 }
