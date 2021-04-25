@@ -16,11 +16,13 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
+import java.util.Optional
 
 const val API_URL = "/api/categories"
 
@@ -68,9 +70,11 @@ internal class CategoryControllerTest {
     @Transactional
     internal fun `get category`() {
         mockMvc.get("$API_URL/{id}", 1)
-            .andExpect { status().isOk }
-            .andExpect { content().contentType("application/json") }
-            .andExpect { jsonPath("$.id").value("1") }
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+                jsonPath("$.id").value("1")
+            }
     }
 
     @Test
@@ -80,7 +84,7 @@ internal class CategoryControllerTest {
     }
 
     private fun postToCategoryController(categoryDto: CategoryDTO): Category {
-        val mockMvcResult = categoryPostRequest(categoryDto)
+        val mockMvcResult: MvcResult = categoryPostRequest(categoryDto)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
@@ -88,8 +92,8 @@ internal class CategoryControllerTest {
             }
             .andReturn()
 
-        val responseCategory = jsonMapper.readValue(mockMvcResult.response.contentAsString, CategoryView::class.java)
-        return categoryRepository.findById(responseCategory.id).orElseThrow().also {
+        val responseCategory = getCategoryFromView(mockMvcResult)
+        return responseCategory.orElseThrow().also {
             assertEquals(categoryDto.name, it.name)
         }
     }
@@ -108,5 +112,10 @@ internal class CategoryControllerTest {
             content { contentType(MediaType.APPLICATION_JSON) }
             jsonPath("$.message").value("Category not found")
         }
+    }
+
+    private fun getCategoryFromView(mvcResult: MvcResult): Optional<Category> {
+        val category = jsonMapper.readValue(mvcResult.response.contentAsString, CategoryView::class.java)
+        return categoryRepository.findById(category.id)
     }
 }

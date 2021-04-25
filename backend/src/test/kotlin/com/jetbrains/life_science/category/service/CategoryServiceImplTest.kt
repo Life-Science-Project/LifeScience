@@ -44,8 +44,6 @@ internal class CategoryServiceImplTest {
     @Test
     @Transactional
     internal fun `add category with parent`() {
-        println(2)
-        println(categoryRepository.findAll().map { it.name })
         val mock = mock<CategoryInfo> {
             on { name } doReturn "sample category"
             on { parentId } doReturn 1L
