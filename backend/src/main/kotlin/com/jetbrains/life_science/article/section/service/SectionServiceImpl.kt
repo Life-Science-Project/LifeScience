@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.article.section.service
 
 import com.jetbrains.life_science.article.content.publish.service.ContentService
+import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.factory.SectionFactory
 import com.jetbrains.life_science.article.section.repository.SectionRepository
@@ -24,6 +25,9 @@ class SectionServiceImpl(
 
     @Autowired
     lateinit var contentService: ContentService
+
+    @Autowired
+    lateinit var contentVersionService: ContentVersionService
 
     @Transactional
     override fun create(info: SectionInfo): Section {
@@ -57,6 +61,12 @@ class SectionServiceImpl(
         newSections.forEach { section ->
             searchService.create(section)
             contentService.publishBySectionId(section.id)
+        }
+    }
+
+    override fun archive(sections: List<Section>) {
+        sections.forEach { section ->
+            contentVersionService.archiveBySectionId(section.id)
         }
     }
 
