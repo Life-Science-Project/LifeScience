@@ -76,7 +76,7 @@ class ArticleVersionController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{versionId}/approve")
+    @PatchMapping("/{versionId}/archive")
     fun archive(
         @PathVariable articleId: Long,
         @PathVariable versionId: Long,
