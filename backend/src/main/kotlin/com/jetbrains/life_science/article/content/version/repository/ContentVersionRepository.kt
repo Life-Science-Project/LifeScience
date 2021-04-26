@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.content.version.repository
 
-import com.jetbrains.life_science.article.content.master.entity.Content
+import com.jetbrains.life_science.article.content.publish.entity.Content
 
 interface ContentVersionRepository {
 

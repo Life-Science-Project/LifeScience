@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.content.master.repository
+package com.jetbrains.life_science.article.content.publish.repository
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
