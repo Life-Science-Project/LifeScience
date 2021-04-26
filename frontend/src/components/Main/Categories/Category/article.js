@@ -3,11 +3,11 @@ import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import "./category.css"
 
-const Article = ({method: article}) => {
+const Article = ({article}) => {
     return (
         <div className="method_container">
             <Link to={"/method/" + article.id}>
-                {article.versions.name}
+                {article.version.name}
             </Link>
         </div>
     );

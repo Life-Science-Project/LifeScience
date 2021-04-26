@@ -1,0 +1,34 @@
+.user_container {
+    margin: 2rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: #282c34;
+}
+
+.user_header {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.user_main_information, .user_photo, .organisations_container {
+    margin: 2rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: lightgray;
+    align-items: center;
+    vertical-align: middle
+
+}
+
+.organisations_container .header {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.user_main_information {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.user_photo img {
+    border-radius: 0.5rem;
+}
