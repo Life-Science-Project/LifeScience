@@ -2,7 +2,7 @@ import React from "react";
 import {BrowserRouter as Router, withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import {fetchSections} from "../../redux/method-reducer";
-import ReduxMethod from "./method";
+import Method from "./method";
 
 
 class MethodContainer extends React.Component {
@@ -18,7 +18,7 @@ class MethodContainer extends React.Component {
     render() {
         const {name, sections} = this.props
         return (
-            <ReduxMethod name={name} sections={sections}/>
+            <Method name={name} sections={sections}/>
         )
     }
 
@@ -33,7 +33,7 @@ class MethodContainer extends React.Component {
 const MethodContainerWithRouter = withRouter(MethodContainer)
 
 function mapStateToProps(state) {
-    return state.method;
+    return {...state.method};
 }
 
 export default connect(mapStateToProps)(MethodContainerWithRouter)
