@@ -44,8 +44,10 @@ class ContentServiceImpl(
         if (content != null) {
             val copy = factory.copy(content)
             repository.save(copy)
+            contentVersionService.deleteBySectionId(sectionId)
+        } else {
+            throw ContentNotFoundException("Content to publish not found by that id")
         }
-        contentVersionService.deleteBySectionId(sectionId)
     }
 
     override fun createCopyBySection(origin: Section, newSection: Section) {
