@@ -1,9 +1,8 @@
 package com.jetbrains.life_science.category.controller
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.category.dto.CategoryDTO
-import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.category.view.CategoryView
 import org.junit.jupiter.api.Assertions.*
@@ -15,14 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MvcResult
-import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
-import java.util.Optional
 
 const val API_URL = "/api/categories"
 
@@ -30,12 +23,8 @@ const val API_URL = "/api/categories"
 @AutoConfigureMockMvc
 @Sql("/scripts/add_test_data.sql")
 @WithUserDetails("admin")
-internal class CategoryControllerTest {
-
-    @Autowired
-    lateinit var mockMvc: MockMvc
-
-    val jsonMapper = jacksonObjectMapper()
+internal class CategoryControllerTest :
+    ControllerTest<CategoryDTO, CategoryView>("Category", CategoryView::class.java) {
 
     @Autowired
     lateinit var categoryRepository: CategoryRepository
@@ -47,75 +36,51 @@ internal class CategoryControllerTest {
     @Transactional
     internal fun `add category`() {
         val categoryDto = CategoryDTO("sample category", 1, 0)
-        val savedCategory = postToCategoryController(categoryDto)
-        assertNotNull(savedCategory.parent)
+        addCategory(categoryDto)
     }
 
     @Test
     @Transactional
     internal fun `add category with no parent`() {
         val categoryDto = CategoryDTO("sample category", null, 0)
-        val savedCategory = postToCategoryController(categoryDto)
-        assertNull(savedCategory.parent)
+        addCategory(categoryDto)
+    }
+
+    private fun addCategory(dto: CategoryDTO) {
+        val responseCategory = postToController(dto)
+        assertNotNull(responseCategory.id)
+        val savedCategory = getCategoryById(responseCategory.id)
+        assertEquals(responseCategory.id, savedCategory.id)
+        assertEquals(dto.parentId, savedCategory.parentId)
+        assertEquals(dto.name, savedCategory.name)
     }
 
     @Test
     @Transactional
     internal fun `add category with non-existent parent`() {
         val categoryDto = CategoryDTO("null parent category", 100, 0)
-        assertCategoryNotFound(categoryPostRequest(categoryDto))
+        assertNotFound(postRequest(categoryDto))
     }
 
     @Test
     @Transactional
     internal fun `get category`() {
-        mockMvc.get("$API_URL/{id}", 1)
-            .andExpect {
-                status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
-                jsonPath("$.id").value("1")
-            }
+        val category = getCategoryById(1)
+        assertEquals(1, category.id)
     }
 
     @Test
     @Transactional
     internal fun `get non-existent category`() {
-        assertCategoryNotFound(mockMvc.get("$API_URL/{id}", 100))
+        assertNotFound(mockMvc.get("$API_URL/{id}", 100))
     }
 
-    private fun postToCategoryController(categoryDto: CategoryDTO): Category {
-        val mockMvcResult: MvcResult = categoryPostRequest(categoryDto)
+    private fun getCategoryById(id: Long): CategoryView {
+        val category = mockMvc.get("$API_URL/{id}", id)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
-                jsonPath("$.id").exists()
-            }
-            .andReturn()
-
-        val responseCategory = getCategoryFromView(mockMvcResult)
-        return responseCategory.orElseThrow().also {
-            assertEquals(categoryDto.name, it.name)
-        }
-    }
-
-    private fun categoryPostRequest(categoryDto: CategoryDTO): ResultActionsDsl {
-        return mockMvc.post(API_URL) {
-            contentType = MediaType.APPLICATION_JSON
-            content = jsonMapper.writeValueAsString(categoryDto)
-            accept = MediaType.APPLICATION_JSON
-        }
-    }
-
-    private fun assertCategoryNotFound(result: ResultActionsDsl) {
-        result.andExpect {
-            status { isNotFound() }
-            content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.message").value("Category not found")
-        }
-    }
-
-    private fun getCategoryFromView(mvcResult: MvcResult): Optional<Category> {
-        val category = jsonMapper.readValue(mvcResult.response.contentAsString, CategoryView::class.java)
-        return categoryRepository.findById(category.id)
+            }.andReturn().response.contentAsString
+        return getViewFromJson(category)
     }
 }
