@@ -45,8 +45,6 @@ class ContentServiceImpl(
             val copy = factory.copy(content)
             repository.save(copy)
             contentVersionService.deleteBySectionId(sectionId)
-        } else {
-            throw ContentNotFoundException("Content to publish not found by that id")
         }
     }
 
