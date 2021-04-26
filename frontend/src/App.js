@@ -6,7 +6,6 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
 import Method from "./components/Method/method";
-import ProfilePage from "./components/ProfilePage/profilePage";
 import Login from "./components/Login/login";
 import CategoriesContainer from "./components/Main/Categories/categoriesContainer";
 import Home from "./components/Main/HomePage/homePage";
@@ -32,7 +31,6 @@ function App() {
             <Route path="/bradford-assay">
                 <Method link="/bradford-assay" articleId={1}/>
             </Route>
-            <Route exact={true} path="/my-account" render={() => <ProfilePage user={loggedUser}/>}/>
         </Router>
     );
 };
