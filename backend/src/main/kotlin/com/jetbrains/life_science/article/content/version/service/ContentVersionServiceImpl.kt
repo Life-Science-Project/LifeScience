@@ -1,8 +1,8 @@
 package com.jetbrains.life_science.article.content.version.service
 
-import com.jetbrains.life_science.article.content.master.entity.Content
-import com.jetbrains.life_science.article.content.master.factory.ContentFactory
-import com.jetbrains.life_science.article.content.master.service.ContentInfo
+import com.jetbrains.life_science.article.content.publish.entity.Content
+import com.jetbrains.life_science.article.content.publish.factory.ContentFactory
+import com.jetbrains.life_science.article.content.publish.service.ContentInfo
 import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.exception.ContentNotFoundException
