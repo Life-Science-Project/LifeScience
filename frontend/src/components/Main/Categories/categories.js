@@ -20,7 +20,7 @@ const Categories = (props) => {
                 {props.category.subcategories.sort(byField('order')).map(category => <Category category={category}/>)}
             </div>
             <div className="articles_container">
-                {props.category.articles.map(article => <Article category={article}/>)}
+                {props.category.articles.map(article => <Article article={article}/>)}
             </div>
         </div>
     );
