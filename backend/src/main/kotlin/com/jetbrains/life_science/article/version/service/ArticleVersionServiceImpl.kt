@@ -54,12 +54,22 @@ class ArticleVersionServiceImpl(
         val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, State.PUBLISHED)
         currentVersion.state = State.PUBLISHED
         if (lastPublished != null) {
-            lastPublished.state = State.ARCHIVED
-            searchService.deleteSearchUnitById(lastPublished.id)
-            sectionService.deleteSearchUnits(lastPublished.sections)
+            if (lastPublished.id == currentVersion.id) {
+                return
+            }
+            archive(lastPublished.id)
         }
         searchService.createSearchUnit(currentVersion)
-        sectionService.createSearchUnits(currentVersion.sections)
+        sectionService.publish(currentVersion.sections)
+    }
+
+    @Transactional
+    override fun archive(id: Long) {
+        val lastPublished = getPublishedVersion(id)
+        lastPublished.state = State.ARCHIVED
+        searchService.deleteSearchUnitById(lastPublished.id)
+        sectionService.deleteSearchUnits(lastPublished.sections)
+        sectionService.archive(lastPublished.sections)
     }
 
     override fun getById(id: Long): ArticleVersion {

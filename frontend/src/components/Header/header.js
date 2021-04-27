@@ -3,13 +3,21 @@ import {Link} from "react-router-dom";
 import './header.css'
 import registerIcon from '../../logos/register_icon.svg'
 import loginIcon from '../../logos/login_icon.svg'
+import {connect} from "react-redux";
 
 const Header = ({user}) => {
-    let authBlock;
+    // const [user, setUser] = useState(null);
+    //
+    // store.subscribe(() => {
+    //     setUser(store.getState().user);
+    // })
 
+    console.log(user)
+    let authBlock;
+    console.log(user);
     // Check if user is logged in.
     // Show Login/Register Buttons if he is not and profile page link otherwise.
-    if (Object.entries(user).length === 0) {
+    if (!user) {
         authBlock = (<div className="d-flex justify-content-between">
             <Link to="/login">
                 <div className="d-flex align-items-center header__group">
@@ -26,10 +34,9 @@ const Header = ({user}) => {
         </div>);
     } else {
         authBlock = (<div className="d-flex justify-content-between">
-            {/*TODO: profile page link*/}
-            <Link to="/profilePage">
+            <Link to="/userPage">
                 <div className="d-flex align-items-center header__group">
-                    <div className="header__group_link p-2 bd-highlight">{user.username}</div>
+                    <div className="header__group_link p-2 bd-highlight">{`${user.userView.firstName} ${user.userView.lastName}`}</div>
                     {/*TODO: proper userpage icon*/}
                     <img src={registerIcon} className="header__group_icon" alt="reg"/>
                 </div>
@@ -47,4 +54,10 @@ const Header = ({user}) => {
     );
 }
 
-export default Header;
+const mapStateToProps = state => {
+    return {
+        user: state.auth.user
+    };
+};
+
+export default connect(mapStateToProps)(Header);

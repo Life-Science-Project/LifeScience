@@ -5,8 +5,13 @@ import PropTypes from 'prop-types';
 import {byField} from "../../../utils/common";
 import Category from "./Category/category";
 import Article from "./Category/article";
+import Trouble from "../../common/Trouble/trouble";
 
 const Categories = (props) => {
+    if (props.trouble !== undefined && props.trouble !== null) {
+        return <Trouble trouble={props.trouble}/>
+    }
+
     if (props.category === null || props.category === undefined) {
         return <Preloader/>;
     }

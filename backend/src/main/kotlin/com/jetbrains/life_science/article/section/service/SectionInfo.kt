@@ -15,4 +15,6 @@ interface SectionInfo {
     val parameters: List<ParameterInfo>
 
     val order: Int
+
+    val visible: Boolean
 }

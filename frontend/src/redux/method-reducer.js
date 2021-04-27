@@ -1,3 +1,4 @@
+
 import {methodApi} from "../api/method-api";
 
 export const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
@@ -38,6 +39,4 @@ export default function methodReducer(state = initialState, action) {
             return state
     }
 }
-
-
 

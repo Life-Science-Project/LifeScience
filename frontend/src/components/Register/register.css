@@ -28,3 +28,8 @@
     margin: auto;
     color: white;
 }
+
+.error {
+    margin-left: 1.5rem;
+    color: red;
+}

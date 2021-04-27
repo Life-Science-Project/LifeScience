@@ -8,6 +8,8 @@ interface ArticleVersionService {
 
     fun approve(id: Long)
 
+    fun archive(id: Long)
+
     fun createCopy(articleId: Long)
 
     fun getPublishedVersion(articleId: Long): ArticleVersion

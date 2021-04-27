@@ -7,7 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface CategoryRepository : JpaRepository<Category, Long> {
 
-    fun findAllByParentId(id: Long): List<Category>
-
     fun findAllByParentIsNull(): List<Category>
 }

@@ -1,3 +1,4 @@
+
 import {instance} from './api'
 
 export const methodApi = {
@@ -13,3 +14,4 @@ export const sectionApi = {
         return instance.get(url)
     }
 }
+
