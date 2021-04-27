@@ -30,7 +30,7 @@ const Header = ({user}) => {
         authBlock = (<div className="d-flex justify-content-between">
             <Link to="/userPage">
                 <div className="d-flex align-items-center header__group">
-                    <div className="header__group_link p-2 bd-highlight">{`${user.firstName} ${user.lastName}`}</div>
+                    <div className="header__group_link p-2 bd-highlight">{`${user.userView.firstName} ${user.userView.lastName}`}</div>
                     {/*TODO: proper userpage icon*/}
                     <img src={registerIcon} className="header__group_icon" alt="reg"/>
                 </div>
