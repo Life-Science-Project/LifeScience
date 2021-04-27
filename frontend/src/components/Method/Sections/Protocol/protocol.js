@@ -1,15 +1,9 @@
 import React from "react";
 
-const Protocol = ({paragraphs}) => {
+const Protocol = ({contents}) => {
     return (
         <div className="section-content">
-            {
-                paragraphs.map((p) => (
-                    <div className="paragraph">
-                        {p.text}
-                    </div>
-                ))
-            }
+            {contents.text}
         </div>
     )
 }

@@ -8,9 +8,12 @@ import Navbar from "./components/Navbar/navbar";
 import Method from "./components/Method/method";
 import Login from "./components/Login/login";
 import CategoriesContainer from "./components/Main/Categories/categoriesContainer";
+import MethodContainerWithRouter from "./components/Method/method-container";
+import MethodContainer from "./components/Method/method-container";
 import Home from "./components/Main/HomePage/homePage";
 import userPageContainer from "./components/Main/UserPage/userPageContainer";
 import NewArticle from "./components/NewArticle/NewArticle";
+
 
 function App() {
     const subFolders = [{
@@ -28,8 +31,8 @@ function App() {
             <Route path="/register" component={Register}/>
             <Route path="/login" render={() => <Login />}/>
             <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
-            <Route path="/bradford-assay">
-                <Method link="/bradford-assay" articleId={1}/>
+            <Route path="/method/:articleId">
+                <MethodContainer/>
             </Route>
         </Router>
     );
