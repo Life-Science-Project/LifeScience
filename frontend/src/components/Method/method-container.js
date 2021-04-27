@@ -17,7 +17,7 @@ class MethodContainer extends React.Component {
 
     getSections() {
         const id = this.props.match.params.articleId;
-        this.props.dispatch(fetchSections(id))
+        this.props.fetchSections(id)
     }
 
     render() {
@@ -36,4 +36,4 @@ function mapStateToProps(state) {
     return {...state.method};
 }
 
-export default connect(mapStateToProps)(MethodContainerWithRouter)
+export default connect(mapStateToProps, {fetchSections})(MethodContainerWithRouter)

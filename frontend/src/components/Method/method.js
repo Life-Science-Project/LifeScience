@@ -2,6 +2,7 @@ import React from "react";
 import {BrowserRouter as Router, NavLink, Redirect, Route, Switch, withRouter} from "react-router-dom";
 import './method.css'
 import SectionContainer from "./Sections/section-container?"
+import Page from "../Page/Page";
 
 const Method = (props) => {
 
@@ -38,6 +39,7 @@ const Method = (props) => {
                         sections.map((section) => (
                             <Route path={link + "/" + section.id}>
                                 {
+                                    // <Page text={`name: ${section.name}, version: ${versionId}`}/>
                                     <SectionContainer versionId={versionId} sectionId={section.id}/>
                                 }
                             </Route>

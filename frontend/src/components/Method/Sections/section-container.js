@@ -29,10 +29,9 @@ class SectionContainer extends React.Component {
     }
 }
 
-const SectionContainerWithRouter = withRouter(SectionContainer)
 
 function mapStateToProps(state) {
     return {...state.section}
 }
 
-export default connect(mapStateToProps)(SectionContainerWithRouter)
+export default connect(mapStateToProps)(SectionContainer)
