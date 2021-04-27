@@ -95,6 +95,18 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
+    protected fun assertForbidden(result: ResultActionsDsl) {
+        result.andExpect {
+            status { isForbidden() }
+        }
+    }
+
+    protected fun assertUnauthenticated(result: ResultActionsDsl) {
+        result.andExpect {
+            status { isUnauthorized() }
+        }
+    }
+
     protected fun getViewFromJson(json: String): View {
         return jsonMapper.readValue(json, viewToken)
     }
