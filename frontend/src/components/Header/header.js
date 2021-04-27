@@ -17,7 +17,6 @@ const Header = ({user}) => {
     console.log(user);
     // Check if user is logged in.
     // Show Login/Register Buttons if he is not and profile page link otherwise.
-    let authBlock;
     if (!user) {
         authBlock = (<div className="d-flex justify-content-between">
             <Link to="/login">
