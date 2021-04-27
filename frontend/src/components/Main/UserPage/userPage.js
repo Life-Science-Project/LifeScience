@@ -13,15 +13,15 @@ const UserPage = (props) => {
                 </div>
                 <div className="user_main_information">
                     <pre>
-                        {getLineWithSetLen(25, 'Name:') + props.user.firstName + ' ' + props.user.lastName}
+                        {getLineWithSetLen(25, 'Name:') + props.curUser.firstName + ' ' + props.curUser.lastName}
                         <br/>
-                        {getLineWithSetLen(25, 'Degree:') + props.user.doctorDegree}
+                        {getLineWithSetLen(25, 'Degree:') + props.curUser.doctorDegree}
                         <br/>
-                        {getLineWithSetLen(25, 'Education:') + props.user.academicDegree}
+                        {getLineWithSetLen(25, 'Education:') + props.curUser.academicDegree}
                         <br/>
-                        {getLineWithSetLen(25, 'Orcid:') + props.user.orcid}
+                        {getLineWithSetLen(25, 'Orcid:') + props.curUser.orcid}
                         <br/>
-                        {getLineWithSetLen(25, 'Researcher Id:') + props.user.researchId}
+                        {getLineWithSetLen(25, 'Researcher Id:') + props.curUser.researchId}
                     </pre>
                 </div>
                 <div className="organisations_container">
@@ -29,7 +29,7 @@ const UserPage = (props) => {
                         organisations
                     </div>
                     <ul>
-                        {props.user.organisations.map(comp => <li>{comp.name}</li>)}
+                        {props.curUser.organisations.map(comp => <li>{comp.name}</li>)}
                     </ul>
                 </div>
                 {/*TODO*/}
@@ -39,7 +39,7 @@ const UserPage = (props) => {
 };
 
 UserPage.propType = {
-    user: PropTypes.exact({
+    curUser: PropTypes.exact({
         userDetailsId: PropTypes.number.isRequired,
         firstName: PropTypes.string.isRequired,
         lastName: PropTypes.string.isRequired,
@@ -57,7 +57,7 @@ UserPage.propType = {
 };
 
 UserPage.defaultProps = {
-    user: {
+    curUser: {
         userDetailsId: 0,
         firstName: 'Irina',
         lastName: 'Iankelevich',
