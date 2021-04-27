@@ -20,7 +20,7 @@ function receiveSections(data) {
 export function fetchSections(articleId) {
     return dispatch => {
         return methodApi.getMethod(articleId)
-            .then(response =>  response.data)
+            .then(response => response.data)
             .then(data => dispatch(receiveSections(data)))
     }
 }
