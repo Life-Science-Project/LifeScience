@@ -84,23 +84,4 @@ internal class CategoryServiceImplTest {
     internal fun `get a non-existent category`() {
         assertThrows(CategoryNotFoundException::class.java) { categoryService.getCategory(-1L) }
     }
-
-    @Test
-    @Transactional
-    internal fun `get children of a category`() {
-        val children = categoryService.getChildren(1)
-        assertEquals(2, children.size)
-
-        assertEquals(2, children[0].id)
-        assertEquals("child category 1", children[0].name)
-
-        assertEquals(3, children[1].id)
-        assertEquals("child category 2", children[1].name)
-    }
-
-    @Test
-    @Transactional
-    internal fun `get children of a non-existent category`() {
-        assertThrows(CategoryNotFoundException::class.java) { categoryService.getChildren(-1L) }
-    }
 }
