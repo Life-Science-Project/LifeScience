@@ -54,8 +54,7 @@ class CategoryController(
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{categoryId}")
-    fun deleteCategory(@PathVariable categoryId: Long, principal: Principal): ResponseEntity<Void> {
+    fun deleteCategory(@PathVariable categoryId: Long, principal: Principal) {
         categoryService.deleteCategory(categoryId)
-        return ResponseEntity.ok().build()
     }
 }
