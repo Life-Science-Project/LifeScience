@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.get
@@ -42,7 +41,7 @@ internal class CategoryControllerTest :
     private fun addCategory(dto: CategoryDTO) {
         val responseCategory = post(dto)
         assertNotNull(responseCategory.id)
-        val savedCategory = getCategoryById(responseCategory.id)
+        val savedCategory = get(responseCategory.id)
         assertEquals(responseCategory.id, savedCategory.id)
         assertEquals(dto.parentId, savedCategory.parentId)
         assertEquals(dto.name, savedCategory.name)
@@ -58,7 +57,7 @@ internal class CategoryControllerTest :
     @Test
     @Transactional
     internal fun `get category`() {
-        val category = getCategoryById(1)
+        val category = get(1)
         assertEquals(1, category.id)
     }
 
@@ -66,15 +65,6 @@ internal class CategoryControllerTest :
     @Transactional
     internal fun `get non-existent category`() {
         assertNotFound(mockMvc.get("$apiUrl/{id}", 100))
-    }
-
-    private fun getCategoryById(id: Long): CategoryView {
-        val category = mockMvc.get("$apiUrl/{id}", id)
-            .andExpect {
-                status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
-            }.andReturn().response.contentAsString
-        return getViewFromJson(category)
     }
 
     override val apiUrl: String
