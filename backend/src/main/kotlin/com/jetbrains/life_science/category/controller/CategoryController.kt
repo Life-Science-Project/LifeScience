@@ -5,7 +5,6 @@ import com.jetbrains.life_science.category.dto.CategoryDTOToInfoAdapter
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.category.view.CategoryView
 import com.jetbrains.life_science.category.view.CategoryViewMapper
-import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
