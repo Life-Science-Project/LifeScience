@@ -4,14 +4,16 @@ export const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
 
 const initialState = {
     name: "",
-    sections: []
+    sections: [],
+    versionId: 1
 }
 
 function receiveSections(data) {
     return {
         type: RECEIVE_SECTIONS,
         sections: data.version.sections,
-        name: data.version.name
+        name: data.version.name,
+        versionId: data.id
     }
 }
 
@@ -29,7 +31,8 @@ export default function methodReducer(state = initialState, action) {
             return {
                 ...state,
                 name: action.name,
-                sections: action.sections
+                sections: action.sections,
+                versionId: action.versionId
             }
         default:
             return state

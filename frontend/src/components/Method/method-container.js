@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter as Router, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import { connect } from 'react-redux'
 import {fetchSections} from "../../redux/method-reducer";
 import Method from "./method";
@@ -16,9 +16,9 @@ class MethodContainer extends React.Component {
     }
 
     render() {
-        const {name, sections} = this.props
+        const {name, sections, versionId} = this.props
         return (
-            <Method name={name} sections={sections}/>
+            <Method name={name} sections={sections} versionId={versionId}/>
         )
     }
 
