@@ -20,5 +20,6 @@ class CategoryFactory {
     fun setParams(category: Category, categoryInfo: CategoryInfo, parent: Category?) {
         category.name = categoryInfo.name
         category.parent = parent
+        category.orderNumber = categoryInfo.order
     }
 }
