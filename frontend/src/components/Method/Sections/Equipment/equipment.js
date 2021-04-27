@@ -1,14 +1,10 @@
 import React from "react";
 
-const Equipment = ({paragraphs}) => {
+const Equipment = ({contents}) => {
     return (
         <div className="section-content">
             {
-                paragraphs.map((p) => (
-                    <div className="paragraph">
-                        {p.text}
-                    </div>
-                ))
+                contents.text
             }
         </div>
     )

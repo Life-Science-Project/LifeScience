@@ -35,7 +35,7 @@ let mapStateToProps = (state) => {
     return ({
         category: state.categoryPage.category
     })
-};
+}
 
 let WithDataContainerComponent = withRouter(CategoriesContainer);
 
