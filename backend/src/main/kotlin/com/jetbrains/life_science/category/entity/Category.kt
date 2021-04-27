@@ -24,3 +24,13 @@ class Category(
 
     val orderNumber: Int
 )
+
+abstract class Example() {
+
+    lateinit var kek: String
+
+    fun lol(data: String = kek) {
+
+    }
+
+}

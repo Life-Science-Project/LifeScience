@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.article.section.service
 
+import com.jetbrains.life_science.article.section.entity.SectionVisibility
 import com.jetbrains.life_science.article.section.parameter.service.ParameterInfo
 
 interface SectionInfo {
@@ -15,4 +16,6 @@ interface SectionInfo {
     val parameters: List<ParameterInfo>
 
     val order: Int
+
+    val visible: Boolean
 }
