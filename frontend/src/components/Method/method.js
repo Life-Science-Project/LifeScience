@@ -35,17 +35,9 @@ const Method = (props) => {
                         </Switch>)
                 }
                 <Switch>
-                    {
-                        sections.map((section) => (
-                            <Route path={link + "/" + section.id}>
-                                {
-                                    // <Page text={`name: ${section.name}, version: ${versionId}`}/>
-                                    <SectionContainer versionId={versionId} sectionId={section.id}/>
-                                }
-                            </Route>
-                        ))
-
-                    }
+                    <Route path={link + "/:sectionId"}>
+                        <SectionContainer versionId={versionId}/>
+                    </Route>
                 </Switch>
             </div>
         </Router>

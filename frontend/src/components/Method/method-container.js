@@ -29,11 +29,8 @@ class MethodContainer extends React.Component {
 
 }
 
-
-const MethodContainerWithRouter = withRouter(MethodContainer)
-
 function mapStateToProps(state) {
     return {...state.method};
 }
 
-export default connect(mapStateToProps, {fetchSections})(MethodContainerWithRouter)
+export default withRouter(connect(mapStateToProps, {fetchSections})(MethodContainer))

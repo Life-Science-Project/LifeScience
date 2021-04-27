@@ -10,7 +10,14 @@ class SectionContainer extends React.Component {
     constructor(props) {
         super(props);
         this.versionId = props.versionId;
-        this.sectionId = props.sectionId;
+        this.sectionId = this.props.match.params.sectionId;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.match.params.sectionId !== this.sectionId) {
+            this.sectionId = this.props.match.params.sectionId;
+            this.getContents()
+        }
     }
 
     componentDidMount() {
@@ -34,4 +41,4 @@ function mapStateToProps(state) {
     return {...state.section}
 }
 
-export default connect(mapStateToProps)(SectionContainer)
+export default withRouter(connect(mapStateToProps)(SectionContainer))
