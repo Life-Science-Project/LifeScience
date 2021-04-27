@@ -4,15 +4,20 @@ import './header.css'
 import registerIcon from '../../logos/register_icon.svg'
 import loginIcon from '../../logos/login_icon.svg'
 import {connect} from "react-redux";
-import {withRouter} from "react-router";
 
 const Header = ({user}) => {
+    // const [user, setUser] = useState(null);
+    //
+    // store.subscribe(() => {
+    //     setUser(store.getState().user);
+    // })
+
     console.log(user)
     let authBlock;
     console.log(user);
     // Check if user is logged in.
     // Show Login/Register Buttons if he is not and profile page link otherwise.
-    if (user === null) {
+    if (!user) {
         authBlock = (<div className="d-flex justify-content-between">
             <Link to="/login">
                 <div className="d-flex align-items-center header__group">
@@ -49,13 +54,10 @@ const Header = ({user}) => {
     );
 }
 
-let mapStateToProps = (state) => {
-    return ({
+const mapStateToProps = state => {
+    return {
         user: state.auth.user
-    })
+    };
 };
 
-// TODO don't use connect
-let WithDataContainerComponent = withRouter(Header);
-
-export default connect(mapStateToProps)(WithDataContainerComponent);
+export default connect(mapStateToProps)(Header);

@@ -15,7 +15,8 @@ class SectionViewMapper(
             name = section.name,
             description = section.description,
             contents = contentService.findBySectionId(section.id)?.let { contentViewMapper.createView(it) },
-            order = section.orderNumber
+            order = section.orderNumber,
+            visible = section.visible
         )
     }
 }
