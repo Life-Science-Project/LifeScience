@@ -37,6 +37,14 @@ class UserController(
         return mapper.createView(user)
     }
 
+    @GetMapping("/current")
+    fun getUser(
+        principal: Principal
+    ): UserView {
+        val user = userCredentialsService.getByEmail(principal.email).user
+        return mapper.createView(user)
+    }
+
     @PutMapping("/{userId}")
     fun addDetails(
         @Validated @RequestBody addDetailsDTO: AddDetailsDTO,
