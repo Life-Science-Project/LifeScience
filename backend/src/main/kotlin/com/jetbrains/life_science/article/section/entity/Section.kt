@@ -26,5 +26,7 @@ class Section(
     @OneToMany
     var parameters: MutableList<Parameter>,
 
-    val orderNumber: Int
+    var orderNumber: Int,
+
+    var visible: Boolean
 )

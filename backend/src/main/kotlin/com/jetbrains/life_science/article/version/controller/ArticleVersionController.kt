@@ -30,9 +30,7 @@ class ArticleVersionController(
     fun getVersion(@PathVariable articleId: Long, @PathVariable versionId: Long): ArticleVersionView {
         val version = service.getById(versionId)
         checkIdEquality(articleId, version.mainArticle.id)
-        return mapper.createView(
-            version
-        )
+        return mapper.createView(version)
     }
 
     @PostMapping
