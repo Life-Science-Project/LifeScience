@@ -7,11 +7,10 @@ const GeneralInformation = ({contents}) => {
 
     return (
         <div className="section-content">
-            {/*<div className="main-text" dangerouslySetInnerHTML={{__html: content}}/>*/}
             <div className="main-text">
                 {contents.text}
             </div>
-            {/*<ReferenceList refs={findReferences()}/>*/}
+            <ReferenceList refs={contents.references}/>
         </div>
     )
 }

@@ -1,15 +1,9 @@
 import React from "react";
 
-const Troubleshooting = ({paragraphs}) => {
+const Troubleshooting = ({contents}) => {
     return (
         <div className="section-content">
-            {
-                paragraphs.map((p) => (
-                    <div className="paragraph">
-                        {p.text}
-                    </div>
-                ))
-            }
+            {contents.text}
         </div>
     )
 }

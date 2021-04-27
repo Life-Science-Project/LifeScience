@@ -3,11 +3,13 @@ import thunkMiddleware from 'redux-thunk';
 import categoryReducer from "./category-rerducer";
 import authReducer from "./auth-reducer";
 import methodReducer from "./method-reducer";
+import sectionReducer from "./section-reducer";
 
 let rootReducer = combineReducers({
     categoryPage: categoryReducer,
     auth: authReducer,
-    method: methodReducer
+    method: methodReducer,
+    section: sectionReducer
 });
 
 //Вносим свои reducers в rootReducer

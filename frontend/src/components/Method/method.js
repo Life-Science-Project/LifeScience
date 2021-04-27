@@ -1,13 +1,12 @@
 import React from "react";
 import {BrowserRouter as Router, NavLink, Redirect, Route, Switch, withRouter} from "react-router-dom";
-import Page from "../Page/Page";
 import './method.css'
+import SectionContainer from "./Sections/section-container?"
 
 const Method = (props) => {
 
     const link = props.match.url
     const {name, sections, versionId} = props;
-
     return (
         <Router>
             <div className="method-name">
@@ -39,7 +38,7 @@ const Method = (props) => {
                         sections.map((section) => (
                             <Route path={link + "/" + section.id}>
                                 {
-                                    <Page text={`name: ${section.name}, version: ${versionId}`}/>
+                                    <SectionContainer versionId={versionId} sectionId={section.id}/>
                                 }
                             </Route>
                         ))
