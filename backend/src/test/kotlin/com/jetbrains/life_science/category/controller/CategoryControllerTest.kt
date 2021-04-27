@@ -11,15 +11,20 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
-import org.springframework.test.web.servlet.get
 import org.springframework.transaction.annotation.Transactional
+
+const val BASE_API_URL = "/api/categories"
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql("/scripts/add_test_data.sql")
 @WithUserDetails("admin")
 internal class CategoryControllerTest :
-    ControllerTest<CategoryDTO, CategoryView>("/api/categories", "Category", CategoryView::class.java) {
+    ControllerTest<CategoryDTO, CategoryView>("Category", CategoryView::class.java) {
+
+    init {
+        apiUrl = "/api/categories"
+    }
 
     @MockBean
     lateinit var contentVersionRepository: ContentVersionRepository
@@ -64,6 +69,6 @@ internal class CategoryControllerTest :
     @Test
     @Transactional
     internal fun `get non-existent category`() {
-        assertNotFound(mockMvc.get("$apiUrl/{id}", 100))
+        assertNotFound(getRequest(100, BASE_API_URL))
     }
 }

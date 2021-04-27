@@ -15,18 +15,19 @@ import org.springframework.test.web.servlet.put
 @SpringBootTest
 @AutoConfigureMockMvc
 abstract class ControllerTest<DTO, View>(
-    protected val apiUrl: String,
     private val name: String,
     private val viewToken: Class<View>
 ) {
+
+    final lateinit var apiUrl: String
 
     @Autowired
     lateinit var mockMvc: MockMvc
 
     private val jsonMapper = jacksonObjectMapper()
 
-    protected fun get(id: Long): View {
-        val entity = getRequest(id)
+    protected fun get(id: Long, url: String = apiUrl): View {
+        val entity = getRequest(id, url)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
@@ -35,8 +36,8 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(entity)
     }
 
-    protected fun post(dto: DTO): View {
-        val viewJson = postRequest(dto)
+    protected fun post(dto: DTO, url: String = apiUrl): View {
+        val viewJson = postRequest(dto, url)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
@@ -45,8 +46,8 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(viewJson)
     }
 
-    protected fun put(id: Long, dto: DTO): View {
-        val viewJson = putRequest(id, dto)
+    protected fun put(id: Long, dto: DTO, url: String = apiUrl): View {
+        val viewJson = putRequest(id, dto, url)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
@@ -55,35 +56,35 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(viewJson)
     }
 
-    protected fun delete(id: Long) {
-        deleteRequest(id)
+    protected fun delete(id: Long, url: String = apiUrl) {
+        deleteRequest(id, url)
             .andExpect {
                 status { isOk() }
             }
     }
 
-    protected fun getRequest(id: Long): ResultActionsDsl {
-        return mockMvc.get("$apiUrl/{id}", id)
+    protected fun getRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
+        return mockMvc.get("$url/{id}", id)
     }
 
-    protected fun postRequest(dto: DTO): ResultActionsDsl {
-        return mockMvc.post(apiUrl) {
+    protected fun postRequest(dto: DTO, url: String = apiUrl): ResultActionsDsl {
+        return mockMvc.post(url) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
             accept = MediaType.APPLICATION_JSON
         }
     }
 
-    protected fun putRequest(id: Long, dto: DTO): ResultActionsDsl {
-        return mockMvc.put("$apiUrl/{id}", id) {
+    protected fun putRequest(id: Long, dto: DTO, url: String = apiUrl): ResultActionsDsl {
+        return mockMvc.put("$url/{id}", id) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
             accept = MediaType.APPLICATION_JSON
         }
     }
 
-    protected fun deleteRequest(id: Long): ResultActionsDsl {
-        return mockMvc.delete("$apiUrl/{id}", id)
+    protected fun deleteRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
+        return mockMvc.delete("$url/{id}", id)
     }
 
     protected fun assertNotFound(result: ResultActionsDsl) {
