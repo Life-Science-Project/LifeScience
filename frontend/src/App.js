@@ -9,7 +9,7 @@ import Method from "./components/Method/method";
 import Login from "./components/Login/login";
 import CategoriesContainer from "./components/Main/Categories/categoriesContainer";
 import Home from "./components/Main/HomePage/homePage";
-import UserPage from "./components/Main/UserPage/userPage";
+import userPageContainer from "./components/Main/UserPage/userPageContainer";
 import NewArticle from "./components/NewArticle/NewArticle";
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
             <Header/>
             <Navbar/>
             <Route exact={true} path="/" component={Home}/>
-            <Route exact={true} path="/userPage" component={UserPage}/>
+            <Route exact={true} path="/userPage/:userId?" component={userPageContainer}/>
             <Route path="/new-article" component={NewArticle}/>
             <Route path="/register" component={Register}/>
             <Route path="/login" render={() => <Login />}/>
