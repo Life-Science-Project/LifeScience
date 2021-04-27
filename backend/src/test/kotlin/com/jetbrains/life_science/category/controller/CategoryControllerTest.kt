@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 @Sql("/scripts/add_test_data.sql")
 @WithUserDetails("admin")
 internal class CategoryControllerTest :
-    ControllerTest<CategoryDTO, CategoryView>("Category", CategoryView::class.java) {
+    ControllerTest<CategoryDTO, CategoryView>("/api/categories", "Category", CategoryView::class.java) {
 
     @MockBean
     lateinit var contentVersionRepository: ContentVersionRepository
@@ -66,7 +66,4 @@ internal class CategoryControllerTest :
     internal fun `get non-existent category`() {
         assertNotFound(mockMvc.get("$apiUrl/{id}", 100))
     }
-
-    override val apiUrl: String
-        get() = "/api/categories"
 }

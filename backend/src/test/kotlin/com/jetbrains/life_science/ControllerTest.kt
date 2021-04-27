@@ -15,11 +15,10 @@ import org.springframework.test.web.servlet.put
 @SpringBootTest
 @AutoConfigureMockMvc
 abstract class ControllerTest<DTO, View>(
+    protected val apiUrl: String,
     private val name: String,
     private val viewToken: Class<View>
 ) {
-
-    abstract val apiUrl: String
 
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -68,7 +67,7 @@ abstract class ControllerTest<DTO, View>(
     }
 
     protected fun postRequest(dto: DTO): ResultActionsDsl {
-        return mockMvc.post(this.apiUrl) {
+        return mockMvc.post(apiUrl) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
             accept = MediaType.APPLICATION_JSON
@@ -76,7 +75,7 @@ abstract class ControllerTest<DTO, View>(
     }
 
     protected fun putRequest(id: Long, dto: DTO): ResultActionsDsl {
-        return mockMvc.put("${this.apiUrl}/{id}", id) {
+        return mockMvc.put("$apiUrl/{id}", id) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
             accept = MediaType.APPLICATION_JSON
