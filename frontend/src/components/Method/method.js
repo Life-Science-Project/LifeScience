@@ -6,7 +6,7 @@ import './method.css'
 const Method = (props) => {
 
     const link = props.match.url
-    const {name, sections} = props;
+    const {name, sections, versionId} = props;
 
     return (
         <Router>
@@ -39,7 +39,7 @@ const Method = (props) => {
                         sections.map((section) => (
                             <Route path={link + "/" + section.id}>
                                 {
-                                    <Page text={section.id + " " + section.name}/>
+                                    <Page text={`name: ${section.name}, version: ${versionId}`}/>
                                 }
                             </Route>
                         ))
