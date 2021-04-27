@@ -6,5 +6,6 @@ class SectionView(
     val name: String,
     val description: String?,
     val contents: ContentView?,
-    val order: Int
+    val order: Int,
+    val visible: Boolean
 )

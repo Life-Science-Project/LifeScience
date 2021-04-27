@@ -5,5 +5,4 @@ enum class SectionVisibility {
     VISIBLE,
 
     HIDDEN
-
 }
