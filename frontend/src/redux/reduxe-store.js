@@ -3,6 +3,7 @@ import thunkMiddleware from 'redux-thunk';
 import categoryReducer from "./category-rerducer";
 import authReducer from "./auth-reducer";
 import usersReducer from "./users-reducer";
+import {StateLoader} from "./state-loader";
 
 let rootReducer = combineReducers({
     categoryPage: categoryReducer,
@@ -12,6 +13,12 @@ let rootReducer = combineReducers({
 
 //Вносим свои reducers в rootReducer
 
-let store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+const stateLoader = new StateLoader();
+
+let store = createStore(rootReducer, stateLoader.loadState());
+
+store.subscribe(() => {
+    stateLoader.saveState(store.getState());
+});
 
 export default store;

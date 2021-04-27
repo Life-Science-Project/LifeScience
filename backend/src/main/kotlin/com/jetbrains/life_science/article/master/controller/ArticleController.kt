@@ -19,9 +19,8 @@ class ArticleController(
 
     @GetMapping("/{articleId}")
     fun getArticle(@PathVariable articleId: Long): ArticleView {
-        return mapper.createView(
-            articleService.getById(articleId)
-        )
+        val article = articleService.getById(articleId)
+        return mapper.createView(article)
     }
 
     @PostMapping

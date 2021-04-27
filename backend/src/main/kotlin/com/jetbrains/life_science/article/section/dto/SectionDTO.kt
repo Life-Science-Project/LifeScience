@@ -16,5 +16,7 @@ data class SectionDTO(
 
     val parameters: List<ParameterDTO>,
 
-    val order: Int
+    val order: Int,
+
+    var visible: Boolean = true
 )

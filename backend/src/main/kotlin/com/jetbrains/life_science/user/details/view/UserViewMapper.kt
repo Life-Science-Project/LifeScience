@@ -17,4 +17,12 @@ class UserViewMapper {
             researchId = user.researchId
         )
     }
+
+    fun createShortView(user: User): UserShortView {
+        return UserShortView(
+            id = user.id,
+            firstName = user.firstName,
+            lastName = user.lastName
+        )
+    }
 }

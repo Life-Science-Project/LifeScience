@@ -12,6 +12,9 @@ const Header = ({user}) => {
     //     setUser(store.getState().user);
     // })
 
+    console.log(user)
+    let authBlock;
+    console.log(user);
     // Check if user is logged in.
     // Show Login/Register Buttons if he is not and profile page link otherwise.
     let authBlock;
@@ -34,7 +37,7 @@ const Header = ({user}) => {
         authBlock = (<div className="d-flex justify-content-between">
             <Link to="/userPage">
                 <div className="d-flex align-items-center header__group">
-                    <div className="header__group_link p-2 bd-highlight">{user.username}</div>
+                    <div className="header__group_link p-2 bd-highlight">{`${user.userView.firstName} ${user.userView.lastName}`}</div>
                     {/*TODO: proper userpage icon*/}
                     <img src={registerIcon} className="header__group_icon" alt="reg"/>
                 </div>

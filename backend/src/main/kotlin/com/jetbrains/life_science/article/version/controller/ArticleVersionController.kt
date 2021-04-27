@@ -30,9 +30,7 @@ class ArticleVersionController(
     fun getVersion(@PathVariable articleId: Long, @PathVariable versionId: Long): ArticleVersionView {
         val version = service.getById(versionId)
         checkIdEquality(articleId, version.mainArticle.id)
-        return mapper.createView(
-            version
-        )
+        return mapper.createView(version)
     }
 
     @PostMapping
@@ -73,6 +71,16 @@ class ArticleVersionController(
         principal: Principal
     ) {
         service.approve(versionId)
+    }
+
+    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
+    @PatchMapping("/{versionId}/archive")
+    fun archive(
+        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
+        principal: Principal
+    ) {
+        service.archive(versionId)
     }
 
     private fun checkIdEquality(
