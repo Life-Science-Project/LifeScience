@@ -2,7 +2,7 @@ package com.jetbrains.life_science.category.view
 
 import com.jetbrains.life_science.article.master.view.ArticleView
 
-class CategoryView(
+data class CategoryView(
     val id: Long,
     val parentId: Long?,
     val name: String,

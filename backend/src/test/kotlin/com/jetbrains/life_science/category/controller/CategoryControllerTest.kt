@@ -40,7 +40,7 @@ internal class CategoryControllerTest :
     }
 
     private fun addCategory(dto: CategoryDTO) {
-        val responseCategory = postToController(dto)
+        val responseCategory = post(dto)
         assertNotNull(responseCategory.id)
         val savedCategory = getCategoryById(responseCategory.id)
         assertEquals(responseCategory.id, savedCategory.id)

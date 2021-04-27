@@ -5,6 +5,7 @@ import com.jetbrains.life_science.category.dto.CategoryDTOToInfoAdapter
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.category.view.CategoryView
 import com.jetbrains.life_science.category.view.CategoryViewMapper
+import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -53,7 +54,8 @@ class CategoryController(
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{categoryId}")
-    fun deleteCategory(@PathVariable categoryId: Long, principal: Principal) {
+    fun deleteCategory(@PathVariable categoryId: Long, principal: Principal): ResponseEntity<Void> {
         categoryService.deleteCategory(categoryId)
+        return ResponseEntity.ok().build()
     }
 }
