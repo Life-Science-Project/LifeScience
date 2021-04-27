@@ -1,0 +1,15 @@
+.new-article-form {
+    margin: 2rem;
+}
+
+.new-article-form--textarea {
+    height: 12rem!important;
+    resize: none;
+}
+
+.new-article-form--button {
+    margin: 0.25rem;
+}
+
+.new-article-form--section-title {
+}
