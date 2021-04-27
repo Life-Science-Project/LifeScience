@@ -24,7 +24,7 @@ abstract class ControllerTest<DTO, View>(
     @Autowired
     lateinit var mockMvc: MockMvc
 
-    private val jsonMapper = jacksonObjectMapper()
+    protected val jsonMapper = jacksonObjectMapper()
 
     protected fun get(id: Long, url: String = apiUrl): View {
         val entity = getRequest(id, url)

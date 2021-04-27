@@ -39,11 +39,15 @@ values (2, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
 values (1, 'master 1', 3, 1, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
-values (2, 'version 2.1', 1, 1, 1);
+values (2, 'version 1.1', 1, 1, 1);
+insert into article_version (id, name, state, author_id, main_article_id)
+values (3, 'version 2.1', 1, 1, 1);
 
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (1, 'desc 1.1', 'name 1.1', 1, 1, true);
 insert into section (id, description, name, article_version_id, order_number, visible)
-values (2, 'desc 1.2', 'name 1.2', 1, 2, false);
+values (2, 'desc 1.2', 'name 1.2', 1, 2, true);
 insert into section (id, description, name, article_version_id, order_number, visible)
-values (3, 'desc 2', 'name 2', 2, 3, true);
+values (3, 'desc 1.3', 'name 1.3', 1, 3, false);
+insert into section (id, description, name, article_version_id, order_number, visible)
+values (4, 'desc 2', 'name 2', 3, 3, true);

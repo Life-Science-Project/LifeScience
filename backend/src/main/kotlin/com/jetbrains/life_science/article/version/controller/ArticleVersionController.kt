@@ -27,7 +27,7 @@ class ArticleVersionController(
     }
 
     @GetMapping("/{versionId}")
-    fun getVersion(@PathVariable articleId: Long, @PathVariable versionId: Long): ArticleVersionView {
+    fun getVersion(@PathVariable articleId: Long, @PathVariable versionId: Long, principal: Principal): ArticleVersionView {
         val version = service.getById(versionId)
         checkIdEquality(articleId, version.mainArticle.id)
         return mapper.createView(version)
@@ -81,6 +81,10 @@ class ArticleVersionController(
         principal: Principal
     ) {
         service.archive(versionId)
+    }
+
+    private fun checkRights(principal: Principal, ) {
+
     }
 
     private fun checkIdEquality(
