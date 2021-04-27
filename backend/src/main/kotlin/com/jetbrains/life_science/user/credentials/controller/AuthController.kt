@@ -29,7 +29,7 @@ class AuthController(
         val jwt = jwtProvider.generateJwtToken(loginRequest.email)
         val authorities = authentication.authorities
             .map { role -> SimpleGrantedAuthority(role.authority) }.toList()
-        return JWTResponse(jwt, loginRequest.email, authorities)
+        return JWTResponse(jwt, userCredentialsService.getByEmail(loginRequest.email).user, authorities)
     }
 
     @PostMapping("/signup")
