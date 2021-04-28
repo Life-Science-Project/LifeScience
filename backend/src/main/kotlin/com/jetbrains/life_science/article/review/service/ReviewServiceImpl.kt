@@ -4,7 +4,7 @@ import com.jetbrains.life_science.article.review.entity.Review
 import com.jetbrains.life_science.article.review.factory.ReviewFactory
 import com.jetbrains.life_science.article.review.repository.ReviewRepository
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
-import com.jetbrains.life_science.exception.ReviewNotFoundException
+import com.jetbrains.life_science.exception.not_found.ReviewNotFoundException
 import com.jetbrains.life_science.user.credentials.entity.UserCredentials
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.user.details.entity.User

@@ -239,34 +239,7 @@ internal class ArticleVersionControllerTest :
         assertEquals(expectedView, updated)
     }
 
-    /**
-     * Trying to update a versions not owned by the user.
-     * The controller should return a 403 status code.
-     */
-    @Test
-    @Transactional
-    fun `delete version by wrong user id`() {
 
-    }
-
-    /**
-     * An attempt was made to update a version with an invalid article ID.
-     * Controller should return 404 status code.
-     */
-    @Test
-    @Transactional
-    fun `delete version by wrong id`() {
-
-    }
-
-    /**
-     * Article deletion test
-     */
-    @Test
-    @Transactional
-    fun `delete version`() {
-
-    }
 
     private fun getAllVersions(articleId: Int): List<ArticleVersionView> {
         val request = mockMvc.get(urlWithArticleId(articleId)).andReturn().response.contentAsString

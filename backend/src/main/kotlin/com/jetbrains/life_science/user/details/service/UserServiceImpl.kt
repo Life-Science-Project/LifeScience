@@ -1,8 +1,8 @@
 package com.jetbrains.life_science.user.details.service
 
 import com.jetbrains.life_science.article.master.service.ArticleService
-import com.jetbrains.life_science.exception.ArticleNotFoundException
-import com.jetbrains.life_science.exception.UserNotFoundException
+import com.jetbrains.life_science.exception.not_found.ArticleNotFoundException
+import com.jetbrains.life_science.exception.not_found.UserNotFoundException
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.user.details.entity.AddDetailsInfo
 import com.jetbrains.life_science.user.details.entity.User

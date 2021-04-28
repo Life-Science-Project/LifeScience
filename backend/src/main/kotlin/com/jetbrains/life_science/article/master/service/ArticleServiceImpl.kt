@@ -4,7 +4,7 @@ import com.jetbrains.life_science.article.master.entity.Article
 import com.jetbrains.life_science.article.master.factory.ArticleFactory
 import com.jetbrains.life_science.article.master.repository.ArticleRepository
 import com.jetbrains.life_science.category.service.CategoryService
-import com.jetbrains.life_science.exception.ArticleNotFoundException
+import com.jetbrains.life_science.exception.not_found.ArticleNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

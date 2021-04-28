@@ -1,8 +1,8 @@
 package com.jetbrains.life_science.article.version.service
 
 import com.jetbrains.life_science.article.master.service.ArticleService
-import com.jetbrains.life_science.exception.ArticleVersionNotFoundException
-import com.jetbrains.life_science.exception.PublishedVersionNotFoundException
+import com.jetbrains.life_science.exception.not_found.ArticleVersionNotFoundException
+import com.jetbrains.life_science.exception.not_found.PublishedVersionNotFoundException
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State

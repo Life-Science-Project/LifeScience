@@ -7,8 +7,8 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import com.jetbrains.life_science.exception.BadRequestException
-import com.jetbrains.life_science.exception.IllegalAccessException
+import com.jetbrains.life_science.exception.request.BadRequestException
+import com.jetbrains.life_science.exception.request.IllegalAccessException
 import com.jetbrains.life_science.user.credentials.entity.UserCredentials
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.user.details.entity.User
