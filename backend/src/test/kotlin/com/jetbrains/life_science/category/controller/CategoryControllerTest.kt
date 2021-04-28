@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 @WithUserDetails("admin")
 @Transactional
 internal class CategoryControllerTest :
-    ControllerTest<CategoryDTO, CategoryView>("Category", CategoryView::class.java) {
+    ControllerTest<CategoryDTO, CategoryView>(CategoryView::class.java) {
 
     init {
         apiUrl = "/api/categories"
@@ -63,7 +63,7 @@ internal class CategoryControllerTest :
      */
     @Test
     internal fun `get non-existent category`() {
-        assertNotFound(getRequest(100))
+        assertNotFound("Category", getRequest(100))
     }
 
     /**
@@ -96,7 +96,7 @@ internal class CategoryControllerTest :
     @Test
     internal fun `create category with non-existent parent`() {
         val categoryDto = CategoryDTO("null parent category", 100, 0)
-        assertNotFound(postRequest(categoryDto))
+        assertNotFound("Category", postRequest(categoryDto))
     }
 
     /**
@@ -129,7 +129,7 @@ internal class CategoryControllerTest :
     @Test
     internal fun `update non-existent category`() {
         val categoryDto = CategoryDTO("no category", null, 150)
-        assertNotFound(putRequest(100, categoryDto))
+        assertNotFound("Category", putRequest(100, categoryDto))
     }
 
     /**
@@ -150,13 +150,13 @@ internal class CategoryControllerTest :
     @Test
     internal fun `update non-existent parent`() {
         val categoryDto = CategoryDTO("updated sample category", 8, 9)
-        assertNotFound(putRequest(1, categoryDto))
+        assertNotFound("Category", putRequest(1, categoryDto))
     }
 
     @Test
     internal fun `delete existing category`() {
         delete(3)
-        assertNotFound(getRequest(3))
+        assertNotFound("Category", getRequest(3))
     }
 
     /**
@@ -174,7 +174,7 @@ internal class CategoryControllerTest :
     @Test
     @Transactional
     internal fun `delete non-existent category`() {
-        assertNotFound(deleteRequest(100))
+        assertNotFound("Category", deleteRequest(100))
     }
 
     /**

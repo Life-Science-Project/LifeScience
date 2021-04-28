@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.put
 @SpringBootTest
 @AutoConfigureMockMvc
 abstract class ControllerTest<DTO, View>(
-    private val name: String,
     private val viewToken: Class<View>
 ) {
 
@@ -87,11 +86,11 @@ abstract class ControllerTest<DTO, View>(
         return mockMvc.delete("$url/{id}", id)
     }
 
-    protected fun assertNotFound(result: ResultActionsDsl) {
+    protected fun assertNotFound(notFoundEntityName: String, result: ResultActionsDsl) {
         result.andExpect {
             status { isNotFound() }
             content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.message") { value("$name not found") }
+            jsonPath("$.message") { value("$notFoundEntityName not found") }
         }
     }
 
