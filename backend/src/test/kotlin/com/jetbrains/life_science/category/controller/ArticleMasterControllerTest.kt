@@ -119,7 +119,7 @@ internal class ArticleMasterControllerTest :
     }
 
     /**
-     * Should forbid access to modifying articles
+     * Should forbid access to modifying and allow to creating articles
      */
     @Test
     @WithUserDetails("user")
