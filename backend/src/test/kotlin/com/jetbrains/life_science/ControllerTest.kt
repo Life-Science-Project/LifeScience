@@ -1,9 +1,11 @@
 package com.jetbrains.life_science
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActionsDsl
@@ -17,6 +19,9 @@ import org.springframework.test.web.servlet.put
 abstract class ControllerTest<DTO, View>(
     private val viewToken: Class<View>
 ) {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     final lateinit var apiUrl: String
 
@@ -91,6 +96,12 @@ abstract class ControllerTest<DTO, View>(
             status { isNotFound() }
             content { contentType(MediaType.APPLICATION_JSON) }
             jsonPath("$.message") { value("$notFoundEntityName not found") }
+        }
+    }
+
+    protected fun assertOk(result: ResultActionsDsl) {
+        result.andExpect {
+            status { isOk() }
         }
     }
 

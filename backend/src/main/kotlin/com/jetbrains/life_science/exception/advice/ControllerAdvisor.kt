@@ -47,6 +47,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return notFoundResponse("Article")
     }
 
+    @ExceptionHandler(ArticleNotEmptyException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleCategoryNotEmpty(ex: ArticleNotEmptyException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse("Article not empty")
+    }
+
     @ExceptionHandler(ReviewNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleReviewNotFound(ex: ReviewNotFoundException, request: WebRequest): ApiErrorResponse {

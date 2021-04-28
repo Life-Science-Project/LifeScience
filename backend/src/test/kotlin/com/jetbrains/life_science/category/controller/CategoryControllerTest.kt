@@ -1,15 +1,12 @@
 package com.jetbrains.life_science.category.controller
 
 import com.jetbrains.life_science.ControllerTest
-import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.category.dto.CategoryDTO
 import com.jetbrains.life_science.category.view.CategoryView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
@@ -19,7 +16,6 @@ import org.springframework.test.web.servlet.get
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @Sql("/scripts/add_test_data.sql")
 @WithUserDetails("admin")
 @Transactional
@@ -29,9 +25,6 @@ internal class CategoryControllerTest :
     init {
         apiUrl = "/api/categories"
     }
-
-    @MockBean
-    lateinit var contentVersionRepository: ContentVersionRepository
 
     /**
      * Should get all categories with no parent
