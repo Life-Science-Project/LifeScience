@@ -92,6 +92,9 @@ internal class ArticleMasterControllerTest :
         assertNotFound("Article", putRequest(100, articleDTO))
     }
 
+    /**
+     * Should delete existing article
+     */
     @Test
     internal fun `delete existing article`() {
         delete(3)
