@@ -8,10 +8,12 @@ import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.patch
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
@@ -239,7 +241,27 @@ internal class ArticleVersionControllerTest :
         assertEquals(expectedView, updated)
     }
 
+    /**
+     * An attempt to publish an article from a user without moderator or administrator rights.
+     * The controller should return a 403 status code.
+     */
+    @Test
+    @Transactional
+    @WithUserDetails("user")
+    fun `approve with regular user`() {
+        assertMethodNotAllowed(patchRequest(2, url = urlWithArticleId(1)))
+    }
 
+    /**
+     * An attempt was made to update a version with an invalid article ID.
+     * Controller should return 404 status code.
+     */
+    @Test
+    @Transactional
+    @WithUserDetails("user")
+    fun `approve article with wrong version id`() {
+        assertNotFound(patchRequest(-1, url = urlWithArticleId(1)))
+    }
 
     private fun getAllVersions(articleId: Int): List<ArticleVersionView> {
         val request = mockMvc.get(urlWithArticleId(articleId)).andReturn().response.contentAsString
