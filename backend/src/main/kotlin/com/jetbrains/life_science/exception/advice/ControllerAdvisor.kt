@@ -44,7 +44,7 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ExceptionHandler(ArticleNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleArticleNotFound(ex: ArticleNotFoundException, request: WebRequest): ApiErrorResponse {
-        return notFoundResponse("Article")
+        return ApiErrorResponse(ex.message)
     }
 
     @ExceptionHandler(ReviewNotFoundException::class)
@@ -68,6 +68,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ExceptionHandler(IllegalAccessException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     fun handleIllegalAccess(ex: IllegalAccessException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
+    @ExceptionHandler(BadRequestException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleBadRequest(ex: BadRequestException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 

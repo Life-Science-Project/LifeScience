@@ -9,6 +9,7 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.factory.ArticleVersionFactory
 import com.jetbrains.life_science.article.version.repository.ArticleVersionRepository
 import com.jetbrains.life_science.article.version.search.service.ArticleVersionSearchUnitService
+import com.jetbrains.life_science.user.details.entity.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -79,6 +80,10 @@ class ArticleVersionServiceImpl(
 
     override fun getByArticleId(articleId: Long): List<ArticleVersion> {
         return repository.findAllByMainArticleId(articleId)
+    }
+
+    override fun getByArticleIdAndUser(articleId: Long, user: User): List<ArticleVersion> {
+        return repository.findAllByMainArticleIdAndAuthor(articleId, user)
     }
 
     @Transactional

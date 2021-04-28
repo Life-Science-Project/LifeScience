@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.article.version.service
 
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
+import com.jetbrains.life_science.user.details.entity.User
 
 interface ArticleVersionService {
 
@@ -17,6 +18,8 @@ interface ArticleVersionService {
     fun getById(id: Long): ArticleVersion
 
     fun getByArticleId(articleId: Long): List<ArticleVersion>
+
+    fun getByArticleIdAndUser(articleId: Long, user: User): List<ArticleVersion>
 
     fun updateById(info: ArticleVersionInfo): ArticleVersion
 }

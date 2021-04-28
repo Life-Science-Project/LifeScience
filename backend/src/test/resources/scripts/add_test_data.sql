@@ -13,7 +13,7 @@ values (2, 2);
 insert into user_details (id, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
 values (1, 0, 0, 'alex1', 'ln alex', '123', '222');
 insert into user_details (id, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
-values (2, 0, 0, 'alex1', 'ln alex', '123', '222');
+values (2, 0, 0, 'alex2', 'ln alex 2', '123', '222');
 
 insert into user_credential (id, password, username, user_id)
 values (1, 'admin', 'admin', 1);
@@ -42,6 +42,11 @@ insert into article_version (id, name, state, author_id, main_article_id)
 values (2, 'version 1.1', 1, 1, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
 values (3, 'version 2.1', 1, 1, 1);
+insert into article_version (id, name, state, author_id, main_article_id)
+values (4, 'version 4.1', 1, 2, 1);
+insert into article_version (id, name, state, author_id, main_article_id)
+values (5, 'version 5.1', 1, 2, 1);
+
 
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (1, 'desc 1.1', 'name 1.1', 1, 1, true);

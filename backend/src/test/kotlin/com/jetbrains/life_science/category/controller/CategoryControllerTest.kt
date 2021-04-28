@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.get
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @Sql("/scripts/add_test_data.sql")
 @WithUserDetails("admin")
 @Transactional
@@ -29,9 +28,6 @@ internal class CategoryControllerTest :
     init {
         apiUrl = "/api/categories"
     }
-
-    @MockBean
-    lateinit var contentVersionRepository: ContentVersionRepository
 
     /**
      * Should get all categories with no parent

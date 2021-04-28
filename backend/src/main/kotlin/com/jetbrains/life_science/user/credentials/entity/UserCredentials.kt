@@ -28,8 +28,12 @@ class UserCredentials(
     )
     val roles: MutableCollection<Role>,
 
-) {
+    ) {
 
     @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], fetch = FetchType.LAZY)
     lateinit var user: User
+
+    val permissionsGreaterThanUser: Boolean
+        get() = roles.any { it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR" }
+
 }
