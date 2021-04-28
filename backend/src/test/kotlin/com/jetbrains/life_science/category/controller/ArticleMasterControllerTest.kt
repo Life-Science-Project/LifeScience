@@ -139,7 +139,7 @@ internal class ArticleMasterControllerTest :
     internal fun `anonymous privileges`() {
         getRequest(1)
         val articleDto = ArticleDTO(2)
-        assertOk(postRequest(articleDto))
+        assertUnauthenticated(postRequest(articleDto))
         assertUnauthenticated(putRequest(1, articleDto))
         assertUnauthenticated(deleteRequest(3))
     }
