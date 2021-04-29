@@ -1,51 +1,41 @@
 import "./NewArticle.css"
 import React, {useState} from "react";
 import Method from "../Method/method";
+import MethodPreview from "../Method/MethodPreview/method-preview";
 
 const NewArticle = () => {
     const [preview, setPreview] = useState(false);
-    const [sections, setSections] = useState([]);
-    const [generalInformation, setGeneralInformation] = useState("");
+    const [sections, setSections] = useState([{
+        id: 0,
+        name: "General Information",
+        content: "",
+    }]);
 
-    // Костыль страшного характера, лучше не трогать
-    const [k, setK] = useState(0);
-    const [count, setCount] = useState(0);
     const newSection = (e) => {
-        let currSections = sections;
-        sections.push({
-            id: count,
+        const section = {
+            id: sections.length,
             name: "",
             content: ""
-        })
-        setCount(count + 1);
-        setSections(currSections);
-
+        }
+        setSections(oldSections => [...oldSections, section]);
         e.preventDefault();
     };
 
     const newSectionStatus = () => {
-        if (generalInformation.length === 0) return false;
-        if (sections.length === 0) return true;
         const lastSection = sections[sections.length - 1];
         return lastSection.name.length > 0 && lastSection.content.length > 0;
     }
 
     const handleSectionTitleUpdate = (e) => {
-        let currSections = sections;
-        sections[e.target.id].name = e.target.value;
-        setSections(currSections);
-        setK(k + 1);
+        let newSections = [...sections]
+        newSections[e.target.id].name = e.target.value;
+        setSections(newSections);
     };
 
     const handleSectionContentUpdate = (e) => {
-        let currSections = sections;
-        sections[e.target.id].content = e.target.value;
-        setSections(currSections);
-        setK(k + 1);
-    };
-
-    const handleGeneralInformationUpdate = (e) => {
-        setGeneralInformation(e.target.value);
+        let newSections = [...sections]
+        newSections[e.target.id].content = e.target.value;
+        setSections(newSections);
     };
 
     const handlePreview = () => {
@@ -54,20 +44,11 @@ const NewArticle = () => {
 
     if (preview) {
         return (
-            <Method/>
+            <MethodPreview sections={sections} goBack={() => setPreview(false)}/>
         );
     } else {
         return (
             <form className="new-article-form">
-                <div className="form-group row">
-                    <h1 className="col-sm-2 col-form-label">General Information</h1>
-                    <div className="col-sm-10">
-                    <textarea type="email" className="form-control new-article-form--textarea" id="inputEmail3"
-                              value={generalInformation}
-                              onChange={handleGeneralInformationUpdate}
-                              placeholder="Text"/>
-                    </div>
-                </div>
                 <div>
                     {sections.map((e) => {
                         return (
