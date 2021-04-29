@@ -25,7 +25,7 @@ function App() {
             <Navbar/>
             <Route exact={true} path="/" component={Home}/>
             <Route exact={true} path="/userPage/:userId?" render={() => <UserPage />}/>
-            <Route path="/new-article" component={NewArticle}/>
+            <Route path="/new-article/:categoryId?" component={NewArticle}/>
             <Route path="/register" component={Register}/>
             <Route path="/login" render={() => <Login />}/>
             <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
