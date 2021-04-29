@@ -18,7 +18,7 @@ const Section = (props) => {
         "General Information": <GeneralInformation contents={contents}/>,
         "Protocol": <Protocol contents={contents}/>,
         "Equipment and reagents required": <Equipment contents={contents}/>,
-        "Application": <Application contents={contents}/>,
+        "Application": <Application contents={contents || undefined}/>,
         "Method advantages and disadvantages": <Advantages contents={contents}/>,
         "Troubleshooting": <Troubleshooting contents={contents}/>,
         "Find collaboration": <Collaboration contents={contents}/>,
