@@ -3,11 +3,14 @@ import React, {useState} from "react";
 import Method from "../Method/method";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
+import {FaTimes} from "react-icons/all";
 
 const NewArticle = () => {
 
     const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
         "Method advantages and disadvantages", "Troubleshooting"];
+
+    const AUTO_SECTION_TITLES = ["Find collaboration", "Education"];
 
     const [preview, setPreview] = useState(false);
     const [sections, setSections] = useState([{
@@ -50,6 +53,16 @@ const NewArticle = () => {
         setPreview(!preview);
     }
 
+    function getSectionsForPreview() {
+        const sortedSections = getSortedSections();
+        for (const title of AUTO_SECTION_TITLES) {
+            sortedSections.push({
+                name: title
+            })
+        }
+        return sortedSections
+    }
+
     function getSortedSections() {
         const sortedSections = [];
         for (const title of SECTION_TITLES) {
@@ -72,12 +85,18 @@ const NewArticle = () => {
     }
 
     function submitDisabled() {
+        return sections[0].content.length === 0 || methodName.length === 0;
+    }
 
+    function removeSection(index) {
+        const newSections = [...sections];
+        newSections.splice(index, 1);
+        setSections(newSections);
     }
 
     if (preview) {
         return (
-            <MethodPreview name={methodName} sections={getSortedSections()} goBack={() => setPreview(false)}/>
+            <MethodPreview name={methodName} sections={getSectionsForPreview()} goBack={() => setPreview(false)}/>
         );
     } else {
         return (
@@ -85,31 +104,48 @@ const NewArticle = () => {
                 <div>
                     <textarea className="form-control new-article-form__method-name"
                               onChange={handleMethodNameChange}
+                              value={methodName}
                               placeholder="Method name"
                     />
+                    <div className="form-group">
+                        <h2 className="col-form-label">
+                            {SECTION_TITLES[0]}
+                        </h2>
+                        <textarea className="form-control new-article-form__section-content"
+                                  onChange={
+                                      (e) => handleSectionContentUpdate(e, 0)
+                                  }
+                                  value={sections[0].content}
+                                  placeholder="Text"
+                        />
+                    </div>
                     {sections.map((section, index) => {
+                        if (index === 0) return
                         return (
                             <div className="form-group">
-                                <DropdownButton className="new-article-form__section-title"
-                                                variant="light" id={"choose-section-" + index}
-                                                title={sections[index].name ? sections[index].name : "Choose section"}>
-                                    {
-                                        SECTION_TITLES
-                                            .filter((title) => !isSectionSelected(title))
-                                            .map(type => (
-                                                <Dropdown.Item
-                                                    eventKey={type}
-                                                    onSelect={(title) => handleSectionTitleSelect(title, index)}>
-                                                    {type}
-                                                </Dropdown.Item>
-                                            ))
-                                    }
-                                </DropdownButton>
+                                <div className="new-article-form__section-title-row">
+                                    <DropdownButton variant="light" id={"choose-section-" + index}
+                                                    title={sections[index].name ? sections[index].name : "Choose section"}>
+                                        {
+                                            SECTION_TITLES
+                                                .filter((title) => !isSectionSelected(title))
+                                                .map(type => (
+                                                    <Dropdown.Item
+                                                        eventKey={type}
+                                                        onSelect={(title) => handleSectionTitleSelect(title, index)}>
+                                                        {type}
+                                                    </Dropdown.Item>
+                                                ))
+                                        }
+                                    </DropdownButton>
+                                    <FaTimes onClick={() => removeSection(index)}
+                                             className="new-article-form__remove-icon"/>
+                                </div>
                                 <textarea className="form-control new-article-form__section-content"
-                                          value={section.content}
                                           onChange={
                                               (e) => handleSectionContentUpdate(e, index)
                                           }
+                                          value={sections[index].content}
                                           placeholder="Text"
                                 />
                             </div>

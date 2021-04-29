@@ -12,9 +12,16 @@
     margin: 0.25rem;
 }
 
-.new-article-form__section-title {
-    margin-top: 0.5rem;
-}
 .new-article-form__method-name {
     margin-bottom: 2rem;
+}
+
+.new-article-form__section-title-row {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+.new-article-form__remove-icon{
+    cursor: pointer;
+    margin-left: 0.5rem;
 }

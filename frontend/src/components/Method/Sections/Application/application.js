@@ -2,7 +2,7 @@ import React from "react";
 
 const Application = ({contents}) => {
     if (!contents) {
-        contents = Application.defaultProps
+        contents = Application.defaultProps.contents
     }
     return (
         <div className="section-content">
