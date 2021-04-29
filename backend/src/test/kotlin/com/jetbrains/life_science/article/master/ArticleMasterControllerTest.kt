@@ -31,7 +31,7 @@ internal class ArticleMasterControllerTest :
      */
     @Test
     internal fun `get existing article`() {
-        val article = get(1)
+        // Preparing expected data
         val exceptedArticle = ArticleView(
             id = 1,
             version = ArticleVersionView(
@@ -45,6 +45,11 @@ internal class ArticleMasterControllerTest :
                 )
             )
         )
+
+        //Action
+        val article = get(1)
+
+        //Check
         assertEquals(exceptedArticle, article)
     }
 
@@ -53,6 +58,7 @@ internal class ArticleMasterControllerTest :
      */
     @Test
     internal fun `get non-existent article`() {
+        //Request with check
         assertNotFound("Article", getRequest(606))
     }
 
@@ -61,7 +67,10 @@ internal class ArticleMasterControllerTest :
      */
     @Test
     internal fun `create article`() {
+        //Preparing request data
         val articleDTO = ArticleDTO(3)
+
+        //Request with check
         createArticle(articleDTO)
     }
 
@@ -70,7 +79,10 @@ internal class ArticleMasterControllerTest :
      */
     @Test
     internal fun `create article with non-existent category`() {
+        //Preparing request data
         val articleDto = ArticleDTO(212)
+
+        //Request with check
         assertNotFound("Category", postRequest(articleDto))
     }
 
@@ -79,7 +91,10 @@ internal class ArticleMasterControllerTest :
      */
     @Test
     internal fun `update existing category`() {
+        //Preparing request data
         val articleDTO = ArticleDTO(2)
+
+        //Request with check
         updateArticle(1, articleDTO)
     }
 
@@ -88,7 +103,10 @@ internal class ArticleMasterControllerTest :
      */
     @Test
     internal fun `update non-existent category`() {
+        //Preparing request data
         val articleDTO = ArticleDTO(111)
+
+        //Request with check
         assertNotFound("Article", putRequest(100, articleDTO))
     }
 
@@ -97,7 +115,10 @@ internal class ArticleMasterControllerTest :
      */
     @Test
     internal fun `delete existing article`() {
+        //Action
         delete(3)
+
+        //Check
         assertNotFound("Article", getRequest(3))
     }
 
@@ -106,6 +127,7 @@ internal class ArticleMasterControllerTest :
      */
     @Test
     internal fun `delete not empty existing article`() {
+        //Request with check
         assertNotEmpty(deleteRequest(1))
     }
 
@@ -115,6 +137,7 @@ internal class ArticleMasterControllerTest :
     @Test
     @Transactional
     internal fun `delete non-existent article`() {
+        //Request with check
         assertNotFound("Article", deleteRequest(100))
     }
 
@@ -124,8 +147,10 @@ internal class ArticleMasterControllerTest :
     @Test
     @WithUserDetails("user")
     internal fun `user privileges`() {
+        //Prepare request data
         val articleDto = ArticleDTO(2)
 
+        //Requests with check
         assertOk(getRequest(1))
         assertOk(postRequest(articleDto))
         assertForbidden(putRequest(1, articleDto))
@@ -138,7 +163,10 @@ internal class ArticleMasterControllerTest :
     @Test
     @WithAnonymousUser
     internal fun `anonymous privileges`() {
+        //Prepare request data
         val articleDto = ArticleDTO(2)
+
+        //Requests with check
         assertOk(getRequest(1))
         assertUnauthenticated(postRequest(articleDto))
         assertUnauthenticated(putRequest(1, articleDto))
@@ -146,17 +174,24 @@ internal class ArticleMasterControllerTest :
     }
 
     private fun createArticle(dto: ArticleDTO) {
+        //Action
         val responseArticle = post(dto)
+
+        //Check
         assertNotNull(responseArticle.id)
         get(responseArticle.id)
     }
 
     private fun updateArticle(id: Long, dto: ArticleDTO) {
+        //Action
         val responseArticle = put(id, dto)
+
+        //Check
         assertEquals(id, responseArticle.id)
     }
 
     protected fun assertNotEmpty(result: ResultActionsDsl) {
+        //Check
         result.andExpect {
             status { isBadRequest() }
             content { contentType(MediaType.APPLICATION_JSON) }
