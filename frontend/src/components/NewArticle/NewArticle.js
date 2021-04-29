@@ -15,13 +15,14 @@ const NewArticle = () => {
         content: "",
     }]);
 
+    const [methodName, setMethodName] = useState("")
+
     const newSection = (e) => {
         const section = {
             name: "",
             content: ""
         }
         setSections(oldSections => [...oldSections, section]);
-        e.preventDefault();
     };
 
     const newSectionStatus = () => {
@@ -29,11 +30,9 @@ const NewArticle = () => {
         return lastSection.name.length > 0 && lastSection.content.length > 0;
     }
 
-    const handleSectionTitleUpdate = (e) => {
-        let newSections = [...sections]
-        newSections[e.target.id].name = e.target.value;
-        setSections(newSections);
-    };
+    const handleMethodNameChange = (e) => {
+        setMethodName(e.target.value)
+    }
 
     const handleSectionContentUpdate = (e, index) => {
         let newSections = [...sections]
@@ -51,6 +50,18 @@ const NewArticle = () => {
         setPreview(!preview);
     }
 
+    function getSortedSections() {
+        const sortedSections = [];
+        for (const title of SECTION_TITLES) {
+            for (const section of sections) {
+                if (section.name === title) {
+                    sortedSections.push(section)
+                }
+            }
+        }
+        return sortedSections;
+    }
+
     function isSectionSelected(title) {
         for (const section of sections) {
             if (section.name === title) {
@@ -60,18 +71,27 @@ const NewArticle = () => {
         return false
     }
 
+    function submitDisabled() {
+
+    }
+
     if (preview) {
         return (
-            <MethodPreview sections={sections} goBack={() => setPreview(false)}/>
+            <MethodPreview name={methodName} sections={getSortedSections()} goBack={() => setPreview(false)}/>
         );
     } else {
         return (
             <form className="new-article-form">
                 <div>
+                    <textarea className="form-control new-article-form__method-name"
+                              onChange={handleMethodNameChange}
+                              placeholder="Method name"
+                    />
                     {sections.map((section, index) => {
                         return (
                             <div className="form-group">
-                                <DropdownButton variant="light" id={"choose-section-" + index}
+                                <DropdownButton className="new-article-form__section-title"
+                                                variant="light" id={"choose-section-" + index}
                                                 title={sections[index].name ? sections[index].name : "Choose section"}>
                                     {
                                         SECTION_TITLES
@@ -85,26 +105,28 @@ const NewArticle = () => {
                                             ))
                                     }
                                 </DropdownButton>
-                                <textarea className="form-control new-article-form--textarea"
+                                <textarea className="form-control new-article-form__section-content"
                                           value={section.content}
                                           onChange={
                                               (e) => handleSectionContentUpdate(e, index)
                                           }
-                                          placeholder="Text"/>
+                                          placeholder="Text"
+                                />
                             </div>
                         );
                     })}
                 </div>
                 <div className="d-flex bd-highlight mb-3">
-                    <button className={"btn btn-large btn-primary new-article-form--button mr-auto p-2 bd-highlight"}
+                    <button className={"btn btn-large btn-primary new-article-form__button mr-auto p-2 bd-highlight"}
                             onClick={newSection} disabled={!newSectionStatus()}>Add Section
                     </button>
                     <button type="submit"
-                            className="btn btn-large btn-secondary new-article-form--button p-2 bd-highlight"
+                            className="btn btn-large btn-secondary new-article-form__button p-2 bd-highlight"
                             onClick={handlePreview}>Preview
                     </button>
                     <button type="submit"
-                            className="btn btn-large btn-success new-article-form--button p-2 bd-highlight">Submit
+                            className="btn btn-large btn-success new-article-form__button p-2 bd-highlight"
+                            disabled={submitDisabled()}>Submit
                     </button>
                 </div>
             </form>
