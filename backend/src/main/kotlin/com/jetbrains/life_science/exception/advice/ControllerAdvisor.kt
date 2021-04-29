@@ -80,7 +80,7 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ExceptionHandler(InternalAuthenticationServiceException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun handleUserWrongCredentials(ex: InternalAuthenticationServiceException, request: WebRequest): ApiErrorResponse {
-        return ApiErrorResponse("Email or password entered incorrectly")
+        return ApiErrorResponse("Wrong authentication information")
     }
 
     @ExceptionHandler(ContentIsNotEditableException::class)
