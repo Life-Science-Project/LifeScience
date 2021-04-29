@@ -8,8 +8,6 @@ interface ArticleService {
 
     fun getById(id: Long): Article
 
-    fun getByCategoryId(categoryId: Long): List<Article>
-
     fun updateById(info: ArticleInfo): Article
 
     fun deleteById(articleId: Long)

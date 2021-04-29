@@ -18,7 +18,7 @@ let rootReducer = combineReducers({
 
 const stateLoader = new StateLoader();
 
-let store = createStore(rootReducer, stateLoader.loadState());
+let store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 store.subscribe(() => {
     stateLoader.saveState(store.getState());

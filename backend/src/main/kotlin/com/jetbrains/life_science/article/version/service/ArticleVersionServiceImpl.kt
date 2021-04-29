@@ -18,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional
 class ArticleVersionServiceImpl(
     val repository: ArticleVersionRepository,
     val factory: ArticleVersionFactory,
-    val articleService: ArticleService,
     val searchService: ArticleVersionSearchUnitService
 ) : ArticleVersionService {
+
+    @Autowired
+    lateinit var articleService: ArticleService
 
     @Autowired
     lateinit var sectionService: SectionService

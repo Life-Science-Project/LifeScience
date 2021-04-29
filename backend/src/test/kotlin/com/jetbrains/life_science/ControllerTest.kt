@@ -7,12 +7,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.*
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.ResultActionsDsl
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 
 @SpringBootTest
 @AutoConfigureMockMvc
 abstract class ControllerTest<DTO, View>(
-    private val name: String,
     private val viewToken: Class<View>
 ) {
 
@@ -24,7 +28,7 @@ abstract class ControllerTest<DTO, View>(
     @Autowired
     lateinit var mockMvc: MockMvc
 
-    protected val jsonMapper = jacksonObjectMapper()
+    private val jsonMapper = jacksonObjectMapper()
 
     protected fun get(id: Long, url: String = apiUrl): View {
         val entity = getRequest(id, url)
@@ -83,12 +87,11 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-
     protected fun deleteRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.delete("$url/{id}", id)
     }
 
-    protected fun assertNotFound(result: ResultActionsDsl, message: String = "$name not found") {
+    protected fun assertNotFound(notFoundEntityName: String, result: ResultActionsDsl, message: String = "$name not found") {
         result.andExpect {
             status { isNotFound() }
             content { contentType(MediaType.APPLICATION_JSON) }
@@ -96,7 +99,7 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-    protected fun assertBadRequest(result: ResultActionsDsl, message: String = "$name not found") {
+    protected fun assertBadRequest(result: ResultActionsDsl, message: String = "$notFoundEntityName not found") {
         result.andExpect {
             status { isBadRequest() }
             content { contentType(MediaType.APPLICATION_JSON) }
@@ -107,6 +110,12 @@ abstract class ControllerTest<DTO, View>(
     protected fun assertMethodNotAllowed(result: ResultActionsDsl) {
         result.andExpect {
             status { isMethodNotAllowed() }
+        }
+    }
+
+    protected fun assertOk(result: ResultActionsDsl) {
+        result.andExpect {
+            status { isOk() }
         }
     }
 
