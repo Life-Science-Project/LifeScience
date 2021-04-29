@@ -245,6 +245,19 @@ internal class ArticleVersionControllerTest :
         assertEquals(expectedView, updated)
     }
 
+
+    /**
+     * An attempt to publish an article from anonymous user.
+     * The controller should return a 401 status code.
+     */
+    @Test
+    @WithAnonymousUser
+    fun `approve with anonymous user`() {
+        mockMvc.patch(urlWithArticleId(1) + "/1/approve")
+            .andExpect { status { isUnauthorized() } }
+            .andReturn()
+    }
+
     /**
      * An attempt to publish an article from a user without moderator or administrator rights.
      * The controller should return a 403 status code.
@@ -324,7 +337,7 @@ internal class ArticleVersionControllerTest :
     ) {
         // Deleting old version search units
         Mockito.verify(articleVersionSearchUnitRepository, times(1)).deleteById(1)
-        // Saving old version search units
+        // Saving new version search units
         Mockito.verify(articleVersionSearchUnitRepository, times(1)).save(ArticleVersionSearchUnit(3, "version 2.1"))
         // Deleting old section search units
         Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(1)
@@ -343,7 +356,6 @@ internal class ArticleVersionControllerTest :
         // Saving main content version to main repository
         Mockito.verify(contentRepository, times(1)).save(content)
     }
-
 
     /**
      * The test checks for no action when publishing an already published version
@@ -368,46 +380,34 @@ internal class ArticleVersionControllerTest :
     }
 
     /**
-     * The test checks for no action when publishing an already published version
+     * Test to publish a version of an article for which a published version does not yet exist
      */
     @Test
     fun `approve article with no master version existent`() {
-        // Configure mocks
-        Mockito.`when`(articleVersionSearchUnitRepository.existsById(1)).thenReturn(true);
-
-        Mockito.`when`(sectionSearchUnitRepository.existsById(1)).thenReturn(true);
-        Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true);
-        Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true);
-
-        val lastContent = Content(1, "test last text", mutableListOf("b"), mutableListOf("1"))
-        Mockito.`when`(contentRepository.findBySectionId(1)).thenReturn(lastContent)
-
-        val content = Content(4, "test new text", mutableListOf("a"), mutableListOf("2"))
-        Mockito.`when`(contentVersionRepository.findBySectionId(4)).thenReturn(content)
+        val content = Content(5, "test new text", mutableListOf("xx"), mutableListOf("yy"))
+        Mockito.`when`(contentVersionRepository.findBySectionId(5)).thenReturn(content)
 
         // Prepare test data
         val expectedToPublishVersionView =
-            ArticleVersionView("version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.PUBLISHED)
-        val sectionLazyViews = listOf(
-            SectionLazyView(1, "name 1.1", 1),
-            SectionLazyView(2, "name 1.2", 2)
-        )
-        val exceptedToArchiveVersionView = ArticleVersionView("master 1", 1, sectionLazyViews, State.ARCHIVED)
+            ArticleVersionView("version 5.1", 2, listOf(SectionLazyView(5, "name 3", 1)), State.PUBLISHED)
 
         // Action
-        mockMvc.patch(urlWithArticleId(1) + "/3/approve")
+        mockMvc.patch(urlWithArticleId(2) + "/6/approve")
             .andExpect { status { isOk() } }
             .andReturn()
 
         // Checks
-        val publishedVersion = get(3, urlWithArticleId(1))
-        val archivedVersion = get(1, urlWithArticleId(1))
+        val publishedVersion = get(6, urlWithArticleId(2))
 
         assertEquals(expectedToPublishVersionView, publishedVersion)
-        assertEquals(exceptedToArchiveVersionView, archivedVersion)
-
-        // Verify elastic modified
-        verifyElasticOperationsAfterApprove(lastContent, content)
+        // Saving new version search units
+        Mockito.verify(articleVersionSearchUnitRepository, times(1)).save(ArticleVersionSearchUnit(6, "version 5.1"))
+        // Creating new section search units
+        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(5, "desc 3"))
+        // Removing new main content version from versions repository
+        Mockito.verify(contentVersionRepository, times(1)).deleteBySectionId(5)
+        // Saving main content version to main repository
+        Mockito.verify(contentRepository, times(1)).save(content)
     }
 
     private fun getAllVersions(articleId: Int): List<ArticleVersionView> {
