@@ -70,7 +70,7 @@ const NewArticle = () => {
                 <div>
                     {sections.map((section, index) => {
                         return (
-                            <div className="form-group row">
+                            <div className="form-group">
                                 <DropdownButton variant="light" id={"choose-section-" + index}
                                                 title={sections[index].name ? sections[index].name : "Choose section"}>
                                     {
@@ -85,14 +85,12 @@ const NewArticle = () => {
                                             ))
                                     }
                                 </DropdownButton>
-                                <div className="col-sm-10">
-                                    <textarea className="form-control new-article-form--textarea"
-                                              value={section.content}
-                                              onChange={
-                                                  (e) => handleSectionContentUpdate(e, index)
-                                              }
-                                              placeholder="Text"/>
-                                </div>
+                                <textarea className="form-control new-article-form--textarea"
+                                          value={section.content}
+                                          onChange={
+                                              (e) => handleSectionContentUpdate(e, index)
+                                          }
+                                          placeholder="Text"/>
                             </div>
                         );
                     })}
