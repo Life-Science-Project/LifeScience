@@ -4,8 +4,10 @@ import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.section.view.SectionLazyView
+import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
@@ -38,11 +40,10 @@ internal class ArticleMasterControllerTest :
                 name = "master 1",
                 articleId = 1,
                 sections = listOf(
-                    SectionLazyView(
-                        id = 1,
-                        name = "name 1.1"
-                    )
-                )
+                    SectionLazyView(id = 1, name = "name 1.1", order = 1),
+                    SectionLazyView(id = 2, name = "name 1.2", order = 2),
+                ),
+                state = State.PUBLISHED
             )
         )
 
@@ -59,7 +60,7 @@ internal class ArticleMasterControllerTest :
     @Test
     internal fun `get non-existent article`() {
         // Request with check
-        assertNotFound("Article", getRequest(606))
+        assertNotFound(getRequest(606), "Article not found by id: 606")
     }
 
     /**
@@ -107,7 +108,7 @@ internal class ArticleMasterControllerTest :
         val articleDTO = ArticleDTO(111)
 
         // Request with check
-        assertNotFound("Article", putRequest(100, articleDTO))
+        assertNotFound(putRequest(100, articleDTO), "Article not found by id: 100")
     }
 
     /**
@@ -119,7 +120,7 @@ internal class ArticleMasterControllerTest :
         delete(3)
 
         // Check
-        assertNotFound("Article", getRequest(3))
+        assertNotFound(getRequest(3), "Article not found by id: 3")
     }
 
     /**
@@ -138,7 +139,7 @@ internal class ArticleMasterControllerTest :
     @Transactional
     internal fun `delete non-existent article`() {
         // Request with check
-        assertNotFound("Article", deleteRequest(100))
+        assertNotFound(deleteRequest(100), "Article not found by id: 100")
     }
 
     /**

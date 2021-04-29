@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional
 @WithUserDetails("admin")
 @Transactional
 internal class ArticleVersionControllerTest :
-    ControllerTest<ArticleVersionDTO, ArticleVersionView>("Article version", ArticleVersionView::class.java) {
+    ControllerTest<ArticleVersionDTO, ArticleVersionView>(ArticleVersionView::class.java) {
 
     @MockBean
     lateinit var articleVersionSearchUnitRepository: ArticleVersionSearchUnitRepository
@@ -85,7 +85,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `get section wrong section id`() {
-        assertNotFound(getRequest(-1, urlWithArticleId(1)))
+        assertNotFound("Article version", getRequest(-1, urlWithArticleId(1)))
     }
 
     /**
@@ -138,7 +138,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `get all versions with wrong article id`() {
-        assertNotFound(getRequest(-1, urlWithArticleId(1)))
+        assertNotFound("Article version", getRequest(-1, urlWithArticleId(1)))
     }
 
     /**
@@ -162,8 +162,8 @@ internal class ArticleVersionControllerTest :
     fun `create version with with different dto id and path variable id`() {
         val dto = ArticleVersionDTO(1000, "test")
         assertBadRequest(
+            "ArticleVersion's article id and request article id doesn't match",
             postRequest(dto, urlWithArticleId(2000)),
-            "ArticleVersion's article id and request article id doesn't match"
         )
     }
 
@@ -205,7 +205,7 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `update version with with wrong article id`() {
         val dto = ArticleVersionDTO(-1, "test")
-        assertNotFound(putRequest(-1, dto, urlWithArticleId(1)))
+        assertNotFound("Article version", putRequest(-1, dto, urlWithArticleId(1)))
     }
 
     /**
@@ -216,8 +216,8 @@ internal class ArticleVersionControllerTest :
     fun `update version with with different dto id and path variable id`() {
         val dto = ArticleVersionDTO(2000, "test")
         assertBadRequest(
+            "Article version id from dto does not matches with id from path variable",
             putRequest(1, dto, urlWithArticleId(1)),
-            "Article version id from dto does not matches with id from path variable"
         )
     }
 
@@ -244,7 +244,6 @@ internal class ArticleVersionControllerTest :
         assertEquals(expectedView, result)
         assertEquals(expectedView, updated)
     }
-
 
     /**
      * An attempt to publish an article from anonymous user.
@@ -294,11 +293,11 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `approve article`() {
         // Configure mocks
-        Mockito.`when`(articleVersionSearchUnitRepository.existsById(1)).thenReturn(true);
+        Mockito.`when`(articleVersionSearchUnitRepository.existsById(1)).thenReturn(true)
 
-        Mockito.`when`(sectionSearchUnitRepository.existsById(1)).thenReturn(true);
-        Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true);
-        Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true);
+        Mockito.`when`(sectionSearchUnitRepository.existsById(1)).thenReturn(true)
+        Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true)
+        Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true)
 
         val lastContent = Content(1, "test last text", mutableListOf("b"), mutableListOf("1"))
         Mockito.`when`(contentRepository.findBySectionId(1)).thenReturn(lastContent)
@@ -466,7 +465,6 @@ internal class ArticleVersionControllerTest :
         assertEquals(exceptedToArchiveVersionView, archivedVersion)
     }
 
-
     /**
      * Test for archiving the version of the article.
      * 1) Create search units for the article, sections and move the old content to the index for versions
@@ -475,11 +473,11 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `archive article`() {
         // Configure mocks
-        Mockito.`when`(articleVersionSearchUnitRepository.existsById(1)).thenReturn(true);
+        Mockito.`when`(articleVersionSearchUnitRepository.existsById(1)).thenReturn(true)
 
-        Mockito.`when`(sectionSearchUnitRepository.existsById(1)).thenReturn(true);
-        Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true);
-        Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true);
+        Mockito.`when`(sectionSearchUnitRepository.existsById(1)).thenReturn(true)
+        Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true)
+        Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true)
 
         val lastContent = Content(1, "test last text", mutableListOf("b"), mutableListOf("1"))
         Mockito.`when`(contentRepository.findBySectionId(1)).thenReturn(lastContent)
@@ -513,7 +511,6 @@ internal class ArticleVersionControllerTest :
         Mockito.verify(contentVersionRepository, times(1)).save(lastContent)
     }
 
-
     private fun getAllVersions(articleId: Int): List<ArticleVersionView> {
         val request = mockMvc.get(urlWithArticleId(articleId)).andReturn().response.contentAsString
         return jsonMapper.readValue(request, Array<ArticleVersionView>::class.java).toList()
@@ -522,5 +519,4 @@ internal class ArticleVersionControllerTest :
     private fun urlWithArticleId(articleId: Int): String {
         return "/api/articles/$articleId/versions"
     }
-
 }

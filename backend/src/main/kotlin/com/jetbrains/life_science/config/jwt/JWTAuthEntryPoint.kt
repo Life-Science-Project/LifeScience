@@ -1,7 +1,5 @@
 package com.jetbrains.life_science.config.jwt
 
-import io.jsonwebtoken.io.IOException
-import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 

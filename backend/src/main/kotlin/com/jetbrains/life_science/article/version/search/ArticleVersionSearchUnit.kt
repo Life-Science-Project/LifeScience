@@ -15,5 +15,4 @@ data class ArticleVersionSearchUnit(
     @Field(name = "text")
     val name: String
 
-
 )

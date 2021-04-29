@@ -12,5 +12,4 @@ interface ArticleVersionRepository : JpaRepository<ArticleVersion, Long> {
     fun findAllByMainArticleId(id: Long): List<ArticleVersion>
 
     fun findAllByMainArticleIdAndAuthor(id: Long, author: User): List<ArticleVersion>
-
 }

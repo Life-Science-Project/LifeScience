@@ -46,9 +46,9 @@ class ArticleVersionServiceImpl(
     @Transactional
     override fun getPublishedVersion(articleId: Long): ArticleVersion {
         return (
-                repository.findByMainArticleIdAndState(articleId, State.PUBLISHED)
-                    ?: throw PublishedVersionNotFoundException("published version to article: $articleId not found")
-                )
+            repository.findByMainArticleIdAndState(articleId, State.PUBLISHED)
+                ?: throw PublishedVersionNotFoundException("published version to article: $articleId not found")
+            )
     }
 
     @Transactional

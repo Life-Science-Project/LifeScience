@@ -7,12 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.ResultActionsDsl
-import org.springframework.test.web.servlet.delete
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
+import org.springframework.test.web.servlet.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,7 +23,7 @@ abstract class ControllerTest<DTO, View>(
     @Autowired
     lateinit var mockMvc: MockMvc
 
-    private val jsonMapper = jacksonObjectMapper()
+    protected val jsonMapper = jacksonObjectMapper()
 
     protected fun get(id: Long, url: String = apiUrl): View {
         val entity = getRequest(id, url)
@@ -91,7 +86,15 @@ abstract class ControllerTest<DTO, View>(
         return mockMvc.delete("$url/{id}", id)
     }
 
-    protected fun assertNotFound(notFoundEntityName: String, result: ResultActionsDsl, message: String = "$name not found") {
+    protected fun assertNotFound(notFoundEntityName: String, result: ResultActionsDsl) {
+        result.andExpect {
+            status { isNotFound() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.message") { value("$notFoundEntityName not found") }
+        }
+    }
+
+    protected fun assertNotFound(result: ResultActionsDsl, message: String) {
         result.andExpect {
             status { isNotFound() }
             content { contentType(MediaType.APPLICATION_JSON) }
@@ -99,7 +102,7 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-    protected fun assertBadRequest(result: ResultActionsDsl, message: String = "$notFoundEntityName not found") {
+    protected fun assertBadRequest(message: String, result: ResultActionsDsl) {
         result.andExpect {
             status { isBadRequest() }
             content { contentType(MediaType.APPLICATION_JSON) }
