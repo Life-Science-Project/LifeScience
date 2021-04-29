@@ -57,7 +57,7 @@ class SearchServiceImpl(
     private fun processHit(hit: SearchHit): SearchResult {
         val content: Map<String, Any> = hit.sourceAsMap
         val id = hit.id
-        val type = content.getOrThrow("_entity_type") { "Type not found at hit: $hit" }
+        val type = content.getOrThrow("_class") { "Type not found at hit: $hit" }
         val service = searchUnits.getOrThrow(type) { "Service not found for type: $type" }
         return service.process(id, content)
     }
