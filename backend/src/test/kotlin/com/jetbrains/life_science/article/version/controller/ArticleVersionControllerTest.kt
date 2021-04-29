@@ -271,7 +271,7 @@ internal class ArticleVersionControllerTest :
     }
 
     /**
-     * An attempt was made to update a version with an invalid article ID.
+     * An attempt was made to approve a version with an invalid article ID.
      * Controller should return 404 status code.
      */
     @Test
@@ -349,11 +349,11 @@ internal class ArticleVersionControllerTest :
         Mockito.verify(contentRepository, times(1)).deleteAllBySectionId(1)
         // Saving last main content to versions index
         Mockito.verify(contentVersionRepository, times(1)).save(lastContent)
-        // Removing new main content version from versions repository
+        // Removing new main content version from versions index
         Mockito.verify(contentVersionRepository, times(1)).deleteBySectionId(4)
-        // Saving old content version to versions repository
+        // Saving old content version to versions index
         Mockito.verify(contentVersionRepository, times(1)).save(lastContent)
-        // Saving main content version to main repository
+        // Saving main content version to main index
         Mockito.verify(contentRepository, times(1)).save(content)
     }
 
@@ -409,6 +409,110 @@ internal class ArticleVersionControllerTest :
         // Saving main content version to main repository
         Mockito.verify(contentRepository, times(1)).save(content)
     }
+
+    /**
+     * An attempt to archive an article from anonymous user.
+     * The controller should return a 401 status code.
+     */
+    @Test
+    @WithAnonymousUser
+    fun `archive with anonymous user`() {
+        mockMvc.patch(urlWithArticleId(1) + "/1/archive")
+            .andExpect { status { isUnauthorized() } }
+            .andReturn()
+    }
+
+    /**
+     * An attempt to publish an article from a user without moderator or administrator rights.
+     * The controller should return a 403 status code.
+     */
+    @Test
+    @WithUserDetails("user")
+    fun `archive with regular user`() {
+        mockMvc.patch(urlWithArticleId(1) + "/1/archive")
+            .andExpect { status { isForbidden() } }
+            .andReturn()
+    }
+
+    /**
+     * An attempt was made to archive a version with an invalid article ID.
+     * Controller should return 404 status code.
+     */
+    @Test
+    fun `archive article with wrong version id`() {
+        mockMvc.patch(urlWithArticleId(1) + "/1000/archive")
+            .andExpect { status { isNotFound() } }
+            .andReturn()
+    }
+
+    /**
+     * Test for archiving the an unpublished version of the article.
+     * Change the state of the version to "Archived".
+     */
+    @Test
+    fun `archive not published article`() {
+        // Prepare expected data
+        val exceptedToArchiveVersionView = ArticleVersionView("version 1.1", 1, listOf(), State.ARCHIVED)
+
+        // Action
+        mockMvc.patch(urlWithArticleId(1) + "/2/archive")
+            .andExpect { status { isOk() } }
+            .andReturn()
+
+        // Check query
+        val archivedVersion = get(2, urlWithArticleId(1))
+
+        // Check
+        assertEquals(exceptedToArchiveVersionView, archivedVersion)
+    }
+
+
+    /**
+     * Test for archiving the version of the article.
+     * 1) Create search units for the article, sections and move the old content to the index for versions
+     * 2) Change the state of the version to "Archived"
+     */
+    @Test
+    fun `archive article`() {
+        // Configure mocks
+        Mockito.`when`(articleVersionSearchUnitRepository.existsById(1)).thenReturn(true);
+
+        Mockito.`when`(sectionSearchUnitRepository.existsById(1)).thenReturn(true);
+        Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true);
+        Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true);
+
+        val lastContent = Content(1, "test last text", mutableListOf("b"), mutableListOf("1"))
+        Mockito.`when`(contentRepository.findBySectionId(1)).thenReturn(lastContent)
+
+        // Prepare expected data
+        val sectionLazyViews = listOf(
+            SectionLazyView(1, "name 1.1", 1),
+            SectionLazyView(2, "name 1.2", 2)
+        )
+        val exceptedToArchiveVersionView = ArticleVersionView("master 1", 1, sectionLazyViews, State.ARCHIVED)
+
+        // Action
+        mockMvc.patch(urlWithArticleId(1) + "/1/archive")
+            .andExpect { status { isOk() } }
+            .andReturn()
+
+        // Check query
+        val archivedVersion = get(1, urlWithArticleId(1))
+
+        // Check
+        assertEquals(exceptedToArchiveVersionView, archivedVersion)
+        // Deleting old version search units
+        Mockito.verify(articleVersionSearchUnitRepository, times(1)).deleteById(1)
+        // Deleting old section search units
+        Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(1)
+        Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(2)
+        Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(3)
+        // Removing last main content from main index
+        Mockito.verify(contentRepository, times(1)).deleteAllBySectionId(1)
+        // Saving last main content to versions index
+        Mockito.verify(contentVersionRepository, times(1)).save(lastContent)
+    }
+
 
     private fun getAllVersions(articleId: Int): List<ArticleVersionView> {
         val request = mockMvc.get(urlWithArticleId(articleId)).andReturn().response.contentAsString
