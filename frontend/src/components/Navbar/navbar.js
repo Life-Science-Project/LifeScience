@@ -14,7 +14,6 @@ const Navbar = () => {
                     <NavLink path="/" name="Home"/>
                     <NavLink path="/categories" name="Categories"/>
                     <NavLink path="/new-article" name="New Article"/>
-                    <NavLink path="/method/1" name="Bradford"/>
 
                 </ul>
                 <form className="form-inline ml-auto p-2">
