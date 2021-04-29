@@ -38,7 +38,9 @@ class SearchServiceImpl(
         response.hits.forEach { hit ->
             try {
                 val searchResult = processHit(hit)
-                resultList.add(searchResult)
+                if (searchResult != null) {
+                    resultList.add(searchResult)
+                }
             } catch (exception: IllegalStateException) {
                 logger.error("Error in search service", exception)
             }
@@ -54,11 +56,11 @@ class SearchServiceImpl(
         return client.search(searchRequest, RequestOptions.DEFAULT)
     }
 
-    private fun processHit(hit: SearchHit): SearchResult {
+    private fun processHit(hit: SearchHit): SearchResult? {
         val content: Map<String, Any> = hit.sourceAsMap
         val id = hit.id
         val type = content.getOrThrow("_class") { "Type not found at hit: $hit" }
-        val service = searchUnits.getOrThrow(type) { "Service not found for type: $type" }
+        val service = searchUnits[type] ?: return null
         return service.process(id, content)
     }
 }

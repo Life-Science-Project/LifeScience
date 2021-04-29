@@ -66,6 +66,7 @@ class WebSecurityConfig(
             ).fullyAuthenticated()
             .antMatchers(HttpMethod.GET).permitAll()
             .antMatchers("/api/auth/**").permitAll()
+            .antMatchers("/api/search/**").permitAll()
             .antMatchers("/api/**").fullyAuthenticated()
             .antMatchers("/**").permitAll()
             .anyRequest().authenticated()
