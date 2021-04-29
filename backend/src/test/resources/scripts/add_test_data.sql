@@ -9,6 +9,8 @@ insert into article (id, category_id)
 values (1, 1);
 insert into article (id, category_id)
 values (2, 2);
+insert into article (id, category_id)
+values (3, 1);
 
 insert into user_details (id, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
 values (1, 0, 0, 'alex1', 'ln alex', '123', '222');
