@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.category.controller
+package com.jetbrains.life_science.article.master
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
@@ -124,8 +124,9 @@ internal class ArticleMasterControllerTest :
     @Test
     @WithUserDetails("user")
     internal fun `user privileges`() {
-        getRequest(1)
         val articleDto = ArticleDTO(2)
+
+        assertOk(getRequest(1))
         assertOk(postRequest(articleDto))
         assertForbidden(putRequest(1, articleDto))
         assertForbidden(deleteRequest(3))
@@ -137,8 +138,8 @@ internal class ArticleMasterControllerTest :
     @Test
     @WithAnonymousUser
     internal fun `anonymous privileges`() {
-        getRequest(1)
         val articleDto = ArticleDTO(2)
+        assertOk(getRequest(1))
         assertUnauthenticated(postRequest(articleDto))
         assertUnauthenticated(putRequest(1, articleDto))
         assertUnauthenticated(deleteRequest(3))
@@ -147,32 +148,12 @@ internal class ArticleMasterControllerTest :
     private fun createArticle(dto: ArticleDTO) {
         val responseArticle = post(dto)
         assertNotNull(responseArticle.id)
-        val savedCategory = get(responseArticle.id)
-        val expectedArticle = ArticleView(
-            id = 4,
-            version = null
-        )
-        assertEquals(expectedArticle, savedCategory)
+        get(responseArticle.id)
     }
 
     private fun updateArticle(id: Long, dto: ArticleDTO) {
         val responseArticle = put(id, dto)
         assertEquals(id, responseArticle.id)
-        val updatedArticle = get(responseArticle.id)
-        val expectedArticle = ArticleView(
-            id = 1,
-            version = ArticleVersionView(
-                name = "master 1",
-                articleId = 1,
-                sections = listOf(
-                    SectionLazyView(
-                        id = 1,
-                        name = "name 1.1"
-                    )
-                )
-            )
-        )
-        assertEquals(expectedArticle, updatedArticle)
     }
 
     protected fun assertNotEmpty(result: ResultActionsDsl) {
