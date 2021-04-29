@@ -2,7 +2,7 @@ import React from "react";
 import Categories from "./categories";
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
-import {getCategoryThunk} from "../../../redux/category-rerducer";
+import {getCategoryThunk} from "../../../redux/category-reducer";
 
 class CategoriesContainer extends React.Component {
     constructor(props) {
