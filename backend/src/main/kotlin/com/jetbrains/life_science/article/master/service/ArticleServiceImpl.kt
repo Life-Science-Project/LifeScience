@@ -33,10 +33,6 @@ class ArticleServiceImpl(
         return repository.findById(id).get()
     }
 
-    override fun getByCategoryId(categoryId: Long): List<Article> {
-        return repository.findAllByCategoryId(categoryId)
-    }
-
     @Transactional
     override fun updateById(info: ArticleInfo): Article {
         val article = getById(info.id)
