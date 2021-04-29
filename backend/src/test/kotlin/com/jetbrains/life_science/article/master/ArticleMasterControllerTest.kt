@@ -179,7 +179,7 @@ internal class ArticleMasterControllerTest :
 
         // Check
         assertNotNull(responseArticle.id)
-        get(responseArticle.id)
+        assertOk(getRequest(responseArticle.id))
     }
 
     private fun updateArticle(id: Long, dto: ArticleDTO) {
@@ -188,6 +188,7 @@ internal class ArticleMasterControllerTest :
 
         // Check
         assertEquals(id, responseArticle.id)
+        assertOk(getRequest(id))
     }
 
     protected fun assertNotEmpty(result: ResultActionsDsl) {
