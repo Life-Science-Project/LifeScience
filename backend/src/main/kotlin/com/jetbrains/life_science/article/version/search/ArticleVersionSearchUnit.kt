@@ -6,11 +6,12 @@ import javax.persistence.Id
 
 @Document(indexName = "article", createIndex = true)
 @TypeAlias("Article")
-class ArticleVersionSearchUnit(
+data class ArticleVersionSearchUnit(
 
     @Id
     val id: Long,
 
     val name: String
+
 
 )

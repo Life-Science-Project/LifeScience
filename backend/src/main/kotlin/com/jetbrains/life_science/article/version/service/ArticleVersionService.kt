@@ -7,9 +7,9 @@ interface ArticleVersionService {
 
     fun createBlank(info: ArticleVersionInfo): ArticleVersion
 
-    fun approve(id: Long)
+    fun approve(versionId: Long)
 
-    fun archive(id: Long)
+    fun archive(versionId: Long)
 
     fun createCopy(articleId: Long)
 

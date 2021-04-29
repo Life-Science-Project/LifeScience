@@ -83,11 +83,6 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-    protected fun patchRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
-        return mockMvc.patch("$url/{id}", id) {
-            accept = MediaType.APPLICATION_JSON
-        }
-    }
 
     protected fun deleteRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.delete("$url/{id}", id)

@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType
 
 @Document(indexName = "content", createIndex = true)
 @TypeAlias("Content")
-class Content(
+data class Content(
 
     var sectionId: Long,
 

@@ -5,7 +5,7 @@ import org.springframework.data.elasticsearch.annotations.Document
 
 @Document(indexName = "section", createIndex = true)
 @TypeAlias("Section")
-class SectionSearchUnit(
+data class SectionSearchUnit(
 
     val id: Long,
 
