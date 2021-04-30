@@ -7,29 +7,61 @@ import Category from "./Category/category";
 import Article from "./Category/article";
 import Trouble from "../../common/Trouble/trouble";
 
-const Categories = (props) => {
-    if (props.trouble !== undefined && props.trouble !== null) {
-        return <Trouble trouble={props.trouble}/>
+class Categories extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onReverse = this.onReverse.bind(this);
+        this.onAdd = this.onAdd.bind(this);
     }
 
-    if (props.category === null || props.category === undefined) {
-        return <Preloader/>;
+    onReverse() {
+        this.props.history.push("/categories/" + this.props.category.parentId);
     }
 
-    return (
-        <div>
-            <div className="category_name">
-                {props.category.name}
+    onAdd() {
+        this.props.history.push("/new-article/" + this.props.category.id);
+    }
+
+    render() {
+        if (this.props.trouble !== undefined && this.props.trouble !== null) {
+            return <Trouble trouble={this.props.trouble}/>
+        }
+
+        if (this.props.category === null || this.props.category === undefined) {
+            return <Preloader/>;
+        }
+
+        const buttonToPrevCategory = () => {
+            if (this.props.category.parentId !== null) {
+                return(
+                    <button className="return_button" onClick={this.onReverse}>
+                        Previous
+                    </button>
+                );
+            }
+        }
+
+        return (
+            <div>
+                <div className="buttons_container">
+                    {buttonToPrevCategory()}
+                    <button className="add_method_button" onClick={this.onAdd}>
+                        Add Method
+                    </button>
+                </div>
+                <div className="category_name">
+                    {this.props.category.name}
+                </div>
+                <div className="categories_container">
+                    {this.props.category.subcategories.sort(byField('order')).map(category => <Category category={category}/>)}
+                </div>
+                <div className="articles_container">
+                    {this.props.category.articles.map(article => <Article article={article}/>)}
+                </div>
             </div>
-            <div className="categories_container">
-                {props.category.subcategories.sort(byField('order')).map(category => <Category category={category}/>)}
-            </div>
-            <div className="articles_container">
-                {props.category.articles.map(article => <Article article={article}/>)}
-            </div>
-        </div>
-    );
-};
+        );
+    }
+}
 
 Categories.propTypes = {
     category: PropTypes.exact({

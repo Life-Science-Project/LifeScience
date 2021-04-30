@@ -1,30 +1,29 @@
 package com.jetbrains.life_science
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.ResultActionsDsl
-import org.springframework.test.web.servlet.delete
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
+import org.springframework.test.web.servlet.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
 abstract class ControllerTest<DTO, View>(
-    private val name: String,
     private val viewToken: Class<View>
 ) {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     final lateinit var apiUrl: String
 
     @Autowired
     lateinit var mockMvc: MockMvc
 
-    private val jsonMapper = jacksonObjectMapper()
+    protected val jsonMapper = jacksonObjectMapper()
 
     protected fun get(id: Long, url: String = apiUrl): View {
         val entity = getRequest(id, url)
@@ -87,11 +86,31 @@ abstract class ControllerTest<DTO, View>(
         return mockMvc.delete("$url/{id}", id)
     }
 
-    protected fun assertNotFound(result: ResultActionsDsl) {
+    protected fun assertNotFound(notFoundEntityName: String, result: ResultActionsDsl) {
         result.andExpect {
             status { isNotFound() }
             content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.message") { value("$name not found") }
+            jsonPath("$.message") { value("$notFoundEntityName not found") }
+        }
+    }
+
+    protected fun assertBadRequest(message: String, result: ResultActionsDsl) {
+        result.andExpect {
+            status { isBadRequest() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.message") { value(message) }
+        }
+    }
+
+    protected fun assertMethodNotAllowed(result: ResultActionsDsl) {
+        result.andExpect {
+            status { isMethodNotAllowed() }
+        }
+    }
+
+    protected fun assertOk(result: ResultActionsDsl) {
+        result.andExpect {
+            status { isOk() }
         }
     }
 

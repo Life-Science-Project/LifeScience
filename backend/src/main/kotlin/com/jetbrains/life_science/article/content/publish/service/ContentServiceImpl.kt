@@ -6,8 +6,8 @@ import com.jetbrains.life_science.article.content.publish.repository.ContentRepo
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
-import com.jetbrains.life_science.exception.ContentAlreadyExistsException
-import com.jetbrains.life_science.exception.ContentNotFoundException
+import com.jetbrains.life_science.exception.request.ContentAlreadyExistsException
+import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

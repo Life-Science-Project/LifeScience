@@ -8,9 +8,9 @@ import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.entity.State
-import com.jetbrains.life_science.exception.ContentIsNotEditableException
-import com.jetbrains.life_science.exception.ContentNotFoundException
-import com.jetbrains.life_science.exception.IllegalAccessException
+import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
+import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
+import com.jetbrains.life_science.exception.request.IllegalAccessException
 import com.jetbrains.life_science.user.details.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.validation.annotation.Validated

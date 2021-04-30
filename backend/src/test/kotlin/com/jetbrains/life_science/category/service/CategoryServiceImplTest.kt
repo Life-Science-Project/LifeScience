@@ -2,7 +2,7 @@ package com.jetbrains.life_science.category.service
 
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.category.repository.CategoryRepository
-import com.jetbrains.life_science.exception.CategoryNotFoundException
+import com.jetbrains.life_science.exception.not_found.CategoryNotFoundException
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import org.junit.jupiter.api.Assertions.*

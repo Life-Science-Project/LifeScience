@@ -5,7 +5,7 @@ import com.jetbrains.life_science.article.content.publish.factory.ContentFactory
 import com.jetbrains.life_science.article.content.publish.service.ContentInfo
 import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
-import com.jetbrains.life_science.exception.ContentNotFoundException
+import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

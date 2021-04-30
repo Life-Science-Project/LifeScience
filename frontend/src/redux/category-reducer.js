@@ -29,11 +29,12 @@ const categoryReducer = (state = initialState, action) => {
 
 export const getCategory = (_id) => {
     return {type: GET_CATEGORY, category: _id}
-};
+}
 
 export const getError = (trouble, reason) => {
     return {type: reason, trouble: trouble}
-};
+}
+
 
 export const getCategoryThunk = (id) => async (dispatch) => {
     let response = await categoryApi.getCategory(id);

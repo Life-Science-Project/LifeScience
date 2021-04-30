@@ -1,15 +1,12 @@
 package com.jetbrains.life_science.category.controller
 
 import com.jetbrains.life_science.ControllerTest
-import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.category.dto.CategoryDTO
 import com.jetbrains.life_science.category.view.CategoryView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
@@ -19,19 +16,15 @@ import org.springframework.test.web.servlet.get
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @Sql("/scripts/add_test_data.sql")
 @WithUserDetails("admin")
 @Transactional
 internal class CategoryControllerTest :
-    ControllerTest<CategoryDTO, CategoryView>("Category", CategoryView::class.java) {
+    ControllerTest<CategoryDTO, CategoryView>(CategoryView::class.java) {
 
     init {
         apiUrl = "/api/categories"
     }
-
-    @MockBean
-    lateinit var contentVersionRepository: ContentVersionRepository
 
     /**
      * Should get all categories with no parent
@@ -52,8 +45,12 @@ internal class CategoryControllerTest :
     internal fun `get existing category`() {
         val category = get(2)
         val expectedCategory = CategoryView(
-            2, 1, "child category 1", 2,
-            listOf(), listOf(ArticleView(2, null))
+            id = 2,
+            parentId = 1,
+            name = "child category 1",
+            order = 2,
+            subcategories = listOf(),
+            articles = listOf(ArticleView(id = 2, version = null))
         )
         assertEquals(expectedCategory, category)
     }
@@ -63,7 +60,7 @@ internal class CategoryControllerTest :
      */
     @Test
     internal fun `get non-existent category`() {
-        assertNotFound(getRequest(100))
+        assertNotFound("Category", getRequest(100))
     }
 
     /**
@@ -96,7 +93,7 @@ internal class CategoryControllerTest :
     @Test
     internal fun `create category with non-existent parent`() {
         val categoryDto = CategoryDTO("null parent category", 100, 0)
-        assertNotFound(postRequest(categoryDto))
+        assertNotFound("Category", postRequest(categoryDto))
     }
 
     /**
@@ -129,7 +126,7 @@ internal class CategoryControllerTest :
     @Test
     internal fun `update non-existent category`() {
         val categoryDto = CategoryDTO("no category", null, 150)
-        assertNotFound(putRequest(100, categoryDto))
+        assertNotFound("Category", putRequest(100, categoryDto))
     }
 
     /**
@@ -150,13 +147,13 @@ internal class CategoryControllerTest :
     @Test
     internal fun `update non-existent parent`() {
         val categoryDto = CategoryDTO("updated sample category", 8, 9)
-        assertNotFound(putRequest(1, categoryDto))
+        assertNotFound("Category", putRequest(1, categoryDto))
     }
 
     @Test
     internal fun `delete existing category`() {
         delete(3)
-        assertNotFound(getRequest(3))
+        assertNotFound("Category", getRequest(3))
     }
 
     /**
@@ -174,7 +171,7 @@ internal class CategoryControllerTest :
     @Test
     @Transactional
     internal fun `delete non-existent category`() {
-        assertNotFound(deleteRequest(100))
+        assertNotFound("Category", deleteRequest(100))
     }
 
     /**
@@ -183,8 +180,8 @@ internal class CategoryControllerTest :
     @Test
     @WithUserDetails("user")
     internal fun `user privileges`() {
-        getRootCategories()
-        getRequest(1)
+        assertOk(rootCategoriesRequest())
+        assertOk(getRequest(1))
         val categoryDto = CategoryDTO("sample category", 1, 0)
         assertForbidden(postRequest(categoryDto))
         assertForbidden(putRequest(1, categoryDto))
@@ -197,8 +194,8 @@ internal class CategoryControllerTest :
     @Test
     @WithAnonymousUser
     internal fun `anonymous privileges`() {
-        getRootCategories()
-        getRequest(1)
+        assertOk(rootCategoriesRequest())
+        assertOk(getRequest(1))
         val categoryDto = CategoryDTO("sample category", 1, 0)
         assertUnauthenticated(postRequest(categoryDto))
         assertUnauthenticated(putRequest(1, categoryDto))
@@ -206,12 +203,16 @@ internal class CategoryControllerTest :
     }
 
     private fun getRootCategories(): List<CategoryView> {
-        val categories = mockMvc.get("$apiUrl/root")
+        val categories = rootCategoriesRequest()
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
             }.andReturn().response.contentAsString
         return getViewsFromJson(categories)
+    }
+
+    private fun rootCategoriesRequest(): ResultActionsDsl {
+        return mockMvc.get("$apiUrl/root")
     }
 
     private fun createCategory(dto: CategoryDTO) {
