@@ -6,7 +6,7 @@ export const usersApi = {
         return instance.get(url);
     },
     getUserFavorites(id) {
-        const url = 'users/' + id + '/favourites';
+        const url = 'users/' + id + '/favourites/';
         return instance.get(url);
     }
 }

@@ -9,7 +9,7 @@ import initReducer from "./init-reducer";
 
 let rootReducer = combineReducers({
     categoryPage: categoryReducer,
-    userPage: usersReducer,
+    usersPage: usersReducer,
     auth: authReducer,
     method: methodReducer,
     section: sectionReducer,

@@ -94,7 +94,7 @@ export const signUpUserThunk = (input) => async (dispatch) => {
     });
     let result, errorMsg = "";
     if (response.status === 200) {
-        // Auth user on successful registration
+        // Auth User on successful registration
         const signInData = {email : input.email, password : input.password};
         dispatch(signInUserThunk(signInData));
     } else {

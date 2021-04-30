@@ -6,7 +6,7 @@ const GET_USER_FAVOURITES = 'GET_USER_FAVOURITES';
 
 const initialState = {
     user: null,
-    favourites: []
+    userFavourites: []
 }
 
 const usersReducer = (state = initialState, action) => {
@@ -46,9 +46,9 @@ export const getUserFavourites = (favourites) => {
     return {type: GET_USER_FAVOURITES, userFavourites: favourites}
 };
 
-export const getUserThunk = (id) => async (dispatch) => {
+export const getUsersThunk = (id) => async (dispatch) => {
     let response = await usersApi.getUser(id);
-    if (response.status === 404) {
+    if (response.status !== 200) {
         dispatch(getError(response.data, ERROR))
     }
     dispatch(getUser(response.data));
@@ -56,7 +56,7 @@ export const getUserThunk = (id) => async (dispatch) => {
 
 export const getUserFavouritesThunk = (id) => async (dispatch) => {
     let response = await usersApi.getUserFavorites(id);
-    if (response.status === 404) {
+    if (response.status === 200) {
         dispatch(getError(response.data, ERROR))
     }
     dispatch(getUserFavourites(response.data));
