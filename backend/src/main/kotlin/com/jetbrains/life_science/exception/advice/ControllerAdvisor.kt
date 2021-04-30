@@ -65,6 +65,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse("User already exists")
     }
 
+    @ExceptionHandler(UserNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleContentIsNotEditable(ex: UserNotFoundException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
     @ExceptionHandler(ContentIsNotEditableException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleContentIsNotEditable(ex: ContentIsNotEditableException, request: WebRequest): ApiErrorResponse {

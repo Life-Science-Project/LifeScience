@@ -18,12 +18,12 @@ class UserCredentialsServiceImpl(
 
     override fun getByEmail(email: String): UserCredentials {
         return userCredentialsRepository.findByEmail(email)
-            .orElseThrow { UserNotFoundException("user with email $email not found") }
+            .orElseThrow { UserNotFoundException("User with email $email not found") }
     }
 
     override fun getById(id: Long): UserCredentials {
         return userCredentialsRepository.findById(id)
-            .orElseThrow { UserNotFoundException("user with id $id not found") }
+            .orElseThrow { UserNotFoundException("User with id $id not found") }
     }
 
     override fun createUser(userInfo: NewUserInfo): UserCredentials {
