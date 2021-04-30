@@ -60,7 +60,7 @@ internal class ArticleMasterControllerTest :
     @Test
     internal fun `get non-existent article`() {
         // Request with check
-        assertNotFound(getRequest(606), "Article not found by id: 606")
+        assertNotFound("Article", getRequest(606))
     }
 
     /**
@@ -108,7 +108,7 @@ internal class ArticleMasterControllerTest :
         val articleDTO = ArticleDTO(111)
 
         // Request with check
-        assertNotFound(putRequest(100, articleDTO), "Article not found by id: 100")
+        assertNotFound("Article", putRequest(100, articleDTO))
     }
 
     /**
@@ -120,7 +120,7 @@ internal class ArticleMasterControllerTest :
         delete(3)
 
         // Check
-        assertNotFound(getRequest(3), "Article not found by id: 3")
+        assertNotFound("Article", getRequest(3))
     }
 
     /**
@@ -139,7 +139,7 @@ internal class ArticleMasterControllerTest :
     @Transactional
     internal fun `delete non-existent article`() {
         // Request with check
-        assertNotFound(deleteRequest(100), "Article not found by id: 100")
+        assertNotFound("Article", deleteRequest(100))
     }
 
     /**

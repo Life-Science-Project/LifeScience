@@ -149,8 +149,8 @@ internal class ArticleVersionControllerTest :
     fun `create version with with wrong article id`() {
         val dto = ArticleVersionDTO(1000, "test")
         assertNotFound(
-            postRequest(dto, urlWithArticleId(1000)),
-            "Article not found by id: 1000"
+            "Article",
+            postRequest(dto, urlWithArticleId(1000))
         )
     }
 
@@ -513,7 +513,7 @@ internal class ArticleVersionControllerTest :
 
     private fun getAllVersions(articleId: Int): List<ArticleVersionView> {
         val request = mockMvc.get(urlWithArticleId(articleId)).andReturn().response.contentAsString
-        return jsonMapper.readValue(request, Array<ArticleVersionView>::class.java).toList()
+        return getViewsFromJson(request)
     }
 
     private fun urlWithArticleId(articleId: Int): String {

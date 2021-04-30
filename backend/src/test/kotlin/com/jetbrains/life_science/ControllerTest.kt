@@ -94,14 +94,6 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-    protected fun assertNotFound(result: ResultActionsDsl, message: String) {
-        result.andExpect {
-            status { isNotFound() }
-            content { contentType(MediaType.APPLICATION_JSON) }
-            jsonPath("$.message") { value(message) }
-        }
-    }
-
     protected fun assertBadRequest(message: String, result: ResultActionsDsl) {
         result.andExpect {
             status { isBadRequest() }

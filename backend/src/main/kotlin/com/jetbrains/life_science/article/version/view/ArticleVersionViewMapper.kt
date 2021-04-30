@@ -15,9 +15,9 @@ class ArticleVersionViewMapper(val sectionLazyMapper: SectionLazyViewMapper) {
         return ArticleVersionView(
             name = articleVersion.name,
             articleId = articleVersion.mainArticle.id,
-            sections = articleVersion.sections
-                .filter { it.visible }
-                .map { sectionLazyMapper.createView(it) },
+            sections = sectionLazyMapper.createViews(
+                articleVersion.sections.filter { it.visible }
+            ),
             state = articleVersion.state
         )
     }

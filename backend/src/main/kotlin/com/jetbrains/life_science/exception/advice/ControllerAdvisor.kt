@@ -49,7 +49,7 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ExceptionHandler(ArticleNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleArticleNotFound(ex: ArticleNotFoundException, request: WebRequest): ApiErrorResponse {
-        return ApiErrorResponse(ex.message)
+        return notFoundResponse("Article")
     }
 
     @ExceptionHandler(ArticleNotEmptyException::class)

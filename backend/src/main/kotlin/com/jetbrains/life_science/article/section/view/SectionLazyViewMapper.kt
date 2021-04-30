@@ -12,4 +12,8 @@ class SectionLazyViewMapper {
             order = section.orderNumber
         )
     }
+
+    fun createViews(sections: List<Section>): List<SectionLazyView> {
+        return sections.map { createView(it) }
+    }
 }
