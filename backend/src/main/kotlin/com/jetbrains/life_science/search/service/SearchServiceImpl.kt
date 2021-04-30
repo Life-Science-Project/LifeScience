@@ -51,7 +51,7 @@ class SearchServiceImpl(
     private fun makeRequest(data: SearchQueryInfo): SearchResponse {
         val searchRequest = SearchRequest()
         val searchBuilder = SearchSourceBuilder()
-        searchBuilder.query(QueryBuilders.matchQuery("text", data.query))
+        searchBuilder.query(QueryBuilders.wildcardQuery("text", "*${data.query}*"))
         searchRequest.source(searchBuilder)
         return client.search(searchRequest, RequestOptions.DEFAULT)
     }

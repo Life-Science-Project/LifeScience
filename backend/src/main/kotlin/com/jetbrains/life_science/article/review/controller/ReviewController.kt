@@ -5,7 +5,7 @@ import com.jetbrains.life_science.article.review.dto.ReviewDTOToInfoAdapter
 import com.jetbrains.life_science.article.review.service.ReviewService
 import com.jetbrains.life_science.article.review.view.ReviewView
 import com.jetbrains.life_science.article.review.view.ReviewViewMapper
-import com.jetbrains.life_science.exception.ReviewNotFoundException
+import com.jetbrains.life_science.exception.not_found.ReviewNotFoundException
 import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.util.email
 import org.springframework.security.access.annotation.Secured

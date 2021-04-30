@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.user.credentials.service
 
-import com.jetbrains.life_science.exception.UserAlreadyExistsException
-import com.jetbrains.life_science.exception.UserNotFoundException
+import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
+import com.jetbrains.life_science.exception.not_found.UserNotFoundException
 import com.jetbrains.life_science.user.credentials.entity.NewUserInfo
 import com.jetbrains.life_science.user.credentials.entity.UserCredentials
 import com.jetbrains.life_science.user.credentials.factory.UserCredentialsFactory

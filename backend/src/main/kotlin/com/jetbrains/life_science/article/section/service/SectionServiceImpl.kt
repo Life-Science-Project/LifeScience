@@ -6,7 +6,7 @@ import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.factory.SectionFactory
 import com.jetbrains.life_science.article.section.repository.SectionRepository
 import com.jetbrains.life_science.article.section.search.service.SectionSearchUnitService
-import com.jetbrains.life_science.exception.SectionNotFoundException
+import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import org.springframework.beans.factory.annotation.Autowired
