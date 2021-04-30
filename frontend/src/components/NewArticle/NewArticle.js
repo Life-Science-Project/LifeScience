@@ -1,11 +1,13 @@
 import "./NewArticle.css"
-import React, {useState} from "react";
-import Method from "../Method/method";
+import React, {useEffect, useState} from "react";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
+import {withRouter} from "react-router-dom";
+import {getCategoryThunk} from "../../redux/category-rerducer";
+import {connect, useDispatch, useSelector} from "react-redux";
 
-const NewArticle = () => {
+const NewArticle = (props) => {
 
     const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
         "Method advantages and disadvantages", "Troubleshooting"];
@@ -20,7 +22,18 @@ const NewArticle = () => {
 
     const [methodName, setMethodName] = useState("")
 
-    const newSection = (e) => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        refreshCategories()
+    }, [])
+
+    const refreshCategories = () => {
+        const categoryId = props.match.params.categoryId;
+        getCategoryThunk(categoryId)(dispatch);
+    }
+
+    const newSection = () => {
         const section = {
             name: "",
             content: ""
@@ -94,81 +107,102 @@ const NewArticle = () => {
         setSections(newSections);
     }
 
-    if (preview) {
-        return (
-            <MethodPreview name={methodName} sections={getSectionsForPreview()} goBack={() => setPreview(false)}/>
-        );
-    } else {
-        return (
-            <form className="new-article-form">
-                <div>
-                    <textarea className="form-control new-article-form__method-name"
-                              onChange={handleMethodNameChange}
-                              value={methodName}
-                              placeholder="Method name"
-                    />
-                    <div className="form-group">
-                        <h2 className="col-form-label">
-                            {SECTION_TITLES[0]}
-                        </h2>
-                        <textarea className="form-control new-article-form__section-content"
-                                  onChange={
-                                      (e) => handleSectionContentUpdate(e, 0)
-                                  }
-                                  value={sections[0].content}
-                                  placeholder="Text"
-                        />
-                    </div>
-                    {sections.map((section, index) => {
-                        if (index === 0) return
-                        return (
-                            <div className="form-group">
-                                <div className="new-article-form__section-title-row">
-                                    <DropdownButton variant="light" id={"choose-section-" + index}
-                                                    title={sections[index].name ? sections[index].name : "Choose section"}>
-                                        {
-                                            SECTION_TITLES
-                                                .filter((title) => !isSectionSelected(title))
-                                                .map(type => (
-                                                    <Dropdown.Item
-                                                        eventKey={type}
-                                                        onSelect={(title) => handleSectionTitleSelect(title, index)}>
-                                                        {type}
-                                                    </Dropdown.Item>
-                                                ))
-                                        }
-                                    </DropdownButton>
-                                    <FaTimes onClick={() => removeSection(index)}
-                                             className="new-article-form__remove-icon"/>
+    const category = useSelector(state => state.categoryPage.category)
+
+    return (
+        preview
+            ?
+            (
+                <MethodPreview name={methodName}
+                               sections={getSectionsForPreview()}
+                               goBack={() => setPreview(false)}/>
+            )
+            :
+            (
+                <form className="new-article-form">
+                    <h4>
+                        Category: {category && category.name}
+                    </h4>
+                    <div>
+                        <div className="new-article-form__method-name">
+                            <h2 className="col-form-label">
+                                Method name
+                            </h2>
+                            <textarea className="form-control"
+                                      onChange={handleMethodNameChange}
+                                      value={methodName}
+                                      placeholder="Input method name"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <h2 className="col-form-label">
+                                {SECTION_TITLES[0]}
+                            </h2>
+                            <textarea className="form-control new-article-form__section-content"
+                                      onChange={
+                                          (e) => handleSectionContentUpdate(e, 0)
+                                      }
+                                      value={sections[0].content}
+                                      placeholder="Text"
+                            />
+                        </div>
+                        {sections.map((section, index) => {
+                            if (index === 0) return
+                            return (
+                                <div className="form-group">
+                                    <div className="new-article-form__section-title-row">
+                                        <DropdownButton variant="light" id={"choose-section-" + index}
+                                                        title={sections[index].name ? sections[index].name : "Choose section"}>
+                                            {
+                                                SECTION_TITLES
+                                                    .filter((title) => !isSectionSelected(title))
+                                                    .map(type => (
+                                                        <Dropdown.Item
+                                                            eventKey={type}
+                                                            onSelect={(title) => handleSectionTitleSelect(title, index)}>
+                                                            {type}
+                                                        </Dropdown.Item>
+                                                    ))
+                                            }
+                                        </DropdownButton>
+                                        <FaTimes onClick={() => removeSection(index)}
+                                                 className="new-article-form__remove-icon"/>
+                                    </div>
+                                    <textarea className="form-control new-article-form__section-content"
+                                              onChange={
+                                                  (e) => handleSectionContentUpdate(e, index)
+                                              }
+                                              value={sections[index].content}
+                                              placeholder="Text"
+                                    />
                                 </div>
-                                <textarea className="form-control new-article-form__section-content"
-                                          onChange={
-                                              (e) => handleSectionContentUpdate(e, index)
-                                          }
-                                          value={sections[index].content}
-                                          placeholder="Text"
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
-                <div className="d-flex bd-highlight mb-3">
-                    <button className={"btn btn-large btn-primary new-article-form__button mr-auto p-2 bd-highlight"}
+                            );
+                        })}
+                    </div>
+                    <div className="d-flex bd-highlight mb-3">
+                        <button
+                            className={"btn btn-large btn-primary new-article-form__button mr-auto p-2 bd-highlight"}
                             onClick={newSection} disabled={!newSectionStatus()}>Add Section
-                    </button>
-                    <button type="submit"
-                            className="btn btn-large btn-secondary new-article-form__button p-2 bd-highlight"
-                            onClick={handlePreview}>Preview
-                    </button>
-                    <button type="submit"
-                            className="btn btn-large btn-success new-article-form__button p-2 bd-highlight"
-                            disabled={submitDisabled()}>Submit
-                    </button>
-                </div>
-            </form>
+                        </button>
+                        <button type="submit"
+                                className="btn btn-large btn-secondary new-article-form__button p-2 bd-highlight"
+                                onClick={handlePreview}>Preview
+                        </button>
+                        <button type="submit"
+                                className="btn btn-large btn-success new-article-form__button p-2 bd-highlight"
+                                disabled={submitDisabled()}>Submit
+                        </button>
+                    </div>
+                </form>
 
-        );
-    }
-};
+            )
+    )
+}
 
-export default NewArticle;
+const mapStateToProps = (state) => {
+    return ({
+        category: state.categoryPage.category
+    })
+}
+
+export default connect(mapStateToProps, {getCategoryThunk})(withRouter(NewArticle));

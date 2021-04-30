@@ -13,7 +13,7 @@
 }
 
 .new-article-form__method-name {
-    margin-bottom: 2rem;
+    margin: 2rem 0;
 }
 
 .new-article-form__section-title-row {
@@ -25,3 +25,4 @@
     cursor: pointer;
     margin-left: 0.5rem;
 }
+
