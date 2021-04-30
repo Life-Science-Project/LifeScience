@@ -3,14 +3,16 @@ import './general-information.css'
 import ReferenceList from "./ReferenceList/reference-list";
 
 const GeneralInformation = ({contents}) => {
-    const REFS = "References"
-
     return (
         <div className="section-content">
             <div className="main-text">
                 {contents.text}
             </div>
-            <ReferenceList refs={contents.references}/>
+            {
+                (contents.references && contents.references.length > 0) &&
+                <ReferenceList refs={contents.references}/>
+            }
+
         </div>
     )
 }
