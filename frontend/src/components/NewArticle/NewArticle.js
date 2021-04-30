@@ -4,7 +4,7 @@ import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
 import {withRouter} from "react-router-dom";
-import {getCategoryThunk} from "../../redux/category-rerducer";
+import {getCategoryThunk} from "../../redux/category-reducer";
 import {connect, useDispatch, useSelector} from "react-redux";
 
 const NewArticle = (props) => {
