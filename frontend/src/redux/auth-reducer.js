@@ -1,5 +1,8 @@
 import {authApi} from "../api/auth-api";
+import {initApi} from "../api/init-api";
+import {getUserView} from "../utils/user-translator";
 
+const LOGOUT = 'logout';
 const SIGN_IN = 'signin';
 const SIGN_UP = 'signup';
 const ERROR = 'error';
@@ -29,9 +32,20 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 errorMsg: action.errorMsg
             }
+        case LOGOUT:
+            return {
+                ...state,
+                user: null,
+                isAuthorized: false
+            }
         default:
             return state;
     }
+}
+
+export const logoutUser = () => {
+    localStorage.removeItem('jwtToken');
+    return {type: LOGOUT}
 }
 
 export const error = (_errorMsg) => {
@@ -43,12 +57,23 @@ export const signInUser = ([_user, _errorMsg]) => {
 
 }
 
+export const getAuthorizedUserThunk = () => async (dispatch) => {
+    let response = await initApi.getAuthorizedUser();
+    let errorMsg = "";
+    if (response.status === 200) {
+        dispatch(signInUser([getUserView(response.data), errorMsg]));
+    } else {
+        localStorage.removeItem('jwtToken');
+    }
+}
+
 export const signInUserThunk = (input) => async (dispatch) => {
     let response = await authApi.signInUser(input);
     let result, errorMsg = "";
     if (response.status === 200) {
-        result = response.data;
-        dispatch(signInUser([result, errorMsg]))
+        result = response.data.userView;
+        localStorage.setItem('jwtToken', response.data.jwtResponse.accessToken);
+        dispatch(signInUser([result, errorMsg]));
     } else {
         errorMsg = "Invalid login or password";
         result = null;
@@ -70,15 +95,8 @@ export const signUpUserThunk = (input) => async (dispatch) => {
     let result, errorMsg = "";
     if (response.status === 200) {
         // Auth user on successful registration
-        response = await authApi.signInUser(input);
-        if (response.status === 200) {
-            result = response.data;
-            dispatch(signInUser([result, errorMsg]))
-        } else {
-            errorMsg = "Unknown error occurred";
-            result = null;
-            dispatch(error(errorMsg));
-        }
+        const signInData = {email : input.email, password : input.password};
+        dispatch(signInUserThunk(signInData));
     } else {
         // TODO proper error handling
         dispatch(error("User already exists"))

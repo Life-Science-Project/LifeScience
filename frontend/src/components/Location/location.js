@@ -26,5 +26,5 @@ const Location = ({subFolders}) => {
 //     }]
 // }
 
-export default Location
+export default Location;
 
