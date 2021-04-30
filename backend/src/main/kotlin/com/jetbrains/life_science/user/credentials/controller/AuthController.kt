@@ -1,6 +1,9 @@
 package com.jetbrains.life_science.user.credentials.controller
 
 import com.jetbrains.life_science.config.jwt.JWTProvider
+import com.jetbrains.life_science.config.jwt.dto.LogOutDTO
+import com.jetbrains.life_science.config.jwt.dto.LogOutDTOToInfoAdapter
+import com.jetbrains.life_science.config.jwt.service.ForbiddenJWTService
 import com.jetbrains.life_science.user.credentials.dto.LoginDTO
 import com.jetbrains.life_science.user.credentials.dto.NewUserDTO
 import com.jetbrains.life_science.user.credentials.dto.NewUserDTOToInfoAdapter
@@ -25,6 +28,7 @@ class AuthController(
     val authenticationManager: AuthenticationManager,
     var jwtProvider: JWTProvider,
     val userCredentialsService: UserCredentialsService,
+    val forbiddenJWTService: ForbiddenJWTService,
     val userService: UserService,
     val loginJWTViewMapper: LoginJWTViewMapper
 ) {
@@ -39,6 +43,11 @@ class AuthController(
             .map { role -> SimpleGrantedAuthority(role.authority) }.toList()
         val user = userService.getByEmail(authentication.email)
         return loginJWTViewMapper.toView(jwt, authorities, user)
+    }
+
+    @PostMapping("/logout")
+    fun logout(@Validated @RequestBody dto: LogOutDTO) {
+        forbiddenJWTService.saveIfNeed(LogOutDTOToInfoAdapter(dto))
     }
 
     @PostMapping("/signup")

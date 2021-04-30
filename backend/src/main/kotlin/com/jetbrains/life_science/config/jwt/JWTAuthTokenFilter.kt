@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.config.jwt
 
+import com.jetbrains.life_science.config.jwt.service.ForbiddenJWTServiceImpl
 import com.jetbrains.life_science.user.credentials.service.UserDetailsServiceImpl
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class JWTAuthTokenFilter(
     private val tokenProvider: JWTProvider,
+    private val forbiddenJWTService: ForbiddenJWTServiceImpl,
     private val userDetailsService: UserDetailsServiceImpl
 ) : OncePerRequestFilter() {
 
@@ -26,7 +28,7 @@ class JWTAuthTokenFilter(
     ) {
         try {
             val jwt = getJwt(request)
-            if (jwt != null && tokenProvider.validateJwtToken(jwt)) {
+            if (jwt != null && !forbiddenJWTService.existsByToken(jwt) && tokenProvider.validateJwtToken(jwt)) {
                 val username = tokenProvider.getUserNameFromJwtToken(jwt)
 
                 val userDetails = userDetailsService.loadUserByUsername(username)
