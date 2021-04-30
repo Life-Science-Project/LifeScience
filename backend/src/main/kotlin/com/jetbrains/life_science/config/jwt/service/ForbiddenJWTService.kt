@@ -9,7 +9,7 @@ interface ForbiddenJWTService {
 
     fun delete(forbiddenJWT: ForbiddenJWT)
 
-    fun existsByToken(token: String) : Boolean
+    fun existsByToken(token: String): Boolean
 
     fun saveIfNeed(info: ForbiddenJWTInfo)
 

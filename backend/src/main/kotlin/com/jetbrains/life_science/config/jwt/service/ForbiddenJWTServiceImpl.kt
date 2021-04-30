@@ -28,7 +28,7 @@ class ForbiddenJWTServiceImpl(
         }
     }
 
-    override fun findAll() : List<ForbiddenJWT> {
+    override fun findAll(): List<ForbiddenJWT> {
         return forbiddenJWTRepository.findAll()
     }
 }
