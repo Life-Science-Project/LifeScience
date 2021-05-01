@@ -27,14 +27,15 @@ class CategoriesContainer extends React.Component {
 
     render() {
         return (
-            <Categories {...this.props} category={this.props.category}/>
+            <Categories {...this.props} category={this.props.category} isShowButton={this.props.isAuthorized}/>
         )
     }
 }
 
 let mapStateToProps = (state) => {
     return ({
-        category: state.categoryPage.category
+        category: state.categoryPage.category,
+        isAuthorized: state.auth.isAuthorized
     })
 }
 

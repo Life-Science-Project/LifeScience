@@ -41,13 +41,21 @@ class Categories extends React.Component {
             }
         }
 
+        const addButton = () => {
+            if (this.props.isShowButton) {
+                return(
+                    <button className="add_method_button" onClick={this.onAdd}>
+                        Add Method
+                    </button>
+                )
+            }
+        }
+
         return (
             <div>
                 <div className="buttons_container">
                     {buttonToPrevCategory()}
-                    <button className="add_method_button" onClick={this.onAdd}>
-                        Add Method
-                    </button>
+                    {addButton()}
                 </div>
                 <div className="category_name">
                     {this.props.category.name}

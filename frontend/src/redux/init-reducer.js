@@ -26,7 +26,6 @@ export const getInitData = (initData) => {
 
 export const getInitDataThunk = () => async (dispatch) => {
     dispatch(getAuthorizedUserThunk());
-    dispatch(getInitData({}));
 }
 
 export default initReducer;

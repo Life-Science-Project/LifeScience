@@ -1,6 +1,7 @@
 import {authApi} from "../api/auth-api";
 import {initApi} from "../api/init-api";
 import {getUserView} from "../utils/user-translator";
+import {getInitData} from "./init-reducer";
 
 const LOGOUT = 'logout';
 const SIGN_IN = 'signin';
@@ -65,6 +66,8 @@ export const getAuthorizedUserThunk = () => async (dispatch) => {
     } else {
         localStorage.removeItem('jwtToken');
     }
+    alert(JSON.stringify(response))
+    dispatch(getInitData({}));
 }
 
 export const signInUserThunk = (input) => async (dispatch) => {

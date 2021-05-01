@@ -8,6 +8,9 @@ import {getCategoryThunk} from "../../redux/category-reducer";
 import {connect, useDispatch, useSelector} from "react-redux";
 
 const NewArticle = (props) => {
+    if (!props.isAuthorized && props.isInitialized) {
+        props.history.push('/login');
+    }
 
     const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
         "Method advantages and disadvantages", "Troubleshooting"];
@@ -201,7 +204,9 @@ const NewArticle = (props) => {
 
 const mapStateToProps = (state) => {
     return ({
-        category: state.categoryPage.category
+        category: state.categoryPage.category,
+        isAuthorized: state.auth.isAuthorized,
+        isInitialized: state.init.isInitialized
     })
 }
 

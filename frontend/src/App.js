@@ -2,7 +2,7 @@ import './App.css';
 import React from "react";
 import Header from './components/Header/header';
 import Register from "./components/Register/register";
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
 import Login from "./components/main/Login/login";
@@ -26,16 +26,17 @@ class App extends React.Component {
             <Router>
                 <Header/>
                 <Navbar/>
-                <Route exact={true} path="/" component={Home}/>
-                <Route path="/profile" render={() => <ProfilePage />}/>
-                <Route path="/new-article/:categoryId?" component={NewArticle}/>
-                <Route path="/register" component={Register}/>
-                <Route path="/login" render={() => <Login />}/>
-                <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
-                <Route path="/notFound" render={() => <NotFound/>}/>
-                <Route path="/method/:articleId">
-                    <MethodContainer/>
-                </Route>
+                <Switch>
+                    <Route exact={true} path="/" component={Home}/>
+                    <Route path="/profile" render={() => <ProfilePage />}/>
+                    <Route path="/new-article/:categoryId?" component={NewArticle}/>
+                    <Route path="/register" render={() => <Register/>}/>
+                    <Route path="/login" render={() => <Login />}/>
+                    <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
+                    <Route path="/notFound" render={() => <NotFound/>}/>
+                    <Route path="/method/:articleId" render={() => <MethodContainer/>}/>
+                    <Route render={() => <NotFound/>}/>
+                </Switch>
             </Router>
         );
     }
