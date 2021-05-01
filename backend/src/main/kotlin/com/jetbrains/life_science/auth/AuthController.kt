@@ -6,6 +6,7 @@ import com.jetbrains.life_science.user.master.dto.NewUserDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserService
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
@@ -39,10 +40,10 @@ class AuthController(
     fun refreshToken(@Validated @RequestBody refreshDto: RefreshTokenDTO): AuthResponse {
         val username = jwtService.getUserNameFromExpiredJwtToken(refreshDto.jwt)
         val user = userService.getByEmail(username)
-        if (user.refreshToken == refreshDto.refreshToken) {
-            return authResponse(user)
+        if (user.refreshToken != refreshDto.refreshToken) {
+            throw BadCredentialsException("Invalid refresh token")
         }
-        TODO("hm")
+        return authResponse(user)
     }
 
     private fun authResponse(user: User): AuthResponse {
