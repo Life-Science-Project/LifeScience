@@ -16,6 +16,8 @@ class UserCredentials(
 
     private val password: String,
 
+    val refreshToken: String,
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",

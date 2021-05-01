@@ -20,6 +20,8 @@ class User(
 
     val password: String,
 
+    var refreshToken: String? = null,
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",

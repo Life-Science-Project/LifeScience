@@ -1,9 +1,9 @@
-package com.jetbrains.life_science.user.master.dto
+package com.jetbrains.life_science.auth
 
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
-class LoginDTO(
+class AuthDTO(
 
     @field:Email
     val email: String,

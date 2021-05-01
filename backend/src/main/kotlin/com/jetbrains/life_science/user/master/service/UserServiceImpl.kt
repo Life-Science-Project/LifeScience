@@ -39,6 +39,11 @@ class UserServiceImpl(
     }
 
     @Transactional
+    override fun updateRefreshToken(token: String, email: String) {
+        getByEmail(email).refreshToken = token
+    }
+
+    @Transactional
     override fun addFavourite(user: User, articleId: Long): User {
         val article = articleService.getById(articleId)
         if (!user.favouriteArticles.any { it.id == articleId }) {
