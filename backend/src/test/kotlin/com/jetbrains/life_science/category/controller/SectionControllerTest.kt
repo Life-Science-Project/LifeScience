@@ -21,14 +21,11 @@ import org.springframework.transaction.annotation.Transactional
 @WithUserDetails("admin")
 @Transactional
 class SectionControllerTest :
-    ControllerTest<SectionDTO, SectionView>("Section", SectionView::class.java) {
+    ControllerTest<SectionDTO, SectionView>(SectionView::class.java) {
 
     init {
         apiUrl = "/api/articles/versions/{id}/sections"
     }
-
-    @MockBean
-    lateinit var sectionRepository: SectionRepository
 
     /**
      * Test: admin wants to get all the sections of
