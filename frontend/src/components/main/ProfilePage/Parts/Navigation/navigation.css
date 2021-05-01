@@ -6,6 +6,10 @@ li {
     margin: 0.5rem;
 }
 
+.navigation_list img {
+    border-radius: 0.5rem;
+}
+
 .rout {
     color: #343a40;
 }

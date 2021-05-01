@@ -2,10 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import {NavLink} from "react-router-dom";
 import {byField} from "../../../../../utils/common";
+import "./shortMethodPreview.css";
 
 const ShortMethodPreview = (props) => {
+    const length = 2;
     const getSections = () => {
-        return props.method.version.sections.sort(byField('order')).map(x =>
+        return props.method.version.sections.slice(0, length).sort(byField('order')).map(x =>
             <li>
                 <NavLink to={"/method/" + props.method.id + "/" + x.id} className="link">
                     {x.name}

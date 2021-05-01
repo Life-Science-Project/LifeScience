@@ -27,7 +27,7 @@ class App extends React.Component {
                 <Header/>
                 <Navbar/>
                 <Route exact={true} path="/" component={Home}/>
-                <Route exact={true} path="/userPage/:userId?" render={() => <ProfilePage />}/>
+                <Route path="/profile" render={() => <ProfilePage />}/>
                 <Route path="/new-article/:categoryId?" component={NewArticle}/>
                 <Route path="/register" component={Register}/>
                 <Route path="/login" render={() => <Login />}/>

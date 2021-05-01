@@ -6,7 +6,7 @@ import {NavLink} from "react-router-dom";
 import "./navigation.css"
 
 const Navigation = () => {
-    const url = "profile";
+    const url = "/profile";
 
     return(
         <div className="navigation_container">

@@ -2,7 +2,9 @@ import React from "react";
 import "./profilePage.css";
 import Navigation from "./Parts/Navigation/navigation";
 import UserPerformance from "./Parts/User/userPerfomance";
-import {Switch} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
+import Favourites from "./Parts/Favourites/favourites";
+import DevelopingPage from "../../common/Developing/developingPage";
 
 class ProfilePage extends React.Component {
     constructor(props) {
@@ -16,8 +18,12 @@ class ProfilePage extends React.Component {
                     <Navigation/>
                 </div>
                 <div className="main_container">
-
-                    <UserPerformance/>
+                    <Switch>
+                        <Route exact={true} path="/profile" render={() => <UserPerformance/>}/>
+                        <Route exact={true} path="/profile/mail" render={() => <DevelopingPage pageName="mail"/>}/>
+                        <Route exact={true} path="/profile/friends" render={() => <DevelopingPage pageName="friends"/>}/>
+                        <Route exact={true} path="/profile/favourites" render={() => <Favourites/>}/>
+                    </Switch>
                 </div>
             </div>
         );
