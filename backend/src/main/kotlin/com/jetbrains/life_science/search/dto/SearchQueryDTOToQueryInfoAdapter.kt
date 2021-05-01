@@ -1,12 +1,15 @@
 package com.jetbrains.life_science.search.dto
 
-import com.jetbrains.life_science.search.service.SearchQueryInfo
+import com.jetbrains.life_science.search.query.SearchQueryInfo
+import com.jetbrains.life_science.search.query.SearchUnitType
 
 class SearchQueryDTOToQueryInfoAdapter(val dto: SearchQueryDTO) : SearchQueryInfo {
 
-    override val query: String by lazy { dto.query }
+    override val text: String = dto.text
 
-    override val tags: List<String> by lazy { dto.tags }
+    override val exclusionTypes: List<SearchUnitType> = dto.exclusionTypes.map { SearchUnitType.valueOf(it) }
 
-    override val exclusionTypes: List<String> by lazy { dto.exclusionTypes }
+    override val from: Int = dto.from
+
+    override val size: Int = dto.size
 }

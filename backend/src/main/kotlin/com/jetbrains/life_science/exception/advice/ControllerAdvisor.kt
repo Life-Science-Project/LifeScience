@@ -1,11 +1,9 @@
 package com.jetbrains.life_science.exception.advice
 
-import com.jetbrains.life_science.exception.*
-import com.jetbrains.life_science.exception.request.BadRequestException
-import com.jetbrains.life_science.exception.request.IllegalAccessException
-import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
-import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
+import com.jetbrains.life_science.exception.ApiErrorResponse
+import com.jetbrains.life_science.exception.ArticleNotEmptyException
 import com.jetbrains.life_science.exception.not_found.*
+import com.jetbrains.life_science.exception.request.*
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -86,6 +84,15 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleBadRequest(ex: BadRequestException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
+    }
+
+    @ExceptionHandler(SearchUnitTypeNotSupportedException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleSearchUnitTypeNotSupported(
+        ex: SearchUnitTypeNotSupportedException,
+        request: WebRequest
+    ): ApiErrorResponse {
+        return ApiErrorResponse("Search unit with type ${ex.unsupportedType} not supported")
     }
 
     private fun notFoundResponse(entity: String): ApiErrorResponse {
