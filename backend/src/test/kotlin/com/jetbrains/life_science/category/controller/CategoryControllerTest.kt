@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.category.controller
 
 import com.jetbrains.life_science.ControllerTest
+import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.category.dto.CategoryDTO
 import com.jetbrains.life_science.category.view.CategoryView
 import org.junit.jupiter.api.Assertions.*
@@ -49,7 +50,7 @@ internal class CategoryControllerTest :
             name = "child category 1",
             order = 2,
             subcategories = listOf(),
-            articles = listOf()
+            articles = listOf(ArticleView(id = 2, version = null))
         )
         assertEquals(expectedCategory, category)
     }

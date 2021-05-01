@@ -1,6 +1,11 @@
 package com.jetbrains.life_science.exception.advice
 
 import com.jetbrains.life_science.exception.*
+import com.jetbrains.life_science.exception.request.BadRequestException
+import com.jetbrains.life_science.exception.request.IllegalAccessException
+import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
+import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
+import com.jetbrains.life_science.exception.not_found.*
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -74,6 +79,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ExceptionHandler(IllegalAccessException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     fun handleIllegalAccess(ex: IllegalAccessException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
+    @ExceptionHandler(BadRequestException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleBadRequest(ex: BadRequestException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 

@@ -35,6 +35,7 @@ export const getError = (trouble, reason) => {
     return {type: reason, trouble: trouble}
 }
 
+
 export const getCategoryThunk = (id) => async (dispatch) => {
     let response = await categoryApi.getCategory(id);
     if (response.status === 404) {
