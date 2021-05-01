@@ -77,6 +77,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse("User already exists")
     }
 
+    @ExceptionHandler(UserNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleContentIsNotEditable(ex: UserNotFoundException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
     @ExceptionHandler(InternalAuthenticationServiceException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun handleUserWrongCredentials(ex: InternalAuthenticationServiceException, request: WebRequest): ApiErrorResponse {
