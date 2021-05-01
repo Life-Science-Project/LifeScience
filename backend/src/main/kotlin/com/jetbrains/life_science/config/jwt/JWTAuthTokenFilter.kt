@@ -1,24 +1,23 @@
 package com.jetbrains.life_science.config.jwt
 
-import com.jetbrains.life_science.user.credentials.service.UserDetailsServiceImpl
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import java.io.IOException
 import javax.servlet.FilterChain
-import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
 class JWTAuthTokenFilter(
     private val tokenProvider: JWTProvider,
-    private val userDetailsService: UserDetailsServiceImpl
+    private val userDetailsService: UserDetailsService
 ) : OncePerRequestFilter() {
 
-    @Throws(ServletException::class, IOException::class)
+    val bearer = "Bearer"
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -47,8 +46,8 @@ class JWTAuthTokenFilter(
     private fun getJwt(request: HttpServletRequest): String? {
         val authHeader = request.getHeader("Authorization")
 
-        return if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            authHeader.substring(7)
+        return if (authHeader != null && authHeader.startsWith(bearer)) {
+            authHeader.substring(bearer.length).trim()
         } else null
     }
 }

@@ -9,9 +9,10 @@ import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.exception.request.IllegalAccessException
-import com.jetbrains.life_science.user.credentials.entity.UserCredentials
-import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
-import com.jetbrains.life_science.user.details.entity.User
+import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.user.master.service.UserCredentialsService
+import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
@@ -23,16 +24,17 @@ import java.security.Principal
 class ArticleVersionController(
     val service: ArticleVersionService,
     val viewMapper: ArticleVersionViewMapper,
+    val userService: UserService,
     val userCredentialsService: UserCredentialsService
 ) {
 
     @GetMapping
     fun getVersions(@PathVariable articleId: Long, principal: Principal): List<ArticleVersionView> {
-        val userCredentials = userCredentialsService.getByEmail(principal.email)
-        val articleVersions = if (userCredentials.permissionsGreaterThanUser) {
+        val user = userService.getByEmail(principal.email)
+        val articleVersions = if (user.isAdminOrModerator()) {
             service.getByArticleId(articleId)
         } else {
-            service.getByArticleIdAndUser(articleId, userCredentials.user)
+            service.getByArticleIdAndUser(articleId, user)
         }
         return viewMapper.createViews(articleVersions)
     }
@@ -57,7 +59,7 @@ class ArticleVersionController(
         principal: Principal
     ): ArticleVersionView {
         checkIdEquality(articleId, dto.articleId)
-        val user = userCredentialsService.getByEmail(principal.email).user
+        val user = userService.getByEmail(principal.email)
         val createdVersion = service.createBlank(
             ArticleVersionDTOToInfoAdapter(dto, user)
         )
@@ -71,7 +73,7 @@ class ArticleVersionController(
         @Validated @RequestBody dto: ArticleVersionDTO,
         principal: Principal
     ): ArticleVersionView {
-        val user = userCredentialsService.getByEmail(principal.email).user
+        val user = userService.getByEmail(principal.email)
         validateUpdateDate(versionId, articleId, dto, user)
         val updatedVersion = service.updateById(ArticleVersionDTOToInfoAdapter(dto, user, versionId))
         return viewMapper.createView(updatedVersion)
@@ -117,7 +119,7 @@ class ArticleVersionController(
         // If trying to get published version
         if (articleVersion.state == State.PUBLISHED) return
         // If trying to get user's version
-        if (articleVersion.author.id == userCredentials.user.id) return
+        if (articleVersion.author.id == userCredentials.id) return
         // If admin or moderator wants to check version
         if (userCredentials.roles.any { it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR" }) return
         // Otherwise user do not have permission to get version

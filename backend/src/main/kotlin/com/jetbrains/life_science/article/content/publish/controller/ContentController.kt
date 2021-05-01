@@ -11,7 +11,7 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
 import com.jetbrains.life_science.exception.request.IllegalAccessException
-import com.jetbrains.life_science.user.details.service.UserService
+import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*

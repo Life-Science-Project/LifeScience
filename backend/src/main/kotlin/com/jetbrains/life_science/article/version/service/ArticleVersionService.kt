@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.article.version.service
 
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
-import com.jetbrains.life_science.user.details.entity.User
+import com.jetbrains.life_science.user.master.entity.User
 
 interface ArticleVersionService {
 

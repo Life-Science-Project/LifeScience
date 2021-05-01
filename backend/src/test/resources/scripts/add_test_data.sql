@@ -12,15 +12,10 @@ values (2, 2);
 insert into article (id, category_id)
 values (3, 1);
 
-insert into user_details (id, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
-values (1, 0, 0, 'alex1', 'ln alex', '123', '222');
-insert into user_details (id, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
-values (2, 0, 0, 'alex2', 'ln alex 2', '123', '222');
-
-insert into user_credential (id, password, username, user_id)
-values (1, 'admin', 'admin', 1);
-insert into user_credential (id, password, username, user_id)
-values (2, 'user', 'user', 2);
+insert into users (id, email, password, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
+values (1, 'admin', 'admin', 0, 0, 'alex1', 'ln alex', '123', '222');
+insert into users (id, email, password, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
+values (2, 'user', 'user', 0, 0, 'alex2', 'ln alex 2', '123', '222');
 
 insert into roles (id, name)
 values (1, 'ROLE_USER');

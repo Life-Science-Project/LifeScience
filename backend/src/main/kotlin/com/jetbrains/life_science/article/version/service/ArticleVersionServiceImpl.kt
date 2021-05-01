@@ -9,7 +9,7 @@ import com.jetbrains.life_science.article.version.repository.ArticleVersionRepos
 import com.jetbrains.life_science.article.version.search.service.ArticleVersionSearchUnitService
 import com.jetbrains.life_science.exception.not_found.ArticleVersionNotFoundException
 import com.jetbrains.life_science.exception.not_found.PublishedVersionNotFoundException
-import com.jetbrains.life_science.user.details.entity.User
+import com.jetbrains.life_science.user.master.entity.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
