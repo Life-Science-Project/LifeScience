@@ -24,9 +24,9 @@ class AuthController(
 ) {
 
     @PostMapping("/signin")
-    fun authenticateUser(@Validated @RequestBody authInfo: AuthDTO): AuthResponse {
-        authenticate(authInfo)
-        val user = userService.getByEmail(authInfo.email)
+    fun authenticateUser(@Validated @RequestBody authRequest: AuthRequest): AuthResponse {
+        authenticate(authRequest)
+        val user = userService.getByEmail(authRequest.email)
         return authResponse(user)
     }
 
@@ -37,10 +37,10 @@ class AuthController(
     }
 
     @PostMapping("/refresh")
-    fun refreshToken(@Validated @RequestBody refreshDto: RefreshTokenDTO): AuthResponse {
-        val username = jwtService.getUserNameFromExpiredJwtToken(refreshDto.jwt)
+    fun refreshToken(@Validated @RequestBody refreshRequest: AuthRefreshRequest): AuthResponse {
+        val username = jwtService.getUserNameFromExpiredJwtToken(refreshRequest.jwt)
         val user = userService.getByEmail(username)
-        if (user.refreshToken != refreshDto.refreshToken) {
+        if (user.refreshToken != refreshRequest.refreshToken) {
             throw BadCredentialsException("Invalid refresh token")
         }
         return authResponse(user)
@@ -52,7 +52,7 @@ class AuthController(
         return authResponseFactory.create(tokens, user)
     }
 
-    private fun authenticate(authInfo: AuthDTO) {
+    private fun authenticate(authInfo: AuthRequest) {
         val token = UsernamePasswordAuthenticationToken(authInfo.email, authInfo.password)
         authenticationManager.authenticate(token)
     }
