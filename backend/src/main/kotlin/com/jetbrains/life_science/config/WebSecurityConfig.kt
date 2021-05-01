@@ -2,7 +2,6 @@ package com.jetbrains.life_science.config
 
 import com.jetbrains.life_science.config.jwt.JWTAuthEntryPoint
 import com.jetbrains.life_science.config.jwt.JWTAuthTokenFilter
-import com.jetbrains.life_science.user.credentials.service.UserDetailsServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -13,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 class WebSecurityConfig(
-    var userDetailsService: UserDetailsServiceImpl,
+    var userCredentialsService: UserDetailsService,
     val unauthorizedHandler: JWTAuthEntryPoint,
     val jwtAuthTokenFilter: JWTAuthTokenFilter
 ) : WebSecurityConfigurerAdapter() {
@@ -35,7 +35,7 @@ class WebSecurityConfig(
 
     override fun configure(authenticationManagerBuilder: AuthenticationManagerBuilder) {
         authenticationManagerBuilder
-            .userDetailsService(userDetailsService)
+            .userDetailsService(userCredentialsService)
             .passwordEncoder(bCryptPasswordEncoder())
     }
 
@@ -64,6 +64,7 @@ class WebSecurityConfig(
                 "/api/articles/versions/*/reviews/**",
                 "/api/articles/*/versions/**"
             ).fullyAuthenticated()
+            .antMatchers("/api/users/current").fullyAuthenticated()
             .antMatchers(HttpMethod.GET).permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/api/search/**").permitAll()
