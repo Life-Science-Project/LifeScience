@@ -19,10 +19,13 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
+import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.patch
+import org.springframework.test.web.servlet.put
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
@@ -103,15 +106,39 @@ internal class ArticleVersionControllerTest :
     }
 
     /**
-     * An attempt was made to create a version with an invalid category ID.
+     * An attempt was made to create empty version with an invalid category ID.
      * Controller should return 404 status code.
      */
     @Test
-    fun `create version with with wrong category id`() {
+    fun `create empty version with wrong category id`() {
         val dto = ArticleVersionCreationDTO(ArticleDTO(1000), "test")
         assertNotFound(
             "Category",
             postRequest(dto, urlWithArticleId())
+        )
+    }
+
+    /**
+     * An attempt was made to create a version's copy with an invalid version ID.
+     * Controller should return 404 status code.
+     */
+    @Test
+    fun `copy version with wrong version sample id`() {
+        assertNotFound(
+            "Published version",
+            putCopyRequest(1000)
+        )
+    }
+
+    /**
+     * An attempt was made to create a version's copy with an non-published version ID.
+     * Controller should return 404 status code.
+     */
+    @Test
+    fun `copy version with non-published version sample id`() {
+        assertNotFound(
+            "Published version",
+            putCopyRequest(3)
         )
     }
 
@@ -124,10 +151,34 @@ internal class ArticleVersionControllerTest :
         val dto = ArticleVersionCreationDTO(ArticleDTO(1), "next version")
 
         // Prepare expected result
-        val expectedView = ArticleVersionView(7, "next version", 4, listOf(), State.EDITING)
+        val expectedView = ArticleVersionView(8, "next version", 4, listOf(), State.EDITING)
 
         // Action
         val result = post(dto, urlWithArticleId())
+        val created = get(8)
+
+        // Check
+        assertEquals(expectedView, result)
+        assertEquals(expectedView, created)
+    }
+
+    /**
+     * Article coping test
+     */
+    @Test
+    fun `create version's copy`() {
+        // Prepare test data
+        val publishedVersionId = 1L
+
+        // Prepare expected result
+        val expectedSectionViews = listOf(
+            SectionLazyView(6, "name 1.1", 1),
+            SectionLazyView(7, "name 1.2", 2)
+        )
+        val expectedView = ArticleVersionView(7, "master 1", 1, expectedSectionViews, State.EDITING)
+
+        // Action
+        val result = putCopy(publishedVersionId)
         val created = get(7)
 
         // Check
@@ -448,5 +499,22 @@ internal class ArticleVersionControllerTest :
 
     private fun urlWithArticleId(): String {
         return "/api/articles/versions"
+    }
+
+    private fun putCopy(id: Long): ArticleVersionView {
+        val viewJson = putCopyRequest(id)
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+            }
+            .andReturn().response.contentAsString
+        return getViewFromJson(viewJson, ArticleVersionView::class.java)
+    }
+
+    private fun putCopyRequest(id: Long): ResultActionsDsl {
+        return mockMvc.put("/api/articles/versions/{id}/copy", id) {
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+        }
     }
 }

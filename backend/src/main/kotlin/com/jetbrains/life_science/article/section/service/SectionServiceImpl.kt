@@ -49,8 +49,8 @@ class SectionServiceImpl(
 
     @Transactional
     override fun createCopiesByArticle(article: ArticleVersion, newArticle: ArticleVersion) {
-        val sections = repository.findAllByArticleVersion(article)
-        sections.forEach { section -> createCopy(section, newArticle) }
+        val sections = article.sections
+        sections.forEach { section -> newArticle.sections.add(createCopy(section, newArticle)) }
     }
 
     override fun deleteSearchUnits(oldSections: List<Section>) {
@@ -70,11 +70,11 @@ class SectionServiceImpl(
         }
     }
 
-    private fun createCopy(origin: Section, newArticle: ArticleVersion) {
+    private fun createCopy(origin: Section, newArticle: ArticleVersion): Section {
         val copy = factory.copy(origin)
         copy.articleVersion = newArticle
         contentService.createCopyBySection(origin, copy)
-        repository.save(copy)
+        return repository.save(copy)
     }
 
     override fun checkExistsById(id: Long) {

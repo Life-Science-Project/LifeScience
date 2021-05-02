@@ -36,18 +36,20 @@ class ArticleVersionServiceImpl(
     }
 
     @Transactional
-    override fun createCopy(articleId: Long) {
+    override fun createCopy(articleId: Long, user: User): ArticleVersion {
         val publishedVersion = getPublishedVersion(articleId)
-        var copy = factory.createCopy(publishedVersion)
-        copy = repository.save(copy)
+        val copy = factory.createCopy(publishedVersion)
+        copy.author = user
+        repository.save(copy)
         sectionService.createCopiesByArticle(publishedVersion, copy)
+        return copy
     }
 
     @Transactional
     override fun getPublishedVersion(articleId: Long): ArticleVersion {
         return (
             repository.findByMainArticleIdAndState(articleId, State.PUBLISHED)
-                ?: throw PublishedVersionNotFoundException("published version to article: $articleId not found")
+                ?: throw PublishedVersionNotFoundException("Published version to article: $articleId not found")
             )
     }
 

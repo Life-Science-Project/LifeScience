@@ -11,7 +11,7 @@ interface ArticleVersionService {
 
     fun archive(versionId: Long)
 
-    fun createCopy(articleId: Long)
+    fun createCopy(articleId: Long, user: User): ArticleVersion
 
     fun getPublishedVersion(articleId: Long): ArticleVersion
 

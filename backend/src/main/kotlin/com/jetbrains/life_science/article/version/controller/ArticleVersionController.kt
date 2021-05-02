@@ -40,7 +40,7 @@ class ArticleVersionController(
     }
 
     @PostMapping
-    fun createVersion(
+    fun createEmptyVersion(
         @Validated @RequestBody dto: ArticleVersionCreationDTO,
         principal: Principal
     ): ArticleVersionView {
@@ -48,6 +48,16 @@ class ArticleVersionController(
         val createdVersion = service.createBlank(
             ArticleVersionCreationDTOToInfoAdapter(dto, user)
         )
+        return viewMapper.createView(createdVersion)
+    }
+
+    @PutMapping("/{sampleVersionId}/copy")
+    fun createCopiedVersion(
+        @PathVariable sampleVersionId: Long,
+        principal: Principal
+    ): ArticleVersionView {
+        val user = userService.getByEmail(principal.email)
+        val createdVersion = service.createCopy(sampleVersionId, user)
         return viewMapper.createView(createdVersion)
     }
 
