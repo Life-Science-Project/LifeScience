@@ -12,6 +12,7 @@ class SectionViewMapper(
 ) {
     fun createView(section: Section): SectionView {
         return SectionView(
+            id = section.id,
             articleVersionId = section.articleVersion.id,
             name = section.name,
             description = section.description,
