@@ -29,7 +29,7 @@ class ArticleController(
         val articleVersions = if (user.isAdminOrModerator()) {
             articleService.getById(articleId).versions
         } else {
-            articleService.getById(articleId).versions.filter { it.author == user }
+            articleService.getById(articleId).versions.filter { it.author.id == user.id }
         }
         return articleVersionViewMapper.createViews(articleVersions)
     }
