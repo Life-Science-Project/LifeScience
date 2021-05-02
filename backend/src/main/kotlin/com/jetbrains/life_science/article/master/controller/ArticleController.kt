@@ -7,7 +7,6 @@ import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import com.jetbrains.life_science.user.master.entity.UserCredentials
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.security.access.annotation.Secured

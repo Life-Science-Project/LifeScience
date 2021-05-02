@@ -249,7 +249,7 @@ internal class ArticleMasterControllerTest :
     }
 
     private fun getAllVersions(articleId: Long): List<ArticleVersionView> {
-        val request = mockMvc.get("/api/articles/${articleId}/versions").andReturn().response.contentAsString
+        val request = mockMvc.get("/api/articles/$articleId/versions").andReturn().response.contentAsString
         return getViewsFromJson(request, ArticleVersionView::class.java)
     }
 }

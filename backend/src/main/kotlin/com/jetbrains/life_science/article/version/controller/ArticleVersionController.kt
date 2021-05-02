@@ -28,7 +28,6 @@ class ArticleVersionController(
     val userCredentialsService: UserCredentialsService
 ) {
 
-
     @GetMapping("/{versionId}")
     fun getVersion(
         @PathVariable versionId: Long,

@@ -446,7 +446,6 @@ internal class ArticleVersionControllerTest :
         Mockito.verify(contentVersionRepository, times(1)).save(lastContent)
     }
 
-
     private fun urlWithArticleId(): String {
         return "/api/articles/versions"
     }
