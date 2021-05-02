@@ -5,7 +5,7 @@ import com.jetbrains.life_science.user.master.entity.User
 
 interface ArticleVersionService {
 
-    fun createBlank(info: ArticleVersionInfo): ArticleVersion
+    fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion
 
     fun approve(versionId: Long)
 

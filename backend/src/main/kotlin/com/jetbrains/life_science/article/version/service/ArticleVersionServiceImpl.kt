@@ -28,8 +28,8 @@ class ArticleVersionServiceImpl(
     lateinit var sectionService: SectionService
 
     @Transactional
-    override fun createBlank(info: ArticleVersionInfo): ArticleVersion {
-        val article = articleService.getById(info.articleId)
+    override fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion {
+        val article = articleService.create(info.articleInfo)
         var articleVersion = factory.create(info, article)
         articleVersion = repository.save(articleVersion)
         return articleVersion

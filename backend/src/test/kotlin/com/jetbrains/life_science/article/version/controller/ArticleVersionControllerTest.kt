@@ -3,9 +3,11 @@ package com.jetbrains.life_science.article.version.controller
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
+import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.search.repository.SectionSearchUnitRepository
 import com.jetbrains.life_science.article.section.view.SectionLazyView
+import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
@@ -20,7 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
-import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.patch
 import org.springframework.transaction.annotation.Transactional
 
@@ -29,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional
 @WithUserDetails("admin")
 @Transactional
 internal class ArticleVersionControllerTest :
-    ControllerTest<ArticleVersionDTO, ArticleVersionView>(ArticleVersionView::class.java) {
+    ControllerTest<ArticleVersionCreationDTO, ArticleVersionView>(ArticleVersionView::class.java) {
 
     @MockBean
     lateinit var articleVersionSearchUnitRepository: ArticleVersionSearchUnitRepository
@@ -39,6 +40,10 @@ internal class ArticleVersionControllerTest :
 
     @MockBean
     lateinit var contentRepository: ContentRepository
+
+    init {
+        apiUrl = "/api/articles/versions"
+    }
 
     /**
      * The controller should return a view of the available version.
@@ -50,10 +55,10 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView("master 1", 1, expectedSectionViews, State.PUBLISHED)
+        val expectedView = ArticleVersionView(1, "master 1", 1, expectedSectionViews, State.PUBLISHED)
 
         // Action
-        val view = get(1, urlWithArticleId(1))
+        val view = get(1, urlWithArticleId())
 
         // Check
         assertEquals(expectedView, view)
@@ -66,7 +71,7 @@ internal class ArticleVersionControllerTest :
     @Test
     @WithAnonymousUser
     fun `get article version with anonymous user`() {
-        assertUnauthenticated(getRequest(3, urlWithArticleId(1)))
+        assertUnauthenticated(getRequest(3, urlWithArticleId()))
     }
 
     /**
@@ -76,7 +81,7 @@ internal class ArticleVersionControllerTest :
     @Test
     @WithUserDetails("user")
     fun `get article version with wrong user`() {
-        assertForbidden(getRequest(3, urlWithArticleId(1)))
+        assertForbidden(getRequest(3, urlWithArticleId()))
     }
 
     /**
@@ -85,51 +90,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `get section wrong section id`() {
-        assertNotFound("Article version", getRequest(-1, urlWithArticleId(1)))
-    }
-
-    /**
-     * Getting the versions that belong to the admin.
-     * The controller should return views of the all available versions from himself and user users.
-     */
-    @Test
-    fun `get all versions`() {
-        // Preparing expected data
-        val expectedSectionViews1 = listOf(
-            SectionLazyView(1, "name 1.1", 1),
-            SectionLazyView(2, "name 1.2", 2)
-        )
-        val expectedView1 = ArticleVersionView("master 1", 1, expectedSectionViews1, State.PUBLISHED)
-        val expectedView2 = ArticleVersionView("version 1.1", 1, listOf(), State.EDITING)
-        val expectedView3 = ArticleVersionView("version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.EDITING)
-        val expectedView4 = ArticleVersionView("version 4.1", 1, listOf(), State.EDITING)
-        val expectedView5 = ArticleVersionView("version 5.1", 1, listOf(), State.EDITING)
-        val expectedResult = listOf(expectedView1, expectedView2, expectedView3, expectedView4, expectedView5)
-
-        // Action
-        val result = getAllVersions(1)
-
-        // Check
-        assertEquals(expectedResult.toSet(), result.toSet())
-    }
-
-    /**
-     * Getting the versions that belong to the user.
-     * The controller should only return versions that belong to the user.
-     */
-    @Test
-    @WithUserDetails("user")
-    fun `get all versions with user`() {
-        // Preparing expected data
-        val expectedView1 = ArticleVersionView("version 4.1", 1, listOf(), State.EDITING)
-        val expectedView2 = ArticleVersionView("version 5.1", 1, listOf(), State.EDITING)
-        val expectedResult = listOf(expectedView1, expectedView2)
-
-        // Action
-        val result = getAllVersions(1)
-
-        // Check
-        assertEquals(expectedResult.toSet(), result.toSet())
+        assertNotFound("Article version", getRequest(-1, urlWithArticleId()))
     }
 
     /**
@@ -138,32 +99,19 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `get all versions with wrong article id`() {
-        assertNotFound("Article version", getRequest(-1, urlWithArticleId(1)))
+        assertNotFound("Article version", getRequest(-1, urlWithArticleId()))
     }
 
     /**
-     * An attempt was made to create a version with an invalid article ID.
+     * An attempt was made to create a version with an invalid category ID.
      * Controller should return 404 status code.
      */
     @Test
-    fun `create version with with wrong article id`() {
-        val dto = ArticleVersionDTO(1000, "test")
+    fun `create version with with wrong category id`() {
+        val dto = ArticleVersionCreationDTO(ArticleDTO(1000), "test")
         assertNotFound(
-            "Article",
-            postRequest(dto, urlWithArticleId(1000))
-        )
-    }
-
-    /**
-     * Test for the create case when the identifier in dto does not match the identifier from the path variable.
-     * The controller should return a 404 status code.
-     */
-    @Test
-    fun `create version with with different dto id and path variable id`() {
-        val dto = ArticleVersionDTO(1000, "test")
-        assertBadRequest(
-            "ArticleVersion's article id and request article id doesn't match",
-            postRequest(dto, urlWithArticleId(2000)),
+            "Category",
+            postRequest(dto, urlWithArticleId())
         )
     }
 
@@ -173,14 +121,14 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create version`() {
         // Prepare test data
-        val dto = ArticleVersionDTO(1, "next version")
+        val dto = ArticleVersionCreationDTO(ArticleDTO(1), "next version")
 
         // Prepare expected result
-        val expectedView = ArticleVersionView("next version", 1, listOf(), State.EDITING)
+        val expectedView = ArticleVersionView(7, "next version", 4, listOf(), State.EDITING)
 
         // Action
-        val result = post(dto, urlWithArticleId(1))
-        val created = getAllVersions(1).find { it == expectedView }
+        val result = post(dto, urlWithArticleId())
+        val created = get(7)
 
         // Check
         assertEquals(expectedView, result)
@@ -195,7 +143,7 @@ internal class ArticleVersionControllerTest :
     @WithUserDetails("user")
     fun `update version with with wrong user id`() {
         val dto = ArticleVersionDTO(1, "test")
-        assertForbidden(putRequest(1, dto, urlWithArticleId(1)))
+        assertForbidden(putRequest(1, dto, urlWithArticleId()))
     }
 
     /**
@@ -205,20 +153,7 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `update version with with wrong article id`() {
         val dto = ArticleVersionDTO(-1, "test")
-        assertNotFound("Article version", putRequest(-1, dto, urlWithArticleId(1)))
-    }
-
-    /**
-     * Test for the update case when the identifier in dto does not match the identifier from the path variable.
-     * The controller should return a 404 status code.
-     */
-    @Test
-    fun `update version with with different dto id and path variable id`() {
-        val dto = ArticleVersionDTO(2000, "test")
-        assertBadRequest(
-            "Article version id from dto does not matches with id from path variable",
-            putRequest(1, dto, urlWithArticleId(1)),
-        )
+        assertNotFound("Article version", putRequest(-1, dto, urlWithArticleId()))
     }
 
     /**
@@ -234,11 +169,11 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView("changed version", 1, expectedSectionViews, State.PUBLISHED)
+        val expectedView = ArticleVersionView(1, "changed version", 1, expectedSectionViews, State.PUBLISHED)
 
         // Action
-        val result = put(1, dto, urlWithArticleId(1))
-        val updated = getAllVersions(1).find { it.name == "changed version" }
+        val result = put(1, dto, urlWithArticleId(), ArticleVersionView::class.java)
+        val updated = get(1)
 
         // Check
         assertEquals(expectedView, result)
@@ -252,7 +187,7 @@ internal class ArticleVersionControllerTest :
     @Test
     @WithAnonymousUser
     fun `approve with anonymous user`() {
-        mockMvc.patch(urlWithArticleId(1) + "/1/approve")
+        mockMvc.patch(urlWithArticleId() + "/1/approve")
             .andExpect { status { isUnauthorized() } }
             .andReturn()
     }
@@ -264,7 +199,7 @@ internal class ArticleVersionControllerTest :
     @Test
     @WithUserDetails("user")
     fun `approve with regular user`() {
-        mockMvc.patch(urlWithArticleId(1) + "/1/approve")
+        mockMvc.patch(urlWithArticleId() + "/1/approve")
             .andExpect { status { isForbidden() } }
             .andReturn()
     }
@@ -275,7 +210,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `approve article with wrong version id`() {
-        mockMvc.patch(urlWithArticleId(1) + "/1000/approve")
+        mockMvc.patch(urlWithArticleId() + "/1000/approve")
             .andExpect { status { isNotFound() } }
             .andReturn()
     }
@@ -307,21 +242,21 @@ internal class ArticleVersionControllerTest :
 
         // Prepare test data
         val expectedToPublishVersionView =
-            ArticleVersionView("version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.PUBLISHED)
+            ArticleVersionView(3, "version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.PUBLISHED)
         val sectionLazyViews = listOf(
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val exceptedToArchiveVersionView = ArticleVersionView("master 1", 1, sectionLazyViews, State.ARCHIVED)
+        val exceptedToArchiveVersionView = ArticleVersionView(1, "master 1", 1, sectionLazyViews, State.ARCHIVED)
 
         // Action
-        mockMvc.patch(urlWithArticleId(1) + "/3/approve")
+        mockMvc.patch(urlWithArticleId() + "/3/approve")
             .andExpect { status { isOk() } }
             .andReturn()
 
         // Checks
-        val publishedVersion = get(3, urlWithArticleId(1))
-        val archivedVersion = get(1, urlWithArticleId(1))
+        val publishedVersion = get(3, urlWithArticleId())
+        val archivedVersion = get(1, urlWithArticleId())
 
         assertEquals(expectedToPublishVersionView, publishedVersion)
         assertEquals(exceptedToArchiveVersionView, archivedVersion)
@@ -366,13 +301,13 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView("master 1", 1, expectedMainSectionViews, State.PUBLISHED)
+        val expectedView = ArticleVersionView(1, "master 1", 1, expectedMainSectionViews, State.PUBLISHED)
 
         // Action
-        mockMvc.patch(urlWithArticleId(1) + "/1/approve")
+        mockMvc.patch(urlWithArticleId() + "/1/approve")
             .andExpect { status { isOk() } }
             .andReturn()
-        val mainVersionView = get(1, urlWithArticleId(1))
+        val mainVersionView = get(1, urlWithArticleId())
 
         // Check
         assertEquals(expectedView, mainVersionView)
@@ -388,15 +323,15 @@ internal class ArticleVersionControllerTest :
 
         // Prepare test data
         val expectedToPublishVersionView =
-            ArticleVersionView("version 5.1", 2, listOf(SectionLazyView(5, "name 3", 1)), State.PUBLISHED)
+            ArticleVersionView(6, "version 5.1", 2, listOf(SectionLazyView(5, "name 3", 1)), State.PUBLISHED)
 
         // Action
-        mockMvc.patch(urlWithArticleId(2) + "/6/approve")
+        mockMvc.patch(urlWithArticleId() + "/6/approve")
             .andExpect { status { isOk() } }
             .andReturn()
 
         // Checks
-        val publishedVersion = get(6, urlWithArticleId(2))
+        val publishedVersion = get(6, urlWithArticleId())
 
         assertEquals(expectedToPublishVersionView, publishedVersion)
         // Saving new version search units
@@ -416,7 +351,7 @@ internal class ArticleVersionControllerTest :
     @Test
     @WithAnonymousUser
     fun `archive with anonymous user`() {
-        mockMvc.patch(urlWithArticleId(1) + "/1/archive")
+        mockMvc.patch(urlWithArticleId() + "/1/archive")
             .andExpect { status { isUnauthorized() } }
             .andReturn()
     }
@@ -428,7 +363,7 @@ internal class ArticleVersionControllerTest :
     @Test
     @WithUserDetails("user")
     fun `archive with regular user`() {
-        mockMvc.patch(urlWithArticleId(1) + "/1/archive")
+        mockMvc.patch(urlWithArticleId() + "/1/archive")
             .andExpect { status { isForbidden() } }
             .andReturn()
     }
@@ -439,7 +374,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `archive article with wrong version id`() {
-        mockMvc.patch(urlWithArticleId(1) + "/1000/archive")
+        mockMvc.patch(urlWithArticleId() + "/1000/archive")
             .andExpect { status { isNotFound() } }
             .andReturn()
     }
@@ -451,15 +386,15 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `archive not published article`() {
         // Prepare expected data
-        val exceptedToArchiveVersionView = ArticleVersionView("version 1.1", 1, listOf(), State.ARCHIVED)
+        val exceptedToArchiveVersionView = ArticleVersionView(2, "version 1.1", 1, listOf(), State.ARCHIVED)
 
         // Action
-        mockMvc.patch(urlWithArticleId(1) + "/2/archive")
+        mockMvc.patch(urlWithArticleId() + "/2/archive")
             .andExpect { status { isOk() } }
             .andReturn()
 
         // Check query
-        val archivedVersion = get(2, urlWithArticleId(1))
+        val archivedVersion = get(2, urlWithArticleId())
 
         // Check
         assertEquals(exceptedToArchiveVersionView, archivedVersion)
@@ -487,15 +422,15 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val exceptedToArchiveVersionView = ArticleVersionView("master 1", 1, sectionLazyViews, State.ARCHIVED)
+        val exceptedToArchiveVersionView = ArticleVersionView(1, "master 1", 1, sectionLazyViews, State.ARCHIVED)
 
         // Action
-        mockMvc.patch(urlWithArticleId(1) + "/1/archive")
+        mockMvc.patch(urlWithArticleId() + "/1/archive")
             .andExpect { status { isOk() } }
             .andReturn()
 
         // Check query
-        val archivedVersion = get(1, urlWithArticleId(1))
+        val archivedVersion = get(1, urlWithArticleId())
 
         // Check
         assertEquals(exceptedToArchiveVersionView, archivedVersion)
@@ -511,12 +446,8 @@ internal class ArticleVersionControllerTest :
         Mockito.verify(contentVersionRepository, times(1)).save(lastContent)
     }
 
-    private fun getAllVersions(articleId: Int): List<ArticleVersionView> {
-        val request = mockMvc.get(urlWithArticleId(articleId)).andReturn().response.contentAsString
-        return getViewsFromJson(request)
-    }
 
-    private fun urlWithArticleId(articleId: Int): String {
-        return "/api/articles/$articleId/versions"
+    private fun urlWithArticleId(): String {
+        return "/api/articles/versions"
     }
 }

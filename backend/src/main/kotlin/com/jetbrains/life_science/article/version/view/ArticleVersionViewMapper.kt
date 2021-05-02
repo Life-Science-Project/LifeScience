@@ -13,6 +13,7 @@ class ArticleVersionViewMapper(val sectionLazyMapper: SectionLazyViewMapper) {
 
     fun createView(articleVersion: ArticleVersion): ArticleVersionView {
         return ArticleVersionView(
+            id = articleVersion.id,
             name = articleVersion.name,
             articleId = articleVersion.mainArticle.id,
             sections = sectionLazyMapper.createViews(

@@ -62,7 +62,7 @@ class WebSecurityConfig(
             .authorizeRequests()
             .antMatchers(
                 "/api/articles/versions/*/reviews/**",
-                "/api/articles/*/versions/**"
+                "/api/articles/versions/**"
             ).fullyAuthenticated()
             .antMatchers("/api/users/current").fullyAuthenticated()
             .antMatchers(HttpMethod.GET).permitAll()

@@ -9,9 +9,7 @@ class ArticleVersionDTOToInfoAdapter(
     override val id: Long = 0
 ) : ArticleVersionInfo {
 
-    override val articleId: Long
-        get() = dto.articleId
+    override val articleId = dto.articleId
 
-    override val name: String
-        get() = dto.name
+    override val name = dto.name
 }
