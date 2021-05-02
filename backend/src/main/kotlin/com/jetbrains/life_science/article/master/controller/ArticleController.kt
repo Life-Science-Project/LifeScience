@@ -5,6 +5,10 @@ import com.jetbrains.life_science.article.master.dto.ArticleDTOToInfoAdapter
 import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
+import com.jetbrains.life_science.article.version.view.ArticleVersionView
+import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
+import com.jetbrains.life_science.user.master.service.UserService
+import com.jetbrains.life_science.util.email
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -14,8 +18,21 @@ import java.security.Principal
 @RequestMapping("/api/articles")
 class ArticleController(
     val articleService: ArticleService,
+    val userService: UserService,
+    val articleVersionViewMapper: ArticleVersionViewMapper,
     val mapper: ArticleViewMapper
 ) {
+
+    @GetMapping("/{articleId}/versions")
+    fun getVersions(@PathVariable articleId: Long, principal: Principal): List<ArticleVersionView> {
+        val user = userService.getByEmail(principal.email)
+        val articleVersions = if (user.isAdminOrModerator()) {
+            articleService.getById(articleId).versions
+        } else {
+            articleService.getById(articleId).versions.filter { it.author.id == user.id }
+        }
+        return articleVersionViewMapper.createViews(articleVersions)
+    }
 
     @GetMapping("/{articleId}")
     fun getArticle(@PathVariable articleId: Long): ArticleView {

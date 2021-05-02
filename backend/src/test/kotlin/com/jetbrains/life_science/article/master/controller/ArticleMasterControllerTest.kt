@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.master
+package com.jetbrains.life_science.article.master.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
@@ -15,6 +15,7 @@ import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.ResultActionsDsl
+import org.springframework.test.web.servlet.get
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
@@ -29,6 +30,51 @@ internal class ArticleMasterControllerTest :
     }
 
     /**
+     * Getting the versions that belong to the user.
+     * The controller should only return versions that belong to the user.
+     */
+    @Test
+    @WithUserDetails("user")
+    fun `get all versions with user`() {
+        // Preparing expected data
+        val expectedView1 = ArticleVersionView(4, "version 4.1", 1, listOf(), State.EDITING)
+        val expectedView2 = ArticleVersionView(5, "version 5.1", 1, listOf(), State.EDITING)
+        val expectedResult = listOf(expectedView1, expectedView2)
+
+        // Action
+        val result = getAllVersions(1)
+
+        // Check
+        assertEquals(expectedResult.toSet(), result.toSet())
+    }
+
+    /**
+     * Getting the versions that belong to the admin.
+     * The controller should return views of the all available versions from himself and user users.
+     */
+    @Test
+    fun `get all versions`() {
+        // Preparing expected data
+        val expectedSectionViews1 = listOf(
+            SectionLazyView(1, "name 1.1", 1),
+            SectionLazyView(2, "name 1.2", 2)
+        )
+        val expectedView1 = ArticleVersionView(1, "master 1", 1, expectedSectionViews1, State.PUBLISHED)
+        val expectedView2 = ArticleVersionView(2, "version 1.1", 1, listOf(), State.EDITING)
+        val expectedView3 =
+            ArticleVersionView(3, "version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.EDITING)
+        val expectedView4 = ArticleVersionView(4, "version 4.1", 1, listOf(), State.EDITING)
+        val expectedView5 = ArticleVersionView(5, "version 5.1", 1, listOf(), State.EDITING)
+        val expectedResult = listOf(expectedView1, expectedView2, expectedView3, expectedView4, expectedView5)
+
+        // Action
+        val result = getAllVersions(1)
+
+        // Check
+        assertEquals(expectedResult.toSet(), result.toSet())
+    }
+
+    /**
      * Should get expected article
      */
     @Test
@@ -37,6 +83,7 @@ internal class ArticleMasterControllerTest :
         val exceptedArticle = ArticleView(
             id = 1,
             version = ArticleVersionView(
+                id = 1,
                 name = "master 1",
                 articleId = 1,
                 sections = listOf(
@@ -199,5 +246,10 @@ internal class ArticleMasterControllerTest :
             content { contentType(MediaType.APPLICATION_JSON) }
             jsonPath("$.message") { value("Article not empty") }
         }
+    }
+
+    private fun getAllVersions(articleId: Long): List<ArticleVersionView> {
+        val request = mockMvc.get("/api/articles/$articleId/versions").andReturn().response.contentAsString
+        return getViewsFromJson(request, ArticleVersionView::class.java)
     }
 }

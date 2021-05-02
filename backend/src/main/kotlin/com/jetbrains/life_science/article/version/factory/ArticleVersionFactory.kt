@@ -3,13 +3,14 @@ package com.jetbrains.life_science.article.version.factory
 import com.jetbrains.life_science.article.master.entity.Article
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State
+import com.jetbrains.life_science.article.version.service.ArticleVersionCreationInfo
 import com.jetbrains.life_science.article.version.service.ArticleVersionInfo
 import org.springframework.stereotype.Component
 
 @Component
 class ArticleVersionFactory {
 
-    fun create(info: ArticleVersionInfo, article: Article): ArticleVersion {
+    fun create(info: ArticleVersionCreationInfo, article: Article): ArticleVersion {
         return ArticleVersion(
             id = info.id,
             name = info.name,
