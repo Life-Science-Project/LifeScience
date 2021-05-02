@@ -1,6 +1,6 @@
 import React from "react";
 import {useForm} from 'react-hook-form';
-import '../../Register/register.css';
+import '../Register/register.css';
 import {Redirect, withRouter} from "react-router";
 import '../../../constants.js';
 import {connect} from "react-redux";
@@ -27,7 +27,7 @@ const Login = ({signInUserThunk, isAuthorized, errorMsg}) => {
                            className={"auth__form_field"}/>
                     {validatePassword(errors)}
                     {!errorMsg.isEmpty && <span>{errorMsg}</span>}
-                    <input type="submit" className={"auth__form_submit btn btn-success btn-lg"}/>
+                    <input type="submit" value="Sign In" className={"auth__form_submit btn btn-success btn-lg"}/>
                 </form>
             </div>
         );

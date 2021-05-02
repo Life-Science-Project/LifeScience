@@ -50,16 +50,34 @@ export const getUsersThunk = (id) => async (dispatch) => {
     let response = await usersApi.getUser(id);
     if (response.status !== 200) {
         dispatch(getError(response.data, ERROR))
+    } else {
+        dispatch(getUser(response.data));
     }
-    dispatch(getUser(response.data));
 };
 
 export const getUserFavouritesThunk = (id) => async (dispatch) => {
     let response = await usersApi.getUserFavorites(id);
-    if (response.status === 200) {
+    if (response.status !== 200) {
+        dispatch(getError(response.data, ERROR))
+    } else {
+        dispatch(getUserFavourites(response.data));
+    }
+};
+
+export const putUserDataThunk = (id, data) => async (dispatch) => {
+    let response = await usersApi.putToUserData(id, data);
+    if (response.status !== 200) {
         dispatch(getError(response.data, ERROR))
     }
-    dispatch(getUserFavourites(response.data));
-};
+}
+
+export const putToUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
+    let response = await usersApi.putToUserFavorites(userId, articleId);
+    if (response.status !== 200) {
+        dispatch(getError(response.data, ERROR))
+    } else {
+        dispatch(getUser(response.data));
+    }
+}
 
 export default usersReducer;

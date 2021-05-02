@@ -5,6 +5,7 @@ import UserPerformance from "./Parts/User/userPerfomance";
 import {Route, Switch} from "react-router-dom";
 import Favourites from "./Parts/Favourites/favourites";
 import DevelopingPage from "../../common/Developing/developingPage";
+import PropTypes from "prop-types";
 
 class ProfilePage extends React.Component {
     constructor(props) {
@@ -19,15 +20,21 @@ class ProfilePage extends React.Component {
                 </div>
                 <div className="main_container">
                     <Switch>
-                        <Route exact={true} path="/profile" render={() => <UserPerformance/>}/>
+                        <Route exact={true} path="/profile" render={() => <UserPerformance curUser={this.props.userData}/>}/>
                         <Route exact={true} path="/profile/mail" render={() => <DevelopingPage pageName="mail"/>}/>
                         <Route exact={true} path="/profile/friends" render={() => <DevelopingPage pageName="friends"/>}/>
-                        <Route exact={true} path="/profile/favourites" render={() => <Favourites/>}/>
+                        <Route exact={true} path="/profile/favourites" render={() => <Favourites {...this.props} />}/>
                     </Switch>
                 </div>
             </div>
         );
     }
+}
+
+ProfilePage.propsType = {
+    userData: PropTypes.exact({
+        userId: PropTypes.number.isRequired
+    })
 }
 
 export default ProfilePage;

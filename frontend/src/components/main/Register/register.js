@@ -2,9 +2,9 @@ import React from "react";
 import {useForm} from 'react-hook-form';
 import './register.css';
 import {Redirect, withRouter} from "react-router";
-import {signUpUserThunk} from "../../redux/auth-reducer";
+import {signUpUserThunk} from "../../../redux/auth-reducer";
 import {connect} from "react-redux";
-import {validateEmail, validateFirstName, validateLastName, validatePassword} from "../../utils/validators"
+import {validateEmail, validateFirstName, validateLastName, validatePassword} from "../../../utils/validators"
 
 const Register = ({signUpUserThunk, isAuthorized, errorMsg}) => {
     const {register, handleSubmit, errors} = useForm();

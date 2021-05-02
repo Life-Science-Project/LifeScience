@@ -10,7 +10,6 @@ class CategoriesContainer extends React.Component {
     }
 
     componentDidMount() {
-
         this.refreshCategories()
     }
 

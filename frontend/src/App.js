@@ -1,7 +1,7 @@
 import './App.css';
 import React from "react";
 import Header from './components/Header/header';
-import Register from "./components/Register/register";
+import Register from "./components/main/Register/register";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
