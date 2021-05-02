@@ -41,12 +41,16 @@ class SearchServiceImpl(
     }
 
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
-        val searchRequest = SearchRequest()
+        val queryBuilder = QueryBuilders.boolQuery()
+            .must(QueryBuilders.regexpQuery("text", ".*${query.text}.*"))
+            .mustNot(QueryBuilders.multiMatchQuery("_class", *query.exclusionTypes))
+
         val searchBuilder = SearchSourceBuilder()
-        searchBuilder
-            .query(QueryBuilders.matchQuery("text", query.text))
+            .query(queryBuilder)
             .from(query.from)
             .size(query.size)
+
+        val searchRequest = SearchRequest()
         searchRequest.source(searchBuilder)
         return searchRequest
     }

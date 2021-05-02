@@ -4,11 +4,11 @@ import javax.validation.constraints.Max
 import javax.validation.constraints.Positive
 import javax.validation.constraints.PositiveOrZero
 
-data class SearchQueryDTO(
+class SearchQueryDTO(
 
     val text: String,
 
-    val exclusionTypes: List<String> = emptyList(),
+    val exclusionTypes: Array<String> = emptyArray(),
 
     @Max(100)
     @Positive

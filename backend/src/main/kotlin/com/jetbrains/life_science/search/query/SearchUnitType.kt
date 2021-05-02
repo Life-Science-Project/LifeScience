@@ -2,16 +2,23 @@ package com.jetbrains.life_science.search.query
 
 enum class SearchUnitType {
 
-    ARTICLE,
+    ARTICLE {
+        override val presentationName = "Article"
+    },
 
-    SECTION,
+    SECTION {
+        override val presentationName = "Section"
+    },
 
-    CONTENT;
+    CONTENT {
+        override val presentationName = "Content"
+    };
 
-    companion object{
+    abstract val presentationName: String;
 
-        private val types = values().map { it.name }.toSet()
+    companion object {
 
+        val types = values().map { it.presentationName }.toSet()
 
     }
 

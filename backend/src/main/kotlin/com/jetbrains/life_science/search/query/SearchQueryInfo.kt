@@ -4,9 +4,10 @@ interface SearchQueryInfo {
 
     val text: String
 
-    val exclusionTypes: List<SearchUnitType>
+    val exclusionTypes: Array<String>
 
     val from: Int
 
     val size: Int
+
 }
