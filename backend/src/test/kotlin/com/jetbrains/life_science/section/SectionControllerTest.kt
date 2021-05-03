@@ -5,6 +5,8 @@ import com.jetbrains.life_science.article.content.publish.repository.ContentRepo
 import com.jetbrains.life_science.article.section.dto.SectionDTO
 import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.category.dto.CategoryDTO
+import com.jetbrains.life_science.category.view.CategoryView
+import com.nhaarman.mockitokotlin2.description
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -55,15 +57,15 @@ class SectionControllerTest :
 
     /**
      * Try to get all the sections of non-existing ArticleVersions.
-     * Should get status code 404
+     * Should get status code 404.
      */
     @Test
     internal fun `get all sections of non-existing article`() {
-        assertNotFound("ArticleVersion", getAllRequest(239))
+        assertNotFound("Article version", getAllRequest(239))
     }
 
     /**
-     * Should get expected section
+     * Should get expected section.
      */
     @Test
     internal fun `get section`() {
@@ -81,8 +83,8 @@ class SectionControllerTest :
     }
 
     /**
-     * Get non-existing section of non-empty ArticleVersion
-     * Should get status code 404
+     * Get non-existing section of non-empty ArticleVersion.
+     * Should get status code 404.
      */
     @Test
     internal fun `get non-existing section`() {
@@ -90,11 +92,84 @@ class SectionControllerTest :
     }
 
     /**
-     * Should create new section
+     * Should create new section.
      */
     @Test
     internal fun `create section`() {
-        createSection(dto)
+        createSection(1)
+    }
+
+    /**
+     * Should get status code 404, because articleVersion doesn't exist.
+     */
+    @Test
+    internal fun `create section with non-existent parent`() {
+        val sectionDTO = SectionDTO(
+            "test_name", 239, "test_description", ArrayList(),
+            5, true
+        )
+        assertNotFound("Article version", postRequest(239, sectionDTO))
+    }
+
+    /**
+     * Updates existing-section.
+     */
+    @Test
+    internal fun `update existing section`() {
+        val updateSectionDTO = SectionDTO(
+            "update_name", 1, "update_description",
+            ArrayList(), 5, true
+        )
+        updateSection(1, 3, updateSectionDTO)
+    }
+
+    /**
+     * Should get status code 404, because articleVersion doesn't exist.
+     */
+    @Test
+    internal fun `update section of non-existing articleVersion`() {
+        val updateSectionDTO = SectionDTO(
+            "update_name", 239, "update_description",
+            ArrayList(), 5, true
+        )
+        assertNotFound("Article version", putRequest(239, 1, updateSectionDTO))
+    }
+
+    /**
+     * Should get status code 404, because the section doesn't exist.
+     */
+    @Test
+    internal fun `update non-existing section`() {
+        val updateSectionDTO = SectionDTO(
+            "update_name", 1, "update_description",
+            ArrayList(), 5, true
+        )
+        assertNotFound("Section", putRequest(1, 239, updateSectionDTO))
+    }
+
+    /**
+     * Delete existing section.
+     */
+    @Test
+    internal fun `delete existing section`() {
+        delete(1, 2)
+        assertNotFound("Section", getRequest(1, 2))
+    }
+
+    /**
+     * Should get 404, because section doesn't exist.
+     */
+    @Test
+    internal fun `delete non-existing section`() {
+        assertNotFound("Section", deleteRequest(1, 239))
+    }
+
+    /**
+     * Should get 404, because articleVersion doesn't exist.
+     */
+    @Test
+    internal fun `delete section of non-existing articleVersion`() {
+        assertNotFound("Article version", deleteRequest(1, 239))
     }
 
     /**
@@ -154,28 +229,55 @@ class SectionControllerTest :
         return mockMvc.get("$apiUrl/{sectionId}", articleId, sectionID)
     }
 
-    private fun putRequest(articleId: Long, sectionId: Long): ResultActionsDsl {
+    protected fun put(articleId: Long, sectionId: Long, dto: SectionDTO, url: String = apiUrl): SectionView {
+        val viewJson = putRequest(articleId, sectionId, dto)
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+            }
+            .andReturn().response.contentAsString
+        return getViewFromJson(viewJson, SectionView::class.java)
+    }
+
+    private fun putRequest(articleId: Long, sectionId: Long, sectionDTO: SectionDTO = dto): ResultActionsDsl {
         return mockMvc.put("$apiUrl/{sectionId}", articleId, sectionId) {
             contentType = MediaType.APPLICATION_JSON
-            content = jsonMapper.writeValueAsString(dto)
+            content = jsonMapper.writeValueAsString(sectionDTO)
             accept = MediaType.APPLICATION_JSON
         }
     }
 
-    private fun postRequest(articleId: Long): ResultActionsDsl {
+    private fun post(articleId: Long, sectionDTO: SectionDTO = dto): SectionView {
+        val viewJson = postRequest(articleId, sectionDTO)
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+            }
+            .andReturn().response.contentAsString
+        return getViewFromJson(viewJson)
+    }
+
+    private fun postRequest(articleId: Long, sectionDTO: SectionDTO = dto): ResultActionsDsl {
         return mockMvc.post(apiUrl, articleId) {
             contentType = MediaType.APPLICATION_JSON
-            content = jsonMapper.writeValueAsString(dto)
+            content = jsonMapper.writeValueAsString(sectionDTO)
             accept = MediaType.APPLICATION_JSON
         }
+    }
+
+    private fun delete(articleId: Long, sectionId: Long) {
+        deleteRequest(articleId, sectionId)
+            .andExpect {
+                status { isOk() }
+            }
     }
 
     private fun deleteRequest(articleId: Long, sectionId: Long): ResultActionsDsl {
         return mockMvc.delete("$apiUrl/{sectionId}", articleId, sectionId)
     }
 
-    private fun createSection(dto: SectionDTO) {
-        val responseSection = post(dto)
+    private fun createSection(id: Long) {
+        val responseSection = post(id)
         assertNotNull(responseSection.id)
         val savedSection = get(responseSection.articleVersionId, responseSection.id)
         val expectedSection = SectionView(
@@ -183,5 +285,22 @@ class SectionControllerTest :
             null, dto.order, dto.visible
         )
         assertEquals(expectedSection, savedSection)
+    }
+
+    private fun updateSection(articleId: Long, sectionId: Long, sectionDTO: SectionDTO) {
+        val oldSection = get(articleId, sectionId)
+        val responseSection = put(articleId, sectionId, sectionDTO)
+        assertEquals(sectionId, responseSection.id)
+        val updatedSection = get(articleId, responseSection.id)
+        val expectedSection = SectionView(
+            id = oldSection.id,
+            articleVersionId = sectionDTO.articleVersionId,
+            name = sectionDTO.name,
+            description = sectionDTO.description,
+            order = sectionDTO.order,
+            contents = null,
+            visible = sectionDTO.visible
+        )
+        assertEquals(expectedSection, updatedSection)
     }
 }
