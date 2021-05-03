@@ -1,9 +1,10 @@
 package com.jetbrains.life_science.user.master.factory
 
-import com.jetbrains.life_science.user.master.service.NewUserInfo
 import com.jetbrains.life_science.user.master.entity.Role
-import com.jetbrains.life_science.user.master.service.AddDetailsInfo
 import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.master.service.AddDetailsInfo
+import com.jetbrains.life_science.user.master.service.NewUserInfo
+import com.jetbrains.life_science.user.organisation.entity.Organisation
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 
@@ -25,13 +26,13 @@ class UserFactory(val encoder: PasswordEncoder) {
         )
     }
 
-    fun setParams(addInfo: AddDetailsInfo): User {
+    fun setParams(addInfo: AddDetailsInfo, organisations: List<Organisation>): User {
         val user = addInfo.user
         user.academicDegree = addInfo.academicDegree
         user.doctorDegree = addInfo.doctorDegree
         user.orcid = addInfo.orcid
         user.researchId = addInfo.researchId
-        user.organisations = addInfo.organisations
+        user.organisations = organisations.toMutableList()
         return user
     }
 }

@@ -10,7 +10,7 @@ class AddDetailsDTO(
 
     val academicDegree: AcademicDegree,
 
-    val organisations: MutableList<Organisation>,
+    val organisations: MutableList<String>,
 
     val orcid: String?,
 

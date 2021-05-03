@@ -8,6 +8,7 @@ import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.factory.UserFactory
 import com.jetbrains.life_science.user.master.repository.RoleRepository
 import com.jetbrains.life_science.user.master.repository.UserRepository
+import com.jetbrains.life_science.user.organisation.service.OrganisationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,7 +17,8 @@ class UserServiceImpl(
     val userFactory: UserFactory,
     val userRepository: UserRepository,
     val roleRepository: RoleRepository,
-    val articleService: ArticleService
+    val articleService: ArticleService,
+    val organisationService: OrganisationService
 ) : UserService {
 
     override fun getByEmail(email: String): User {
@@ -66,7 +68,10 @@ class UserServiceImpl(
 
     @Transactional
     override fun update(info: AddDetailsInfo): User {
-        return userFactory.setParams(info)
+        val organisations = info.organisations.map {
+            organisationService.getByName(it) ?: organisationService.create(it)
+        }
+        return userFactory.setParams(info, organisations)
     }
 
     fun checkUserNotExists(email: String) {

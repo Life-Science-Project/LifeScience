@@ -17,7 +17,7 @@ class AddDetailsDTOToInfoAdapter(
     override val academicDegree: AcademicDegree
         get() = dto.academicDegree
 
-    override val organisations: MutableList<Organisation>
+    override val organisations: MutableList<String>
         get() = dto.organisations
 
     override val orcid: String?
