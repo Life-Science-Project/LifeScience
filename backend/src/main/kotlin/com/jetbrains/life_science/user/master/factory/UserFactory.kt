@@ -26,8 +26,7 @@ class UserFactory(val encoder: PasswordEncoder) {
         )
     }
 
-    fun setParams(addInfo: AddDetailsInfo, organisations: List<Organisation>): User {
-        val user = addInfo.user
+    fun setParams(addInfo: AddDetailsInfo, organisations: List<Organisation>, user: User): User {
         user.academicDegree = addInfo.academicDegree
         user.doctorDegree = addInfo.doctorDegree
         user.orcid = addInfo.orcid

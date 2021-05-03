@@ -186,6 +186,9 @@ internal class CategoryControllerTest :
         assertNotFound("Category", putRequest(1, categoryDto))
     }
 
+    /**
+     * Should delete existing user
+     */
     @Test
     internal fun `delete existing category`() {
         delete(3)
@@ -196,7 +199,6 @@ internal class CategoryControllerTest :
      * Should get 400, because deleting non-empty categories is prohibited
      */
     @Test
-    @Transactional
     internal fun `delete category with children`() {
         assertNotEmpty(deleteRequest(1))
     }
