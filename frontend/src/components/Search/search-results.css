@@ -1,0 +1,15 @@
+.search-results__main {
+    margin-top: 3rem;
+    margin-left: 5rem;
+}
+
+.search-results__result {
+    margin-top: 1rem;
+    text-decoration: underline;
+}
+
+.search-results__result-list {
+    list-style-type: none;
+}
+
+

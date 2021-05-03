@@ -6,6 +6,7 @@ import methodReducer from "./method-reducer";
 import sectionReducer from "./section-reducer";
 import usersReducer from "./users-reducer";
 import initReducer from "./init-reducer";
+import searchReducer from "./search-reducer";
 
 let rootReducer = combineReducers({
     categoryPage: categoryReducer,
@@ -13,7 +14,8 @@ let rootReducer = combineReducers({
     auth: authReducer,
     method: methodReducer,
     section: sectionReducer,
-    init: initReducer
+    init: initReducer,
+    search: searchReducer,
 });
 
 //Вносим свои reducers в rootReducer
