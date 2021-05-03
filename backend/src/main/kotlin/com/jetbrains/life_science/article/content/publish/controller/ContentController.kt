@@ -10,7 +10,7 @@ import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
-import com.jetbrains.life_science.exception.request.IllegalAccessException
+import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.validation.annotation.Validated
@@ -90,7 +90,7 @@ class ContentController(
         val user = userService.getByEmail(principal.email)
         val sectionOwner = section.articleVersion.author
         if (user.id != sectionOwner.id) {
-            throw IllegalAccessException("Section $sectionId not belongs to user ${principal.email}")
+            throw AccessDeniedException("Section $sectionId not belongs to user ${principal.email}")
         }
         if (section.articleVersion.state != State.EDITING) {
             throw ContentIsNotEditableException("Content is not editable")
