@@ -12,6 +12,7 @@ class SectionViewMapper(
 ) {
     fun createView(section: Section): SectionView {
         return SectionView(
+            id = section.id,
             name = section.name,
             description = section.description,
             contents = contentService.findBySectionId(section.id)?.let { contentViewMapper.createView(it) },
