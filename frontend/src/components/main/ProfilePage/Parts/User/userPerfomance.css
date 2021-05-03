@@ -1,5 +1,8 @@
-.user_container {
+.user {
     margin: 1rem;
+}
+
+.user_container {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -18,4 +21,9 @@
 
 .user_container .user_photo img {
     border-radius: 0.5rem;
+}
+
+.edit_link {
+    margin-right: 2rem;
+    float: right;
 }

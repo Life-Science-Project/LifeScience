@@ -5,10 +5,6 @@ import Preloader from "../../../../common/Preloader/preloader";
 import ShortMethodPreview from "./shortMethodPreview";
 
 class Favourites extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     refresh() {
         this.props.getUserFavouritesThunk(this.props.user.id);
     }

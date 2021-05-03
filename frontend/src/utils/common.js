@@ -36,3 +36,13 @@ export const containsByField = (data, field, fieldId) => {
     }
     return false;
 }
+
+export const getUserWrap = (user) => {
+    return {
+        doctorDegree: user.doctorDegree,
+        academicDegree: user.academicDegree,
+        organisations: user.organisations,
+        orcid: user.orcid,
+        researchId: user.researchId
+    }
+}

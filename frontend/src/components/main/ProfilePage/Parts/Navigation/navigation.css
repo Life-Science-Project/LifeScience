@@ -1,9 +1,10 @@
 .navigation_list {
     list-style-type: none;
     width: 15vw;
+    text-align: center;
 }
 li {
-    margin: 0.5rem;
+    margin: 1rem;
 }
 
 .navigation_list img {

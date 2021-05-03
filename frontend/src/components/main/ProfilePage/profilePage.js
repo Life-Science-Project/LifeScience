@@ -6,12 +6,10 @@ import {Route, Switch} from "react-router-dom";
 import Favourites from "./Parts/Favourites/favourites";
 import DevelopingPage from "../../common/Developing/developingPage";
 import PropTypes from "prop-types";
+import EditUserData from "./Parts/User/EditUserData/editUserData";
+import NotFound from "../../common/NotFound/notFound";
 
 class ProfilePage extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return(
             <div className="profile_container">
@@ -23,7 +21,9 @@ class ProfilePage extends React.Component {
                         <Route exact={true} path="/profile" render={() => <UserPerformance curUser={this.props.userData}/>}/>
                         <Route exact={true} path="/profile/mail" render={() => <DevelopingPage pageName="mail"/>}/>
                         <Route exact={true} path="/profile/friends" render={() => <DevelopingPage pageName="friends"/>}/>
-                        <Route exact={true} path="/profile/favourites" render={() => <Favourites {...this.props} />}/>
+                        <Route exact={true} path="/profile/favourites" render={() => <Favourites/>}/>
+                        <Route exact={true} path="/profile/edit" render={() => <EditUserData/>}/>
+                        <Route render={() => <NotFound />}/>
                     </Switch>
                 </div>
             </div>

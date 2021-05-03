@@ -64,7 +64,7 @@ class Categories extends React.Component {
                     {this.props.category.subcategories.sort(byField('order')).map(category => <Category category={category}/>)}
                 </div>
                 <div className="articles_container">
-                    {this.props.category.articles.map(article => <Article article={article}/>)}
+                    {this.props.category.articles.filter(x => x.version !== null).map(article => <Article article={article}/>)}
                 </div>
             </div>
         );

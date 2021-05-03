@@ -5,10 +5,6 @@ import {connect} from "react-redux";
 import {getCategoryThunk} from "../../../redux/category-reducer";
 
 class CategoriesContainer extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.refreshCategories()
     }

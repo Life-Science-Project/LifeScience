@@ -1,7 +1,6 @@
 import React from "react";
 import {BrowserRouter as Router, NavLink, Redirect, Route, Switch, withRouter} from "react-router-dom";
 import './method.css'
-import {connect} from 'react-redux'
 import SectionContainer from "./Sections/section-container?";
 
 const Method = (props) => {

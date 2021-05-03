@@ -4,14 +4,22 @@ import UserInformation from "./UserParts/userInformation";
 import UserOrganisations from "./UserParts/userOrganisations";
 import PropTypes from "prop-types";
 import "./userPerfomance.css";
+import {Link} from "react-router-dom";
 
 const UserPerformance = ({curUser}) => {
     return(
-        <div className="user_container">
-            <UserAvatar/>
-            <UserInformation curUser={curUser}/>
-            {<UserOrganisations organisations={curUser.organisations}/>}
-            {/*TODO(ADD MORE INFORMATION)*/}
+        <div className="user">
+            <div className="user_container">
+                <UserAvatar/>
+                <UserInformation curUser={curUser}/>
+                {<UserOrganisations organisations={curUser.organisations}/>}
+                {/*TODO(ADD MORE INFORMATION)*/}
+            </div>
+            <div className="edit_link">
+                <Link to="/profile/edit">
+                    Edit data
+                </Link>
+            </div>
         </div>
     );
 }

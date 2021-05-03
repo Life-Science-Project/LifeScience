@@ -26,9 +26,9 @@ const ShortMethodPreview = (props) => {
                     {getSections()}
                 </ul>
             </div>
-            <div className="buttons_delete_container">
+            <div className="button_delete_container">
                 <button onClick={functionWrapper(props.delete, props.user.id, props.method.id)}>
-                    Delete from favourites
+                    Unsave
                 </button>
             </div>
         </div>

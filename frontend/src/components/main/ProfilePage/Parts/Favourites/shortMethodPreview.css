@@ -24,8 +24,7 @@
     text-decoration: underline;
 }
 
-.short_method_preview_container .buttons_delete_container {
-    float: left;
-    margin: 1rem;
-    padding: 1rem;
+.short_method_preview_container .button_delete_container button {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
 }

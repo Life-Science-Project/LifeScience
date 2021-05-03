@@ -1,4 +1,5 @@
 import {usersApi} from "../api/users-api";
+import {getAuthorizedUserThunk} from "./auth-reducer";
 
 const GET_USER = 'GET_USER';
 const ERROR = 'USER_ERROR';
@@ -65,11 +66,11 @@ export const getUserFavouritesThunk = (id) => async (dispatch) => {
 };
 
 export const patchUserDataThunk = (id, data) => async (dispatch) => {
-    let response = await usersApi.patchToUserFavorites(id, data);
+    let response = await usersApi.patchToUserData(id, data);
     if (response.status !== 200) {
         dispatch(getError(response.data, ERROR))
     } else {
-        dispatch(getUser(id))
+        dispatch(getAuthorizedUserThunk())
     }
 }
 

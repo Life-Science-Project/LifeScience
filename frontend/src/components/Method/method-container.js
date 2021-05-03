@@ -8,11 +8,6 @@ import AddButton from "./AddButton/addButton";
 
 
 class MethodContainer extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.getSections()
     }

@@ -6,10 +6,6 @@ import {getAuthorizedUserThunk} from "../../../redux/auth-reducer";
 import Preloader from "../../common/Preloader/preloader";
 
 class ProfilePageContainer extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.refreshUser();
     }
