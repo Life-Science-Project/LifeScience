@@ -9,7 +9,7 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import com.jetbrains.life_science.exception.request.IllegalAccessException
+import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.user.master.entity.UserCredentials
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
@@ -112,6 +112,6 @@ class ArticleVersionController(
         // If admin or moderator wants to check version
         if (userCredentials.roles.any { it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR" }) return
         // Otherwise user do not have permission to get version
-        throw IllegalAccessException("User has no access to that version")
+        throw AccessDeniedException("User has no access to that version")
     }
 }

@@ -2,7 +2,7 @@ package com.jetbrains.life_science.exception.advice
 
 import com.jetbrains.life_science.exception.*
 import com.jetbrains.life_science.exception.request.BadRequestException
-import com.jetbrains.life_science.exception.request.IllegalAccessException
+import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
 import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import com.jetbrains.life_science.exception.not_found.*
@@ -82,9 +82,9 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse(ex.message)
     }
 
-    @ExceptionHandler(IllegalAccessException::class)
+    @ExceptionHandler(AccessDeniedException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    fun handleIllegalAccess(ex: IllegalAccessException, request: WebRequest): ApiErrorResponse {
+    fun handleAccessDenied(ex: AccessDeniedException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 

@@ -17,7 +17,8 @@ class JWTAuthEntryPoint : AuthenticationEntryPoint {
         e: AuthenticationException
     ) {
         logger.error("Unauthorized error. Message - {}", e.message)
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid credentials")
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        response.writer.println("HTTP Status 401 - " + e.message)
     }
 
     companion object {
