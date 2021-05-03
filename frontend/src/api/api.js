@@ -11,6 +11,7 @@ const instance = axios.create({
 instance.interceptors.response.use(
     (response) =>  response,
     (error) => {
+        alert(JSON.stringify(error))
         const statusCode = error.response ? error.response.status : null;
         if (statusCode === 401) {
             return {status: statusCode, message: "Try to refresh jwtToken, or you haven't permission"}

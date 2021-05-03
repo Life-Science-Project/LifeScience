@@ -1,8 +1,9 @@
 import React from "react";
 import ProfilePage from "./profilePage";
 import {withRouter} from "react-router-dom";
-import {getUsersThunk} from "../../../redux/users-reducer";
 import {connect} from "react-redux";
+import {getAuthorizedUserThunk} from "../../../redux/auth-reducer";
+import Preloader from "../../common/Preloader/preloader";
 
 class ProfilePageContainer extends React.Component {
     constructor(props) {
@@ -13,11 +14,6 @@ class ProfilePageContainer extends React.Component {
         this.refreshUser();
     }
 
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        //TODO more deep checks
-        return this.props.user.id !== nextProps.user.id;
-    }
-
     checkAccess() {
         if (!this.props.isAuthorized) {
             this.props.history.push('/login');
@@ -25,25 +21,28 @@ class ProfilePageContainer extends React.Component {
     }
 
     refreshUser() {
-        this.props.getUsersThunk(this.props.user.id);
+        this.props.getAuthorizedUserThunk();
     }
 
     render() {
+        if (!this.props.isInitialized) {
+            return <Preloader/>
+        }
         this.checkAccess();
         return(
-            <ProfilePage {...this.props} userData={this.props.userData}/>
+            <ProfilePage {...this.props} userData={this.props.user}/>
         );
     }
 }
 
 let mapStateToProps = (state) => {
     return({
+        isInitialized: state.init.isInitialized,
         isAuthorized: state.auth.isAuthorized,
-        user: state.auth.user,
-        userData: state.usersPage.user
+        user: state.auth.user
     });
 }
 
 let WithRoutProfileContainer = withRouter(ProfilePageContainer)
 
-export default connect(mapStateToProps, {getUsersThunk})(WithRoutProfileContainer);
+export default connect(mapStateToProps, {getAuthorizedUserThunk})(WithRoutProfileContainer);

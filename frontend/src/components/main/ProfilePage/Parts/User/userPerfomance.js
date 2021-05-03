@@ -10,7 +10,7 @@ const UserPerformance = ({curUser}) => {
         <div className="user_container">
             <UserAvatar/>
             <UserInformation curUser={curUser}/>
-            <UserOrganisations organisations={curUser.organisations}/>
+            {<UserOrganisations organisations={curUser.organisations}/>}
             {/*TODO(ADD MORE INFORMATION)*/}
         </div>
     );
@@ -33,6 +33,7 @@ UserPerformance.propType = {
         researchId: PropTypes.string.isRequired
     })
 }
+
 UserPerformance.defaultProps = {
     curUser: {
         userDetailsId: 0,

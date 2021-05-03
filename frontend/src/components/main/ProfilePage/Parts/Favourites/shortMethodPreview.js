@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {NavLink} from "react-router-dom";
-import {byField} from "../../../../../utils/common";
+import {byField, functionWrapper} from "../../../../../utils/common";
 import "./shortMethodPreview.css";
 
 const ShortMethodPreview = (props) => {
@@ -25,6 +25,11 @@ const ShortMethodPreview = (props) => {
                 <ul className="section_list">
                     {getSections()}
                 </ul>
+            </div>
+            <div className="buttons_delete_container">
+                <button onClick={functionWrapper(props.delete, props.user.id, props.method.id)}>
+                    Delete from favourites
+                </button>
             </div>
         </div>
     );

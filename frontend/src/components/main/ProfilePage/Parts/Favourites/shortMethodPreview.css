@@ -23,3 +23,9 @@
 .short_method_preview_container .link:hover {
     text-decoration: underline;
 }
+
+.short_method_preview_container .buttons_delete_container {
+    float: left;
+    margin: 1rem;
+    padding: 1rem;
+}

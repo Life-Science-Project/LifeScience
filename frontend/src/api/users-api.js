@@ -5,17 +5,17 @@ export const usersApi = {
         const url = 'users/' + userId;
         return instance.get(url);
     },
-    putToUserData(userId, data) {
+    patchToUserData(userId, data) {
         const url = 'users/' + userId;
-        return instance.put(url, data);
+        return instance.patch(url, data);
     },
     getUserFavorites(id) {
         const url = 'users/' + id + '/favourites/';
         return instance.get(url);
     },
-    putToUserFavorites(userId, articleId) {
+    patchToUserFavorites(userId, articleId) {
         const url = 'users/' + userId + '/favourites/' + articleId;
-        return instance.put(url);
+        return instance.patch(url);
     },
     deleteFromUserFavourites(userId, articleId) {
         const url = 'users/' + userId + '/favourites/' + articleId;

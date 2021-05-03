@@ -2,9 +2,9 @@ import React from "react";
 import {useForm} from 'react-hook-form';
 import './register.css';
 import {Redirect, withRouter} from "react-router";
-import {signUpUserThunk} from "../../../redux/auth-reducer";
+import {signUpUserThunk} from "../../../../redux/auth-reducer";
 import {connect} from "react-redux";
-import {validateEmail, validateFirstName, validateLastName, validatePassword} from "../../../utils/validators"
+import {validateEmail, validateFirstName, validateLastName, validatePassword} from "../../../../utils/validators"
 
 const Register = ({signUpUserThunk, isAuthorized, errorMsg}) => {
     const {register, handleSubmit, errors} = useForm();
@@ -37,7 +37,7 @@ const Register = ({signUpUserThunk, isAuthorized, errorMsg}) => {
                            ref={register({required: true, minLength: 6, maxLength: 24})}
                            className={"auth__form_field"}/>
 
-                    <input type="submit" value="Create an account" className={"auth__form_submit btn btn-success btn-lg"}/>
+                    <input type="submit" value="Sign Up" className={"auth__form_submit btn btn-success btn-lg"}/>
                 </form>
             </div>
         );

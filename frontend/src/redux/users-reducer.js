@@ -64,20 +64,32 @@ export const getUserFavouritesThunk = (id) => async (dispatch) => {
     }
 };
 
-export const putUserDataThunk = (id, data) => async (dispatch) => {
-    let response = await usersApi.putToUserData(id, data);
-    if (response.status !== 200) {
-        dispatch(getError(response.data, ERROR))
-    }
-}
-
-export const putToUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
-    let response = await usersApi.putToUserFavorites(userId, articleId);
+export const patchUserDataThunk = (id, data) => async (dispatch) => {
+    let response = await usersApi.patchToUserFavorites(id, data);
     if (response.status !== 200) {
         dispatch(getError(response.data, ERROR))
     } else {
-        dispatch(getUser(response.data));
+        dispatch(getUser(id))
     }
 }
 
+export const patchToUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
+    let response = await usersApi.patchToUserFavorites(userId, articleId);
+    if (response.status !== 200) {
+        alert(userId)
+        dispatch(getError(response.data, ERROR))
+    } else {
+        dispatch(getUserFavouritesThunk(userId));
+    }
+}
+
+export const deleteFromUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
+    let response = await usersApi.deleteFromUserFavourites(userId, articleId);
+    if (response.status !== 200) {
+        dispatch(getError(response.data, ERROR));
+    } else {
+        dispatch(getUserFavouritesThunk(userId));
+    }
+
+}
 export default usersReducer;

@@ -21,5 +21,18 @@ export const getLineWithSetLen = (length, firstStr) => {
         res = res.concat(' ');
     }
     return res;
-} ;
+};
 
+export const functionWrapper = (f, ...args) => () => {
+    return f(...args);
+}
+
+export const containsByField = (data, field, fieldId) => {
+    const id = parseInt(fieldId);
+    for (let i = 0; i < data.length; i++) {
+        if (data[i][field] === id) {
+            return true
+        }
+    }
+    return false;
+}

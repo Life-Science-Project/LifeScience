@@ -2,10 +2,10 @@ import React from "react";
 import {useForm} from 'react-hook-form';
 import '../Register/register.css';
 import {Redirect, withRouter} from "react-router";
-import '../../../constants.js';
+import '../../../../constants.js';
 import {connect} from "react-redux";
-import {signInUserThunk} from "../../../redux/auth-reducer";
-import {validateEmail, validatePassword} from "../../../utils/validators"
+import {signInUserThunk} from "../../../../redux/auth-reducer";
+import {validateEmail, validatePassword} from "../../../../utils/validators"
 
 const Login = ({signInUserThunk, isAuthorized, errorMsg}) => {
     const {register, handleSubmit, errors} = useForm();

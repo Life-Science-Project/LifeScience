@@ -2,13 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const UserOrganisations = ({organisations}) => {
+    const getOrganisations = () => {
+        if (organisations.length  === 0) {
+            return <p>None</p>
+        }
+        return organisations.map(comp => <li>{comp.name}</li>);
+    }
     return(
         <div className="organisations_container">
             <div className="header">
                 organisations
             </div>
             <ul>
-                {organisations.map(comp => <li>{comp.name}</li>)}
+                {getOrganisations()}
             </ul>
         </div>
     );
