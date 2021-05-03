@@ -7,5 +7,4 @@ import org.springframework.stereotype.Component
 class OrganisationFactory {
 
     fun create(name: String): Organisation = Organisation(0, name)
-
 }

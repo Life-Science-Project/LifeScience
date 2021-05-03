@@ -10,5 +10,4 @@ interface OrganisationRepository : JpaRepository<Organisation, Long> {
     fun existsByName(name: String): Boolean
 
     fun findByName(name: String): Organisation?
-
 }

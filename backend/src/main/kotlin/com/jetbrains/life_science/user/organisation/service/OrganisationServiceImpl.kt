@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.user.organisation.service
 
-import com.jetbrains.life_science.exception.not_found.OrganisationNotFoundException
 import com.jetbrains.life_science.user.organisation.entity.Organisation
 import com.jetbrains.life_science.user.organisation.factory.OrganisationFactory
 import com.jetbrains.life_science.user.organisation.repository.OrganisationRepository

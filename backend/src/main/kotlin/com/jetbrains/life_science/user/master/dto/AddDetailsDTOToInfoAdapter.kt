@@ -4,7 +4,6 @@ import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.master.service.AddDetailsInfo
 import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.user.organisation.entity.Organisation
 
 class AddDetailsDTOToInfoAdapter(
     private val dto: AddDetailsDTO,
