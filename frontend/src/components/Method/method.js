@@ -2,7 +2,6 @@ import React from "react";
 import {BrowserRouter as Router, NavLink, Redirect, Route, Switch, withRouter} from "react-router-dom";
 import './method.css'
 import SectionContainer from "./Sections/section-container?"
-import Page from "../Page/Page";
 
 const Method = (props) => {
 
@@ -10,13 +9,13 @@ const Method = (props) => {
     const {name, sections, versionId} = props;
     return (
         <Router>
-            <div className="method-name">
+            <div className="method__method-name">
                 <h2>
                     {name}
                 </h2>
             </div>
-            <div className="main">
-                <ul className="section-list">
+            <div className="method__main">
+                <ul className="method__section-list">
                     {
                         sections.map((section) => (
                             <li className="list-item">

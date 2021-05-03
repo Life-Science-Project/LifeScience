@@ -1,6 +1,6 @@
 import React from "react";
 import "./advantages-disadvantages.css"
-import Page from "../../../Page/Page";
+import Page from "../../../Page/SectionPage";
 
 const Advantages = ({contents}) => {
     if (!contents) {

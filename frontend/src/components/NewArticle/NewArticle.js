@@ -25,10 +25,10 @@ const NewArticle = (props) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        refreshCategories()
-    }, [])
+        refreshCategory()
+    })
 
-    const refreshCategories = () => {
+    const refreshCategory = () => {
         const categoryId = props.match.params.categoryId;
         getCategoryThunk(categoryId)(dispatch);
     }
@@ -199,10 +199,4 @@ const NewArticle = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return ({
-        category: state.categoryPage.category
-    })
-}
-
-export default connect(mapStateToProps, {getCategoryThunk})(withRouter(NewArticle));
+export default withRouter(NewArticle);

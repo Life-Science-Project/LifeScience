@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import '../method.css'
-import {NavLink} from "react-router-dom";
 import Section from "../Sections/section";
 
 const MethodPreview = ({name, sections, goBack}) => {

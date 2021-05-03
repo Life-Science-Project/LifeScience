@@ -12,3 +12,5 @@ export const ResultCodesEnum = {
     Success: 0,
     Error: 1
 }
+
+export const METHOD_URL = "method/"

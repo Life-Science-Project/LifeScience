@@ -2,7 +2,7 @@ import './App.css';
 import React from "react";
 import Header from './components/Header/header';
 import Register from "./components/Register/register";
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, withRouter} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
 import Login from "./components/Main/Login/login";
@@ -11,9 +11,9 @@ import MethodContainer from "./components/Method/method-container";
 import Home from "./components/Main/HomePage/homePage";
 import NewArticle from "./components/NewArticle/NewArticle";
 import UserPage from "./components/Main/UserPage/userPage";
-import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {getInitDataThunk} from "./redux/init-reducer";
+import SearchContainer from "./components/Search/search-container";
 
 class App extends React.Component {
     componentDidMount() {
@@ -33,6 +33,9 @@ class App extends React.Component {
                 <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
                 <Route path="/method/:articleId">
                     <MethodContainer/>
+                </Route>
+                <Route path="/search">
+                    <SearchContainer/>
                 </Route>
             </Router>
         );
