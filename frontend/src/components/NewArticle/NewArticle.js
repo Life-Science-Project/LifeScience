@@ -69,18 +69,16 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
     }
 
     const handlePreview = () => {
-        console.log("...");
         setPreview(!preview);
 
     }
     const handleSubmit = (event) => {
-        console.log("...");
         event.preventDefault();
-        addMethodThunk(categoryId, methodName, sections);
+        addMethodThunk(categoryId, methodName, getSectionsForSubmit());
     }
 
 
-    function getSectionsForPreview() {
+    function getSectionsForSubmit() {
         const sortedSections = getSortedSections();
         for (const title of AUTO_SECTION_TITLES) {
             sortedSections.push({
@@ -128,7 +126,7 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
             ?
             (
                 <MethodPreview name={methodName}
-                               sections={getSectionsForPreview()}
+                               sections={getSectionsForSubmit()}
                                goBack={() => setPreview(false)}/>
             )
             :
