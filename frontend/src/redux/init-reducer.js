@@ -1,4 +1,5 @@
 import {getAuthorizedUserThunk} from "./auth-reducer";
+import {getTokens} from "../utils/auth";
 
 const INIT = 'init';
 
@@ -25,7 +26,12 @@ export const getInitData = (initData) => {
 }
 
 export const getInitDataThunk = () => async (dispatch) => {
-    dispatch(getAuthorizedUserThunk());
+    const tokens = getTokens();
+    if (tokens.jwt !== null) {
+        dispatch(getAuthorizedUserThunk());
+    } else {
+        dispatch(getInitData())
+    }
 }
 
 export default initReducer;

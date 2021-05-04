@@ -29,4 +29,7 @@ class Section(
     var orderNumber: Int,
 
     var visible: Boolean
-)
+) {
+
+    val articleId: Long get() = articleVersion.mainArticle.id
+}

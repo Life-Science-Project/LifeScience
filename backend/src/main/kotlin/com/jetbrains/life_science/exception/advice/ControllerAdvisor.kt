@@ -2,10 +2,12 @@ package com.jetbrains.life_science.exception.advice
 
 import com.jetbrains.life_science.exception.*
 import com.jetbrains.life_science.exception.request.BadRequestException
-import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
 import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
+import com.jetbrains.life_science.exception.ApiErrorResponse
+import com.jetbrains.life_science.exception.ArticleNotEmptyException
 import com.jetbrains.life_science.exception.not_found.*
+import com.jetbrains.life_science.exception.request.*
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -82,9 +84,9 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse(ex.message)
     }
 
-    @ExceptionHandler(AccessDeniedException::class)
+    @ExceptionHandler(IllegalAccessException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    fun handleAccessDenied(ex: AccessDeniedException, request: WebRequest): ApiErrorResponse {
+    fun handleIllegalAccess(ex: IllegalAccessException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 
@@ -94,10 +96,13 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse(ex.message)
     }
 
-    @ExceptionHandler(OrganisationNotFoundException::class)
+    @ExceptionHandler(SearchUnitTypeNotSupportedException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleOrganisationNotFound(ex: OrganisationNotFoundException, request: WebRequest): ApiErrorResponse {
-        return notFoundResponse("Organisation")
+    fun handleSearchUnitTypeNotSupported(
+        ex: SearchUnitTypeNotSupportedException,
+        request: WebRequest
+    ): ApiErrorResponse {
+        return ApiErrorResponse("Search unit with type ${ex.unsupportedType} not supported, [ARTICLE, CONTENT] only available.")
     }
 
     private fun notFoundResponse(entity: String): ApiErrorResponse {

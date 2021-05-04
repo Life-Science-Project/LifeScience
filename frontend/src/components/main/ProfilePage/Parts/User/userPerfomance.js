@@ -12,8 +12,7 @@ const UserPerformance = ({curUser}) => {
             <div className="user_container">
                 <UserAvatar/>
                 <UserInformation curUser={curUser}/>
-                {<UserOrganisations organisations={curUser.organisations}/>}
-                {/*TODO(ADD MORE INFORMATION)*/}
+                <UserOrganisations organisations={curUser.organisations}/>
             </div>
             <div className="edit_link">
                 <Link to="/profile/edit">

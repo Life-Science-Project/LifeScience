@@ -1,11 +1,20 @@
 package com.jetbrains.life_science.search.dto
 
-data class SearchQueryDTO(
+import javax.validation.constraints.Max
+import javax.validation.constraints.Positive
+import javax.validation.constraints.PositiveOrZero
 
-    val query: String,
+class SearchQueryDTO(
 
-    val tags: List<String> = emptyList(),
+    val text: String,
 
-    val exclusionTypes: List<String> = emptyList()
+    val includeTypes: List<String> = listOf("ARTICLE", "CONTENT"),
+
+    @field:Max(100)
+    @field:Positive
+    val size: Int = 10,
+
+    @field:PositiveOrZero
+    val from: Int = 0
 
 )

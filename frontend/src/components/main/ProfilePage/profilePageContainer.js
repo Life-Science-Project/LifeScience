@@ -10,12 +10,6 @@ class ProfilePageContainer extends React.Component {
         this.refreshUser();
     }
 
-    checkAccess() {
-        if (!this.props.isAuthorized) {
-            this.props.history.push('/login');
-        }
-    }
-
     refreshUser() {
         this.props.getAuthorizedUserThunk();
     }
@@ -24,7 +18,10 @@ class ProfilePageContainer extends React.Component {
         if (!this.props.isInitialized) {
             return <Preloader/>
         }
-        this.checkAccess();
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/login');
+            return <Preloader/>
+        }
         return(
             <ProfilePage {...this.props} userData={this.props.user}/>
         );
