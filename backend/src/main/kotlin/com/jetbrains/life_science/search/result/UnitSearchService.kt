@@ -2,9 +2,9 @@ package com.jetbrains.life_science.search.result
 
 import com.jetbrains.life_science.search.query.SearchUnitType
 
-abstract class UnitSearchService(
-    val key: SearchUnitType
-) {
+interface UnitSearchService {
 
-    abstract fun process(id: String, response: Map<String, Any>): SearchResult
+    fun process(id: String, response: Map<String, Any>): SearchResult
+
+    val key: SearchUnitType
 }

@@ -1,7 +1,5 @@
 package com.jetbrains.life_science.search.result
 
 abstract class SearchResult(
-    val typeName: String,
-
-    val id: String
+    val typeName: String
 )
