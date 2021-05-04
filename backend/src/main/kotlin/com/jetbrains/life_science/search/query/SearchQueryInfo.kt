@@ -9,5 +9,4 @@ interface SearchQueryInfo {
     val from: Int
 
     val size: Int
-
 }

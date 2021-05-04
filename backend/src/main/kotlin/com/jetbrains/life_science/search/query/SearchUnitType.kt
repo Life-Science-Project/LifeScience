@@ -28,7 +28,5 @@ enum class SearchUnitType {
         val types = values().map { it.presentationName }.toSet()
 
         val indices = values().map { it.indexName }.toTypedArray()
-
     }
-
 }

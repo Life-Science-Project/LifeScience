@@ -22,6 +22,4 @@ class SearchController(
             SearchQueryDTOToQueryInfoAdapter(queryDTO)
         )
     }
-
-
 }
