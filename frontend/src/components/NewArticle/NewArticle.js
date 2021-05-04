@@ -6,11 +6,14 @@ import {FaTimes} from "react-icons/all";
 import {withRouter} from "react-router-dom";
 import {getCategoryThunk} from "../../redux/category-reducer";
 import {connect, useDispatch, useSelector} from "react-redux";
+import {addMethodThunk} from "../../redux/method-reducer";
 
-const NewArticle = (props) => {
-    if (!props.isAuthorized && props.isInitialized) {
-        props.history.push('/login');
+const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk}) => {
+    if (!isAuthorized && isInitialized) {
+        history.push('/login');
     }
+
+    const categoryId = match.params.categoryId;
 
     const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
         "Method advantages and disadvantages", "Troubleshooting"];
@@ -32,7 +35,7 @@ const NewArticle = (props) => {
     })
 
     const refreshCategory = () => {
-        const categoryId = props.match.params.categoryId;
+        const categoryId = match.params.categoryId;
         getCategoryThunk(categoryId)(dispatch);
     }
 
@@ -66,8 +69,16 @@ const NewArticle = (props) => {
     }
 
     const handlePreview = () => {
+        console.log("...");
         setPreview(!preview);
+
     }
+    const handleSubmit = (event) => {
+        console.log("...");
+        event.preventDefault();
+        addMethodThunk(categoryId, methodName, sections);
+    }
+
 
     function getSectionsForPreview() {
         const sortedSections = getSortedSections();
@@ -193,7 +204,7 @@ const NewArticle = (props) => {
                         </button>
                         <button type="submit"
                                 className="btn btn-large btn-success new-article-form__button p-2 bd-highlight"
-                                disabled={submitDisabled()}>Submit
+                                onClick={handleSubmit}>Submit
                         </button>
                     </div>
                 </form>
@@ -210,4 +221,4 @@ const mapStateToProps = (state) => {
     })
 }
 
-export default connect(mapStateToProps, {getCategoryThunk})(withRouter(NewArticle));
+export default connect(mapStateToProps, {getCategoryThunk, addMethodThunk})(withRouter(NewArticle));

@@ -6,7 +6,6 @@ import Register from "./components/main/Authentication/Register/register";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
 import Login from "./components/main/Authentication/Login/login";
-import CategoriesContainer from "./components/main/Categories/categoriesContainer";
 import MethodContainer from "./components/Method/method-container";
 import NewArticle from "./components/NewArticle/NewArticle"
 import ProfilePageContainer from "./components/main/ProfilePage/profilePageContainer";
@@ -15,6 +14,7 @@ import {connect} from "react-redux";
 import {getInitDataThunk} from "./redux/init-reducer";
 import NotFound from "./components/common/NotFound/notFound";
 import Preloader from "./components/common/Preloader/preloader";
+import CategoriesContainer from './components/main/Categories/categoriesContainer'
 import SearchContainer from "./components/Search/search-container";
 
 class App extends React.Component {

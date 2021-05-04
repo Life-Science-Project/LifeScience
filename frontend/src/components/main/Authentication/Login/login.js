@@ -19,11 +19,11 @@ const Login = ({signInUserThunk, isAuthorized, errorMsg}) => {
                 <form onSubmit={handleSubmit(signInUserThunk)}
                       className="d-flex justify-content-center flex-column auth__form_fields">
                     <input type="text" placeholder="Email" name="email"
-                           ref={register({required: true, pattern: /^\S+@\S+$/i})}
+                           ref={register({required: true, pattern: /^\S\S+$/i})}
                            className={"auth__form_field"}/>
                     {validateEmail(errors)}
                     <input type="password" placeholder="Password" name="password"
-                           ref={register({required: true, minLength: 6, maxLength: 24})}
+                           ref={register({required: true, minLength: 5, maxLength: 24})}
                            className={"auth__form_field"}/>
                     {validatePassword(errors)}
                     {!errorMsg.isEmpty && <span>{errorMsg}</span>}
