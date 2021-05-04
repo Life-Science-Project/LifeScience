@@ -10,6 +10,7 @@ class SectionSearchService : UnitSearchService(SearchUnitType.SECTION) {
 
     override fun process(id: String, response: Map<String, Any>): SectionSearchResult {
         val text = response.getOrThrow("text") { "Text not found" }.toString()
-        return SectionSearchResult(id, text)
+        val articleVersionId = response.getOrThrow("articleVersionId") { "Article version id not found" } as Number
+        return SectionSearchResult(id, text, articleVersionId.toLong())
     }
 }

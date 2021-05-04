@@ -43,6 +43,7 @@ class SearchServiceImpl(
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
         val queryBuilder = QueryBuilders.boolQuery()
             .must(QueryBuilders.matchPhrasePrefixQuery("text", query.text))
+            .should(QueryBuilders.matchQuery("_class", "Article"))
 
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)

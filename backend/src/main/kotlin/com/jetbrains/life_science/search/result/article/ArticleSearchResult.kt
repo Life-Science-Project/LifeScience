@@ -5,5 +5,5 @@ import com.jetbrains.life_science.search.result.SearchResult
 
 class ArticleSearchResult(
     id: String,
-    name: String
-) : SearchResult(SearchUnitType.ARTICLE.presentationName, id, name)
+    val name: String
+) : SearchResult(SearchUnitType.ARTICLE.presentationName, id)

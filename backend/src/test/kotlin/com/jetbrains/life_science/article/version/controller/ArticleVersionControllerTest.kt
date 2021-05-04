@@ -343,7 +343,7 @@ internal class ArticleVersionControllerTest :
         Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(2)
         Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(3)
         // Creating new section search units
-        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(4, "desc 2"))
+        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(4, "desc 2", 3))
         // Removing last main content from main index
         Mockito.verify(contentRepository, times(1)).deleteAllBySectionId(1)
         // Saving last main content to versions index
@@ -402,7 +402,7 @@ internal class ArticleVersionControllerTest :
         // Saving new version search units
         Mockito.verify(articleVersionSearchUnitRepository, times(1)).save(ArticleVersionSearchUnit(6, "version 5.1"))
         // Creating new section search units
-        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(5, "desc 3"))
+        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(5, "desc 3", 6))
         // Removing new main content version from versions repository
         Mockito.verify(contentVersionRepository, times(1)).deleteBySectionId(5)
         // Saving main content version to main repository
