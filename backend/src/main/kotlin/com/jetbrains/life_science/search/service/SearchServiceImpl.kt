@@ -23,11 +23,11 @@ class SearchServiceImpl(
 
     val logger = getLogger()
 
-    lateinit var searchUnitServices: Map<SearchUnitType, UnitSearchService>
+    lateinit var searchUnitServices: Map<String, UnitSearchService>
 
     @Autowired
     fun register(unitSearchService: List<UnitSearchService>) {
-        searchUnitServices = unitSearchService.associateBy { service -> service.key }
+        searchUnitServices = unitSearchService.associateBy { service -> service.key.presentationName }
     }
 
     override fun search(query: SearchQueryInfo): List<SearchResult> {
@@ -42,8 +42,13 @@ class SearchServiceImpl(
 
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
         val queryBuilder = QueryBuilders.boolQuery()
-            .must(QueryBuilders.regexpQuery("text", ".*${query.text}.*"))
-            .mustNot(QueryBuilders.multiMatchQuery("_class", *query.exclusionTypes))
+            .must(QueryBuilders.matchPhrasePrefixQuery("text", query.text))
+
+        if (query.exclusionTypes.isNotEmpty()) {
+            queryBuilder.mustNot(
+                QueryBuilders.matchQuery("_class", query.exclusionTypes.joinToString(" "))
+            )
+        }
 
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
