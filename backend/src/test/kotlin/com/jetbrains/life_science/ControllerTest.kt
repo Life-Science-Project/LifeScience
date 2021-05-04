@@ -140,6 +140,13 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
+    protected fun assertOkAndGetJson(result: ResultActionsDsl): String {
+        return result.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+        }.andReturn().response.contentAsString
+    }
+
     protected fun assertForbidden(result: ResultActionsDsl) {
         result.andExpect {
             status { isForbidden() }

@@ -9,13 +9,11 @@ import com.jetbrains.life_science.user.master.view.UserView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.patch
 import org.springframework.transaction.annotation.Transactional
 
@@ -280,11 +278,7 @@ internal class UserControllerTest :
     }
 
     private fun getAllUsers(): List<UserView> {
-        val users = getAllUsersRequest()
-            .andExpect {
-                status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
-            }.andReturn().response.contentAsString
+        val users = assertOkAndGetJson(getAllUsersRequest())
         return getViewsFromJson(users)
     }
 
@@ -293,11 +287,7 @@ internal class UserControllerTest :
     }
 
     private fun getCurrentUser(): UserView {
-        val user = getCurrentUserRequest()
-            .andExpect {
-                status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
-            }.andReturn().response.contentAsString
+        val user = assertOkAndGetJson(getCurrentUserRequest())
         return getViewFromJson(user)
     }
 
@@ -306,11 +296,7 @@ internal class UserControllerTest :
     }
 
     private fun getFavourites(id: Long): List<ArticleView> {
-        val articles = getFavouritesRequest(id)
-            .andExpect {
-                status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
-            }.andReturn().response.contentAsString
+        val articles = assertOkAndGetJson(getFavouritesRequest(id))
         return getViewsFromJson(articles, ArticleView::class.java)
     }
 
@@ -318,25 +304,25 @@ internal class UserControllerTest :
         return mockMvc.get("$apiUrl/$id/favourites")
     }
 
-    private fun updateFavourites(id: Long, articleId: Long) {
-        updateFavouritesRequest(id, articleId)
+    private fun updateFavourites(userId: Long, articleId: Long) {
+        updateFavouritesRequest(userId, articleId)
             .andExpect {
                 status { isOk() }
             }
     }
 
-    private fun updateFavouritesRequest(id: Long, articleId: Long): ResultActionsDsl {
-        return mockMvc.patch("$apiUrl/$id/favourites/$articleId")
+    private fun updateFavouritesRequest(userId: Long, articleId: Long): ResultActionsDsl {
+        return mockMvc.patch("$apiUrl/$userId/favourites/$articleId")
     }
 
-    private fun deleteFavourite(id: Long, articleId: Long) {
-        deleteFavouriteRequest(id, articleId)
+    private fun deleteFavourite(userId: Long, articleId: Long) {
+        deleteFavouriteRequest(userId, articleId)
             .andExpect {
                 status { isOk() }
             }
     }
 
-    private fun deleteFavouriteRequest(id: Long, articleId: Long): ResultActionsDsl {
-        return mockMvc.delete("$apiUrl/$id/favourites/$articleId")
+    private fun deleteFavouriteRequest(userId: Long, articleId: Long): ResultActionsDsl {
+        return deleteRequest(articleId, "$apiUrl/$userId/favourites")
     }
 }
