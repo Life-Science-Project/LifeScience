@@ -21,4 +21,8 @@ class OrganisationServiceImpl(
     override fun getByName(name: String): Organisation? {
         return repository.findByName(name)
     }
+
+    override fun getAllOrganisations(): List<Organisation> {
+        return repository.findAll()
+    }
 }

@@ -9,4 +9,6 @@ interface OrganisationService {
     fun create(organisationName: String): Organisation
 
     fun getByName(name: String): Organisation?
+
+    fun getAllOrganisations(): List<Organisation>
 }
