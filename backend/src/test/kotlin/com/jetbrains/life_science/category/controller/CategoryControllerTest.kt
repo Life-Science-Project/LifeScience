@@ -2,7 +2,11 @@ package com.jetbrains.life_science.category.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.master.view.ArticleView
+import com.jetbrains.life_science.article.section.view.SectionLazyView
+import com.jetbrains.life_science.article.version.entity.State
+import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.category.dto.CategoryDTO
+import com.jetbrains.life_science.category.view.CategorySubcategoryView
 import com.jetbrains.life_science.category.view.CategoryView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -49,8 +53,37 @@ internal class CategoryControllerTest :
             parentId = 1,
             name = "child category 1",
             order = 2,
-            subcategories = listOf(),
-            articles = listOf(ArticleView(id = 2, version = null))
+            subcategories = emptyList(),
+            articles = emptyList()
+        )
+        assertEquals(expectedCategory, category)
+    }
+
+    /**
+     * Should get expected category with versions
+     */
+    @Test
+    internal fun `get existing category with versions`() {
+        val category = get(1)
+        val expectedCategory = CategoryView(
+            id = 1,
+            parentId = null,
+            name = "root",
+            order = 1,
+            subcategories = listOf(
+                CategorySubcategoryView(id = 2, name = "child category 1", order = 2),
+                CategorySubcategoryView(id = 3, name = "child category 2", order = 3)
+            ),
+            articles = listOf(
+                ArticleView(
+                    id = 1, version = ArticleVersionView(
+                        1, "master 1", 1, listOf(
+                            SectionLazyView(1, "name 1.1", 1),
+                            SectionLazyView(2, "name 1.2", 2)
+                        ), State.PUBLISHED
+                    )
+                )
+            )
         )
         assertEquals(expectedCategory, category)
     }
