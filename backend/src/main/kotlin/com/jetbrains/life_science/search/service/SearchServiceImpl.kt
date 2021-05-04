@@ -51,11 +51,11 @@ class SearchServiceImpl(
 
         val searchRequest = SearchRequest()
         searchRequest.source(searchBuilder)
-        searchRequest.indices(*getExclusionIndices(query))
+        searchRequest.indices(*getRequestIndices(query))
         return searchRequest
     }
 
-    private fun getExclusionIndices(query: SearchQueryInfo) =
+    private fun getRequestIndices(query: SearchQueryInfo) =
         SearchUnitType.values().filter { !query.exclusionTypes.contains(it) }.map { it.indexName }.toTypedArray()
 
     private fun processHit(hit: SearchHit): SearchResult? {
