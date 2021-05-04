@@ -12,6 +12,8 @@ data class Content(
 
     var sectionId: Long,
 
+    var articleId: Long,
+
     @Field(type = FieldType.Text)
     var text: String,
 

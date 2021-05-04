@@ -5,6 +5,7 @@ import com.jetbrains.life_science.article.content.publish.factory.ContentFactory
 import com.jetbrains.life_science.article.content.publish.service.ContentInfo
 import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
+import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -18,8 +19,12 @@ class ContentVersionServiceImpl(
     @Autowired
     lateinit var contentService: ContentService
 
-    override fun create(contentInfo: ContentInfo): Content {
-        val content = factory.create(contentInfo)
+    @Autowired
+    lateinit var sectionService: SectionService
+
+    override fun create(info: ContentInfo): Content {
+        val section = sectionService.getById(info.sectionId)
+        val content = factory.create(info, section.articleId)
         return repository.save(content)
     }
 
@@ -43,9 +48,10 @@ class ContentVersionServiceImpl(
         }
     }
 
-    override fun update(contentInfo: ContentInfo): Content {
-        val content = findById(contentInfo.id)
-        factory.setParams(content, contentInfo)
+    override fun update(info: ContentInfo): Content {
+        val content = findById(info.id)
+        val section = sectionService.getById(info.sectionId)
+        factory.setParams(content, info, section.articleId)
         return repository.save(content)
     }
 

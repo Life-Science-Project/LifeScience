@@ -1,8 +1,11 @@
 package com.jetbrains.life_science.search.result.content
 
+import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.SearchResult
 
 class ContentSearchResult(
-    id: String,
-    name: String,
-) : SearchResult("Content", id, name)
+    val id: String,
+    val text: String,
+    val sectionId: Long,
+    val articleId: Long
+) : SearchResult(SearchUnitType.CONTENT.presentationName)
