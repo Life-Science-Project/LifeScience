@@ -34,7 +34,7 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
         refreshCategory()
     })
 
-    const refreshCategories = () => {
+    const refreshCategory = () => {
         const categoryId = match.params.categoryId;
         getCategoryThunk(categoryId)(dispatch);
     }
