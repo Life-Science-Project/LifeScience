@@ -5,11 +5,11 @@ import com.jetbrains.life_science.article.content.publish.service.ContentInfo
 
 interface ContentVersionService {
 
-    fun create(contentInfo: ContentInfo): Content
+    fun create(info: ContentInfo): Content
 
     fun findById(contentId: String?): Content
 
-    fun update(contentInfo: ContentInfo): Content
+    fun update(info: ContentInfo): Content
 
     fun delete(contentId: String)
 

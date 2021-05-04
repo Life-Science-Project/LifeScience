@@ -1,16 +1,13 @@
 import React from "react";
 import {withRouter} from "react-router-dom";
-import { connect } from 'react-redux'
+import {connect} from 'react-redux';
 import {fetchSections} from "../../redux/method-reducer";
 import Method from "./method";
+import Preloader from "../common/Preloader/preloader";
+import AddButton from "./AddButton/addButton";
 
 
 class MethodContainer extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.getSections()
     }
@@ -21,16 +18,38 @@ class MethodContainer extends React.Component {
     }
 
     render() {
-        const {name, sections, versionId} = this.props
+        if (!this.props.isReceived) {
+            return (
+                <Preloader/>
+            );
+        }
+
+        if (this.props.isAuthorized) {
+            return (
+                <div>
+                    <AddButton articleId={this.props.match.params.articleId}/>
+                    <Method name={this.props.name} sections={this.props.sections} versionId={this.props.versionId}/>
+                </div>
+            );
+        }
+
         return (
-            <Method name={name} sections={sections} versionId={versionId}/>
-        )
+            <div>
+                <Method name={this.props.name} sections={this.props.sections} versionId={this.props.versionId}/>
+            </div>
+        );
     }
 
 }
 
-function mapStateToProps(state) {
-    return {...state.method};
+let mapStateToProps = (state) => {
+    return ({
+        name: state.method.name,
+        sections: state.method.sections,
+        versionId: state.method.versionId,
+        isReceived: state.method.isReceived,
+        isAuthorized: state.auth.isAuthorized
+    });
 }
 
 export default withRouter(connect(mapStateToProps, {fetchSections})(MethodContainer))

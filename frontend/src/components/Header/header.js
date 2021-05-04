@@ -3,7 +3,8 @@ import './header.css'
 import {connect} from "react-redux";
 import Logged from "./logged";
 import UnLogged from "./unlogged";
-import {logoutUser} from "../../redux/auth-reducer";
+import {getAuthorizedUserThunk, logoutUser} from "../../redux/auth-reducer";
+import {withRouter} from "react-router";
 
 class Header extends React.Component {
     constructor(props) {
@@ -18,6 +19,18 @@ class Header extends React.Component {
         return <Logged {...this.props} user={this.props.user}/>;
     }
 
+    refreshUser() {
+        this.props.getAuthorizedUserThunk();
+    }
+
+    componentDidMount() {
+        this.refreshUser()
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return nextProps.isAuthorized !== this.props.isAuthorized;
+    }
+
     render() {
         return (
             <div className="d-flex align-items-center justify-content-between">
@@ -28,10 +41,11 @@ class Header extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        user: state.auth.user
+        user: state.auth.user,
+        isAuthorized: state.auth.isAuthorized
     };
 };
 
-export default connect(mapStateToProps, {logoutUser})(Header);
+export default connect(mapStateToProps, {logoutUser, getAuthorizedUserThunk})(Header);

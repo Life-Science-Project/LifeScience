@@ -9,6 +9,9 @@ import {connect, useDispatch, useSelector} from "react-redux";
 import {addMethodThunk} from "../../redux/method-reducer";
 
 const NewArticle = (props) => {
+    if (!props.isAuthorized && props.isInitialized) {
+        props.history.push('/login');
+    }
 
     const categoryId = props.match.params.categoryId;
 
@@ -209,7 +212,9 @@ const NewArticle = (props) => {
 
 const mapStateToProps = (state) => {
     return ({
-        category: state.categoryPage.category
+        category: state.categoryPage.category,
+        isAuthorized: state.auth.isAuthorized,
+        isInitialized: state.init.isInitialized
     })
 }
 

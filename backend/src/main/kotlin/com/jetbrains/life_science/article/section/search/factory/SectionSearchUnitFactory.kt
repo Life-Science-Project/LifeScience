@@ -7,5 +7,10 @@ import org.springframework.stereotype.Component
 @Component
 class SectionSearchUnitFactory {
 
-    fun create(section: Section) = SectionSearchUnit(section.id, section.description ?: "")
+    fun create(section: Section) =
+        SectionSearchUnit(
+            id = section.id,
+            description = section.description ?: "",
+            articleVersionId = section.articleVersion.id
+        )
 }

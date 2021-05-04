@@ -1,19 +1,21 @@
 import './App.css';
 import React from "react";
 import Header from './components/Header/header';
-import Register from "./components/Register/register";
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import Register from "./components/main/Authentication/Register/register";
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
-import Login from "./components/Main/Login/login";
-import CategoriesContainer from "./components/Main/Categories/categoriesContainer";
+import Login from "./components/main/Authentication/Login/login";
+import CategoriesContainer from "./components/main/Categories/categoriesContainer";
 import MethodContainer from "./components/Method/method-container";
-import Home from "./components/Main/HomePage/homePage";
-import NewArticle from "./components/NewArticle/NewArticle";
-import UserPage from "./components/Main/UserPage/userPage";
+import Home from "./components/main/HomePage/homePage";
+import NewArticle from "./components/NewArticle/NewArticle"
+import ProfilePageContainer from "./components/main/ProfilePage/profilePageContainer";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {getInitDataThunk} from "./redux/init-reducer";
+import NotFound from "./components/common/NotFound/notFound";
+import Preloader from "./components/common/Preloader/preloader";
 
 class App extends React.Component {
     componentDidMount() {
@@ -21,19 +23,23 @@ class App extends React.Component {
     }
 
     render() {
+        if (!this.props.isInitialized) {
+            return <Preloader/>
+        }
         return (
             <Router>
                 <Header/>
                 <Navbar/>
-                <Route exact={true} path="/" component={Home}/>
-                <Route exact={true} path="/userPage/:userId?" render={() => <UserPage />}/>
-                <Route path="/new-article/:categoryId?" component={NewArticle}/>
-                <Route path="/register" component={Register}/>
-                <Route path="/login" render={() => <Login />}/>
-                <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
-                <Route path="/method/:articleId">
-                    <MethodContainer/>
-                </Route>
+                <Switch>
+                    <Route exact={true} path="/" component={Home}/>
+                    <Route path="/profile" render={() => <ProfilePageContainer />}/>
+                    <Route path="/new-article/:categoryId?" render={() => <NewArticle/>}/>
+                    <Route path="/register" render={() => <Register/>}/>
+                    <Route path="/login" render={() => <Login />}/>
+                    <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
+                    <Route path="/method/:articleId" render={() => <MethodContainer/>}/>
+                    <Route render={() => <NotFound/>}/>
+                </Switch>
             </Router>
         );
     }

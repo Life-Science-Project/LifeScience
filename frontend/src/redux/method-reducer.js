@@ -1,4 +1,3 @@
-
 import {articleApi, contentApi, methodApi} from "../api/method-api";
 import {categoryApi} from "../api/category-api";
 import {getCategory, getError} from "./category-reducer";
@@ -8,7 +7,8 @@ export const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
 const initialState = {
     name: "",
     sections: [],
-    versionId: 1
+    versionId: 1,
+    isReceived: false
 }
 
 function receiveSections(data) {
@@ -35,7 +35,8 @@ export default function methodReducer(state = initialState, action) {
                 ...state,
                 name: action.name,
                 sections: action.sections,
-                versionId: action.versionId
+                versionId: action.versionId,
+                isReceived: true
             }
         default:
             return state
@@ -64,4 +65,3 @@ export const addMethodThunk = (categoryid, name, sections) => async (dispatch) =
         }
     }
 }
-

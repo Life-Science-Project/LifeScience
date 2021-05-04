@@ -1,11 +1,9 @@
 import React from "react";
 import {BrowserRouter as Router, NavLink, Redirect, Route, Switch, withRouter} from "react-router-dom";
 import './method.css'
-import SectionContainer from "./Sections/section-container?"
-import Page from "../Page/Page";
+import SectionContainer from "./Sections/section-container?";
 
 const Method = (props) => {
-
     const link = props.match.url
     const {name, sections, versionId} = props;
     return (
@@ -44,4 +42,4 @@ const Method = (props) => {
     )
 }
 
-export default withRouter(Method)
+export default withRouter(Method);
