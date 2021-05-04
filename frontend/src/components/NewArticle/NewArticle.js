@@ -31,8 +31,8 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
     const dispatch = useDispatch()
 
     useEffect(() => {
-        refreshCategories()
-    }, [])
+        refreshCategory()
+    })
 
     const refreshCategories = () => {
         const categoryId = match.params.categoryId;

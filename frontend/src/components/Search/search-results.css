@@ -1,0 +1,23 @@
+.search-results__main {
+    margin-top: 2rem;
+    margin-left: 5rem;
+}
+
+.search-results__result {
+    margin-top: 1.5rem;
+    max-width: 50rem;
+    line-height: 1.5rem;
+    max-height: 4.5rem;
+    text-decoration: underline;
+    overflow: hidden;
+}
+
+.search-results__result-list {
+    list-style-type: none;
+}
+
+.search-results__type {
+    margin-top: 3rem;
+}
+
+
