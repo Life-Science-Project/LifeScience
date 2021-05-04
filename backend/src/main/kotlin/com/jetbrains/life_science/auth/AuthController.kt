@@ -33,7 +33,7 @@ class AuthController(
     @PostMapping("/signup")
     fun registerUser(@Validated @RequestBody userDto: NewUserDTO): AuthResponse {
         val user = userService.createUser(NewUserDTOToInfoAdapter(userDto))
-        return authResponse(user)
+        return authResponse(user, true)
     }
 
     @PostMapping("/refresh")
@@ -43,12 +43,18 @@ class AuthController(
         if (user.refreshToken != refreshRequest.refreshToken) {
             throw BadCredentialsException("Invalid refresh token")
         }
-        return authResponse(user)
+        return authResponse(user, true)
     }
 
-    private fun authResponse(user: User): AuthResponse {
+    private fun authResponse(user: User, updateRefresh: Boolean = false): AuthResponse {
         val tokens = jwtService.generateAuthTokens(user.email)
-        userService.updateRefreshToken(tokens.refreshToken, user.email)
+
+        val oldRefreshToken = user.refreshToken
+        if (updateRefresh || oldRefreshToken == null) {
+            userService.updateRefreshToken(tokens.refreshToken, user.email)
+        } else {
+            tokens.refreshToken = oldRefreshToken
+        }
         return authResponseFactory.create(tokens, user)
     }
 
