@@ -6,15 +6,15 @@ import com.jetbrains.life_science.search.query.SearchUnitType
 
 class SearchQueryDTOToQueryInfoAdapter(val dto: SearchQueryDTO) : SearchQueryInfo {
 
-    override val exclusionTypes: Array<String>
+    override val exclusionTypes: List<SearchUnitType>
 
     init {
         for (typeName in dto.exclusionTypes) {
-            if (typeName !in SearchUnitType.types) {
+            if (typeName !in SearchUnitType.names) {
                 throw SearchUnitTypeNotSupportedException(typeName)
             }
         }
-        exclusionTypes = dto.exclusionTypes
+        exclusionTypes = dto.exclusionTypes.map { SearchUnitType.valueOf(it) }
     }
 
     override val text: String = dto.text

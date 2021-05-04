@@ -11,7 +11,7 @@ data class SectionSearchUnit(
 
     val id: Long,
 
-    @Field(name = "text", type = FieldType.Search_As_You_Type)
+    @Field(name = "text", type = FieldType.Text)
     var description: String
 
 )

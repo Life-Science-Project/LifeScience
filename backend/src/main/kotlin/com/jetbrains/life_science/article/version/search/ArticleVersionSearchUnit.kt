@@ -13,7 +13,7 @@ data class ArticleVersionSearchUnit(
     @Id
     val id: Long,
 
-    @Field(name = "text", type = FieldType.Search_As_You_Type)
+    @Field(name = "text", type = FieldType.Text)
     val name: String
 
 )

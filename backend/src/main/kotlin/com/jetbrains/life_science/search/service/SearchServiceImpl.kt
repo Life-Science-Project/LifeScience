@@ -44,12 +44,6 @@ class SearchServiceImpl(
         val queryBuilder = QueryBuilders.boolQuery()
             .must(QueryBuilders.matchPhrasePrefixQuery("text", query.text))
 
-        if (query.exclusionTypes.isNotEmpty()) {
-            queryBuilder.mustNot(
-                QueryBuilders.matchQuery("_class", query.exclusionTypes.joinToString(" "))
-            )
-        }
-
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
             .from(query.from)
@@ -57,8 +51,12 @@ class SearchServiceImpl(
 
         val searchRequest = SearchRequest()
         searchRequest.source(searchBuilder)
+        searchRequest.indices(*getExclusionIndices(query))
         return searchRequest
     }
+
+    private fun getExclusionIndices(query: SearchQueryInfo) =
+        SearchUnitType.values().filter { !query.exclusionTypes.contains(it) }.map { it.indexName }.toTypedArray()
 
     private fun processHit(hit: SearchHit): SearchResult? {
         try {
