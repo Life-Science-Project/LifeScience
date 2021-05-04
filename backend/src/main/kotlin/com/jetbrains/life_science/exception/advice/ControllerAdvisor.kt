@@ -94,6 +94,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse(ex.message)
     }
 
+    @ExceptionHandler(OrganisationNotFoundException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleOrganisationNotFound(ex: OrganisationNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Organisation")
+    }
+
     private fun notFoundResponse(entity: String): ApiErrorResponse {
         return ApiErrorResponse("$entity not found")
     }

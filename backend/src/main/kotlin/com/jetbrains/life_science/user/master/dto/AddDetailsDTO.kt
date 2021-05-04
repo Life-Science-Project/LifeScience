@@ -2,7 +2,6 @@ package com.jetbrains.life_science.user.master.dto
 
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
-import com.jetbrains.life_science.user.organisation.entity.Organisation
 
 class AddDetailsDTO(
 
@@ -10,7 +9,7 @@ class AddDetailsDTO(
 
     val academicDegree: AcademicDegree,
 
-    val organisations: MutableList<Organisation>,
+    val organisations: MutableList<String>,
 
     val orcid: String?,
 
