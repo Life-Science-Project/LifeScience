@@ -45,19 +45,13 @@ export default function methodReducer(state = initialState, action) {
 
 export const addMethodThunk = (categoryid, name, sections) => async (dispatch) => {
     let response = await articleApi.postVersion(categoryid, name);
-    console.log("articleApi.postVersion");
-    console.log(response);
     if (response.status === 200) {
-        let versionId = response.id;
+        let versionId = response.data.id;
         for (const s of sections) {
             response = await articleApi.postSection(versionId, s.name);
-            console.log("articleApi.postSection");
-            console.log(response);
             if (response.status === 200) {
-                let sectionId = response.id;
+                let sectionId = response.data.id;
                 response = await contentApi.postContent(sectionId, s.content);
-                console.log("contentApi.postContent");
-                console.log(response);
             }
         }
         if (response.status === 200) {

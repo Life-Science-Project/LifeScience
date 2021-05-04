@@ -41,8 +41,8 @@ export const articleApi = {
         })
     },
     approve(versionId) {
-        const url = `/api/articles/versions/${versionId}/approve`;
-        return instance.post(url);
+        const url = `/articles/versions/${versionId}/approve`;
+        return instance.patch(url);
     }
 }
 
@@ -50,7 +50,7 @@ export const contentApi = {
     postContent(sectionId, content) {
         const url = `/articles/versions/sections/${sectionId}/contents`;
         return instance.post(url, {
-            sectionId: 0,
+            sectionId: sectionId,
             text: content,
             references: [],
             tags: []

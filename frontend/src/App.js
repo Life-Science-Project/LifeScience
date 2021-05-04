@@ -1,21 +1,21 @@
 import './App.css';
 import React from "react";
 import Header from './components/Header/header';
-import Register from "./components/main/Authentication/Register/register";
+import Register from "./components/Main/Authentication/Register/register";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
-import Login from "./components/main/Authentication/Login/login";
-import CategoriesContainer from "./components/main/Categories/categoriesContainer";
+import Login from "./components/Main/Authentication/Login/login";
 import MethodContainer from "./components/Method/method-container";
-import Home from "./components/main/HomePage/homePage";
+import Home from "./components/Main/HomePage/homePage";
 import NewArticle from "./components/NewArticle/NewArticle"
-import ProfilePageContainer from "./components/main/ProfilePage/profilePageContainer";
+import ProfilePageContainer from "./components/Main/ProfilePage/profilePageContainer";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {getInitDataThunk} from "./redux/init-reducer";
 import NotFound from "./components/common/NotFound/notFound";
 import Preloader from "./components/common/Preloader/preloader";
+import CategoriesContainer from './components/Main/Categories/categoriesContainer'
 
 class App extends React.Component {
     componentDidMount() {
