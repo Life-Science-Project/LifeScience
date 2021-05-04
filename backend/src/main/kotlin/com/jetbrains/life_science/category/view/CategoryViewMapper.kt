@@ -10,7 +10,9 @@ class CategoryViewMapper(
 ) {
     fun createView(category: Category): CategoryView {
         val subcategoriesView = category.subCategories.map { CategorySubcategoryView(it.id, it.name, it.orderNumber) }
-        val articlesView = category.articles.filter { it.versions.isNotEmpty() }.map { articleViewMapper.createView(it) }
+        val articlesView = category.articles
+            .filter { it.hasPublishedVersions }
+            .map { articleViewMapper.createView(it) }
         return CategoryView(
             id = category.id,
             parentId = category.parent?.id,
