@@ -273,7 +273,7 @@ class SectionControllerTest :
     }
 
     private fun deleteRequest(articleId: Long, sectionId: Long): ResultActionsDsl {
-        return mockMvc.delete("$apiUrl/{sectionId}", articleId, sectionId)
+        return mockMvc.delete("$apiUrl/{id}", articleId, sectionId)
     }
 
     private fun createSection(id: Long) {
