@@ -27,7 +27,6 @@ class ArticleVersionServiceImpl(
     @Autowired
     lateinit var sectionService: SectionService
 
-
     override fun existsById(versionId: Long): Boolean {
         return repository.existsById(versionId)
     }
@@ -53,9 +52,9 @@ class ArticleVersionServiceImpl(
     @Transactional
     override fun getPublishedVersion(articleId: Long): ArticleVersion {
         return (
-                repository.findByMainArticleIdAndState(articleId, State.PUBLISHED)
-                    ?: throw PublishedVersionNotFoundException("Published version to article: $articleId not found")
-                )
+            repository.findByMainArticleIdAndState(articleId, State.PUBLISHED)
+                ?: throw PublishedVersionNotFoundException("Published version to article: $articleId not found")
+            )
     }
 
     @Transactional
