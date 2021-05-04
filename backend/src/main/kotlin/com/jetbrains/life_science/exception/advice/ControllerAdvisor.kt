@@ -6,6 +6,7 @@ import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
 import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import com.jetbrains.life_science.exception.not_found.*
+import org.springframework.expression.AccessException
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.InternalAuthenticationServiceException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -92,6 +93,18 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ExceptionHandler(ContentIsNotEditableException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleContentIsNotEditable(ex: ContentIsNotEditableException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
+    @ExceptionHandler(IllegalAccessException::class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    fun handleIllegalAccess(ex: IllegalAccessException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
+    @ExceptionHandler(AccessException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleIllegalAccess(ex: AccessException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 

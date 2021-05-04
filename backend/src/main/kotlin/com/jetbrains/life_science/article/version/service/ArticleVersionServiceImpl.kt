@@ -27,6 +27,11 @@ class ArticleVersionServiceImpl(
     @Autowired
     lateinit var sectionService: SectionService
 
+
+    override fun existsById(versionId: Long): Boolean {
+        return repository.existsById(versionId)
+    }
+
     @Transactional
     override fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion {
         val article = articleService.create(info.articleInfo)
