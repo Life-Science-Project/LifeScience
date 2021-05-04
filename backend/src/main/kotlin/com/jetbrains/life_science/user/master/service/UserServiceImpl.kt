@@ -1,13 +1,13 @@
 package com.jetbrains.life_science.user.master.service
 
 import com.jetbrains.life_science.article.master.service.ArticleService
-import com.jetbrains.life_science.exception.not_found.ArticleNotFoundException
 import com.jetbrains.life_science.exception.not_found.UserNotFoundException
 import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
 import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.factory.UserFactory
 import com.jetbrains.life_science.user.master.repository.RoleRepository
 import com.jetbrains.life_science.user.master.repository.UserRepository
+import com.jetbrains.life_science.user.organisation.service.OrganisationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,8 +16,13 @@ class UserServiceImpl(
     val userFactory: UserFactory,
     val userRepository: UserRepository,
     val roleRepository: RoleRepository,
-    val articleService: ArticleService
+    val articleService: ArticleService,
+    val organisationService: OrganisationService
 ) : UserService {
+
+    override fun getAllUsers(): List<User> {
+        return userRepository.findAll()
+    }
 
     override fun getByEmail(email: String): User {
         return userRepository.getByEmail(email)
@@ -56,17 +61,18 @@ class UserServiceImpl(
     @Transactional
     override fun removeFavourite(user: User, articleId: Long) {
         val article = articleService.getById(articleId)
-        if (!user.favouriteArticles.any { it.id == articleId }) {
-            throw ArticleNotFoundException("Article not found in favourites")
-        } else {
+        if (user.favouriteArticles.any { it.id == articleId }) {
             user.favouriteArticles.remove(article)
             article.users.remove(user)
         }
     }
 
     @Transactional
-    override fun update(info: AddDetailsInfo): User {
-        return userFactory.setParams(info)
+    override fun update(info: UpdateDetailsInfo, user: User): User {
+        val organisations = info.organisations.map {
+            organisationService.getByName(it) ?: organisationService.create(it)
+        }
+        return userFactory.setParams(info, organisations, user)
     }
 
     fun checkUserNotExists(email: String) {

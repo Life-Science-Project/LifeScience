@@ -2,11 +2,13 @@ package com.jetbrains.life_science.exception.advice
 
 import com.jetbrains.life_science.exception.*
 import com.jetbrains.life_science.exception.request.BadRequestException
-import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
 import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
+import com.jetbrains.life_science.exception.ApiErrorResponse
+import com.jetbrains.life_science.exception.ArticleNotEmptyException
 import com.jetbrains.life_science.exception.not_found.*
 import org.springframework.expression.AccessException
+import com.jetbrains.life_science.exception.request.*
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.InternalAuthenticationServiceException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -78,27 +80,21 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse("User already exists")
     }
 
-    @ExceptionHandler(UserNotFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleContentIsNotEditable(ex: UserNotFoundException, request: WebRequest): ApiErrorResponse {
-        return ApiErrorResponse(ex.message)
-    }
-
     @ExceptionHandler(InternalAuthenticationServiceException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun handleUserWrongCredentials(ex: InternalAuthenticationServiceException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse("Wrong authentication information")
     }
 
+    @ExceptionHandler(UserNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleUserNotFound(ex: UserNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("User")
+    }
+
     @ExceptionHandler(ContentIsNotEditableException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleContentIsNotEditable(ex: ContentIsNotEditableException, request: WebRequest): ApiErrorResponse {
-        return ApiErrorResponse(ex.message)
-    }
-
-    @ExceptionHandler(IllegalAccessException::class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    fun handleIllegalAccess(ex: IllegalAccessException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 
@@ -108,9 +104,9 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse(ex.message)
     }
 
-    @ExceptionHandler(AccessDeniedException::class)
+    @ExceptionHandler(IllegalAccessException::class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    fun handleAccessDenied(ex: AccessDeniedException, request: WebRequest): ApiErrorResponse {
+    fun handleIllegalAccess(ex: IllegalAccessException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 
@@ -118,6 +114,15 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleBadRequest(ex: BadRequestException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
+    }
+
+    @ExceptionHandler(SearchUnitTypeNotSupportedException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleSearchUnitTypeNotSupported(
+        ex: SearchUnitTypeNotSupportedException,
+        request: WebRequest
+    ): ApiErrorResponse {
+        return ApiErrorResponse("Search unit with type ${ex.unsupportedType} not supported, [ARTICLE, CONTENT] only available.")
     }
 
     private fun notFoundResponse(entity: String): ApiErrorResponse {

@@ -6,8 +6,14 @@ import {FaTimes} from "react-icons/all";
 import {withRouter} from "react-router-dom";
 import {getCategoryThunk} from "../../redux/category-reducer";
 import {connect, useDispatch, useSelector} from "react-redux";
+import {addMethodThunk} from "../../redux/method-reducer";
 
-const NewArticle = (props) => {
+const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk}) => {
+    if (!isAuthorized && isInitialized) {
+        history.push('/login');
+    }
+
+    const categoryId = match.params.categoryId;
 
     const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
         "Method advantages and disadvantages", "Troubleshooting"];
@@ -25,11 +31,11 @@ const NewArticle = (props) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        refreshCategories()
-    }, [])
+        refreshCategory()
+    })
 
-    const refreshCategories = () => {
-        const categoryId = props.match.params.categoryId;
+    const refreshCategory = () => {
+        const categoryId = match.params.categoryId;
         getCategoryThunk(categoryId)(dispatch);
     }
 
@@ -64,9 +70,15 @@ const NewArticle = (props) => {
 
     const handlePreview = () => {
         setPreview(!preview);
+
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        addMethodThunk(categoryId, methodName, getSectionsForSubmit());
     }
 
-    function getSectionsForPreview() {
+
+    function getSectionsForSubmit() {
         const sortedSections = getSortedSections();
         for (const title of AUTO_SECTION_TITLES) {
             sortedSections.push({
@@ -114,7 +126,7 @@ const NewArticle = (props) => {
             ?
             (
                 <MethodPreview name={methodName}
-                               sections={getSectionsForPreview()}
+                               sections={getSectionsForSubmit()}
                                goBack={() => setPreview(false)}/>
             )
             :
@@ -190,7 +202,7 @@ const NewArticle = (props) => {
                         </button>
                         <button type="submit"
                                 className="btn btn-large btn-success new-article-form__button p-2 bd-highlight"
-                                disabled={submitDisabled()}>Submit
+                                onClick={handleSubmit}>Submit
                         </button>
                     </div>
                 </form>
@@ -201,8 +213,10 @@ const NewArticle = (props) => {
 
 const mapStateToProps = (state) => {
     return ({
-        category: state.categoryPage.category
+        category: state.categoryPage.category,
+        isAuthorized: state.auth.isAuthorized,
+        isInitialized: state.init.isInitialized
     })
 }
 
-export default connect(mapStateToProps, {getCategoryThunk})(withRouter(NewArticle));
+export default connect(mapStateToProps, {getCategoryThunk, addMethodThunk})(withRouter(NewArticle));

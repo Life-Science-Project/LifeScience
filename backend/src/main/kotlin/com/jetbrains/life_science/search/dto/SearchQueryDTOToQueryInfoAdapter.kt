@@ -1,12 +1,28 @@
 package com.jetbrains.life_science.search.dto
 
-import com.jetbrains.life_science.search.service.SearchQueryInfo
+import com.jetbrains.life_science.exception.request.SearchUnitTypeNotSupportedException
+import com.jetbrains.life_science.search.query.SearchQueryInfo
+import com.jetbrains.life_science.search.query.SearchUnitType
 
-class SearchQueryDTOToQueryInfoAdapter(val dto: SearchQueryDTO) : SearchQueryInfo {
+class SearchQueryDTOToQueryInfoAdapter(val dto: SearchQueryDTO, supportedTypes: List<SearchUnitType>) :
+    SearchQueryInfo {
 
-    override val query: String by lazy { dto.query }
+    override val includeTypes: List<SearchUnitType>
 
-    override val tags: List<String> by lazy { dto.tags }
+    init {
+        val types = mutableListOf<SearchUnitType>()
+        for (typeName in dto.includeTypes) {
+            if (supportedTypes.none { it.name == typeName }) {
+                throw SearchUnitTypeNotSupportedException(typeName)
+            }
+            types.add(SearchUnitType.valueOf(typeName))
+        }
+        includeTypes = types
+    }
 
-    override val exclusionTypes: List<String> by lazy { dto.exclusionTypes }
+    override val text: String = dto.text
+
+    override val from: Int = dto.from
+
+    override val size: Int = dto.size
 }

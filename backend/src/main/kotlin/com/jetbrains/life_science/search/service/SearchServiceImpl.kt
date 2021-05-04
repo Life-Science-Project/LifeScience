@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.search.service
 
+import com.jetbrains.life_science.search.query.SearchQueryInfo
+import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.SearchResult
 import com.jetbrains.life_science.search.result.UnitSearchService
 import com.jetbrains.life_science.util.getLogger
@@ -21,46 +23,55 @@ class SearchServiceImpl(
 
     val logger = getLogger()
 
-    lateinit var searchUnits: Map<String, UnitSearchService>
+    lateinit var searchUnitServices: Map<String, UnitSearchService>
+
+    override val supportedTypes: List<SearchUnitType> = listOf(
+        SearchUnitType.CONTENT,
+        SearchUnitType.ARTICLE
+    )
 
     @Autowired
     fun register(unitSearchService: List<UnitSearchService>) {
-        searchUnits = unitSearchService.associateBy { service -> service.key }
+        searchUnitServices = unitSearchService.associateBy { service -> service.key.presentationName }
     }
 
-    override fun search(data: SearchQueryInfo): List<SearchResult> {
-        val response = makeRequest(data)
-        return processAllHits(response)
+    override fun search(query: SearchQueryInfo): List<SearchResult> {
+        val request = makeRequest(query)
+        val response = getResponse(request)
+        return response.hits.mapNotNull { processHit(it) }
     }
 
-    private fun processAllHits(response: SearchResponse): MutableList<SearchResult> {
-        val resultList = mutableListOf<SearchResult>()
-        response.hits.forEach { hit ->
-            try {
-                val searchResult = processHit(hit)
-                if (searchResult != null) {
-                    resultList.add(searchResult)
-                }
-            } catch (exception: IllegalStateException) {
-                logger.error("Error in search service", exception)
-            }
-        }
-        return resultList
+    private fun getResponse(request: SearchRequest): SearchResponse {
+        return client.search(request, RequestOptions.DEFAULT)
     }
 
-    private fun makeRequest(data: SearchQueryInfo): SearchResponse {
-        val searchRequest = SearchRequest()
+    private fun makeRequest(query: SearchQueryInfo): SearchRequest {
+        val queryBuilder = QueryBuilders.boolQuery()
+            .must(QueryBuilders.matchPhrasePrefixQuery("text", query.text))
+            .should(QueryBuilders.matchQuery("_class", "Article"))
+
         val searchBuilder = SearchSourceBuilder()
-        searchBuilder.query(QueryBuilders.wildcardQuery("text", "*${data.query}*"))
-        searchRequest.source(searchBuilder)
-        return client.search(searchRequest, RequestOptions.DEFAULT)
+            .query(queryBuilder)
+            .from(query.from)
+            .size(query.size)
+
+        return SearchRequest()
+            .source(searchBuilder)
+            .indices(*getRequestIndices(query))
     }
+
+    private fun getRequestIndices(query: SearchQueryInfo) = query.includeTypes.map { it.indexName }.toTypedArray()
 
     private fun processHit(hit: SearchHit): SearchResult? {
-        val content: Map<String, Any> = hit.sourceAsMap
-        val id = hit.id
-        val type = content.getOrThrow("_class") { "Type not found at hit: $hit" }
-        val service = searchUnits[type] ?: return null
-        return service.process(id, content)
+        try {
+            val content: Map<String, Any> = hit.sourceAsMap
+            val id = hit.id
+            val type = content.getOrThrow("_class") { "Type not found at hit: $hit" }
+            val service = searchUnitServices[type] ?: return null
+            return service.process(id, content)
+        } catch (e: Exception) {
+            logger.error("Error in search service", e)
+            return null
+        }
     }
 }

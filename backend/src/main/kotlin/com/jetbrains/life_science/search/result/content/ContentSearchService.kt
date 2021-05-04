@@ -1,13 +1,19 @@
 package com.jetbrains.life_science.search.result.content
 
+import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.UnitSearchService
 import com.jetbrains.life_science.util.getOrThrow
+import org.springframework.stereotype.Service
 
-// @Service TODO: fix parameters and enable later
-class ContentSearchService : UnitSearchService("Content") {
+@Service
+class ContentSearchService : UnitSearchService {
 
     override fun process(id: String, response: Map<String, Any>): ContentSearchResult {
         val text = response.getOrThrow("text") { "Text not found" }.toString()
-        return ContentSearchResult(id, text)
+        val sectionId = response.getOrThrow("sectionId") { "Section id not found" } as Number
+        val articleId = response.getOrThrow("articleId") { "Article id not found" } as Number
+        return ContentSearchResult(id, text, sectionId.toLong(), articleId.toLong())
     }
+
+    override val key = SearchUnitType.CONTENT
 }

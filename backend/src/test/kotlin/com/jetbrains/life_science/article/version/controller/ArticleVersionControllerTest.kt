@@ -285,10 +285,10 @@ internal class ArticleVersionControllerTest :
         Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true)
         Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true)
 
-        val lastContent = Content(1, "test last text", mutableListOf("b"), mutableListOf("1"))
+        val lastContent = Content(1, 1, "test last text", mutableListOf("b"), mutableListOf("1"))
         Mockito.`when`(contentRepository.findBySectionId(1)).thenReturn(lastContent)
 
-        val content = Content(4, "test new text", mutableListOf("a"), mutableListOf("2"))
+        val content = Content(4, 1, "test new text", mutableListOf("a"), mutableListOf("2"))
         Mockito.`when`(contentVersionRepository.findBySectionId(4)).thenReturn(content)
 
         // Prepare test data
@@ -323,13 +323,13 @@ internal class ArticleVersionControllerTest :
         // Deleting old version search units
         Mockito.verify(articleVersionSearchUnitRepository, times(1)).deleteById(1)
         // Saving new version search units
-        Mockito.verify(articleVersionSearchUnitRepository, times(1)).save(ArticleVersionSearchUnit(3, "version 2.1"))
+        Mockito.verify(articleVersionSearchUnitRepository, times(1)).save(ArticleVersionSearchUnit(3, 1, "version 2.1"))
         // Deleting old section search units
         Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(1)
         Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(2)
         Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(3)
         // Creating new section search units
-        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(4, "desc 2"))
+        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(4, "desc 2", 3))
         // Removing last main content from main index
         Mockito.verify(contentRepository, times(1)).deleteAllBySectionId(1)
         // Saving last main content to versions index
@@ -369,7 +369,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `approve article with no master version existent`() {
-        val content = Content(5, "test new text", mutableListOf("xx"), mutableListOf("yy"))
+        val content = Content(5, 1, "test new text", mutableListOf("xx"), mutableListOf("yy"))
         Mockito.`when`(contentVersionRepository.findBySectionId(5)).thenReturn(content)
 
         // Prepare test data
@@ -386,9 +386,9 @@ internal class ArticleVersionControllerTest :
 
         assertEquals(expectedToPublishVersionView, publishedVersion)
         // Saving new version search units
-        Mockito.verify(articleVersionSearchUnitRepository, times(1)).save(ArticleVersionSearchUnit(6, "version 5.1"))
+        Mockito.verify(articleVersionSearchUnitRepository, times(1)).save(ArticleVersionSearchUnit(6, 2, "version 5.1"))
         // Creating new section search units
-        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(5, "desc 3"))
+        Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(5, "desc 3", 6))
         // Removing new main content version from versions repository
         Mockito.verify(contentVersionRepository, times(1)).deleteBySectionId(5)
         // Saving main content version to main repository
@@ -465,7 +465,7 @@ internal class ArticleVersionControllerTest :
         Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true)
         Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true)
 
-        val lastContent = Content(1, "test last text", mutableListOf("b"), mutableListOf("1"))
+        val lastContent = Content(1, 1, "test last text", mutableListOf("b"), mutableListOf("1"))
         Mockito.`when`(contentRepository.findBySectionId(1)).thenReturn(lastContent)
 
         // Prepare expected data

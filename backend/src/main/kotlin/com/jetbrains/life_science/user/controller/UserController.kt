@@ -2,8 +2,8 @@ package com.jetbrains.life_science.user.controller
 
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
-import com.jetbrains.life_science.user.master.dto.AddDetailsDTO
-import com.jetbrains.life_science.user.master.dto.AddDetailsDTOToInfoAdapter
+import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
+import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
@@ -31,8 +31,9 @@ class UserController(
 ) {
 
     @GetMapping
-    fun getUsers() {
-        TODO("Not yet implemented")
+    fun getUsers(): List<UserView> {
+        return userService.getAllUsers()
+            .map { mapper.createView(it) }
     }
 
     @GetMapping("/{userId}")
@@ -51,17 +52,18 @@ class UserController(
         return mapper.createView(user)
     }
 
+    // TODO(#141): DTO uses entities and enums, many 500 error possibilities
     @PatchMapping("/{userId}")
-    fun addDetails(
+    fun updateDetails(
         @PathVariable userId: Long,
-        @Validated @RequestBody addDetailsDTO: AddDetailsDTO,
+        @Validated @RequestBody updateDetailsDTO: UpdateDetailsDTO,
         principal: Principal
-    ) {
+    ): UserView {
         val user = userService.getById(userId)
         if (!checkAccess(user, principal)) {
             throw AccessDeniedException("Not enough permissions to edit this user")
         }
-        userService.update(AddDetailsDTOToInfoAdapter(addDetailsDTO, user))
+        return mapper.createView(userService.update(UpdateDetailsDTOToInfoAdapter(updateDetailsDTO), user))
     }
 
     @DeleteMapping("/{userId}")
@@ -76,7 +78,7 @@ class UserController(
         userService.deleteById(userId)
     }
 
-    @GetMapping("/{userId}/favourites/")
+    @GetMapping("/{userId}/favourites")
     fun getFavourites(@PathVariable userId: Long): List<ArticleView> {
         val user = userService.getById(userId)
         return user.favouriteArticles.map { articleMapper.createView(it) }
@@ -89,12 +91,11 @@ class UserController(
         principal: Principal
     ): UserView {
         val user = userService.getById(userId)
-        if (checkAccess(user, principal)) {
-            val updatedUser = userService.addFavourite(user, articleId)
-            return mapper.createView(updatedUser)
-        } else {
-            throw AccessDeniedException("You haven't got enough permissions to add this favourite")
+        if (!checkAccess(user, principal)) {
+            throw AccessDeniedException("Not enough permissions to add this favourite")
         }
+        val updatedUser = userService.addFavourite(user, articleId)
+        return mapper.createView(updatedUser)
     }
 
     @DeleteMapping("/{userId}/favourites/{articleId}")
@@ -104,11 +105,10 @@ class UserController(
         principal: Principal
     ) {
         val user = userService.getById(userId)
-        if (checkAccess(user, principal)) {
-            userService.removeFavourite(user, articleId)
-        } else {
+        if (!checkAccess(user, principal)) {
             throw AccessDeniedException("You haven't got enough permissions to delete this favourite")
         }
+        userService.removeFavourite(user, articleId)
     }
 
     private fun checkAccess(user: User, principal: Principal): Boolean {

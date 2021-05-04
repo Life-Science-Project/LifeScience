@@ -1,0 +1,24 @@
+.navigation_list {
+    list-style-type: none;
+    width: 15vw;
+    text-align: center;
+}
+li {
+    margin: 1rem;
+}
+
+.navigation_list img {
+    border-radius: 0.5rem;
+}
+
+.rout {
+    color: #343a40;
+}
+
+.rout:hover {
+    color: #343a40;
+}
+
+.active-rout {
+    text-decoration: underline;
+}

@@ -1,4 +1,5 @@
 import {usersApi} from "../api/users-api";
+import {getAuthorizedUserThunk} from "./auth-reducer";
 
 const GET_USER = 'GET_USER';
 const ERROR = 'USER_ERROR';
@@ -6,7 +7,7 @@ const GET_USER_FAVOURITES = 'GET_USER_FAVOURITES';
 
 const initialState = {
     user: null,
-    favourites: []
+    userFavourites: []
 }
 
 const usersReducer = (state = initialState, action) => {
@@ -46,20 +47,49 @@ export const getUserFavourites = (favourites) => {
     return {type: GET_USER_FAVOURITES, userFavourites: favourites}
 };
 
-export const getUserThunk = (id) => async (dispatch) => {
+export const getUsersThunk = (id) => async (dispatch) => {
     let response = await usersApi.getUser(id);
-    if (response.status === 404) {
+    if (response.status !== 200) {
         dispatch(getError(response.data, ERROR))
+    } else {
+        dispatch(getUser(response.data));
     }
-    dispatch(getUser(response.data));
 };
 
 export const getUserFavouritesThunk = (id) => async (dispatch) => {
     let response = await usersApi.getUserFavorites(id);
-    if (response.status === 404) {
+    if (response.status !== 200) {
         dispatch(getError(response.data, ERROR))
+    } else {
+        dispatch(getUserFavourites(response.data));
     }
-    dispatch(getUserFavourites(response.data));
 };
 
+export const patchUserDataThunk = (id, data) => async (dispatch) => {
+    let response = await usersApi.patchToUserData(id, data);
+    if (response.status !== 200) {
+        dispatch(getError(response.data, ERROR))
+    } else {
+        dispatch(getAuthorizedUserThunk())
+    }
+}
+
+export const patchToUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
+    let response = await usersApi.patchToUserFavorites(userId, articleId);
+    if (response.status !== 200) {
+        dispatch(getError(response.data, ERROR))
+    } else {
+        dispatch(getUserFavouritesThunk(userId));
+    }
+}
+
+export const deleteFromUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
+    let response = await usersApi.deleteFromUserFavourites(userId, articleId);
+    if (response.status !== 200) {
+        dispatch(getError(response.data, ERROR));
+    } else {
+        dispatch(getUserFavouritesThunk(userId));
+    }
+
+}
 export default usersReducer;

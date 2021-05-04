@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 const Logged = (props) => {
     return(
         <div className="d-flex justify-content-between">
-            <Link to="/userPage">
+            <Link to="/profile">
                 <div className="d-flex align-items-center header__group">
                     <div className="header__group_link p-2 bd-highlight">{`${props.user.firstName} ${props.user.lastName}`}</div>
                     {/*TODO: proper userpage icon*/}

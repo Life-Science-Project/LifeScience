@@ -1,12 +1,14 @@
-
-import {methodApi} from "../api/method-api";
+import {articleApi, contentApi, methodApi} from "../api/method-api";
+import {categoryApi} from "../api/category-api";
+import {getCategory, getError} from "./category-reducer";
 
 export const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
 
 const initialState = {
     name: "",
     sections: [],
-    versionId: 1
+    versionId: 1,
+    isReceived: false
 }
 
 function receiveSections(data) {
@@ -33,10 +35,27 @@ export default function methodReducer(state = initialState, action) {
                 ...state,
                 name: action.name,
                 sections: action.sections,
-                versionId: action.versionId
+                versionId: action.versionId,
+                isReceived: true
             }
         default:
             return state
     }
 }
 
+export const addMethodThunk = (categoryid, name, sections) => async (dispatch) => {
+    let response = await articleApi.postVersion(categoryid, name);
+    if (response.status === 200) {
+        let versionId = response.data.id;
+        for (const s of sections) {
+            response = await articleApi.postSection(versionId, s.name);
+            if (response.status === 200) {
+                let sectionId = response.data.id;
+                if (s.content) response = await contentApi.postContent(sectionId, s.content);
+            }
+        }
+        if (response.status === 200) {
+           await articleApi.approve(versionId);
+        }
+    }
+}

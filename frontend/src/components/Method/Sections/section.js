@@ -6,7 +6,8 @@ import Advantages from "./AdvantagesDisadvantages/advantages-disadvantages";
 import Troubleshooting from "./Troubleshooting/troubleshooting";
 import Collaboration from "./FindCollaboration/collaboration";
 import Education from "./Education/education";
-import Page from "../../Page/Page";
+import SectionPage from "../../Page/SectionPage";
+import Preloader from "../../common/Preloader/preloader";
 
 
 const Section = (props) => {
@@ -28,9 +29,9 @@ const Section = (props) => {
     function getSection() {
         let component = nameToComponent[name];
         if (!component) {
-            component = <Page text={contents.text}/>
+            component = <SectionPage text={contents.text}/>
         }
-        return component
+        return (contents) ? component : <Preloader/>
     }
 
     return getSection()
