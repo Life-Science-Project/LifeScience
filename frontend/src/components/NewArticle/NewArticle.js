@@ -28,10 +28,10 @@ const NewArticle = (props) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        refreshCategories()
-    }, [])
+        refreshCategory()
+    })
 
-    const refreshCategories = () => {
+    const refreshCategory = () => {
         const categoryId = props.match.params.categoryId;
         getCategoryThunk(categoryId)(dispatch);
     }

@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import '../method.css'
-import {NavLink} from "react-router-dom";
 import Section from "../Sections/section";
 
 const MethodPreview = ({name, sections, goBack}) => {
@@ -13,13 +12,13 @@ const MethodPreview = ({name, sections, goBack}) => {
     }
     return (
         <div>
-            <div className="method-name">
+            <div className="method__method-name">
                 <h2>
                     {name}
                 </h2>
             </div>
-            <div className="main">
-                <ul className="section-list">
+            <div className="method__main">
+                <ul className="method__section-list">
                     {
                         sections.map((section, index) => (
                             <li className="list-item">
