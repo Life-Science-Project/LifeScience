@@ -7,7 +7,7 @@ const Article = ({article}) => {
     return (
         <div className="method_container">
             <Link to={"/method/" + article.id}>
-                {article.version.name}
+                {article.version && article.version.name}
             </Link>
         </div>
     );
