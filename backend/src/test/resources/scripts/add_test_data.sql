@@ -13,9 +13,9 @@ insert into article (id, category_id)
 values (3, 1);
 
 insert into users (id, email, password, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
-values (1, 'admin', 'admin', 0, 0, 'alex1', 'ln alex', '123', '222');
+values (1, 'admin', 'admin', 0, 0, 'Admin', 'Admin-Admin', '123', '222');
 insert into users (id, email, password, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
-values (2, 'user', 'user', 0, 0, 'alex2', 'ln alex 2', '123', '222');
+values (2, 'user', 'user', 1, 1, 'User', 'User-User', '123', '222');
 
 insert into roles (id, name)
 values (1, 'ROLE_USER');
@@ -32,6 +32,10 @@ insert into users_roles(user_id, role_id)
 values (1, 3);
 insert into users_roles(user_id, role_id)
 values (2, 1);
+
+insert into users_favourite_articles(user_id, favourite_articles_id)
+values (2, 1),
+       (2, 2);
 
 insert into article_version (id, name, state, author_id, main_article_id)
 values (1, 'master 1', 3, 1, 1);

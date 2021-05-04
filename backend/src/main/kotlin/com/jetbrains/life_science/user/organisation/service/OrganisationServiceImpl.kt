@@ -11,8 +11,6 @@ class OrganisationServiceImpl(
     val factory: OrganisationFactory
 ) : OrganisationService {
 
-    override fun existsByName(name: String) = repository.existsByName(name)
-
     override fun create(organisationName: String): Organisation {
         val organisation = factory.create(organisationName)
         return repository.save(organisation)

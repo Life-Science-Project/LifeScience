@@ -59,6 +59,20 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(viewJson, customViewToken)
     }
 
+    protected fun patch(id: Long, dto: DTO, url: String = apiUrl): View {
+        return patch(id, dto, url, viewToken)
+    }
+
+    protected fun <U, V> patch(id: Long, dto: U, url: String = apiUrl, customViewToken: Class<V>): V {
+        val viewJson = patchRequest(id, dto, url)
+            .andExpect {
+                status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
+            }
+            .andReturn().response.contentAsString
+        return getViewFromJson(viewJson, customViewToken)
+    }
+
     protected fun delete(id: Long, url: String = apiUrl) {
         deleteRequest(id, url)
             .andExpect {
@@ -80,6 +94,14 @@ abstract class ControllerTest<DTO, View>(
 
     protected fun <U> putRequest(id: Long, dto: U, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.put("$url/{id}", id) {
+            contentType = MediaType.APPLICATION_JSON
+            content = jsonMapper.writeValueAsString(dto)
+            accept = MediaType.APPLICATION_JSON
+        }
+    }
+
+    protected fun <U> patchRequest(id: Long, dto: U, url: String = apiUrl): ResultActionsDsl {
+        return mockMvc.patch("$url/{id}", id) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
             accept = MediaType.APPLICATION_JSON
@@ -116,6 +138,13 @@ abstract class ControllerTest<DTO, View>(
         result.andExpect {
             status { isOk() }
         }
+    }
+
+    protected fun assertOkAndGetJson(result: ResultActionsDsl): String {
+        return result.andExpect {
+            status { isOk() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+        }.andReturn().response.contentAsString
     }
 
     protected fun assertForbidden(result: ResultActionsDsl) {
