@@ -101,7 +101,7 @@ abstract class ControllerTest<DTO, View>(
     }
 
     protected fun <U> patchRequest(id: Long, dto: U, url: String = apiUrl): ResultActionsDsl {
-        return mockMvc.put("$url/{id}", id) {
+        return mockMvc.patch("$url/{id}", id) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
             accept = MediaType.APPLICATION_JSON

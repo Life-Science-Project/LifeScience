@@ -68,7 +68,7 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun update(info: AddDetailsInfo, user: User): User {
+    override fun update(info: UpdateDetailsInfo, user: User): User {
         val organisations = info.organisations.map {
             organisationService.getByName(it) ?: organisationService.create(it)
         }

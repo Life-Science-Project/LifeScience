@@ -4,7 +4,7 @@ import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
-import com.jetbrains.life_science.user.master.dto.AddDetailsDTO
+import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
 import com.jetbrains.life_science.user.master.view.UserView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @WithUserDetails("admin")
 internal class UserControllerTest :
-    ControllerTest<AddDetailsDTO, UserView>(UserView::class.java) {
+    ControllerTest<UpdateDetailsDTO, UserView>(UserView::class.java) {
 
     init {
         apiUrl = "/api/users"
@@ -89,9 +89,14 @@ internal class UserControllerTest :
      */
     @Test
     internal fun `update existing user`() {
-        // TODO(#141): implement test
-        // val addDetailsDto = AddDetailsDTO(...)
-        // updateUser(1, addDetailsDto)
+        val updateDetailsDto = UpdateDetailsDTO(
+            doctorDegree = DoctorDegree.NONE,
+            academicDegree = AcademicDegree.PROFESSIONAL,
+            organisations = listOf("abc", "def"),
+            orcid = "babla",
+            researchId = "5555"
+        )
+        updateUser(1, updateDetailsDto)
     }
 
     /**
@@ -99,9 +104,14 @@ internal class UserControllerTest :
      */
     @Test
     internal fun `update non-existent user`() {
-        // TODO(#141): implement test
-        // val addDetailsDTO = AddDetailsDTO(...)
-        // assertNotFound("User", patchRequest(100, addDetailsDTO))
+        val updateDetailsDto = UpdateDetailsDTO(
+            doctorDegree = DoctorDegree.NONE,
+            academicDegree = AcademicDegree.PROFESSIONAL,
+            organisations = listOf("abc", "def"),
+            orcid = "babla",
+            researchId = "5555"
+        )
+        assertNotFound("User", patchRequest(100, updateDetailsDto))
     }
 
     /**
@@ -192,7 +202,7 @@ internal class UserControllerTest :
      */
     @Test
     @WithUserDetails("user")
-    internal fun `delete same favourites`() {
+    internal fun `delete non-existent favourite`() {
         val userId = 2L
         val articleId = 3L
 
@@ -258,19 +268,22 @@ internal class UserControllerTest :
         assertUnauthenticated(deleteRequest(userId))
     }
 
-    private fun updateUser(id: Long, dto: AddDetailsDTO) {
-        val oldUser = get(id)
-        val responseUser = patch(id, dto)
-        assertEquals(id, responseUser.id)
+    private fun updateUser(userId: Long, dto: UpdateDetailsDTO) {
+        val oldUser = get(userId)
+        val responseUser = patch(userId, dto)
+        assertEquals(userId, responseUser.id)
+        val responseOrgs = responseUser.organisations.map { it.name }
+        assertEquals(dto.organisations.size, responseOrgs.size)
+        dto.organisations.forEach { assertTrue(responseOrgs.contains(it)) }
         val updatedUser = get(responseUser.id)
         val expectedUser = UserView(
-            id = id,
+            id = userId,
             email = oldUser.email,
             firstName = oldUser.firstName,
             lastName = oldUser.lastName,
             doctorDegree = dto.doctorDegree,
             academicDegree = dto.academicDegree,
-            organisations = dto.organisations,
+            organisations = responseUser.organisations,
             orcid = dto.orcid,
             researchId = dto.researchId
         )

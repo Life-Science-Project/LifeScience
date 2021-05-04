@@ -2,8 +2,8 @@ package com.jetbrains.life_science.user.controller
 
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
-import com.jetbrains.life_science.user.master.dto.AddDetailsDTO
-import com.jetbrains.life_science.user.master.dto.AddDetailsDTOToInfoAdapter
+import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
+import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
@@ -54,16 +54,16 @@ class UserController(
 
     // TODO(#141): DTO uses entities and enums, many 500 error possibilities
     @PatchMapping("/{userId}")
-    fun addDetails(
+    fun updateDetails(
         @PathVariable userId: Long,
-        @Validated @RequestBody addDetailsDTO: AddDetailsDTO,
+        @Validated @RequestBody updateDetailsDTO: UpdateDetailsDTO,
         principal: Principal
-    ) {
+    ): UserView {
         val user = userService.getById(userId)
         if (!checkAccess(user, principal)) {
             throw AccessDeniedException("Not enough permissions to edit this user")
         }
-        userService.update(AddDetailsDTOToInfoAdapter(addDetailsDTO), user)
+        return mapper.createView(userService.update(UpdateDetailsDTOToInfoAdapter(updateDetailsDTO), user))
     }
 
     @DeleteMapping("/{userId}")
