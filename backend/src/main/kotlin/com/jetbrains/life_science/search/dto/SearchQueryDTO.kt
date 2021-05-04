@@ -8,13 +8,13 @@ class SearchQueryDTO(
 
     val text: String,
 
-    val exclusionTypes: Array<String> = emptyArray(),
+    val includeTypes: List<String> = listOf("ARTICLE", "CONTENT", "SECTION"),
 
-    @Max(100)
-    @Positive
+    @field:Max(100)
+    @field:Positive
     val size: Int = 10,
 
-    @PositiveOrZero
+    @field:PositiveOrZero
     val from: Int = 0
 
 )

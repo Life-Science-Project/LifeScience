@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.search.service
 
 import com.jetbrains.life_science.search.query.SearchQueryInfo
-import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.SearchResult
 import com.jetbrains.life_science.search.result.UnitSearchService
 import com.jetbrains.life_science.util.getLogger
@@ -56,8 +55,7 @@ class SearchServiceImpl(
         return searchRequest
     }
 
-    private fun getRequestIndices(query: SearchQueryInfo) =
-        SearchUnitType.values().filter { !query.exclusionTypes.contains(it) }.map { it.indexName }.toTypedArray()
+    private fun getRequestIndices(query: SearchQueryInfo) = query.includeTypes.map { it.indexName }.toTypedArray()
 
     private fun processHit(hit: SearchHit): SearchResult? {
         try {
