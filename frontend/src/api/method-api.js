@@ -1,5 +1,4 @@
-
-import {instance} from './api'
+import instance from './api'
 
 export const methodApi = {
     getMethod(articleId) {

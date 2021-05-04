@@ -1,6 +1,8 @@
 import {authApi} from "../api/auth-api";
 import {initApi} from "../api/init-api";
-import {getUserView} from "../utils/user-translator";
+import {getInitData} from "./init-reducer";
+import {getTokens, removeTokens, setTokens} from "../utils/auth";
+import {errorHandler} from "../utils/errorHandler";
 
 const LOGOUT = 'logout';
 const SIGN_IN = 'signin';
@@ -43,16 +45,11 @@ const authReducer = (state = initialState, action) => {
     }
 }
 
-export const logoutUser = () => {
-    localStorage.removeItem('jwtToken');
-    return {type: LOGOUT}
-}
-
 export const error = (_errorMsg) => {
     return {type: ERROR, errorMsg: _errorMsg};
 }
 
-export const signInUser = ([_user, _errorMsg]) => {
+export const signInUser = (_user) => {
     return {type: SIGN_IN, user: _user};
 
 }
@@ -60,29 +57,36 @@ export const signInUser = ([_user, _errorMsg]) => {
 export const getAuthorizedUserThunk = () => async (dispatch) => {
     let response = await initApi.getAuthorizedUser();
     let errorMsg = "";
-    if (response.status === 200) {
-        dispatch(signInUser([getUserView(response.data), errorMsg]));
+    if (response.status === 401) {
+        response = await authApi.refreshTokens(getTokens());
+        if (response.status === 200) {
+            const result = response.data.user;
+            setTokens(response.data.tokens);
+            dispatch(signInUser(result));
+        } else {
+            dispatch(logoutUser());
+        }
+    } else if (response.status === 200) {
+        dispatch(signInUser(response.data));
     } else {
-        localStorage.removeItem('jwtToken');
+        removeTokens();
+        errorMsg = errorHandler(response).message;
+        dispatch(error(errorMsg));
     }
+    dispatch(getInitData({}));
 }
 
 export const signInUserThunk = (input) => async (dispatch) => {
     let response = await authApi.signInUser(input);
     let result, errorMsg = "";
     if (response.status === 200) {
-        result = response.data.userView;
-        localStorage.setItem('jwtToken', response.data.jwtResponse.accessToken);
-        dispatch(signInUser([result, errorMsg]));
+        result = response.data.user;
+        setTokens(response.data.tokens);
+        dispatch(signInUser(result));
     } else {
-        errorMsg = "Invalid login or password";
-        result = null;
+        errorMsg = errorHandler(response).message;
         dispatch(error(errorMsg));
     }
-}
-
-export const signUpUser = (_user) => {
-    return {type: SIGN_UP, user: _user};
 }
 
 export const signUpUserThunk = (input) => async (dispatch) => {
@@ -94,13 +98,18 @@ export const signUpUserThunk = (input) => async (dispatch) => {
     });
     let result, errorMsg = "";
     if (response.status === 200) {
-        // Auth user on successful registration
-        const signInData = {email : input.email, password : input.password};
-        dispatch(signInUserThunk(signInData));
+        result = response.data.user;
+        setTokens(response.data.tokens);
+        dispatch(signInUser(result));
     } else {
-        // TODO proper error handling
-        dispatch(error("User already exists"))
+        errorMsg = errorHandler(response).message;
+        dispatch(error(errorMsg))
     }
+}
+
+export const logoutUser = () => {
+    removeTokens();
+    return {type: LOGOUT}
 }
 
 export default authReducer;

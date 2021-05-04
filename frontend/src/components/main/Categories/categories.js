@@ -41,13 +41,21 @@ class Categories extends React.Component {
             }
         }
 
+        const addButton = () => {
+            if (this.props.isShowButton) {
+                return(
+                    <button className="add_method_button" onClick={this.onAdd}>
+                        Add Method
+                    </button>
+                )
+            }
+        }
+
         return (
             <div>
                 <div className="buttons_container">
                     {buttonToPrevCategory()}
-                    <button className="add_method_button" onClick={this.onAdd}>
-                        Add Method
-                    </button>
+                    {addButton()}
                 </div>
                 <div className="category_name">
                     {this.props.category.name}
@@ -56,7 +64,7 @@ class Categories extends React.Component {
                     {this.props.category.subcategories.sort(byField('order')).map(category => <Category category={category}/>)}
                 </div>
                 <div className="articles_container">
-                    {this.props.category.articles.map(article => <Article article={article}/>)}
+                    {this.props.category.articles.filter(x => x.version !== null).map(article => <Article article={article}/>)}
                 </div>
             </div>
         );

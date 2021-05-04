@@ -1,0 +1,23 @@
+.nav_container {
+    grid-area: menu;
+}
+
+.main_container {
+    grid-area: main;
+}
+
+.profile_container {
+    background-color: #282c34;
+    border-radius: 0.5rem;
+    margin: 2rem 1rem;
+    padding: 2rem;
+    display: grid;
+    grid-template-areas: 'menu main main main main';
+    grid-gap: 1rem;
+}
+
+.profile_container > div {
+    background-color: lightgray;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}

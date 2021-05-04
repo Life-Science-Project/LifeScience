@@ -19,12 +19,14 @@ Article.propsTypes = {
        version: PropTypes.exact({
            name: PropTypes.string.isRequired,
            articleId: PropTypes.number.isRequired,
-           sectionsIds: PropTypes.arrayOf(
+           sections: PropTypes.arrayOf(
                PropTypes.exact({
                    id: PropTypes.number.isRequired,
-                   name: PropTypes.string.isRequired
+                   name: PropTypes.string.isRequired,
+                   order: PropTypes.number.isRequired
                })
-           ).isRequired
+           ).isRequired,
+           state: PropTypes.string.isRequired
        })
    })
 };

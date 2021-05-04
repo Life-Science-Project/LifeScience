@@ -5,10 +5,6 @@ import {connect} from "react-redux";
 import {getCategoryThunk} from "../../../redux/category-reducer";
 
 class CategoriesContainer extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         this.refreshCategories()
     }
@@ -26,14 +22,15 @@ class CategoriesContainer extends React.Component {
 
     render() {
         return (
-            <Categories {...this.props} category={this.props.category}/>
+            <Categories {...this.props} category={this.props.category} isShowButton={this.props.isAuthorized}/>
         )
     }
 }
 
 let mapStateToProps = (state) => {
     return ({
-        category: state.categoryPage.category
+        category: state.categoryPage.category,
+        isAuthorized: state.auth.isAuthorized
     })
 }
 

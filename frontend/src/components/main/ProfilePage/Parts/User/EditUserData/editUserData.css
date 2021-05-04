@@ -1,0 +1,32 @@
+.edit_user_container {
+    border-radius: 0.5rem;
+    margin: 1rem;
+    padding: 1rem;
+    text-align: center;
+    align-self: center;
+}
+
+.edit_user_container .form_part_container {
+    margin: 0.5rem;
+    padding: 0.5rem;
+}
+
+.edit_user_container .form_part_container .input_name {
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+.edit_user_container .form_part_container .field {
+    width: 25rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+.edit_user_container .form_part_container .pin {
+    margin-left: 1rem;
+}
+
+.edit_user_container .form_part_container .button {
+    border-radius: 0.5rem;
+    width: 25rem;
+    background-color: cadetblue;
+}
