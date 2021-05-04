@@ -51,7 +51,7 @@ export const addMethodThunk = (categoryid, name, sections) => async (dispatch) =
             response = await articleApi.postSection(versionId, s.name);
             if (response.status === 200) {
                 let sectionId = response.data.id;
-                response = await contentApi.postContent(sectionId, s.content);
+                if (s.content) response = await contentApi.postContent(sectionId, s.content);
             }
         }
         if (response.status === 200) {
