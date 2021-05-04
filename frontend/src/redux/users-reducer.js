@@ -77,7 +77,6 @@ export const patchUserDataThunk = (id, data) => async (dispatch) => {
 export const patchToUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
     let response = await usersApi.patchToUserFavorites(userId, articleId);
     if (response.status !== 200) {
-        alert(userId)
         dispatch(getError(response.data, ERROR))
     } else {
         dispatch(getUserFavouritesThunk(userId));
