@@ -10,7 +10,7 @@ import CategoriesContainer from "./components/main/Categories/categoriesContaine
 import MethodContainer from "./components/Method/method-container";
 import NewArticle from "./components/NewArticle/NewArticle"
 import ProfilePageContainer from "./components/main/ProfilePage/profilePageContainer";
-import Home from "./components/Main/HomePage/homePage";
+import Home from "./components/main/HomePage/homePage"
 import {connect} from "react-redux";
 import {getInitDataThunk} from "./redux/init-reducer";
 import NotFound from "./components/common/NotFound/notFound";

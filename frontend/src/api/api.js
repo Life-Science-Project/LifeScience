@@ -25,3 +25,5 @@ instance.interceptors.response.use(
 );
 
 export const METHOD_URL = "method/"
+
+export default instance;

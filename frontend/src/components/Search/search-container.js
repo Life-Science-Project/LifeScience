@@ -14,13 +14,13 @@ const SearchContainer = () => {
 
     useEffect(() => {
         updateSearch()
-    }, [location.search, results])
+    }, [location.search])
 
     const updateSearch = () => {
-        setQuery(new URLSearchParams(location.search).get("query"))
-        dispatch(search(query))
+        const newQuery = new URLSearchParams(location.search).get("query")
+        setQuery(newQuery)
+        dispatch(search(newQuery))
     }
-
 
     return (
         <SearchResults results={results} query={query}/>

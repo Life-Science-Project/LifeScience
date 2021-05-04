@@ -1,13 +1,11 @@
-import {instance} from './api'
+import instance from './api'
 
 export const searchApi = {
-    search(query, tags, exclusionTypes) {
+    search(query) {
         const data = {
-            query: query,
-            tags: tags ? tags : [],
-            exclusionTypes: exclusionTypes ? exclusionTypes : [],
+            text: query,
         }
-        const url = "/search"
+        const url = "search"
         return instance.post(url, data)
     }
 }
