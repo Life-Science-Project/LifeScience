@@ -76,11 +76,14 @@ internal class CategoryControllerTest :
             ),
             articles = listOf(
                 ArticleView(
-                    id = 1, version = ArticleVersionView(
-                        1, "master 1", 1, listOf(
+                    id = 1,
+                    version = ArticleVersionView(
+                        1, "master 1", 1,
+                        listOf(
                             SectionLazyView(1, "name 1.1", 1),
                             SectionLazyView(2, "name 1.2", 2)
-                        ), State.PUBLISHED
+                        ),
+                        State.PUBLISHED
                     )
                 )
             )
