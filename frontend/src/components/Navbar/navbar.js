@@ -13,8 +13,6 @@ const Navbar = () => {
                     {/*</NavLink>*/}
                     <NavLink path="/" name="Home"/>
                     <NavLink path="/categories" name="Categories"/>
-                    <NavLink path="/new-article" name="New Article"/>
-
                 </ul>
                 <SearchForm/>
             </div>
