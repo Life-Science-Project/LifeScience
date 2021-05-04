@@ -4,9 +4,6 @@ import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
 import com.jetbrains.life_science.article.section.dto.SectionDTO
 import com.jetbrains.life_science.article.section.view.SectionView
-import com.jetbrains.life_science.article.version.repository.ArticleVersionRepository
-import com.jetbrains.life_science.user.master.repository.RoleRepository
-import com.jetbrains.life_science.user.master.repository.UserRepository
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
