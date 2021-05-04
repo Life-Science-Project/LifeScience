@@ -5,4 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface OrganisationRepository : JpaRepository<Organisation, Long>
+interface OrganisationRepository : JpaRepository<Organisation, Long> {
+
+    fun existsByName(name: String): Boolean
+
+    fun findByName(name: String): Organisation?
+}

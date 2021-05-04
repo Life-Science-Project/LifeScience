@@ -28,7 +28,7 @@ class SectionFactory(
             name = section.name,
             description = section.description,
             articleVersion = section.articleVersion,
-            parameters = section.parameters,
+            parameters = section.parameters.toMutableList(),
             orderNumber = section.orderNumber,
             visible = section.visible
         )

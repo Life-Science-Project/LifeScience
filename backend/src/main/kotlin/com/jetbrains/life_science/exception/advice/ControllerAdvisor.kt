@@ -1,5 +1,9 @@
 package com.jetbrains.life_science.exception.advice
 
+import com.jetbrains.life_science.exception.*
+import com.jetbrains.life_science.exception.request.BadRequestException
+import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
+import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import com.jetbrains.life_science.exception.ApiErrorResponse
 import com.jetbrains.life_science.exception.ArticleNotEmptyException
 import com.jetbrains.life_science.exception.not_found.*
@@ -42,6 +46,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleArticleVersionNotFound(ex: ArticleVersionNotFoundException, request: WebRequest): ApiErrorResponse {
         return notFoundResponse("Article version")
+    }
+
+    @ExceptionHandler(PublishedVersionNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handlePublishedVersionNotFoundException(ex: PublishedVersionNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Published version")
     }
 
     @ExceptionHandler(ArticleNotFoundException::class)

@@ -5,10 +5,9 @@ import com.jetbrains.life_science.article.review.factory.ReviewFactory
 import com.jetbrains.life_science.article.review.repository.ReviewRepository
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.ReviewNotFoundException
-import com.jetbrains.life_science.user.credentials.entity.UserCredentials
-import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
-import com.jetbrains.life_science.user.details.entity.User
-import com.jetbrains.life_science.user.details.service.UserService
+import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.user.master.service.UserService
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,13 +17,12 @@ class ReviewServiceImpl(
     val repository: ReviewRepository,
     val factory: ReviewFactory,
     val articleVersionService: ArticleVersionService,
-    val userCredentialsService: UserCredentialsService,
     val userService: UserService
 ) : ReviewService {
 
     override fun addReview(info: ReviewInfo): Review {
         val articleVersion = articleVersionService.getById(info.articleVersionId)
-        val user = userCredentialsService.getById(info.reviewerId).user
+        val user = userService.getById(info.reviewerId)
         return repository.save(factory.create(info, articleVersion, user))
     }
 
@@ -65,8 +63,8 @@ class ReviewServiceImpl(
     }
 
     private fun checkAccess(reviewer: User, author: User, userCredentials: UserCredentials): Boolean {
-        return reviewer.id == userCredentials.user.id ||
-            author.id == userCredentials.user.id ||
+        return reviewer.id == userCredentials.id ||
+            author.id == userCredentials.id ||
             userCredentials.roles.any {
                 it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
             }

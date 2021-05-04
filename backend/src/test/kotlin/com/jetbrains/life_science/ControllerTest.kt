@@ -46,13 +46,17 @@ abstract class ControllerTest<DTO, View>(
     }
 
     protected fun put(id: Long, dto: DTO, url: String = apiUrl): View {
+        return put(id, dto, url, viewToken)
+    }
+
+    protected fun <U, V> put(id: Long, dto: U, url: String = apiUrl, customViewToken: Class<V>): V {
         val viewJson = putRequest(id, dto, url)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
             }
             .andReturn().response.contentAsString
-        return getViewFromJson(viewJson)
+        return getViewFromJson(viewJson, customViewToken)
     }
 
     protected fun delete(id: Long, url: String = apiUrl) {
@@ -74,7 +78,7 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-    protected fun putRequest(id: Long, dto: DTO, url: String = apiUrl): ResultActionsDsl {
+    protected fun <U> putRequest(id: Long, dto: U, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.put("$url/{id}", id) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
@@ -127,11 +131,19 @@ abstract class ControllerTest<DTO, View>(
     }
 
     protected fun getViewFromJson(json: String): View {
-        return jsonMapper.readValue(json, viewToken)
+        return getViewFromJson(json, viewToken)
+    }
+
+    protected fun <U> getViewFromJson(json: String, customViewToken: Class<U>): U {
+        return jsonMapper.readValue(json, customViewToken)
     }
 
     protected fun getViewsFromJson(json: String): List<View> {
-        val viewListType = jsonMapper.typeFactory.constructCollectionType(List::class.java, viewToken)
+        return getViewsFromJson(json, viewToken)
+    }
+
+    protected fun <U> getViewsFromJson(json: String, customViewToken: Class<U>): List<U> {
+        val viewListType = jsonMapper.typeFactory.constructCollectionType(List::class.java, customViewToken)
         return jsonMapper.readValue(json, viewListType)
     }
 }

@@ -1,9 +1,9 @@
 package com.jetbrains.life_science.config.jwt
 
+import com.jetbrains.life_science.util.getLogger
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-import org.slf4j.LoggerFactory
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
@@ -16,12 +16,12 @@ class JWTAuthEntryPoint : AuthenticationEntryPoint {
         response: HttpServletResponse,
         e: AuthenticationException
     ) {
-
         logger.error("Unauthorized error. Message - {}", e.message)
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid credentials")
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        response.writer.println("HTTP Status 401 - " + e.message)
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JWTAuthEntryPoint::class.java)
+        private val logger = getLogger()
     }
 }

@@ -9,7 +9,7 @@ import com.jetbrains.life_science.article.version.repository.ArticleVersionRepos
 import com.jetbrains.life_science.article.version.search.service.ArticleVersionSearchUnitService
 import com.jetbrains.life_science.exception.not_found.ArticleVersionNotFoundException
 import com.jetbrains.life_science.exception.not_found.PublishedVersionNotFoundException
-import com.jetbrains.life_science.user.details.entity.User
+import com.jetbrains.life_science.user.master.entity.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -28,26 +28,28 @@ class ArticleVersionServiceImpl(
     lateinit var sectionService: SectionService
 
     @Transactional
-    override fun createBlank(info: ArticleVersionInfo): ArticleVersion {
-        val article = articleService.getById(info.articleId)
+    override fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion {
+        val article = articleService.create(info.articleInfo)
         var articleVersion = factory.create(info, article)
         articleVersion = repository.save(articleVersion)
         return articleVersion
     }
 
     @Transactional
-    override fun createCopy(articleId: Long) {
+    override fun createCopy(articleId: Long, user: User): ArticleVersion {
         val publishedVersion = getPublishedVersion(articleId)
-        var copy = factory.createCopy(publishedVersion)
-        copy = repository.save(copy)
+        val copy = factory.createCopy(publishedVersion)
+        copy.author = user
+        repository.save(copy)
         sectionService.createCopiesByArticle(publishedVersion, copy)
+        return copy
     }
 
     @Transactional
     override fun getPublishedVersion(articleId: Long): ArticleVersion {
         return (
             repository.findByMainArticleIdAndState(articleId, State.PUBLISHED)
-                ?: throw PublishedVersionNotFoundException("published version to article: $articleId not found")
+                ?: throw PublishedVersionNotFoundException("Published version to article: $articleId not found")
             )
     }
 

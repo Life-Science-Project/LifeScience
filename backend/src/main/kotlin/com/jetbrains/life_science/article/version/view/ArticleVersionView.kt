@@ -4,6 +4,7 @@ import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.entity.State
 
 data class ArticleVersionView(
+    val id: Long,
     val name: String,
     val articleId: Long,
     val sections: List<SectionLazyView>,

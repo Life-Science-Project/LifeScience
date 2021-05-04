@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.article.review.service
 
 import com.jetbrains.life_science.article.review.entity.Review
-import com.jetbrains.life_science.user.credentials.entity.UserCredentials
+import com.jetbrains.life_science.user.master.entity.UserCredentials
 
 interface ReviewService {
 

@@ -1,17 +1,17 @@
 package com.jetbrains.life_science.article.version.service
 
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
-import com.jetbrains.life_science.user.details.entity.User
+import com.jetbrains.life_science.user.master.entity.User
 
 interface ArticleVersionService {
 
-    fun createBlank(info: ArticleVersionInfo): ArticleVersion
+    fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion
 
     fun approve(versionId: Long)
 
     fun archive(versionId: Long)
 
-    fun createCopy(articleId: Long)
+    fun createCopy(articleId: Long, user: User): ArticleVersion
 
     fun getPublishedVersion(articleId: Long): ArticleVersion
 
