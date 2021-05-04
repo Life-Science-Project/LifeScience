@@ -102,7 +102,7 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         ex: SearchUnitTypeNotSupportedException,
         request: WebRequest
     ): ApiErrorResponse {
-        return ApiErrorResponse("Search unit with type ${ex.unsupportedType} not supported, [ARTICLE, SECTION, CONTENT] only available.")
+        return ApiErrorResponse("Search unit with type ${ex.unsupportedType} not supported, [ARTICLE, CONTENT] only available.")
     }
 
     private fun notFoundResponse(entity: String): ApiErrorResponse {

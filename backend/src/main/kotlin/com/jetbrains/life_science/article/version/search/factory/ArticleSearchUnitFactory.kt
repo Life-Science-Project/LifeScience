@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component
 class ArticleSearchUnitFactory {
 
     fun create(articleVersion: ArticleVersion): ArticleVersionSearchUnit {
-        return ArticleVersionSearchUnit(articleVersion.id, articleVersion.name)
+        return ArticleVersionSearchUnit(articleVersion.id, articleVersion.articleId, articleVersion.name)
     }
 }

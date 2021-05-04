@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component
 @Component
 class ContentFactory {
 
-    fun create(info: ContentInfo): Content {
+    fun create(info: ContentInfo, articleId: Long): Content {
         return Content(
+            articleId = articleId,
             sectionId = info.sectionId,
             text = info.text,
             tags = info.tags,
@@ -19,6 +20,7 @@ class ContentFactory {
 
     fun copy(origin: Content): Content {
         return Content(
+            articleId = origin.articleId,
             sectionId = origin.sectionId,
             text = origin.text,
             tags = origin.tags,
@@ -27,10 +29,11 @@ class ContentFactory {
         )
     }
 
-    fun setParams(origin: Content, info: ContentInfo) {
+    fun setParams(origin: Content, info: ContentInfo, articleId: Long) {
         origin.text = info.text
         origin.tags = info.tags
         origin.sectionId = info.sectionId
         origin.references = info.references
+        origin.articleId = articleId
     }
 }

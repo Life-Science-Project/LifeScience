@@ -60,17 +60,18 @@ class ContentServiceImpl(
     }
 
     override fun create(info: ContentInfo): Content {
-        sectionService.checkExistsById(info.sectionId)
+        val section = sectionService.getById(info.sectionId)
         if (repository.countBySectionId(info.sectionId) > 0) {
             throw ContentAlreadyExistsException("Content already exists is section with id: ${info.sectionId}")
         }
-        val content = factory.create(info)
+        val content = factory.create(info, section.articleId)
         return repository.save(content)
     }
 
     override fun update(info: ContentInfo): Content {
         val content = findById(info.id)
-        factory.setParams(content, info)
+        val section = sectionService.getById(info.sectionId)
+        factory.setParams(content, info, section.articleId)
         return repository.save(content)
     }
 

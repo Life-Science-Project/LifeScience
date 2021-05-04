@@ -6,10 +6,13 @@ import com.jetbrains.life_science.util.getOrThrow
 import org.springframework.stereotype.Service
 
 @Service
-class ArticleSearchService : UnitSearchService(SearchUnitType.ARTICLE) {
+class ArticleSearchService : UnitSearchService {
 
     override fun process(id: String, response: Map<String, Any>): ArticleSearchResult {
         val name = response.getOrThrow("text") { "Name not found" }.toString()
-        return ArticleSearchResult(id, name)
+        val articleId = response.getOrThrow("articleId") { "ArticleId not found" } as Number
+        return ArticleSearchResult(id.toLong(), name, articleId.toLong())
     }
+
+    override val key = SearchUnitType.ARTICLE
 }

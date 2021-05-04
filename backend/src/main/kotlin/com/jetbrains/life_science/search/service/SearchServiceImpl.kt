@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.search.service
 
 import com.jetbrains.life_science.search.query.SearchQueryInfo
+import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.SearchResult
 import com.jetbrains.life_science.search.result.UnitSearchService
 import com.jetbrains.life_science.util.getLogger
@@ -23,6 +24,11 @@ class SearchServiceImpl(
     val logger = getLogger()
 
     lateinit var searchUnitServices: Map<String, UnitSearchService>
+
+    override val supportedTypes: List<SearchUnitType> = listOf(
+        SearchUnitType.CONTENT,
+        SearchUnitType.ARTICLE
+    )
 
     @Autowired
     fun register(unitSearchService: List<UnitSearchService>) {
@@ -49,10 +55,9 @@ class SearchServiceImpl(
             .from(query.from)
             .size(query.size)
 
-        val searchRequest = SearchRequest()
-        searchRequest.source(searchBuilder)
-        searchRequest.indices(*getRequestIndices(query))
-        return searchRequest
+        return SearchRequest()
+            .source(searchBuilder)
+            .indices(*getRequestIndices(query))
     }
 
     private fun getRequestIndices(query: SearchQueryInfo) = query.includeTypes.map { it.indexName }.toTypedArray()

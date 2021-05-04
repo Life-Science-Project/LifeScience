@@ -4,6 +4,7 @@ import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.SearchResult
 
 class ArticleSearchResult(
-    id: String,
-    val name: String
-) : SearchResult(SearchUnitType.ARTICLE.presentationName, id)
+    val versionId: Long,
+    val name: String,
+    val articleId: Long
+) : SearchResult(SearchUnitType.ARTICLE.presentationName)
