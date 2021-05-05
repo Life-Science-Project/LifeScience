@@ -1,9 +1,9 @@
 package com.jetbrains.life_science.article.content.publish.dto
 
-class ContentInnerDTO(
+data class ContentInnerDTO(
     val text: String,
 
-    val references: MutableList<String>,
+    val references: List<String>,
 
-    val tags: MutableList<String>
+    val tags: List<String>
 )

@@ -8,7 +8,7 @@ interface ContentInfo {
 
     val text: String
 
-    val references: MutableList<String>
+    val references: List<String>
 
-    val tags: MutableList<String>
+    val tags: List<String>
 }

@@ -13,5 +13,5 @@ data class ArticleVersionCreationDTO(
     @field:NotBlank
     val name: String,
 
-    val sections: List<SectionInnerDTO>
+    val sections: List<SectionInnerDTO> = emptyList()
 )

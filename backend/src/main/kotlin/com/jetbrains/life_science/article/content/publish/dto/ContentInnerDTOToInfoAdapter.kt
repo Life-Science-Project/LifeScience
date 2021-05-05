@@ -9,7 +9,7 @@ class ContentInnerDTOToInfoAdapter(
 ) : ContentInfo {
     override val text: String = dto.text
 
-    override val references: MutableList<String> = dto.references
+    override val references: List<String> = dto.references
 
-    override val tags: MutableList<String> = dto.tags
+    override val tags: List<String> = dto.tags
 }
