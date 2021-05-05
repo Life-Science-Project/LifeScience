@@ -8,12 +8,6 @@ node {
     download = true
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
-    }
-}
-
 
 task bundle(type: NpmTask, dependsOn: npmInstall) {
     environment = ['CI': '']
