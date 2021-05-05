@@ -1,5 +1,9 @@
 package com.jetbrains.life_science.article.version.controller
 
+import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTOToInfoAdapter
+import com.jetbrains.life_science.article.content.publish.service.ContentService
+import com.jetbrains.life_science.article.section.dto.SectionInnerDTOToInfoAdapter
+import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTOToInfoAdapter
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
@@ -9,12 +13,13 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.user.master.entity.UserCredentials
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.annotation.Secured
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -22,7 +27,9 @@ import java.security.Principal
 @RestController
 @RequestMapping("/api/articles/versions")
 class ArticleVersionController(
-    val service: ArticleVersionService,
+    val articleVersionService: ArticleVersionService,
+    val sectionService: SectionService,
+    val contentService: ContentService,
     val viewMapper: ArticleVersionViewMapper,
     val userService: UserService,
     val userCredentialsService: UserCredentialsService
@@ -33,21 +40,31 @@ class ArticleVersionController(
         @PathVariable versionId: Long,
         principal: Principal
     ): ArticleVersionView {
-        val version = service.getById(versionId)
+        val version = articleVersionService.getById(versionId)
         val userCredentials = userCredentialsService.getByEmail(principal.email)
         checkGetPermission(userCredentials, version)
         return viewMapper.createView(version)
     }
 
     @PostMapping
-    fun createEmptyVersion(
+    @Transactional
+    fun createNewVersion(
         @Validated @RequestBody dto: ArticleVersionCreationDTO,
         principal: Principal
     ): ArticleVersionView {
         val user = userService.getByEmail(principal.email)
-        val createdVersion = service.createBlank(
+        val createdVersion = articleVersionService.createBlank(
             ArticleVersionCreationDTOToInfoAdapter(dto, user)
         )
+        for ((order, sectionInnerDTO) in dto.sections.withIndex()) {
+            val sectionInfo = SectionInnerDTOToInfoAdapter(createdVersion.id, order, sectionInnerDTO)
+            val createdSection = sectionService.create(sectionInfo)
+
+            val contentInfo = ContentInnerDTOToInfoAdapter(createdSection.id, sectionInnerDTO.content)
+            contentService.create(contentInfo)
+
+            createdVersion.sections.add(createdSection)
+        }
         return viewMapper.createView(createdVersion)
     }
 
@@ -57,7 +74,7 @@ class ArticleVersionController(
         principal: Principal
     ): ArticleVersionView {
         val user = userService.getByEmail(principal.email)
-        val createdVersion = service.createCopy(sampleVersionId, user)
+        val createdVersion = articleVersionService.createCopy(sampleVersionId, user)
         return viewMapper.createView(createdVersion)
     }
 
@@ -69,7 +86,7 @@ class ArticleVersionController(
     ): ArticleVersionView {
         checkUpdatePermission(versionId, principal)
         val user = userService.getByEmail(principal.email)
-        val updatedVersion = service.updateById(ArticleVersionDTOToInfoAdapter(dto, user, versionId))
+        val updatedVersion = articleVersionService.updateById(ArticleVersionDTOToInfoAdapter(dto, user, versionId))
         return viewMapper.createView(updatedVersion)
     }
 
@@ -79,7 +96,7 @@ class ArticleVersionController(
         @PathVariable versionId: Long,
         principal: Principal
     ) {
-        service.approve(versionId)
+        articleVersionService.approve(versionId)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
@@ -88,14 +105,14 @@ class ArticleVersionController(
         @PathVariable versionId: Long,
         principal: Principal
     ) {
-        service.archive(versionId)
+        articleVersionService.archive(versionId)
     }
 
     private fun checkUpdatePermission(
         versionId: Long,
         principal: Principal
     ) {
-        val articleVersion = service.getById(versionId)
+        val articleVersion = articleVersionService.getById(versionId)
         val userCredentials = userCredentialsService.getByEmail(principal.email)
         checkPermission(userCredentials, articleVersion)
     }

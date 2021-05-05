@@ -12,8 +12,8 @@ class ContentFactory {
             articleId = articleId,
             sectionId = info.sectionId,
             text = info.text,
-            tags = info.tags,
-            references = info.references,
+            tags = info.tags.toMutableList(),
+            references = info.references.toMutableList(),
             id = null
         )
     }
@@ -31,9 +31,9 @@ class ContentFactory {
 
     fun setParams(origin: Content, info: ContentInfo, articleId: Long) {
         origin.text = info.text
-        origin.tags = info.tags
+        origin.tags = info.tags.toMutableList()
         origin.sectionId = info.sectionId
-        origin.references = info.references
+        origin.references = info.references.toMutableList()
         origin.articleId = articleId
     }
 }
