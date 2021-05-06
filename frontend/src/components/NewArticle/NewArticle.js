@@ -203,6 +203,7 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
                         </button>
                         <button type="submit"
                                 className="btn btn-large btn-success new-article-form__button p-2 bd-highlight"
+                                disabled={submitDisabled()}
                                 onClick={handleSubmit}>Submit
                         </button>
                     </div>
