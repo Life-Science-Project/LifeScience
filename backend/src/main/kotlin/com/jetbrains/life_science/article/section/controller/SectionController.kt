@@ -112,6 +112,7 @@ class SectionController(
         }
     }
 
+    // TODO:: не должно глобально отличаться от ArticleVersion
     private fun checkAccess(versionId: Long, principal: Principal?) {
         val articleVersion = articleVersionService.getById(versionId)
         if (articleVersion.state != State.PUBLISHED) {

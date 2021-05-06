@@ -291,11 +291,7 @@ class SectionControllerTest :
     }
 
     private fun getArticleVersionSections(id: Long): List<SectionView> {
-        val sections = getAllRequest(id)
-            .andExpect {
-                status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
-            }.andReturn().response.contentAsString
+        val sections = assertOkAndGetJson(getAllRequest(id))
         return getViewsFromJson(sections)
     }
 
