@@ -10,7 +10,6 @@ import com.jetbrains.life_science.exception.not_found.*
 import org.springframework.expression.AccessException
 import com.jetbrains.life_science.exception.request.*
 import org.springframework.http.HttpStatus
-import org.springframework.security.authentication.InternalAuthenticationServiceException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
