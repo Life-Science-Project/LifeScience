@@ -31,7 +31,7 @@ const Section = (props) => {
         if (!component) {
             component = <SectionPage text={contents.text}/>
         }
-        return (contents) ? component : <Preloader/>
+        return component
     }
 
     return getSection()
