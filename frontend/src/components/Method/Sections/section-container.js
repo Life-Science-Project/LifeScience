@@ -10,9 +10,9 @@ const SectionContainer = (props) => {
     const dispatch = useDispatch()
     const match = useRouteMatch()
 
-    // const [name, setName] = useState("");
-    // const [contents, setContents] = useState([]);
-    // const [isReceived, setIsReceived] = useState(false);
+    const name = useSelector(state => state.section.name);
+    const contents = useSelector(state => state.section.contents);
+    const isReceived = useSelector(state => state.section.isReceived)
 
     useEffect(() => {
         getContents()
@@ -23,10 +23,6 @@ const SectionContainer = (props) => {
         const sectionId = match.params.sectionId;
         dispatch(fetchContents(versionId, sectionId))
     }
-
-    const name = useSelector(state => state.section.name);
-    const contents = useSelector(state => state.section.contents);
-    const isReceived = useSelector(state => state.section.isReceived);
 
     if (!isReceived) return <Preloader/>
     return (

@@ -24,14 +24,6 @@ const Method = (props) => {
                         ))
                     }
                 </ul>
-                {
-                    sections[0] && (
-                        <Switch>
-                            {
-                                <Redirect exact from={link} to={link + "/" + sections[0].id}/>
-                            }
-                        </Switch>)
-                }
                 <Switch>
                     <Route path={link + "/:sectionId"}>
                         <SectionContainer versionId={versionId}/>

@@ -2,7 +2,8 @@ import {articleApi, contentApi, methodApi} from "../api/method-api";
 import {categoryApi} from "../api/category-api";
 import {getCategory, getError} from "./category-reducer";
 
-export const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
+const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
+const REQUEST_SECTIONS = 'REQUEST_SECTIONS'
 
 const initialState = {
     name: "",
@@ -20,8 +21,15 @@ function receiveSections(data) {
     }
 }
 
+function requestSections() {
+    return {
+        type: REQUEST_SECTIONS
+    }
+}
+
 export function fetchSections(articleId) {
     return dispatch => {
+        dispatch(requestSections())
         return methodApi.getMethod(articleId)
             .then(response => response.data)
             .then(data => dispatch(receiveSections(data)))
@@ -36,7 +44,12 @@ export default function methodReducer(state = initialState, action) {
                 name: action.name,
                 sections: action.sections,
                 versionId: action.versionId,
-                isReceived: true
+                isReceived: true,
+            }
+        case REQUEST_SECTIONS:
+            return  {
+                ...state,
+                isReceived: false
             }
         default:
             return state

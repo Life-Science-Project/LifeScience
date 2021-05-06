@@ -8,6 +8,7 @@ import Collaboration from "./FindCollaboration/collaboration";
 import Education from "./Education/education";
 import SectionPage from "../../Page/SectionPage";
 import Preloader from "../../common/Preloader/preloader";
+import NoContent from "./no-content";
 
 
 const Section = (props) => {
