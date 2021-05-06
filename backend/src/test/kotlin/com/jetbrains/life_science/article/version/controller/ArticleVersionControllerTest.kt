@@ -1,9 +1,12 @@
 package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.ControllerTest
+import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTO
 import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
+import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
+import com.jetbrains.life_science.article.section.parameter.dto.ParameterDTO
 import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.search.repository.SectionSearchUnitRepository
 import com.jetbrains.life_science.article.section.view.SectionLazyView
@@ -143,23 +146,59 @@ internal class ArticleVersionControllerTest :
     }
 
     /**
-     * Article versioning test
+     * Article versioning test without sections
      */
     @Test
-    fun `create version`() {
+    fun `create version without sections`() {
         // Prepare test data
         val dto = ArticleVersionCreationDTO(ArticleDTO(1), "next version")
 
         // Prepare expected result
-        val expectedView = ArticleVersionView(8, "next version", 4, listOf(), State.EDITING)
+        val expectedView = ArticleVersionView(7, "next version", 4, listOf(), State.EDITING)
 
         // Action
         val result = post(dto, urlWithArticleId())
-        val created = get(8)
+        val created = get(result.id)
 
         // Check
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
+    }
+
+    /**
+     * Article versioning test with sections and content
+     */
+    @Test
+    fun `create version with sections and content`() {
+        // Prepare test data
+        val dto = ArticleVersionCreationDTO(
+            ArticleDTO(1), "big version",
+            listOf(
+                SectionInnerDTO(
+                    "inner section 1",
+                    "desc 1",
+                    listOf(ParameterDTO("a", "2")),
+                    true,
+                    ContentInnerDTO("text", listOf("ref 1"), listOf("tag 1"))
+                )
+            )
+        )
+
+        val contentToSave = Content(9, 5, "text", mutableListOf("tag 1"), mutableListOf("ref 1"))
+        Mockito.`when`(contentRepository.save(contentToSave)).thenReturn(contentToSave)
+
+        // Prepare expected result
+        val expectedView =
+            ArticleVersionView(9, "big version", 5, listOf(SectionLazyView(9, "inner section 1", 0)), State.EDITING)
+
+        // Action
+        val result = post(dto, urlWithArticleId())
+        val created = get(result.id)
+
+        // Check
+        assertEquals(expectedView, result)
+        assertEquals(expectedView, created)
+        Mockito.verify(contentRepository, times(1)).save(contentToSave)
     }
 
     /**
@@ -175,11 +214,11 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(6, "name 1.1", 1),
             SectionLazyView(7, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView(7, "master 1", 1, expectedSectionViews, State.EDITING)
+        val expectedView = ArticleVersionView(8, "master 1", 1, expectedSectionViews, State.EDITING)
 
         // Action
         val result = putCopy(publishedVersionId)
-        val created = get(7)
+        val created = get(result.id)
 
         // Check
         assertEquals(expectedView, result)
