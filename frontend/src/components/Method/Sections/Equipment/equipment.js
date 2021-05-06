@@ -1,6 +1,8 @@
 import React from "react";
+import NoContent from "../no-content";
 
 const Equipment = ({contents}) => {
+    if (!contents) return <NoContent/>
     return (
         <div className="section-content">
             {
