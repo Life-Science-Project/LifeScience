@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useRouteMatch, withRouter} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchContents, clearContents} from "../../../redux/section-reducer";
-import Preloader from "../../common/Preloader/preloader";
 import Section from "./section";
-import {clearSections} from "../../../redux/method-reducer";
+import Preloader from "../../common/Preloader/preloader";
 
 const SectionContainer = (props) => {
 
