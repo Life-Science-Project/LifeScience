@@ -5,7 +5,10 @@ import SectionContainer from "./Sections/section-container?";
 
 const Method = (props) => {
     const link = props.match.url
-    const {name, sections, versionId} = props;
+    const {name, sections, versionId, addButton} = props;
+    const buttonStyle = {
+        "margin-left": "-1.5rem"
+    }
     return (
         <Router>
             <div className="method__method-name">
@@ -22,6 +25,12 @@ const Method = (props) => {
                                          to={link + "/" + section.id}>{section.name}</NavLink>
                             </li>
                         ))
+                    }
+                    {
+                        addButton &&
+                        (<li className="list-item" style={buttonStyle}>
+                            {addButton}
+                        </li>)
                     }
                 </ul>
                 <Switch>

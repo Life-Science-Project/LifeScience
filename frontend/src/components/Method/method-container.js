@@ -29,13 +29,15 @@ const MethodContainer = () => {
         getSections()
     }, [match.params])
 
+    const getAddButton = () => {
+        return isAuthorized && <AddButton articleId={articleId}/>
+    }
+
+
     if (!isReceived) return <Preloader/>
     return (
         <div>
-            {
-                isAuthorized && <AddButton articleId={articleId}/>
-            }
-            <Method name={name} sections={sections} versionId={versionId}/>
+            <Method name={name} sections={sections} versionId={versionId} addButton={getAddButton()}/>
         </div>
     );
 
