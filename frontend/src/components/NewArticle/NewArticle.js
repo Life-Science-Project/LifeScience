@@ -3,17 +3,17 @@ import React, {useEffect, useState} from "react";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
-import {useLocation, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {getCategoryThunk} from "../../redux/category-reducer";
 import {connect, useDispatch, useSelector} from "react-redux";
-import {addMethodThunk} from "../../redux/method-reducer";
+import {addMethodThunk, clearPostStatus, PostStatusEnum} from "../../redux/actions/new-article-actions";
+import {useRouteMatch} from "react-router";
+import Preloader from "../common/Preloader/preloader";
 
-const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk}) => {
+const NewArticle = ({history, isAuthorized, isInitialized, addMethodThunk}) => {
     if (!isAuthorized && isInitialized) {
         history.push('/login');
     }
-
-    const categoryId = match.params.categoryId;
 
     const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
         "Method advantages and disadvantages", "Troubleshooting"];
@@ -25,19 +25,23 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
         name: SECTION_TITLES[0],
         content: "",
     }]);
-
     const [methodName, setMethodName] = useState("")
 
     const dispatch = useDispatch()
-    const location = useLocation()
+    const match = useRouteMatch()
+
+    const categoryId = match.params.categoryId;
+    const category = useSelector(state => state.categoryPage.category)
+    const postStatus = useSelector(state => state.newArticle.postStatus)
+    const articleId = useSelector(state => state.newArticle.articleId);
 
     useEffect(() => {
         refreshCategory()
-    }, [location.search])
+    }, [match.params])
 
     const refreshCategory = () => {
         const categoryId = match.params.categoryId;
-        getCategoryThunk(categoryId)(dispatch);
+        dispatch(getCategoryThunk(categoryId));
     }
 
     const newSection = () => {
@@ -71,8 +75,8 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
 
     const handlePreview = () => {
         setPreview(!preview);
-
     }
+
     const handleSubmit = (event) => {
         event.preventDefault();
         addMethodThunk(categoryId, methodName, getSectionsForSubmit());
@@ -120,7 +124,11 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
         setSections(newSections);
     }
 
-    const category = useSelector(state => state.categoryPage.category)
+    if (postStatus === PostStatusEnum.POSTING) return <Preloader/>
+    if (postStatus === PostStatusEnum.POSTED) {
+        dispatch(clearPostStatus()) //clear information for further use
+        history.push(`/method/${articleId}`);
+    }
 
     return (
         preview
@@ -221,4 +229,4 @@ const mapStateToProps = (state) => {
     })
 }
 
-export default connect(mapStateToProps, {getCategoryThunk, addMethodThunk})(withRouter(NewArticle));
+export default connect(mapStateToProps, {addMethodThunk})(withRouter(NewArticle));
