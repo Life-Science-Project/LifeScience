@@ -9,10 +9,11 @@ import {connect, useDispatch, useSelector} from "react-redux";
 import {addMethodThunk, clearPostStatus, PostStatusEnum} from "../../redux/actions/new-article-actions";
 import {useRouteMatch} from "react-router";
 import Preloader from "../common/Preloader/preloader";
+import {LOGIN_URL, METHOD_URL} from "../../constants";
 
 const NewArticle = ({history, isAuthorized, isInitialized, addMethodThunk}) => {
     if (!isAuthorized && isInitialized) {
-        history.push('/login');
+        history.push(LOGIN_URL);
     }
 
     const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
@@ -127,7 +128,7 @@ const NewArticle = ({history, isAuthorized, isInitialized, addMethodThunk}) => {
     if (postStatus === PostStatusEnum.POSTING) return <Preloader/>
     if (postStatus === PostStatusEnum.POSTED) {
         dispatch(clearPostStatus()) //clear information for further use
-        history.push(`/method/${articleId}`);
+        history.push(`${METHOD_URL}/${articleId}`);
     }
 
     return (
