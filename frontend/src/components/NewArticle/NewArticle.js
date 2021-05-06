@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
-import {withRouter} from "react-router-dom";
+import {useLocation, withRouter} from "react-router-dom";
 import {getCategoryThunk} from "../../redux/category-reducer";
 import {connect, useDispatch, useSelector} from "react-redux";
 import {addMethodThunk} from "../../redux/method-reducer";
@@ -29,10 +29,11 @@ const NewArticle = ({history, isAuthorized, isInitialized, match, addMethodThunk
     const [methodName, setMethodName] = useState("")
 
     const dispatch = useDispatch()
+    const location = useLocation()
 
     useEffect(() => {
         refreshCategory()
-    })
+    }, [location.search])
 
     const refreshCategory = () => {
         const categoryId = match.params.categoryId;
