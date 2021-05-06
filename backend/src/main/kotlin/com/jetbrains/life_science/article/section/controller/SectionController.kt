@@ -33,7 +33,7 @@ class SectionController(
         @PathVariable versionId: Long,
         principal: Principal?
     ): List<SectionView> {
-        checkArticleVersion(versionId)
+        checkArticleVersionExists(versionId)
         checkAccess(versionId, principal)
         return service.getByVersionId(versionId).map { sectionViewMapper.createView(it) }
     }
@@ -44,7 +44,7 @@ class SectionController(
         @PathVariable sectionId: Long,
         principal: Principal?
     ): SectionView {
-        checkArticleVersion(versionId)
+        checkArticleVersionExists(versionId)
         checkAccess(versionId, principal)
         val section = service.getById(sectionId)
         return sectionViewMapper.createView(section)
@@ -57,7 +57,7 @@ class SectionController(
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        checkArticleVersion(versionId)
+        checkArticleVersionExists(versionId)
         checkIdEquality(versionId, dto.articleVersionId)
         val section = service.create(
             SectionDTOToInfoAdapter(dto)
@@ -73,7 +73,7 @@ class SectionController(
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        checkArticleVersion(versionId)
+        checkArticleVersionExists(versionId)
         val version = service.getById(sectionId)
         checkIdEquality(versionId, version.articleVersion.id)
         val updatedSection = service.update(
@@ -89,13 +89,13 @@ class SectionController(
         @PathVariable sectionId: Long,
         principal: Principal
     ) {
-        checkArticleVersion(versionId)
+        checkArticleVersionExists(versionId)
         val section = service.getById(sectionId)
         checkIdEquality(versionId, section.articleVersion.id)
         service.deleteById(sectionId)
     }
 
-    private fun checkArticleVersion(
+    private fun checkArticleVersionExists(
         versionId: Long
     ) {
         if (!articleVersionService.existsById(versionId)) {

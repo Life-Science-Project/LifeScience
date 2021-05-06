@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.section
+package com.jetbrains.life_science.section.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
@@ -15,6 +15,7 @@ import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.*
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -23,10 +24,6 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class SectionControllerTest :
     ControllerTest<SectionDTO, SectionView>(SectionView::class.java) {
-
-    init {
-        apiUrl = "/api/articles/versions/"
-    }
 
     @MockBean
     lateinit var contentRepository: ContentRepository
@@ -38,9 +35,36 @@ class SectionControllerTest :
     internal fun `get all sections`() {
         val sections = getArticleVersionSections(1)
         assertTrue(sections.isNotEmpty())
-        for (section in sections) {
-            assertEquals(section.articleVersionId, 1)
-        }
+        val firstSection = SectionView(
+            id = 1,
+            articleVersionId = 1,
+            description = "desc 1.1",
+            name = "name 1.1",
+            visible = true,
+            order = 1,
+            contents = null
+        )
+        assertEquals(sections[0], firstSection)
+        val secondSection = SectionView(
+            id = 2,
+            articleVersionId = 1,
+            description = "desc 1.2",
+            name = "name 1.2",
+            visible = true,
+            order = 2,
+            contents = null
+        )
+        assertEquals(sections[1], secondSection)
+        val thirdSection = SectionView(
+            id = 3,
+            articleVersionId = 1,
+            description = "desc 1.3",
+            name = "name 1.3",
+            visible = false,
+            order = 3,
+            contents = null
+        )
+        assertEquals(sections[2], thirdSection)
     }
 
     /**
@@ -94,10 +118,22 @@ class SectionControllerTest :
     @Test
     internal fun `create section`() {
         val sectionDTO = SectionDTO(
-            "test_creation", 1, "test_creation", ArrayList(),
-            5, true
+            "test_creation", 1, "test_creation",
+            Collections.emptyList(), 5, true
         )
-        createSection(1, sectionDTO)
+        val responseSection = post(1, sectionDTO)
+        assertNotNull(responseSection.id)
+        val savedSection = get(responseSection.articleVersionId, responseSection.id)
+        val expectedSection = SectionView(
+            id = responseSection.id,
+            articleVersionId = sectionDTO.articleVersionId,
+            name = sectionDTO.name,
+            description = sectionDTO.description,
+            contents = responseSection.contents,
+            order = sectionDTO.order,
+            visible = sectionDTO.visible
+        )
+        assertEquals(expectedSection, savedSection)
     }
 
     /**
@@ -106,8 +142,8 @@ class SectionControllerTest :
     @Test
     internal fun `create section with non-existing articleVersion`() {
         val sectionDTO = SectionDTO(
-            "test_name", 239, "test_description", ArrayList(),
-            5, true
+            "test_name", 239, "test_description",
+            Collections.emptyList(), 5, true
         )
         assertNotFound("Article version", postSectionRequest(239, sectionDTO))
     }
@@ -119,8 +155,8 @@ class SectionControllerTest :
     @Test
     internal fun `create section with wrong articleVersionId in path`() {
         val sectionDTO = SectionDTO(
-            "test_name", 1, "test_description", ArrayList(),
-            5, true
+            "test_name", 1, "test_description",
+            Collections.emptyList(), 5, true
         )
         assertNotFound("Section", postSectionRequest(2, sectionDTO))
     }
@@ -132,9 +168,22 @@ class SectionControllerTest :
     internal fun `update existing section`() {
         val updateSectionDTO = SectionDTO(
             "update_name", 1, "update_description",
-            ArrayList(), 5, true
+            Collections.emptyList(), 5, true
         )
-        updateSection(1, 3, updateSectionDTO)
+        val oldSection = get(1, 3)
+        val responseSection = put(1, 3, updateSectionDTO)
+        assertEquals(3, responseSection.id)
+        val updatedSection = get(1, responseSection.id)
+        val expectedSection = SectionView(
+            id = oldSection.id,
+            articleVersionId = updateSectionDTO.articleVersionId,
+            name = updateSectionDTO.name,
+            description = updateSectionDTO.description,
+            contents = responseSection.contents,
+            order = updateSectionDTO.order,
+            visible = updateSectionDTO.visible
+        )
+        assertEquals(expectedSection, updatedSection)
     }
 
     /**
@@ -144,7 +193,7 @@ class SectionControllerTest :
     internal fun `update section of non-existing articleVersion`() {
         val updateSectionDTO = SectionDTO(
             "update_name", 239, "update_description",
-            ArrayList(), 5, true
+            Collections.emptyList(), 5, true
         )
         assertNotFound("Article version", putRequest(239, 1, updateSectionDTO))
     }
@@ -156,7 +205,7 @@ class SectionControllerTest :
     internal fun `update non-existing section`() {
         val updateSectionDTO = SectionDTO(
             "update_name", 1, "update_description",
-            ArrayList(), 5, true
+            Collections.emptyList(), 5, true
         )
         assertNotFound("Section", putRequest(1, 239, updateSectionDTO))
     }
@@ -169,7 +218,7 @@ class SectionControllerTest :
     internal fun `update section with wrong articleVersionId in path`() {
         val updateSectionDTO = SectionDTO(
             "update_name", 1, "update_description",
-            ArrayList(), 5, true
+            Collections.emptyList(), 5, true
         )
         assertNotFound("Section", postSectionRequest(2, updateSectionDTO))
     }
@@ -205,13 +254,15 @@ class SectionControllerTest :
     @Test
     @WithUserDetails("user")
     internal fun `user privileges`() {
-        assertOk(getAllRequest(1))
-        assertOk(getRequest(1, 1))
-        assertForbidden(getAllRequest(2))
-        assertForbidden(getRequest(3, 4))
+        val publishedArticleVersionId = 1L
+        val notPublishedArticleVersionId = 3L
+        assertOk(getAllRequest(publishedArticleVersionId))
+        assertOk(getRequest(publishedArticleVersionId, 1))
+        assertForbidden(getAllRequest(notPublishedArticleVersionId))
+        assertForbidden(getRequest(notPublishedArticleVersionId, 4))
         val sectionDTO = SectionDTO(
-            "test_forbidden", 1, "test_forbidden", ArrayList(),
-            5, true
+            "test_forbidden", 1, "test_forbidden",
+            Collections.emptyList(), 5, true
         )
         assertForbidden(postSectionRequest(1, sectionDTO))
         assertForbidden(putRequest(1, 1, sectionDTO))
@@ -224,13 +275,15 @@ class SectionControllerTest :
     @Test
     @WithAnonymousUser
     internal fun `anonymous privileges`() {
-        assertOk(getAllRequest(1))
-        assertOk(getRequest(1, 1))
-        assertUnauthenticated(getAllRequest(2))
-        assertUnauthenticated(getRequest(3, 4))
+        val publishedArticleVersionId = 1L
+        val notPublishedArticleVersionId = 3L
+        assertOk(getAllRequest(publishedArticleVersionId))
+        assertOk(getRequest(publishedArticleVersionId, 1))
+        assertUnauthenticated(getAllRequest(notPublishedArticleVersionId))
+        assertUnauthenticated(getRequest(notPublishedArticleVersionId, 4))
         val sectionDTO = SectionDTO(
             "test_unauthenticated", 1, "test_unauthenticated",
-            ArrayList(), 5, true
+            Collections.emptyList(), 5, true
         )
         assertUnauthenticated(postSectionRequest(1, sectionDTO))
         assertUnauthenticated(putRequest(1, 1, sectionDTO))
@@ -247,66 +300,38 @@ class SectionControllerTest :
     }
 
     private fun getAllRequest(articleId: Long): ResultActionsDsl {
-        return mockMvc.get("$apiUrl/$articleId/sections")
+        return mockMvc.get("/api/articles/versions/$articleId/sections")
     }
 
     private fun get(articleId: Long, sectionID: Long): SectionView {
-        return get(sectionID, "$apiUrl/$articleId/sections")
+        return get(sectionID, "/api/articles/versions/$articleId/sections")
     }
 
     private fun getRequest(articleId: Long, sectionID: Long): ResultActionsDsl {
-        return getRequest(sectionID, "$apiUrl/$articleId/sections")
+        return getRequest(sectionID, "/api/articles/versions/$articleId/sections")
     }
 
     protected fun put(articleId: Long, sectionId: Long, sectionDTO: SectionDTO): SectionView {
-        return put(sectionId, sectionDTO, "$apiUrl/$articleId/sections")
+        return put(sectionId, sectionDTO, "/api/articles/versions/$articleId/sections")
     }
 
     private fun putRequest(articleId: Long, sectionId: Long, sectionDTO: SectionDTO): ResultActionsDsl {
-        return putRequest(sectionId, sectionDTO, "$apiUrl/$articleId/sections")
+        return putRequest(sectionId, sectionDTO, "/api/articles/versions/$articleId/sections")
     }
 
     private fun post(articleId: Long, sectionDTO: SectionDTO): SectionView {
-        return post(sectionDTO, "$apiUrl/$articleId/sections")
+        return post(sectionDTO, "/api/articles/versions/$articleId/sections")
     }
 
     private fun postSectionRequest(articleId: Long, sectionDTO: SectionDTO): ResultActionsDsl {
-        return postRequest(sectionDTO, "$apiUrl/$articleId/sections")
+        return postRequest(sectionDTO, "/api/articles/versions/$articleId/sections")
     }
 
     private fun deleteSection(articleId: Long, sectionId: Long) {
-        delete(sectionId, "$apiUrl/$articleId/sections")
+        delete(sectionId, "/api/articles/versions/$articleId/sections")
     }
 
     private fun deleteSectionRequest(articleId: Long, sectionId: Long): ResultActionsDsl {
-        return deleteRequest(sectionId, "$apiUrl/$articleId/sections")
-    }
-
-    private fun createSection(id: Long, dto: SectionDTO) {
-        val responseSection = post(id, dto)
-        assertNotNull(responseSection.id)
-        val savedSection = get(responseSection.articleVersionId, responseSection.id)
-        val expectedSection = SectionView(
-            responseSection.id, dto.articleVersionId, dto.name, dto.description,
-            null, dto.order, dto.visible
-        )
-        assertEquals(expectedSection, savedSection)
-    }
-
-    private fun updateSection(articleId: Long, sectionId: Long, sectionDTO: SectionDTO) {
-        val oldSection = get(articleId, sectionId)
-        val responseSection = put(articleId, sectionId, sectionDTO)
-        assertEquals(sectionId, responseSection.id)
-        val updatedSection = get(articleId, responseSection.id)
-        val expectedSection = SectionView(
-            id = oldSection.id,
-            articleVersionId = sectionDTO.articleVersionId,
-            name = sectionDTO.name,
-            description = sectionDTO.description,
-            order = sectionDTO.order,
-            contents = null,
-            visible = sectionDTO.visible
-        )
-        assertEquals(expectedSection, updatedSection)
+        return deleteRequest(sectionId, "/api/articles/versions/$articleId/sections")
     }
 }
