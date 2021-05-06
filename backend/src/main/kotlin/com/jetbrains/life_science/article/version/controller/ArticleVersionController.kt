@@ -9,7 +9,6 @@ import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTOT
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAdapter
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
-import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
@@ -91,15 +90,6 @@ class ArticleVersionController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{versionId}/approve")
-    fun approve(
-        @PathVariable versionId: Long,
-        principal: Principal
-    ) {
-        articleVersionService.approve(versionId)
-    }
-
-    @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/{versionId}/archive")
     fun archive(
         @PathVariable versionId: Long,
@@ -114,21 +104,14 @@ class ArticleVersionController(
     ) {
         val articleVersion = articleVersionService.getById(versionId)
         val userCredentials = userCredentialsService.getByEmail(principal.email)
-        checkPermission(userCredentials, articleVersion)
+        if (!articleVersion.canModify(userCredentials)) {
+            throw AccessDeniedException("User has no access to that version")
+        }
     }
 
     private fun checkGetPermission(userCredentials: UserCredentials, articleVersion: ArticleVersion) {
-        // If trying to get published version
-        if (articleVersion.state == State.PUBLISHED) return
-        checkPermission(userCredentials, articleVersion)
-    }
-
-    private fun checkPermission(userCredentials: UserCredentials, articleVersion: ArticleVersion) {
-        // If trying to get user's version
-        if (articleVersion.author.id == userCredentials.id) return
-        // If admin or moderator wants to check version
-        if (userCredentials.roles.any { it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR" }) return
-        // Otherwise user do not have permission to get version
-        throw AccessDeniedException("User has no access to that version")
+        if (!articleVersion.canRead(userCredentials)) {
+            throw AccessDeniedException("User has no access to that version")
+        }
     }
 }
