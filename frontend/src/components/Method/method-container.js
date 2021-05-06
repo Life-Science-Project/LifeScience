@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useRouteMatch, withRouter} from "react-router-dom";
-import {connect, useDispatch, useSelector} from 'react-redux';
-import {fetchSections} from "../../redux/method-reducer";
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchSections, clearSections} from "../../redux/method-reducer";
 import Method from "./method";
 import Preloader from "../common/Preloader/preloader";
 import AddButton from "./AddButton/addButton";
@@ -27,6 +27,10 @@ const MethodContainer = () => {
 
     useEffect(() => {
         getSections()
+
+        return () => {
+            dispatch(clearSections())
+        }
     }, [match.params])
 
     const getAddButton = () => {

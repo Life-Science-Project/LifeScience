@@ -1,7 +1,7 @@
 import {sectionApi} from "../api/method-api";
 
 const RECEIVE_CONTENTS = "RECEIVE_CONTENTS"
-const REQUEST_CONTENTS = "REQUEST_CONTENTS"
+const CLEAR_CONTENTS = "CLEAR_CONTENTS"
 
 const initialState = {
     contents: {},
@@ -9,12 +9,11 @@ const initialState = {
     isReceived: false,
 }
 
-function requestContents() {
+export function clearContents() {
     return {
-        type: REQUEST_CONTENTS,
+        type: CLEAR_CONTENTS,
     }
 }
-
 
 function receiveContents(data) {
     return {
@@ -25,9 +24,11 @@ function receiveContents(data) {
 }
 
 export function fetchContents(versionId, sectionId) {
-    return dispatch => sectionApi.getSection(versionId, sectionId)
-        .then(response => response.data)
-        .then(data => dispatch(receiveContents(data)))
+    return dispatch => {
+        sectionApi.getSection(versionId, sectionId)
+            .then(response => response.data)
+            .then(data => dispatch(receiveContents(data)))
+    }
 
 }
 
@@ -40,7 +41,7 @@ export default function sectionReducer(state = initialState, action) {
                 name: action.name,
                 isReceived: true,
             }
-        case REQUEST_CONTENTS: {
+        case CLEAR_CONTENTS: {
             return {
                 ...state,
                 isReceived: false,
