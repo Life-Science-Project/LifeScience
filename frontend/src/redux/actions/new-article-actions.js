@@ -31,20 +31,11 @@ export function clearPostStatus() {
 
 export const addMethodThunk = (categoryId, name, sections) => async (dispatch) => {
     dispatch(postArticle())
-    let response = await articleApi.postVersion(categoryId, name);
-    if (response.status === 200) {
-        let versionId = response.data.id;
-        const articleId = response.data.articleId;
-        for (const s of sections) {
-            response = await articleApi.postSection(versionId, s.name);
-            if (response.status === 200) {
-                let sectionId = response.data.id;
-                if (s.content) response = await contentApi.postContent(sectionId, s.content);
-            }
-        }
-        if (response.status === 200) {
-            await articleApi.approve(versionId);
-            dispatch(receivePostedArticle(articleId))
-        }
-    }
+    let response = await articleApi.postVersion(categoryId, name, sections);
+    //todo exception handling
+    if (response.status !== 200) return
+    let versionId = response.data.id;
+    const articleId = response.data.articleId;
+    await articleApi.approve(versionId);
+    dispatch(receivePostedArticle(articleId))
 }
