@@ -60,10 +60,14 @@ class ArticleVersionController(
             val sectionInfo = SectionInnerDTOToInfoAdapter(createdVersion.id, order, sectionInnerDTO)
             val createdSection = sectionService.create(sectionInfo)
 
-            val contentInfo = ContentInnerDTOToInfoAdapter(createdSection.id, sectionInnerDTO.content)
-            contentService.create(contentInfo)
+            val content = sectionInnerDTO.content
 
-            createdVersion.sections.add(createdSection)
+            if (content != null) {
+                val contentInfo = ContentInnerDTOToInfoAdapter(createdSection.id, content)
+                contentService.create(contentInfo)
+
+                createdVersion.sections.add(createdSection)
+            }
         }
         return viewMapper.createView(createdVersion)
     }
