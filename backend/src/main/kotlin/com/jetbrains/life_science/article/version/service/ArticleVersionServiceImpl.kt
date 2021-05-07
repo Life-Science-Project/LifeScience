@@ -36,8 +36,8 @@ class ArticleVersionServiceImpl(
     }
 
     @Transactional
-    override fun createCopy(articleId: Long, user: User): ArticleVersion {
-        val publishedVersion = getPublishedVersion(articleId)
+    override fun createCopy(versionId: Long, user: User): ArticleVersion {
+        val publishedVersion = getPublishedVersion(versionId)
         val copy = factory.createCopy(publishedVersion)
         copy.author = user
         repository.save(copy)
@@ -46,22 +46,41 @@ class ArticleVersionServiceImpl(
     }
 
     @Transactional
-    override fun getPublishedVersion(articleId: Long): ArticleVersion {
+    override fun getPublishedVersion(versionId: Long): ArticleVersion {
         return (
-            repository.findByMainArticleIdAndState(articleId, State.PUBLISHED)
-                ?: throw PublishedVersionNotFoundException("Published version to article: $articleId not found")
+            repository.findByIdAndStateIn(versionId, listOf(State.PUBLISHED, State.USER_PUBLISHED))
+                ?: throw PublishedVersionNotFoundException("Published version to article: $versionId not found")
             )
     }
 
+    override fun getUserPublishedVersions(articleId: Long): List<ArticleVersion> {
+        return repository.findAllByMainArticleIdAndState(articleId, State.USER_PUBLISHED)
+    }
+
     @Transactional
-    override fun approve(versionId: Long) {
+    override fun approveGlobal(versionId: Long) {
+        approve(versionId, State.PUBLISHED)
+    }
+
+    @Transactional
+    override fun approveUserLocal(versionId: Long) {
+        approve(versionId, State.USER_PUBLISHED)
+    }
+
+    @Transactional
+    override fun moveToEdit(articleVersion: ArticleVersion) {
+        articleVersion.state = State.EDITING
+        repository.save(articleVersion)
+    }
+
+    private fun approve(versionId: Long, state: State) {
         val currentVersion = getById(versionId)
-        val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, State.PUBLISHED)
+        val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, state)
         if (lastPublished != null) {
             if (lastPublished.id == currentVersion.id) return
             archive(lastPublished.id)
         }
-        currentVersion.state = State.PUBLISHED
+        currentVersion.state = state
         searchService.createSearchUnit(currentVersion)
         sectionService.publish(currentVersion.sections)
     }
@@ -84,10 +103,6 @@ class ArticleVersionServiceImpl(
 
     override fun getByArticleId(articleId: Long): List<ArticleVersion> {
         return repository.findAllByMainArticleId(articleId)
-    }
-
-    override fun getByArticleIdAndUser(articleId: Long, user: User): List<ArticleVersion> {
-        return repository.findAllByMainArticleIdAndAuthor(articleId, user)
     }
 
     @Transactional

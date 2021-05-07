@@ -172,8 +172,9 @@ internal class ArticleVersionControllerTest :
     fun `create version with sections and content`() {
         // Prepare test data
         val dto = ArticleVersionCreationDTO(
-            ArticleDTO(1), "big version",
-            listOf(
+            articleDTO = ArticleDTO(1),
+            name = "big version",
+            sections = listOf(
                 SectionInnerDTO(
                     "inner section 1",
                     "desc 1",
@@ -198,7 +199,7 @@ internal class ArticleVersionControllerTest :
         // Check
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
-        Mockito.verify(contentRepository, times(1)).save(contentToSave)
+        Mockito.verify(contentVersionRepository, times(1)).save(contentToSave)
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.user.controller
 
-import com.jetbrains.life_science.article.master.view.ArticleView
-import com.jetbrains.life_science.article.master.view.ArticleViewMapper
+import com.jetbrains.life_science.article.version.view.ArticleVersionView
+import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.entity.User
@@ -27,7 +27,7 @@ class UserController(
     val userService: UserService,
     val userCredentialsService: UserCredentialsService,
     val mapper: UserViewMapper,
-    val articleMapper: ArticleViewMapper,
+    val articleVersionViewMapper: ArticleVersionViewMapper
 ) {
 
     @GetMapping
@@ -79,9 +79,9 @@ class UserController(
     }
 
     @GetMapping("/{userId}/favourites")
-    fun getFavourites(@PathVariable userId: Long): List<ArticleView> {
+    fun getFavourites(@PathVariable userId: Long): List<ArticleVersionView> {
         val user = userService.getById(userId)
-        return user.favouriteArticles.map { articleMapper.createView(it) }
+        return user.favouriteArticles.map { articleVersionViewMapper.createView(it) }
     }
 
     @PatchMapping("/{userId}/favourites/{articleId}")

@@ -7,19 +7,23 @@ interface ArticleVersionService {
 
     fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion
 
-    fun approve(versionId: Long)
+    fun approveGlobal(versionId: Long)
+
+    fun approveUserLocal(versionId: Long)
 
     fun archive(versionId: Long)
 
-    fun createCopy(articleId: Long, user: User): ArticleVersion
+    fun createCopy(versionId: Long, user: User): ArticleVersion
 
-    fun getPublishedVersion(articleId: Long): ArticleVersion
+    fun getPublishedVersion(versionId: Long): ArticleVersion
 
     fun getById(id: Long): ArticleVersion
 
     fun getByArticleId(articleId: Long): List<ArticleVersion>
 
-    fun getByArticleIdAndUser(articleId: Long, user: User): List<ArticleVersion>
-
     fun updateById(info: ArticleVersionInfo): ArticleVersion
+
+    fun moveToEdit(articleVersion: ArticleVersion)
+
+    fun getUserPublishedVersions(articleId: Long): List<ArticleVersion>
 }

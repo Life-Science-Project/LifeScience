@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTOToInfoAdapter
-import com.jetbrains.life_science.article.content.publish.service.ContentService
+import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTO
@@ -12,6 +12,7 @@ import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
+import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.user.master.entity.UserCredentials
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
@@ -28,7 +29,7 @@ import java.security.Principal
 class ArticleVersionController(
     val articleVersionService: ArticleVersionService,
     val sectionService: SectionService,
-    val contentService: ContentService,
+    val contentVersionService: ContentVersionService,
     val viewMapper: ArticleVersionViewMapper,
     val userService: UserService,
     val userCredentialsService: UserCredentialsService
@@ -60,7 +61,7 @@ class ArticleVersionController(
             val createdSection = sectionService.create(sectionInfo)
 
             val contentInfo = ContentInnerDTOToInfoAdapter(createdSection.id, sectionInnerDTO.content)
-            contentService.create(contentInfo)
+            contentVersionService.create(contentInfo)
 
             createdVersion.sections.add(createdSection)
         }
@@ -87,6 +88,22 @@ class ArticleVersionController(
         val user = userService.getByEmail(principal.email)
         val updatedVersion = articleVersionService.updateById(ArticleVersionDTOToInfoAdapter(dto, user, versionId))
         return viewMapper.createView(updatedVersion)
+    }
+
+    @PatchMapping("/{versionId}/to-edit")
+    fun moveToEdit(
+        @PathVariable versionId: Long,
+        principal: Principal
+    ) {
+        val articleVersion = articleVersionService.getById(versionId)
+        val userCredentials = userCredentialsService.getByEmail(principal.email)
+        if (!articleVersion.canModify(userCredentials)) {
+            throw AccessDeniedException("User has no access to that version")
+        }
+        if (articleVersion.isPublished || articleVersion.isArchived) {
+            throw BadRequestException("Version is not editable")
+        }
+        articleVersionService.moveToEdit(articleVersion)
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")

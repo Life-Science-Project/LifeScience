@@ -2,11 +2,13 @@ package com.jetbrains.life_science.article.version.entity
 
 enum class State {
 
-    MODERATION,
+    PENDING_FOR_REVIEW,
 
     EDITING,
 
     ARCHIVED,
 
-    PUBLISHED
+    PUBLISHED,
+
+    USER_PUBLISHED
 }
