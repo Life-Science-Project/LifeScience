@@ -10,9 +10,9 @@ data class SectionInnerDTO(
 
     val description: String = "",
 
-    val parameters: List<ParameterDTO>,
+    val parameters: List<ParameterDTO> = emptyList(),
 
     var visible: Boolean = true,
 
-    val content: ContentInnerDTO
+    val content: ContentInnerDTO? = null
 )
