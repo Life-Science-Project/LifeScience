@@ -7,7 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ArticleVersionRepository : JpaRepository<ArticleVersion, Long> {
 
+    fun findByMainArticleIdAndStateIn(id: Long, states: List<State>): ArticleVersion?
+
+    fun findByIdAndStateIn(id: Long, states: List<State>): ArticleVersion?
+
     fun findByMainArticleIdAndState(id: Long, state: State): ArticleVersion?
+
+    fun findAllByMainArticleIdAndState(id: Long, state: State): List<ArticleVersion>
 
     fun findAllByMainArticleId(id: Long): List<ArticleVersion>
 

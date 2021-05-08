@@ -11,8 +11,7 @@ class ArticleFactory {
         return Article(
             id = 0,
             category = category,
-            versions = mutableListOf(),
-            users = mutableListOf()
+            versions = mutableListOf()
         )
     }
 

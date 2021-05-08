@@ -6,9 +6,9 @@ import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.factory.SectionFactory
 import com.jetbrains.life_science.article.section.repository.SectionRepository
 import com.jetbrains.life_science.article.section.search.service.SectionSearchUnitService
-import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
+import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -73,8 +73,9 @@ class SectionServiceImpl(
     private fun createCopy(origin: Section, newArticle: ArticleVersion): Section {
         val copy = factory.copy(origin)
         copy.articleVersion = newArticle
-        contentService.createCopyBySection(origin, copy)
-        return repository.save(copy)
+        val savedCopy = repository.save(copy)
+        contentService.createCopyBySection(origin, savedCopy)
+        return savedCopy
     }
 
     override fun checkExistsById(id: Long) {
