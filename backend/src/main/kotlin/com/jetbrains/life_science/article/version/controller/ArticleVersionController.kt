@@ -59,7 +59,6 @@ class ArticleVersionController(
             val sectionInfo = SectionInnerDTOToInfoAdapter(createdVersion.id, order, sectionInnerDTO)
             val createdSection = sectionService.create(sectionInfo)
 
-
             val content = sectionInnerDTO.content
 
             if (content != null) {
