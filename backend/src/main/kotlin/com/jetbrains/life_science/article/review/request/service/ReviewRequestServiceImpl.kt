@@ -6,7 +6,7 @@ import com.jetbrains.life_science.article.review.request.repository.ReviewReques
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.ReviewRequestNotFoundException
-import com.jetbrains.life_science.exception.request.ReviewRequestDuplicateException
+import com.jetbrains.life_science.exception.request.DuplicateReviewRequestException
 import com.jetbrains.life_science.exception.request.ReviewResponseAlreadyExistsException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -20,9 +20,9 @@ class ReviewRequestServiceImpl(
 ) : ReviewRequestService {
 
     @Transactional
-    override fun addRequest(info: ReviewRequestInfo): ReviewRequest {
+    override fun add(info: ReviewRequestInfo): ReviewRequest {
         if (repository.existsByVersionIdAndResolutionIsNull(info.versionId)) {
-            throw ReviewRequestDuplicateException("Review for version ${info.versionId} already exists")
+            throw DuplicateReviewRequestException("Review request for version ${info.versionId} already exists")
         }
         val version = articleVersionService.getById(info.versionId)
         version.state = State.PENDING_FOR_REVIEW
@@ -37,7 +37,7 @@ class ReviewRequestServiceImpl(
 
     @Transactional
     override fun removeRequest(reviewId: Long) {
-        val request = getById(reviewId)
+        val request = getByIdOrThrow(reviewId)
         if (request.resolution != null) {
             repository.delete(request)
         } else {
@@ -49,15 +49,15 @@ class ReviewRequestServiceImpl(
         return repository.findByVersionIdAndResolutionIsNull(versionId)
     }
 
-    override fun getRequestsByVersionId(versionId: Long): List<ReviewRequest> {
+    override fun getAllByVersionId(versionId: Long): List<ReviewRequest> {
         return repository.findAllByVersionId(versionId)
     }
 
-    override fun getRequestsByAuthorId(authorId: Long): List<ReviewRequest> {
+    override fun getAllByAuthorId(authorId: Long): List<ReviewRequest> {
         return repository.findAllByVersionAuthorId(authorId)
     }
 
-    override fun getById(reviewRequestId: Long): ReviewRequest {
+    override fun getByIdOrThrow(reviewRequestId: Long): ReviewRequest {
         return repository.findByIdOrNull(reviewRequestId)
             ?: throw ReviewRequestNotFoundException("Review with id $reviewRequestId not found")
     }

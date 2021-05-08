@@ -84,31 +84,31 @@ class UserController(
         return user.favouriteArticles.map { articleVersionViewMapper.createView(it) }
     }
 
-    @PatchMapping("/{userId}/favourites/{articleId}")
+    @PatchMapping("/{userId}/favourites/{versionId}")
     fun addFavourite(
         @PathVariable userId: Long,
-        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
         principal: Principal
     ): UserView {
         val user = userService.getById(userId)
         if (!checkAccess(user, principal)) {
             throw AccessDeniedException("Not enough permissions to add this favourite")
         }
-        val updatedUser = userService.addFavourite(user, articleId)
+        val updatedUser = userService.addFavourite(user, versionId)
         return mapper.createView(updatedUser)
     }
 
-    @DeleteMapping("/{userId}/favourites/{articleId}")
+    @DeleteMapping("/{userId}/favourites/{versionId}")
     fun removeFavourite(
         @PathVariable userId: Long,
-        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
         principal: Principal
     ) {
         val user = userService.getById(userId)
         if (!checkAccess(user, principal)) {
             throw AccessDeniedException("You haven't got enough permissions to delete this favourite")
         }
-        userService.removeFavourite(user, articleId)
+        userService.removeFavourite(user, versionId)
     }
 
     private fun checkAccess(user: User, principal: Principal): Boolean {

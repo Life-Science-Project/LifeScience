@@ -68,7 +68,7 @@ class ReviewServiceImpl(
         return if (user.isAdminOrModerator()) {
             repository.findAllByReviewRequestVersionId(versionId)
         } else {
-            repository.findAllByReviewRequestVersionIdAndReviewRequestVersionAuthor(versionId, user)
+            repository.findAllByReviewRequestVersionIdAndReviewRequestVersionAuthorId(versionId, user.id)
         }
     }
 

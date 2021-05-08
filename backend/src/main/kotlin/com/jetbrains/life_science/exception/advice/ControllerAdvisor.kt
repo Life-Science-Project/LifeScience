@@ -107,9 +107,9 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse(ex.message)
     }
 
-    @ExceptionHandler(ReviewRequestDuplicateException::class)
+    @ExceptionHandler(DuplicateReviewRequestException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleDuplicateReviewRequest(ex: ReviewRequestDuplicateException, request: WebRequest): ApiErrorResponse {
+    fun handleDuplicateReviewRequest(ex: DuplicateReviewRequestException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 

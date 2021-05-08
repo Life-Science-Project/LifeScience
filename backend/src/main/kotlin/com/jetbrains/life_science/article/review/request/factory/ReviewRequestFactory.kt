@@ -5,10 +5,6 @@ import com.jetbrains.life_science.article.review.request.entity.VersionDestinati
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import org.springframework.stereotype.Component
 
-/**
- * @author Потапов Александр
- * @since 06.05.2021
- */
 @Component
 class ReviewRequestFactory {
 

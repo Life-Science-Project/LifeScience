@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*
 import java.security.Principal
 
 @RestController
-@RequestMapping("/api/articles/versions/{versionId}")
+@RequestMapping("/api/articles/versions/{versionId}/reviews")
 class ArticleReviewController(
     val reviewService: ReviewService,
     val reviewRequestService: ReviewRequestService,
@@ -35,7 +35,7 @@ class ArticleReviewController(
     val viewMapper: ReviewViewMapper,
 ) {
 
-    @GetMapping("/reviews")
+    @GetMapping
     fun getReviews(
         @PathVariable versionId: Long,
         principal: Principal
@@ -45,7 +45,7 @@ class ArticleReviewController(
         return viewMapper.createViews(reviews)
     }
 
-    @GetMapping("/reviews/{reviewId}")
+    @GetMapping("/{reviewId}")
     fun getReview(
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
@@ -58,7 +58,7 @@ class ArticleReviewController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PostMapping("/reviews")
+    @PostMapping
     fun createReview(
         @PathVariable versionId: Long,
         @Validated @RequestBody reviewDto: ReviewDTO,
@@ -72,7 +72,7 @@ class ArticleReviewController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PutMapping("/reviews/{reviewId}")
+    @PutMapping("/{reviewId}")
     fun updateReview(
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
@@ -87,7 +87,7 @@ class ArticleReviewController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @DeleteMapping("/reviews/{reviewId}")
+    @DeleteMapping("/{reviewId}")
     fun deleteReview(
         @PathVariable versionId: Long,
         @PathVariable reviewId: Long,
@@ -98,7 +98,7 @@ class ArticleReviewController(
         reviewService.deleteReview(reviewId)
     }
 
-    @PatchMapping("/{versionId}/request-review/local")
+    @PatchMapping("/request/local")
     fun requestReviewLocal(
         @PathVariable versionId: Long,
         principal: Principal
@@ -106,12 +106,12 @@ class ArticleReviewController(
         val user = userCredentialsService.getByEmail(principal.email)
         val version = articleVersionService.getById(versionId)
         checkBeforeRequest(version, user)
-        reviewRequestService.addRequest(
+        reviewRequestService.add(
             ReviewRequestDTOToInfoAdapter(versionId, VersionDestination.USER_LOCAL)
         )
     }
 
-    @PatchMapping("/{versionId}/request-review/global")
+    @PatchMapping("/request/global")
     fun requestReviewGlobal(
         @PathVariable versionId: Long,
         principal: Principal
@@ -119,7 +119,7 @@ class ArticleReviewController(
         val user = userCredentialsService.getByEmail(principal.email)
         val version = articleVersionService.getById(versionId)
         checkBeforeRequest(version, user)
-        reviewRequestService.addRequest(
+        reviewRequestService.add(
             ReviewRequestDTOToInfoAdapter(versionId, VersionDestination.GLOBAL)
         )
     }
@@ -134,7 +134,7 @@ class ArticleReviewController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{versionId}/approve")
+    @PatchMapping("/approve")
     fun approve(
         @PathVariable versionId: Long,
         principal: Principal
@@ -144,7 +144,7 @@ class ArticleReviewController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{versionId}/approve-local")
+    @PatchMapping("/approve-local")
     fun approveLocal(
         @PathVariable versionId: Long,
         principal: Principal
@@ -154,7 +154,7 @@ class ArticleReviewController(
     }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
-    @PatchMapping("/{versionId}/request-changes")
+    @PatchMapping("/request-changes")
     fun requestChanges(
         @PathVariable versionId: Long,
         @Validated @RequestBody reviewDto: ReviewDTO,

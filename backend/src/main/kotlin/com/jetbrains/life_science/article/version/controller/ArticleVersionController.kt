@@ -90,21 +90,6 @@ class ArticleVersionController(
         return viewMapper.createView(updatedVersion)
     }
 
-    @PatchMapping("/{versionId}/to-edit")
-    fun moveToEdit(
-        @PathVariable versionId: Long,
-        principal: Principal
-    ) {
-        val articleVersion = articleVersionService.getById(versionId)
-        val userCredentials = userCredentialsService.getByEmail(principal.email)
-        if (!articleVersion.canModify(userCredentials)) {
-            throw AccessDeniedException("User has no access to that version")
-        }
-        if (articleVersion.isPublished || articleVersion.isArchived) {
-            throw BadRequestException("Version is not editable")
-        }
-        articleVersionService.moveToEdit(articleVersion)
-    }
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/{versionId}/archive")

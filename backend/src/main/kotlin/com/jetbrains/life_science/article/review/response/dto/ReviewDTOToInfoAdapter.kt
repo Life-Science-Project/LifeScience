@@ -17,5 +17,5 @@ class ReviewDTOToInfoAdapter(
     override val comment: String = dto.comment
 
     override val resolution: ReviewResolution =
-        enumValueOrNull(dto.resolution) ?: throw BadRequestException("Resolution not found")
+        enumValueOrNull(dto.resolution) ?: throw BadRequestException("Invalid resolution")
 }

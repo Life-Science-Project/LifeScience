@@ -33,7 +33,7 @@ class ArticleVersion(
 
     val isPublished: Boolean get() = state == State.PUBLISHED || state == State.USER_PUBLISHED
 
-    val isArchived: Boolean get() = state == State.PUBLISHED || state == State.USER_PUBLISHED
+    val isArchived: Boolean get() = state == State.ARCHIVED
 
     fun canRead(user: UserCredentials): Boolean {
         return state == State.PUBLISHED || canModify(user)

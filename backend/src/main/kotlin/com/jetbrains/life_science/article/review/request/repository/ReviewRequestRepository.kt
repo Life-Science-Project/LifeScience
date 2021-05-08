@@ -4,10 +4,6 @@ import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
-/**
- * @author Потапов Александр
- * @since 06.05.2021
- */
 @Repository
 interface ReviewRequestRepository : JpaRepository<ReviewRequest, Long> {
 

@@ -49,18 +49,18 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun addFavourite(user: User, articleId: Long): User {
-        val version = articleVersionService.getById(articleId)
-        if (!user.favouriteArticles.any { it.id == articleId }) {
+    override fun addFavourite(user: User, articleVersionId: Long): User {
+        val version = articleVersionService.getById(articleVersionId)
+        if (!user.favouriteArticles.any { it.id == articleVersionId }) {
             user.favouriteArticles.add(version)
         }
         return user
     }
 
     @Transactional
-    override fun removeFavourite(user: User, articleId: Long) {
-        val version = articleVersionService.getById(articleId)
-        if (user.favouriteArticles.any { it.id == articleId }) {
+    override fun removeFavourite(user: User, articleVersionId: Long) {
+        val version = articleVersionService.getById(articleVersionId)
+        if (user.favouriteArticles.any { it.id == articleVersionId }) {
             user.favouriteArticles.remove(version)
         }
     }
