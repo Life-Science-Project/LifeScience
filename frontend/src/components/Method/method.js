@@ -5,7 +5,10 @@ import SectionContainer from "./Sections/section-container?";
 
 const Method = (props) => {
     const link = props.match.url
-    const {name, sections, versionId} = props;
+    const {name, sections, versionId, addButton} = props;
+    const buttonStyle = {
+        "margin-left": "-1.5rem"
+    }
     return (
         <Router>
             <div className="method__method-name">
@@ -23,15 +26,20 @@ const Method = (props) => {
                             </li>
                         ))
                     }
+                    {
+                        addButton &&
+                        (<li className="list-item" style={buttonStyle}>
+                            {addButton}
+                        </li>)
+                    }
                 </ul>
-                {
-                    sections[0] && (
-                        <Switch>
-                            {
-                                <Redirect exact from={link} to={link + "/" + sections[0].id}/>
-                            }
-                        </Switch>)
-                }
+                <Switch>
+                    {
+                        sections[0] && (
+                            <Redirect exact from={link} to={link + "/" + sections[0].id}/>
+                        )
+                    }
+                </Switch>
                 <Switch>
                     <Route path={link + "/:sectionId"}>
                         <SectionContainer versionId={versionId}/>

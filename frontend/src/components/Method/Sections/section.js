@@ -7,7 +7,6 @@ import Troubleshooting from "./Troubleshooting/troubleshooting";
 import Collaboration from "./FindCollaboration/collaboration";
 import Education from "./Education/education";
 import SectionPage from "../../Page/SectionPage";
-import Preloader from "../../common/Preloader/preloader";
 
 
 const Section = (props) => {
@@ -31,7 +30,7 @@ const Section = (props) => {
         if (!component) {
             component = <SectionPage text={contents.text}/>
         }
-        return (contents) ? component : <Preloader/>
+        return component
     }
 
     return getSection()
