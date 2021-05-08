@@ -187,12 +187,12 @@ class SectionControllerTest :
             ParameterView(
                 id = 1,
                 name = "First parameter",
-                defaultValue ="default_value"
+                defaultValue = "default_value"
             ),
             ParameterView(
                 id = 2,
                 name = "Second parameter",
-                defaultValue ="default_value"
+                defaultValue = "default_value"
             ),
         )
         val expectedSection = SectionView(
