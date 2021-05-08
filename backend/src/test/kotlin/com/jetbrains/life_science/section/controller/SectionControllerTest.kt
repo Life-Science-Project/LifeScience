@@ -4,6 +4,7 @@ import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
 import com.jetbrains.life_science.article.section.dto.SectionDTO
 import com.jetbrains.life_science.article.section.parameter.dto.ParameterDTO
+import com.jetbrains.life_science.article.section.parameter.view.ParameterView
 import com.jetbrains.life_science.article.section.view.SectionView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -39,9 +40,10 @@ class SectionControllerTest :
             articleVersionId = 1,
             description = "desc 1.1",
             name = "name 1.1",
-            visible = true,
+            contents = null,
+            parameters = emptyList(),
             order = 1,
-            contents = null
+            visible = true
         )
         assertEquals(sections[0], firstSection)
         val secondSection = SectionView(
@@ -49,9 +51,10 @@ class SectionControllerTest :
             articleVersionId = 1,
             description = "desc 1.2",
             name = "name 1.2",
-            visible = true,
+            contents = null,
+            parameters = emptyList(),
             order = 2,
-            contents = null
+            visible = true
         )
         assertEquals(sections[1], secondSection)
         val thirdSection = SectionView(
@@ -59,9 +62,10 @@ class SectionControllerTest :
             articleVersionId = 1,
             description = "desc 1.3",
             name = "name 1.3",
-            visible = false,
+            contents = null,
+            parameters = emptyList(),
             order = 3,
-            contents = null
+            visible = false
         )
         assertEquals(sections[2], thirdSection)
     }
@@ -87,6 +91,7 @@ class SectionControllerTest :
             name = "name 1.3",
             description = "desc 1.3",
             contents = null,
+            parameters = emptyList(),
             order = 3,
             visible = false
         )
@@ -129,6 +134,7 @@ class SectionControllerTest :
             name = sectionDTO.name,
             description = sectionDTO.description,
             contents = responseSection.contents,
+            parameters = emptyList(),
             order = sectionDTO.order,
             visible = sectionDTO.visible
         )
@@ -177,12 +183,25 @@ class SectionControllerTest :
         val responseSection = put(1, 3, updateSectionDTO)
         assertEquals(3, responseSection.id)
         val updatedSection = get(1, responseSection.id)
+        val expectedParameters = listOf(
+            ParameterView(
+                id = 1,
+                name = "First parameter",
+                defaultValue ="default_value"
+            ),
+            ParameterView(
+                id = 2,
+                name = "Second parameter",
+                defaultValue ="default_value"
+            ),
+        )
         val expectedSection = SectionView(
             id = oldSection.id,
             articleVersionId = updateSectionDTO.articleVersionId,
             name = updateSectionDTO.name,
             description = updateSectionDTO.description,
             contents = responseSection.contents,
+            parameters = expectedParameters,
             order = updateSectionDTO.order,
             visible = updateSectionDTO.visible
         )
