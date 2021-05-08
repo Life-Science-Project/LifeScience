@@ -64,7 +64,7 @@ class ArticleVersionController(
 
             if (content != null) {
                 val contentInfo = ContentInnerDTOToInfoAdapter(createdSection.id, content)
-                contentService.create(contentInfo)
+                contentVersionService.create(contentInfo)
 
                 createdVersion.sections.add(createdSection)
             }
