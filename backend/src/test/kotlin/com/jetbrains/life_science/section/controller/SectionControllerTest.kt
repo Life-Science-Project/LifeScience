@@ -3,6 +3,7 @@ package com.jetbrains.life_science.section.controller
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
 import com.jetbrains.life_science.article.section.dto.SectionDTO
+import com.jetbrains.life_science.article.section.parameter.dto.ParameterDTO
 import com.jetbrains.life_science.article.section.view.SectionView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -14,7 +15,6 @@ import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.*
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -118,7 +118,7 @@ class SectionControllerTest :
     internal fun `create section`() {
         val sectionDTO = SectionDTO(
             "test_creation", 1, "test_creation",
-            Collections.emptyList(), 5, true
+            emptyList(), 5, true
         )
         val responseSection = post(1, sectionDTO)
         assertNotNull(responseSection.id)
@@ -142,7 +142,7 @@ class SectionControllerTest :
     internal fun `create section with non-existing articleVersion`() {
         val sectionDTO = SectionDTO(
             "test_name", 239, "test_description",
-            Collections.emptyList(), 5, true
+            emptyList(), 5, true
         )
         assertNotFound("Article version", postSectionRequest(239, sectionDTO))
     }
@@ -155,7 +155,7 @@ class SectionControllerTest :
     internal fun `create section with wrong articleVersionId in path`() {
         val sectionDTO = SectionDTO(
             "test_name", 1, "test_description",
-            Collections.emptyList(), 5, true
+            emptyList(), 5, true
         )
         assertNotFound("Section", postSectionRequest(2, sectionDTO))
     }
@@ -165,9 +165,13 @@ class SectionControllerTest :
      */
     @Test
     internal fun `update existing section`() {
+        val parameters = listOf(
+            ParameterDTO("First parameter", "default_value"),
+            ParameterDTO("Second parameter", "default_value")
+        )
         val updateSectionDTO = SectionDTO(
             "update_name", 1, "update_description",
-            Collections.emptyList(), 5, true
+            parameters, 5, true
         )
         val oldSection = get(1, 3)
         val responseSection = put(1, 3, updateSectionDTO)
@@ -192,7 +196,7 @@ class SectionControllerTest :
     internal fun `update section of non-existing articleVersion`() {
         val updateSectionDTO = SectionDTO(
             "update_name", 239, "update_description",
-            Collections.emptyList(), 5, true
+            emptyList(), 5, true
         )
         assertNotFound("Article version", putRequest(239, 1, updateSectionDTO))
     }
@@ -204,7 +208,7 @@ class SectionControllerTest :
     internal fun `update non-existing section`() {
         val updateSectionDTO = SectionDTO(
             "update_name", 1, "update_description",
-            Collections.emptyList(), 5, true
+            emptyList(), 5, true
         )
         assertNotFound("Section", putRequest(1, 239, updateSectionDTO))
     }
@@ -217,7 +221,7 @@ class SectionControllerTest :
     internal fun `update section with wrong articleVersionId in path`() {
         val updateSectionDTO = SectionDTO(
             "update_name", 1, "update_description",
-            Collections.emptyList(), 5, true
+            emptyList(), 5, true
         )
         assertNotFound("Section", postSectionRequest(2, updateSectionDTO))
     }
@@ -261,7 +265,7 @@ class SectionControllerTest :
         assertForbidden(getRequest(notPublishedArticleVersionId, 4))
         val sectionDTO = SectionDTO(
             "test_forbidden", 1, "test_forbidden",
-            Collections.emptyList(), 5, true
+            emptyList(), 5, true
         )
         assertForbidden(postSectionRequest(1, sectionDTO))
         assertForbidden(putRequest(1, 1, sectionDTO))
@@ -282,7 +286,7 @@ class SectionControllerTest :
         assertUnauthenticated(getRequest(notPublishedArticleVersionId, 4))
         val sectionDTO = SectionDTO(
             "test_unauthenticated", 1, "test_unauthenticated",
-            Collections.emptyList(), 5, true
+            emptyList(), 5, true
         )
         assertUnauthenticated(postSectionRequest(1, sectionDTO))
         assertUnauthenticated(putRequest(1, 1, sectionDTO))

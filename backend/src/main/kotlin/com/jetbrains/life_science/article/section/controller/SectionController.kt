@@ -7,12 +7,14 @@ import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.article.section.view.SectionViewMapper
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
+import com.jetbrains.life_science.exception.UnauthorizedException
 import com.jetbrains.life_science.exception.not_found.ArticleVersionNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.user.master.repository.RoleRepository
+import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
-import org.springframework.expression.AccessException
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -23,6 +25,7 @@ import java.security.Principal
 class SectionController(
     val service: SectionService,
     val userService: UserService,
+    val userCredentialsService: UserCredentialsService,
     val articleVersionService: ArticleVersionService,
     val roleRepository: RoleRepository,
     val sectionViewMapper: SectionViewMapper
@@ -112,17 +115,18 @@ class SectionController(
         }
     }
 
-    // TODO:: не должно глобально отличаться от ArticleVersion
     private fun checkAccess(versionId: Long, principal: Principal?) {
         val articleVersion = articleVersionService.getById(versionId)
-        if (articleVersion.state != State.PUBLISHED) {
-            if (principal == null) {
-                throw AccessException("User is not authorized")
-            }
-            val userRole = roleRepository.findByName("ROLE_USER")
-            if (userService.getByEmail(principal.email).roles.contains(userRole)) {
-                throw IllegalAccessException("User can't access to the not published articleVersion")
-            }
+        // If trying to get published sections
+        if (articleVersion.state == State.PUBLISHED) return
+        // If guest tries to get non-published sections
+        if (principal == null) {
+            throw UnauthorizedException("User is not authorized")
         }
+        val userCredentials = userCredentialsService.getByEmail(principal.email)
+        // If admin or moderator wants to check sections
+        if (userCredentials.roles.any { it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR" }) return
+        // Otherwise user do not have permission to get sections
+        throw AccessDeniedException("User has no access to the sections of that articleVersion")
     }
 }
