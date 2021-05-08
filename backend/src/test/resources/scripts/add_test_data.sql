@@ -47,7 +47,6 @@ values (5, 'version 5.1', 1, 2, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
 values (6, 'version 5.1', 1, 1, 2);
 
-
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (1, 'desc 1.1', 'name 1.1', 1, 1, true);
 insert into section (id, description, name, article_version_id, order_number, visible)
@@ -59,7 +58,7 @@ values (4, 'desc 2', 'name 2', 3, 3, true);
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (5, 'desc 3', 'name 3', 6, 1, true);
 
-
 insert into users_favourite_articles(user_id, favourite_articles_id)
-values (2, 1),
-       (2, 2);
+values (2, 1);
+insert into users_favourite_articles(user_id, favourite_articles_id)
+values (2, 2);

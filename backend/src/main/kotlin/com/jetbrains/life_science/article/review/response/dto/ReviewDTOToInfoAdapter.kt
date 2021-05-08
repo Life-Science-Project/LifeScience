@@ -1,11 +1,10 @@
-package com.jetbrains.life_science.article.review.dto
+package com.jetbrains.life_science.article.review.response.dto
 
-import com.jetbrains.life_science.article.review.response.dto.ReviewDTO
 import com.jetbrains.life_science.article.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.article.review.response.service.ReviewInfo
 import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.util.enumValueOrNull
+import com.jetbrains.life_science.util.enumValue
 
 class ReviewDTOToInfoAdapter(
     val dto: ReviewDTO,
@@ -17,5 +16,5 @@ class ReviewDTOToInfoAdapter(
     override val comment: String = dto.comment
 
     override val resolution: ReviewResolution =
-        enumValueOrNull(dto.resolution) ?: throw BadRequestException("Invalid resolution")
+        enumValue<ReviewResolution>(dto.resolution) ?: throw BadRequestException("Invalid resolution")
 }

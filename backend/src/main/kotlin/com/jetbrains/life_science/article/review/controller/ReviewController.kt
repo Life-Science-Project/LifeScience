@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.review.controller
 
-import com.jetbrains.life_science.article.review.dto.ReviewDTOToInfoAdapter
+import com.jetbrains.life_science.article.review.response.dto.ReviewDTOToInfoAdapter
 import com.jetbrains.life_science.article.review.request.dto.ReviewRequestDTOToInfoAdapter
 import com.jetbrains.life_science.article.review.request.entity.VersionDestination
 import com.jetbrains.life_science.article.review.request.service.ReviewRequestService
