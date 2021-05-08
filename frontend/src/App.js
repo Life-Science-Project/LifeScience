@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar/navbar";
 import Login from "./components/main/Authentication/Login/login";
 import MethodContainer from "./components/Method/method-container";
-import NewArticle from "./components/NewArticle/NewArticle"
 import ProfilePageContainer from "./components/main/ProfilePage/profilePageContainer";
 import Home from "./components/main/HomePage/homePage"
 import {connect} from "react-redux";
@@ -16,6 +15,7 @@ import NotFound from "./components/common/NotFound/notFound";
 import Preloader from "./components/common/Preloader/preloader";
 import CategoriesContainer from './components/main/Categories/categoriesContainer'
 import SearchContainer from "./components/Search/search-container";
+import NewArticleContainer from "./components/NewArticle/new-article-container";
 
 class App extends React.Component {
     componentDidMount() {
@@ -33,7 +33,7 @@ class App extends React.Component {
                 <Switch>
                     <Route exact={true} path="/" component={Home}/>
                     <Route path="/profile" render={() => <ProfilePageContainer />}/>
-                    <Route path="/new-article/:categoryId?" render={() => <NewArticle/>}/>
+                    <Route path="/new-article/:categoryId?" render={() => <NewArticleContainer/>}/>
                     <Route path="/register" render={() => <Register/>}/>
                     <Route path="/login" render={() => <Login />}/>
                     <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
