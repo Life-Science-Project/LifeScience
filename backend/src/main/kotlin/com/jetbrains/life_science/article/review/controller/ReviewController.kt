@@ -18,6 +18,7 @@ import com.jetbrains.life_science.user.master.entity.UserCredentials
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
@@ -35,6 +36,7 @@ class ArticleReviewController(
     val viewMapper: ReviewViewMapper,
 ) {
 
+    @Operation(summary = "Returns all version's reviews")
     @GetMapping
     fun getReviews(
         @PathVariable versionId: Long,
@@ -45,6 +47,7 @@ class ArticleReviewController(
         return viewMapper.createViews(reviews)
     }
 
+    @Operation(summary = "Returns review")
     @GetMapping("/{reviewId}")
     fun getReview(
         @PathVariable versionId: Long,
@@ -57,6 +60,7 @@ class ArticleReviewController(
         return viewMapper.createView(review)
     }
 
+    @Operation(summary = "Creates new review associated with version")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
     fun createReview(
@@ -71,6 +75,7 @@ class ArticleReviewController(
         return viewMapper.createView(review)
     }
 
+    @Operation(summary = "Updates existing review")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping("/{reviewId}")
     fun updateReview(
@@ -86,6 +91,7 @@ class ArticleReviewController(
         return viewMapper.createView(updatedReview)
     }
 
+    @Operation(summary = "Deletes existing review")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{reviewId}")
     fun deleteReview(
@@ -98,6 +104,7 @@ class ArticleReviewController(
         reviewService.deleteReview(reviewId)
     }
 
+    @Operation(summary = "Creates review request to change version's state to USER PUBLISHED")
     @PatchMapping("/request/local")
     fun requestReviewLocal(
         @PathVariable versionId: Long,
@@ -111,6 +118,7 @@ class ArticleReviewController(
         )
     }
 
+    @Operation(summary = "Creates review request to change version's state to PUBLISHED")
     @PatchMapping("/request/global")
     fun requestReviewGlobal(
         @PathVariable versionId: Long,
@@ -133,6 +141,7 @@ class ArticleReviewController(
         }
     }
 
+    @Operation(summary = "Changes version state to PUBLISHED by existing review request")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/approve")
     fun approve(
@@ -143,6 +152,7 @@ class ArticleReviewController(
         reviewService.approve(versionId, user, VersionDestination.GLOBAL)
     }
 
+    @Operation(summary = "Changes version state to USER PUBLISHED by existing review request")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/approve-local")
     fun approveLocal(
@@ -153,6 +163,7 @@ class ArticleReviewController(
         reviewService.approve(versionId, user, VersionDestination.USER_LOCAL)
     }
 
+    @Operation(summary = "Changes version state to EDITING by existing review request")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/request-changes")
     fun requestChanges(

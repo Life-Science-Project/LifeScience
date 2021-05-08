@@ -3,6 +3,7 @@ package com.jetbrains.life_science.user.organisation.controller
 import com.jetbrains.life_science.user.organisation.service.OrganisationService
 import com.jetbrains.life_science.user.organisation.view.OrganisationView
 import com.jetbrains.life_science.user.organisation.view.OrganisationViewMapper
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -14,6 +15,7 @@ class OrganisationController(
     val viewMapper: OrganisationViewMapper
 ) {
 
+    @Operation(summary = "Returns all organisations")
     @GetMapping
     fun getAllOrganisations(): List<OrganisationView> {
         val organisations = organisationService.getAllOrganisations()

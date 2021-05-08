@@ -5,6 +5,7 @@ import com.jetbrains.life_science.user.master.dto.NewUserDTO
 import com.jetbrains.life_science.user.master.dto.NewUserDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserService
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -23,6 +24,7 @@ class AuthController(
     val authResponseFactory: AuthResponseFactory
 ) {
 
+    @Operation(summary = "Sign in")
     @PostMapping("/signin")
     fun authenticateUser(@Validated @RequestBody authRequest: AuthRequest): AuthResponse {
         authenticate(authRequest)
@@ -30,12 +32,14 @@ class AuthController(
         return authResponse(user)
     }
 
+    @Operation(summary = "Sign up")
     @PostMapping("/signup")
     fun registerUser(@Validated @RequestBody userDto: NewUserDTO): AuthResponse {
         val user = userService.createUser(NewUserDTOToInfoAdapter(userDto))
         return authResponse(user, true)
     }
 
+    @Operation(summary = "Refreshes JWT token")
     @PostMapping("/refresh")
     fun refreshToken(@Validated @RequestBody refreshRequest: AuthRefreshRequest): AuthResponse {
         val username = jwtService.getUserNameFromExpiredJwtToken(refreshRequest.jwt)

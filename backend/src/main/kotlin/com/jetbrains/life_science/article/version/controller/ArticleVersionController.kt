@@ -16,6 +16,7 @@ import com.jetbrains.life_science.user.master.entity.UserCredentials
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.transaction.annotation.Transactional
@@ -34,6 +35,7 @@ class ArticleVersionController(
     val userCredentialsService: UserCredentialsService
 ) {
 
+    @Operation(summary = "Returns a version, if it's available to the user")
     @GetMapping("/{versionId}")
     fun getVersion(
         @PathVariable versionId: Long,
@@ -45,6 +47,7 @@ class ArticleVersionController(
         return viewMapper.createView(version)
     }
 
+    @Operation(summary = "Creates new article AND new version inside it with optional sections and content")
     @PostMapping
     @Transactional
     fun createNewVersion(
@@ -72,6 +75,7 @@ class ArticleVersionController(
         return viewMapper.createView(createdVersion)
     }
 
+    @Operation(summary = "Creates copy of existing version associated with same article")
     @PutMapping("/{sampleVersionId}/copy")
     fun createCopiedVersion(
         @PathVariable sampleVersionId: Long,
@@ -82,6 +86,7 @@ class ArticleVersionController(
         return viewMapper.createView(createdVersion)
     }
 
+    @Operation(summary = "Updates existing version if it's available to the user")
     @PutMapping("/{versionId}")
     fun updateVersion(
         @PathVariable versionId: Long,
@@ -94,6 +99,7 @@ class ArticleVersionController(
         return viewMapper.createView(updatedVersion)
     }
 
+    @Operation(summary = "Changes version state to ARCHIVED")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/{versionId}/archive")
     fun archive(
