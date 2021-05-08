@@ -2,7 +2,6 @@ package com.jetbrains.life_science.article.review.request.service
 
 import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
 
-
 interface ReviewRequestService {
 
     fun add(info: ReviewRequestInfo): ReviewRequest

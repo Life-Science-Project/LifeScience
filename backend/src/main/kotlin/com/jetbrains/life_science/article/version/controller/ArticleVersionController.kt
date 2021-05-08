@@ -12,7 +12,6 @@ import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.user.master.entity.UserCredentials
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
@@ -89,7 +88,6 @@ class ArticleVersionController(
         val updatedVersion = articleVersionService.updateById(ArticleVersionDTOToInfoAdapter(dto, user, versionId))
         return viewMapper.createView(updatedVersion)
     }
-
 
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/{versionId}/archive")
