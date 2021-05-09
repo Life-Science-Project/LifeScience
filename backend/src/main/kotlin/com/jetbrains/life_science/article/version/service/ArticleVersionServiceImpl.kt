@@ -27,6 +27,12 @@ class ArticleVersionServiceImpl(
     @Autowired
     lateinit var sectionService: SectionService
 
+    override fun checkExistenceById(versionId: Long) {
+        if (!repository.existsById(versionId)) {
+            throw ArticleVersionNotFoundException("Article version with id = $versionId not found")
+        }
+    }
+
     @Transactional
     override fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion {
         val article = articleService.create(info.articleInfo)
