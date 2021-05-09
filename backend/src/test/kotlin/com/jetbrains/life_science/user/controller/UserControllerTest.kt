@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.user.controller
 
 import com.jetbrains.life_science.ControllerTest
-import com.jetbrains.life_science.article.master.view.ArticleView
+import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
@@ -308,9 +308,9 @@ internal class UserControllerTest :
         return mockMvc.get("$apiUrl/current")
     }
 
-    private fun getFavourites(id: Long): List<ArticleView> {
+    private fun getFavourites(id: Long): List<ArticleVersionView> {
         val articles = assertOkAndGetJson(getFavouritesRequest(id))
-        return getViewsFromJson(articles, ArticleView::class.java)
+        return getViewsFromJson(articles, ArticleVersionView::class.java)
     }
 
     private fun getFavouritesRequest(id: Long): ResultActionsDsl {

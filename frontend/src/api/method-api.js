@@ -20,13 +20,14 @@ export const sectionApi = {
 }
 
 export const articleApi = {
-    postVersion(categoryId, name) {
+    postVersion(categoryId, name, sections) {
         const url = 'articles/versions';
         return instance.post(url, {
             articleDTO: {
                 categoryId: categoryId
             },
-            name: name
+            name: name,
+            sections: sections,
         })
     },
     postSection(versionId, name) {

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.user.master.service
 
-import com.jetbrains.life_science.article.master.service.ArticleService
+import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.UserNotFoundException
 import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
 import com.jetbrains.life_science.user.master.entity.User
@@ -16,7 +16,7 @@ class UserServiceImpl(
     val userFactory: UserFactory,
     val userRepository: UserRepository,
     val roleRepository: RoleRepository,
-    val articleService: ArticleService,
+    val articleVersionService: ArticleVersionService,
     val organisationService: OrganisationService
 ) : UserService {
 
@@ -49,21 +49,19 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun addFavourite(user: User, articleId: Long): User {
-        val article = articleService.getById(articleId)
-        if (!user.favouriteArticles.any { it.id == articleId }) {
-            user.favouriteArticles.add(article)
-            article.users.add(user)
+    override fun addFavourite(user: User, articleVersionId: Long): User {
+        val version = articleVersionService.getById(articleVersionId)
+        if (!user.favouriteArticles.any { it.id == articleVersionId }) {
+            user.favouriteArticles.add(version)
         }
         return user
     }
 
     @Transactional
-    override fun removeFavourite(user: User, articleId: Long) {
-        val article = articleService.getById(articleId)
-        if (user.favouriteArticles.any { it.id == articleId }) {
-            user.favouriteArticles.remove(article)
-            article.users.remove(user)
+    override fun removeFavourite(user: User, articleVersionId: Long) {
+        val version = articleVersionService.getById(articleVersionId)
+        if (user.favouriteArticles.any { it.id == articleVersionId }) {
+            user.favouriteArticles.remove(version)
         }
     }
 

@@ -1,55 +1,50 @@
-import React from "react";
-import {withRouter} from "react-router-dom";
-import {connect} from 'react-redux';
-import {fetchSections} from "../../redux/method-reducer";
+import React, {useEffect, useState} from "react";
+import {useRouteMatch, withRouter} from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchSections, clearSections} from "../../redux/method-reducer";
 import Method from "./method";
 import Preloader from "../common/Preloader/preloader";
 import AddButton from "./AddButton/addButton";
 
 
-class MethodContainer extends React.Component {
-    componentDidMount() {
-        this.getSections()
+const MethodContainer = () => {
+
+    const [articleId, setArticleId] = useState(1);
+    const match = useRouteMatch()
+    const dispatch = useDispatch()
+
+    const name = useSelector(state => state.method.name)
+    const sections = useSelector(state => state.method.sections)
+    const versionId = useSelector(state => state.method.versionId)
+    const isReceived = useSelector(state => state.method.isReceived)
+    const isAuthorized = useSelector(state => state.auth.isAuthorized)
+
+    const getSections = () => {
+        const id = match.params.articleId;
+        setArticleId(id)
+        dispatch(fetchSections(id))
     }
 
-    getSections() {
-        const id = this.props.match.params.articleId;
-        this.props.fetchSections(id)
-    }
+    useEffect(() => {
+        getSections()
 
-    render() {
-        if (!this.props.isReceived) {
-            return (
-                <Preloader/>
-            );
+        return () => {
+            dispatch(clearSections())
         }
+    }, [match.params])
 
-        if (this.props.isAuthorized) {
-            return (
-                <div>
-                    <AddButton articleId={this.props.match.params.articleId}/>
-                    <Method name={this.props.name} sections={this.props.sections} versionId={this.props.versionId}/>
-                </div>
-            );
-        }
-
-        return (
-            <div>
-                <Method name={this.props.name} sections={this.props.sections} versionId={this.props.versionId}/>
-            </div>
-        );
+    const getAddButton = () => {
+        return isAuthorized && <AddButton articleId={articleId}/>
     }
+
+
+    if (!isReceived) return <Preloader/>
+    return (
+        <div>
+            <Method name={name} sections={sections} versionId={versionId} addButton={getAddButton()}/>
+        </div>
+    );
 
 }
 
-let mapStateToProps = (state) => {
-    return ({
-        name: state.method.name,
-        sections: state.method.sections,
-        versionId: state.method.versionId,
-        isReceived: state.method.isReceived,
-        isAuthorized: state.auth.isAuthorized
-    });
-}
-
-export default withRouter(connect(mapStateToProps, {fetchSections})(MethodContainer))
+export default withRouter(MethodContainer)

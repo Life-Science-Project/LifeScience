@@ -1,8 +1,5 @@
 package com.jetbrains.life_science.exception.advice
 
-import com.jetbrains.life_science.exception.request.BadRequestException
-import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
-import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import com.jetbrains.life_science.exception.ApiErrorResponse
 import com.jetbrains.life_science.exception.UnauthorizedException
 import com.jetbrains.life_science.exception.not_empty.ArticleNotEmptyException
@@ -88,6 +85,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return notFoundResponse("User")
     }
 
+    @ExceptionHandler(ReviewRequestNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleReviewRequestNotFound(ex: ReviewRequestNotFoundException, request: WebRequest): ApiErrorResponse {
+        return notFoundResponse("Review request")
+    }
+
     @ExceptionHandler(ContentIsNotEditableException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleContentIsNotEditable(ex: ContentIsNotEditableException, request: WebRequest): ApiErrorResponse {
@@ -103,6 +106,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     @ExceptionHandler(BadRequestException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleBadRequest(ex: BadRequestException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
+    @ExceptionHandler(DuplicateReviewRequestException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleDuplicateReviewRequest(ex: DuplicateReviewRequestException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse(ex.message)
     }
 

@@ -3,6 +3,7 @@ package com.jetbrains.life_science.article.version.entity
 import com.jetbrains.life_science.article.master.entity.Article
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.master.entity.UserCredentials
 import javax.persistence.*
 
 @Entity
@@ -29,4 +30,20 @@ class ArticleVersion(
 ) {
 
     val articleId: Long get() = mainArticle.id
+
+    val isPublished: Boolean get() = state == State.PUBLISHED || state == State.USER_PUBLISHED
+
+    val isArchived: Boolean get() = state == State.ARCHIVED
+
+    fun canRead(user: UserCredentials): Boolean {
+        return state == State.PUBLISHED || canModify(user)
+    }
+
+    fun canModify(user: UserCredentials): Boolean {
+        return author.id == user.id ||
+            user.roles.any {
+                it.name == "ROLE_ADMIN" ||
+                    it.name == "ROLE_MODERATOR"
+            }
+    }
 }

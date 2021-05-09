@@ -1,8 +1,7 @@
-import {articleApi, contentApi, methodApi} from "../api/method-api";
-import {categoryApi} from "../api/category-api";
-import {getCategory, getError} from "./category-reducer";
+import {methodApi} from "../api/method-api";
 
-export const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
+const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
+const CLEAR_SECTIONS = 'CLEAR_SECTIONS'
 
 const initialState = {
     name: "",
@@ -17,6 +16,12 @@ function receiveSections(data) {
         sections: data.version.sections,
         name: data.version.name,
         versionId: data.id
+    }
+}
+
+export function clearSections() {
+    return {
+        type: CLEAR_SECTIONS
     }
 }
 
@@ -36,26 +41,14 @@ export default function methodReducer(state = initialState, action) {
                 name: action.name,
                 sections: action.sections,
                 versionId: action.versionId,
-                isReceived: true
+                isReceived: true,
+            }
+        case CLEAR_SECTIONS:
+            return  {
+                ...state,
+                isReceived: false
             }
         default:
             return state
-    }
-}
-
-export const addMethodThunk = (categoryid, name, sections) => async (dispatch) => {
-    let response = await articleApi.postVersion(categoryid, name);
-    if (response.status === 200) {
-        let versionId = response.data.id;
-        for (const s of sections) {
-            response = await articleApi.postSection(versionId, s.name);
-            if (response.status === 200) {
-                let sectionId = response.data.id;
-                if (s.content) response = await contentApi.postContent(sectionId, s.content);
-            }
-        }
-        if (response.status === 200) {
-           await articleApi.approve(versionId);
-        }
     }
 }

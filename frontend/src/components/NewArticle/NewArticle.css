@@ -4,7 +4,6 @@
 
 .new-article-form__section-content {
     margin-top: 0.5rem;
-    height: 12rem!important;
     resize: none;
 }
 
@@ -24,5 +23,9 @@
 .new-article-form__remove-icon{
     cursor: pointer;
     margin-left: 0.5rem;
+}
+
+textarea.new-article-form__section-content {
+    height: 12rem;
 }
 

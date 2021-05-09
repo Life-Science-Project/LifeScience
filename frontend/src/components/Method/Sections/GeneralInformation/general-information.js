@@ -1,8 +1,11 @@
 import React from "react";
 import './general-information.css'
 import ReferenceList from "./ReferenceList/reference-list";
+import NotFound from "../../../common/NotFound/notFound";
+import NoContent from "../no-content";
 
 const GeneralInformation = ({contents}) => {
+    if (!contents) return <NoContent/>
     return (
         <div className="section-content">
             <div className="main-text">
