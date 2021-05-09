@@ -8,7 +8,6 @@ import com.jetbrains.life_science.article.section.view.SectionViewMapper
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.UnauthorizedException
-import com.jetbrains.life_science.exception.not_found.ArticleVersionNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.util.email
@@ -32,7 +31,7 @@ class SectionController(
         @PathVariable versionId: Long,
         principal: Principal?
     ): List<SectionView> {
-        checkArticleVersionExists(versionId)
+        articleVersionService.checkExistenceById(versionId)
         checkAccess(versionId, principal)
         return service.getByVersionId(versionId).map { sectionViewMapper.createView(it) }
     }
@@ -43,7 +42,7 @@ class SectionController(
         @PathVariable sectionId: Long,
         principal: Principal?
     ): SectionView {
-        checkArticleVersionExists(versionId)
+        articleVersionService.checkExistenceById(versionId)
         checkAccess(versionId, principal)
         val section = service.getById(sectionId)
         return sectionViewMapper.createView(section)
@@ -56,7 +55,7 @@ class SectionController(
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        checkArticleVersionExists(versionId)
+        articleVersionService.checkExistenceById(versionId)
         checkIdEquality(versionId, dto.articleVersionId)
         val section = service.create(
             SectionDTOToInfoAdapter(dto)
@@ -72,7 +71,7 @@ class SectionController(
         @Validated @RequestBody dto: SectionDTO,
         principal: Principal
     ): SectionView {
-        checkArticleVersionExists(versionId)
+        articleVersionService.checkExistenceById(versionId)
         val version = service.getById(sectionId)
         checkIdEquality(versionId, version.articleVersion.id)
         val updatedSection = service.update(
@@ -88,18 +87,10 @@ class SectionController(
         @PathVariable sectionId: Long,
         principal: Principal
     ) {
-        checkArticleVersionExists(versionId)
+        articleVersionService.checkExistenceById(versionId)
         val section = service.getById(sectionId)
         checkIdEquality(versionId, section.articleVersion.id)
         service.deleteById(sectionId)
-    }
-
-    private fun checkArticleVersionExists(
-        versionId: Long
-    ) {
-        if (!articleVersionService.existsById(versionId)) {
-            throw ArticleVersionNotFoundException("ArticleVersion with id $versionId doesn't find")
-        }
     }
 
     private fun checkIdEquality(

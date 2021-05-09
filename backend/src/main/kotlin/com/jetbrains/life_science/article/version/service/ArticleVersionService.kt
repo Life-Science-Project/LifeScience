@@ -5,7 +5,7 @@ import com.jetbrains.life_science.user.master.entity.User
 
 interface ArticleVersionService {
 
-    fun existsById(versionId: Long): Boolean
+    fun checkExistenceById(versionId: Long)
 
     fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion
 
