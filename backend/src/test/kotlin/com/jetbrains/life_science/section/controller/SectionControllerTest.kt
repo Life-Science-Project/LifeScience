@@ -33,8 +33,6 @@ class SectionControllerTest :
      */
     @Test
     internal fun `get all sections`() {
-        val sections = getArticleVersionSections(1)
-        assertTrue(sections.isNotEmpty())
         val firstSection = SectionView(
             id = 1,
             articleVersionId = 1,
@@ -45,7 +43,6 @@ class SectionControllerTest :
             order = 1,
             visible = true
         )
-        assertEquals(sections[0], firstSection)
         val secondSection = SectionView(
             id = 2,
             articleVersionId = 1,
@@ -56,7 +53,6 @@ class SectionControllerTest :
             order = 2,
             visible = true
         )
-        assertEquals(sections[1], secondSection)
         val thirdSection = SectionView(
             id = 3,
             articleVersionId = 1,
@@ -67,6 +63,10 @@ class SectionControllerTest :
             order = 3,
             visible = false
         )
+        val sections = getArticleVersionSections(1)
+        assertTrue(sections.isNotEmpty())
+        assertEquals(sections[0], firstSection)
+        assertEquals(sections[1], secondSection)
         assertEquals(sections[2], thirdSection)
     }
 
@@ -84,7 +84,6 @@ class SectionControllerTest :
      */
     @Test
     internal fun `get section`() {
-        val section = get(1, 3)
         val expectedSection = SectionView(
             id = 3,
             articleVersionId = 1,
@@ -95,6 +94,7 @@ class SectionControllerTest :
             order = 3,
             visible = false
         )
+        val section = get(1, 3)
         assertEquals(expectedSection, section)
     }
 
@@ -127,7 +127,6 @@ class SectionControllerTest :
         )
         val responseSection = post(1, sectionDTO)
         assertNotNull(responseSection.id)
-        val savedSection = get(responseSection.articleVersionId, responseSection.id)
         val expectedSection = SectionView(
             id = responseSection.id,
             articleVersionId = sectionDTO.articleVersionId,
@@ -138,6 +137,7 @@ class SectionControllerTest :
             order = sectionDTO.order,
             visible = sectionDTO.visible
         )
+        val savedSection = get(responseSection.articleVersionId, responseSection.id)
         assertEquals(expectedSection, savedSection)
     }
 

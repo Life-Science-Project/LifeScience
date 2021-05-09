@@ -24,10 +24,8 @@ import java.security.Principal
 @RequestMapping("/api/articles/versions/{versionId}/sections")
 class SectionController(
     val service: SectionService,
-    val userService: UserService,
     val userCredentialsService: UserCredentialsService,
     val articleVersionService: ArticleVersionService,
-    val roleRepository: RoleRepository,
     val sectionViewMapper: SectionViewMapper
 ) {
 
