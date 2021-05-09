@@ -10,9 +10,7 @@ import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.UnauthorizedException
 import com.jetbrains.life_science.exception.not_found.ArticleVersionNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
-import com.jetbrains.life_science.user.master.repository.RoleRepository
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
-import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.annotation.Secured
