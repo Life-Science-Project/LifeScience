@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.user.controller
 
-import com.jetbrains.life_science.article.master.view.ArticleView
-import com.jetbrains.life_science.article.master.view.ArticleViewMapper
+import com.jetbrains.life_science.article.version.view.ArticleVersionView
+import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.entity.User
@@ -27,7 +27,7 @@ class UserController(
     val userService: UserService,
     val userCredentialsService: UserCredentialsService,
     val mapper: UserViewMapper,
-    val articleMapper: ArticleViewMapper,
+    val articleVersionViewMapper: ArticleVersionViewMapper
 ) {
 
     @GetMapping
@@ -79,36 +79,36 @@ class UserController(
     }
 
     @GetMapping("/{userId}/favourites")
-    fun getFavourites(@PathVariable userId: Long): List<ArticleView> {
+    fun getFavourites(@PathVariable userId: Long): List<ArticleVersionView> {
         val user = userService.getById(userId)
-        return user.favouriteArticles.map { articleMapper.createView(it) }
+        return user.favouriteArticles.map { articleVersionViewMapper.createView(it) }
     }
 
-    @PatchMapping("/{userId}/favourites/{articleId}")
+    @PatchMapping("/{userId}/favourites/{versionId}")
     fun addFavourite(
         @PathVariable userId: Long,
-        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
         principal: Principal
     ): UserView {
         val user = userService.getById(userId)
         if (!checkAccess(user, principal)) {
             throw AccessDeniedException("Not enough permissions to add this favourite")
         }
-        val updatedUser = userService.addFavourite(user, articleId)
+        val updatedUser = userService.addFavourite(user, versionId)
         return mapper.createView(updatedUser)
     }
 
-    @DeleteMapping("/{userId}/favourites/{articleId}")
+    @DeleteMapping("/{userId}/favourites/{versionId}")
     fun removeFavourite(
         @PathVariable userId: Long,
-        @PathVariable articleId: Long,
+        @PathVariable versionId: Long,
         principal: Principal
     ) {
         val user = userService.getById(userId)
         if (!checkAccess(user, principal)) {
             throw AccessDeniedException("You haven't got enough permissions to delete this favourite")
         }
-        userService.removeFavourite(user, articleId)
+        userService.removeFavourite(user, versionId)
     }
 
     private fun checkAccess(user: User, principal: Principal): Boolean {

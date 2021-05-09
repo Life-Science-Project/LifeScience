@@ -37,7 +37,7 @@ const MethodPreview = ({name, sections, goBack}) => {
                     </li>
                 </ul>
                 <Section name={sections[activeSectionIndex].name}
-                         contents={{text: sections[activeSectionIndex].content}}/>
+                         contents={sections[activeSectionIndex].content}/>
             </div>
 
         </div>

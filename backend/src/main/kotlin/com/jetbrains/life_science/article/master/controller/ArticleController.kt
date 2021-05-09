@@ -5,10 +5,13 @@ import com.jetbrains.life_science.article.master.dto.ArticleDTOToInfoAdapter
 import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
+import com.jetbrains.life_science.article.version.service.ArticleVersionService
+import com.jetbrains.life_science.article.version.view.ArticleVersionLazyView
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -22,6 +25,9 @@ class ArticleController(
     val articleVersionViewMapper: ArticleVersionViewMapper,
     val mapper: ArticleViewMapper
 ) {
+
+    @Autowired
+    lateinit var articleVersionService: ArticleVersionService
 
     @GetMapping("/{articleId}/versions")
     fun getVersions(@PathVariable articleId: Long, principal: Principal): List<ArticleVersionView> {
@@ -38,6 +44,12 @@ class ArticleController(
     fun getArticle(@PathVariable articleId: Long): ArticleView {
         val article = articleService.getById(articleId)
         return mapper.createView(article)
+    }
+
+    @GetMapping("/{articleId}/user-published")
+    fun getUserPublishedViews(@PathVariable articleId: Long): List<ArticleVersionLazyView> {
+        val versions = articleVersionService.getUserPublishedVersions(articleId)
+        return articleVersionViewMapper.createLazyViews(versions)
     }
 
     @PostMapping

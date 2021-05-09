@@ -1,44 +1,40 @@
-import React from "react";
-import {fetchContents} from "../../../redux/section-reducer";
-import {withRouter} from "react-router-dom";
-import {connect} from "react-redux";
+import React, {useEffect} from "react";
+import {useRouteMatch, withRouter} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchContents, clearContents} from "../../../redux/section-reducer";
 import Section from "./section";
+import Preloader from "../../common/Preloader/preloader";
 
+const SectionContainer = (props) => {
 
-class SectionContainer extends React.Component {
+    const dispatch = useDispatch()
+    const match = useRouteMatch()
 
-    constructor(props) {
-        super(props);
-        this.versionId = props.versionId;
-        this.sectionId = this.props.match.params.sectionId;
-    }
+    const name = useSelector(state => state.section.name);
+    const contents = useSelector(state => state.section.contents);
+    const isReceived = useSelector(state => state.section.isReceived)
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.match.params.sectionId !== this.sectionId) {
-            this.sectionId = this.props.match.params.sectionId;
-            this.getContents()
+    useEffect(() => {
+        getContents()
+
+        return () => {
+            dispatch(clearContents())
         }
+    }, [props.versionId, match.params])
+
+    const getContents = () => {
+        const versionId = props.versionId;
+        const sectionId = match.params.sectionId;
+        dispatch(fetchContents(versionId, sectionId))
     }
 
-    componentDidMount() {
-        this.getContents()
-    }
+    if (!isReceived) return <Preloader/>
+    return (
+        <Section contents={contents} name={name}/>
+    )
 
-    getContents() {
-        this.props.dispatch(fetchContents(this.versionId, this.sectionId))
-    }
 
-    render() {
-        const {contents, name} = this.props;
-        return (
-            <Section contents={contents} name={name}/>
-        )
-    }
+
 }
 
-
-function mapStateToProps(state) {
-    return {...state.section}
-}
-
-export default withRouter(connect(mapStateToProps)(SectionContainer))
+export default withRouter(SectionContainer)

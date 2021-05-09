@@ -56,7 +56,7 @@ class ContentServiceImpl(
     private fun copy(originContent: Content, newSection: Section) {
         val copy = factory.copy(originContent)
         copy.sectionId = newSection.id
-        repository.save(copy)
+        contentVersionService.saveCopy(copy)
     }
 
     override fun create(info: ContentInfo): Content {

@@ -14,7 +14,7 @@ interface UserService {
 
     fun deleteById(id: Long)
 
-    fun addFavourite(user: User, articleId: Long): User
+    fun addFavourite(user: User, articleVersionId: Long): User
 
     fun removeFavourite(user: User, articleId: Long)
 

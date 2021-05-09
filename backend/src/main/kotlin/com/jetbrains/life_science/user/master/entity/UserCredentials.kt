@@ -41,4 +41,8 @@ class UserCredentials(
     override fun isCredentialsNonExpired() = true
 
     override fun isEnabled() = true
+
+    fun isAdminOrModerator(): Boolean {
+        return roles.any { it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR" }
+    }
 }

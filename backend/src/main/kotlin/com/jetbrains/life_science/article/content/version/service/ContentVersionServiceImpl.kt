@@ -28,6 +28,10 @@ class ContentVersionServiceImpl(
         return repository.save(content)
     }
 
+    override fun saveCopy(copy: Content) {
+        repository.save(copy)
+    }
+
     override fun deleteBySectionId(sectionId: Long) {
         repository.deleteBySectionId(sectionId)
     }
