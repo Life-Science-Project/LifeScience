@@ -3,6 +3,7 @@ import {getTokens} from "../utils/auth";
 import {initApi} from "../api/init-api";
 import {statisticsApi} from "../api/statistics-api";
 import {categoryApi} from "../api/category-api";
+import {organizationsApi} from "../api/organizations-api";
 
 const INIT = 'init';
 const STATISTICS = 'statistics';
@@ -59,9 +60,12 @@ export const getStatisticsThunk = () => async (dispatch) => {
     }
     await postDFS(1, inc);
 
+    let organizations = await organizationsApi.getOrganizations();
+
     dispatch(getStatistics({
         userCount: users.data.length,
-        postCount
+        postCount,
+        organizationsCount: organizations.data.length
     }));
 }
 

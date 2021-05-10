@@ -21,8 +21,12 @@ class Home extends React.Component {
                 <h1>Welcome to the Life Science project!</h1>
                 <br/>
                 <br/>
-                <h5>Total users: {statistics.userCount}</h5>
-                <h5>Total articles: {statistics.postCount}</h5>
+                <h5>*insert project description*</h5>
+                <h5>
+                    We have a total of {this.props.statistics.userCount} users
+                    from {this.props.statistics.organizationsCount} different organizations.
+                    The platform currently holds {this.props.statistics.postCount} articles.
+                </h5>
             </div>
         );
     }
