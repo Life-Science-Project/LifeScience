@@ -21,4 +21,6 @@ interface UserService {
     fun createUser(info: NewUserInfo): User
 
     fun updateRefreshToken(token: String, email: String)
+
+    fun countAll(): Long
 }
