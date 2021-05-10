@@ -52,30 +52,14 @@ export const getStatistics = (statistics) => {
 }
 
 export const getStatisticsThunk = () => async (dispatch) => {
-    let users = await statisticsApi.getUsers();
-
-    let postCount = 0;
-    function inc(n) {
-        postCount += n;
-    }
-    await postDFS(1, inc);
-
+    let statistics = await statisticsApi.getStatistics()
     let organizations = await organizationsApi.getOrganizations();
 
     dispatch(getStatistics({
-        userCount: users.data.length,
-        postCount,
+        userCount: statistics.data.usersCount,
+        postCount: statistics.data.articlesCount,
         organizationsCount: organizations.data.length
     }));
-}
-
-async function postDFS(id, inc) {
-    let category = await categoryApi.getCategory(id);
-    inc(category.data.articles.length);
-
-    for (let subCategory of category.data.subcategories) {
-        await postDFS(subCategory.id, inc);
-    }
 }
 
 export default initReducer;
