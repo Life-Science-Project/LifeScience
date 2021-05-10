@@ -1,9 +1,12 @@
 package com.jetbrains.life_science.article.version.service
 
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
+import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.user.master.entity.User
 
 interface ArticleVersionService {
+
+    fun changeState(version: ArticleVersion, state: State): ArticleVersion
 
     fun checkExistenceById(versionId: Long)
 

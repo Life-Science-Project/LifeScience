@@ -8,7 +8,7 @@ interface ReviewRequestService {
 
     fun removeRequest(reviewId: Long)
 
-    fun getByIdOrThrow(reviewRequestId: Long): ReviewRequest
+    fun getById(reviewRequestId: Long): ReviewRequest
 
     fun getAllByVersionId(versionId: Long): List<ReviewRequest>
 
@@ -17,4 +17,8 @@ interface ReviewRequestService {
     fun getByVersionId(versionId: Long): ReviewRequest?
 
     fun getByVersionIdOrThrow(versionId: Long): ReviewRequest
+
+    fun getAllActiveByVersionId(versionId: Long): List<ReviewRequest>
+
+    fun delete(request: ReviewRequest)
 }

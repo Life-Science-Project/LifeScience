@@ -8,7 +8,7 @@ enum class State {
 
     ARCHIVED,
 
-    PUBLISHED,
+    PUBLISHED_AS_ARTICLE,
 
-    USER_PUBLISHED
+    PUBLISHED_AS_PROTOCOL
 }

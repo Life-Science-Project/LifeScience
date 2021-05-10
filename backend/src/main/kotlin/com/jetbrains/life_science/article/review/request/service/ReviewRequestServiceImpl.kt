@@ -21,14 +21,17 @@ class ReviewRequestServiceImpl(
 
     @Transactional
     override fun add(info: ReviewRequestInfo): ReviewRequest {
-        if (repository.existsByVersionIdAndResolutionIsNull(info.versionId)) {
-            throw DuplicateReviewRequestException("Review request for version ${info.versionId} already exists")
+        if (repository.existsByVersionAndResolutionIsNull(info.version)) {
+            throw DuplicateReviewRequestException("Review request for version ${info.version.id} already exists")
         }
-        val version = articleVersionService.getById(info.versionId)
-        version.state = State.PENDING_FOR_REVIEW
-        val request = factory.create(version, info.destination)
+        articleVersionService.changeState(info.version, State.PENDING_FOR_REVIEW)
+        val request = factory.create(info)
         repository.save(request)
         return request
+    }
+
+    override fun delete(request: ReviewRequest) {
+        repository.delete(request)
     }
 
     override fun getByVersionIdOrThrow(versionId: Long): ReviewRequest {
@@ -37,7 +40,7 @@ class ReviewRequestServiceImpl(
 
     @Transactional
     override fun removeRequest(reviewId: Long) {
-        val request = getByIdOrThrow(reviewId)
+        val request = getById(reviewId)
         if (request.resolution != null) {
             repository.delete(request)
         } else {
@@ -57,8 +60,12 @@ class ReviewRequestServiceImpl(
         return repository.findAllByVersionAuthorId(authorId)
     }
 
-    override fun getByIdOrThrow(reviewRequestId: Long): ReviewRequest {
+    override fun getById(reviewRequestId: Long): ReviewRequest {
         return repository.findByIdOrNull(reviewRequestId)
             ?: throw ReviewRequestNotFoundException("Review with id $reviewRequestId not found")
+    }
+
+    override fun getAllActiveByVersionId(versionId: Long): List<ReviewRequest> {
+        TODO("Not yet implemented")
     }
 }

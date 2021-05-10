@@ -6,6 +6,7 @@ import com.jetbrains.life_science.article.review.response.entity.Review
 import com.jetbrains.life_science.article.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.article.review.response.factory.ReviewFactory
 import com.jetbrains.life_science.article.review.response.repository.ReviewRepository
+import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.ReviewNotFoundException
@@ -31,8 +32,8 @@ class ReviewServiceImpl(
             repository.save(review)
         }
         when (destination) {
-            VersionDestination.USER_LOCAL -> articleVersionService.approveUserLocal(versionId)
-            VersionDestination.GLOBAL -> articleVersionService.approveGlobal(versionId)
+            VersionDestination.PROTOCOL -> articleVersionService.approveUserLocal(versionId)
+            VersionDestination.STATIC -> articleVersionService.approveGlobal(versionId)
         }
     }
 
@@ -66,12 +67,13 @@ class ReviewServiceImpl(
         articleVersion.state = State.EDITING
     }
 
-    override fun getAllByVersionId(versionId: Long, user: User): List<Review> {
-        return if (user.isAdminOrModerator()) {
-            repository.findAllByReviewRequestVersionId(versionId)
-        } else {
-            repository.findAllByReviewRequestVersionIdAndReviewRequestVersionAuthorId(versionId, user.id)
-        }
+
+    override fun getAllByVersion(version: ArticleVersion): List<Review> {
+        return repository.findAllByReviewRequestVersion(version)
+    }
+
+    override fun getAllByVersionAndUser(version: ArticleVersion, user: User): List<Review> {
+        return repository.findAllByReviewRequestVersionAndReviewRequestVersionAuthor(version, user)
     }
 
     override fun getByVersionId(versionId: Long): Review? {

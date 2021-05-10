@@ -11,7 +11,7 @@ class ArticleViewMapper(
 ) {
     fun createView(article: Article): ArticleView {
         val publishedVersionView = article.versions
-            .filter { it.state == State.PUBLISHED }
+            .filter { it.state == State.PUBLISHED_AS_ARTICLE }
             .map { versionViewMapper.createView(it) }
             .firstOrNull()
         return ArticleView(article.id, publishedVersionView)

@@ -41,6 +41,11 @@ class ArticleVersionServiceImpl(
         return articleVersion
     }
 
+    override fun changeState(version: ArticleVersion, state: State): ArticleVersion {
+        version.state = state
+        return repository.save(version)
+    }
+
     @Transactional
     override fun createCopy(versionId: Long, user: User): ArticleVersion {
         val publishedVersion = getPublishedVersion(versionId)
@@ -54,23 +59,23 @@ class ArticleVersionServiceImpl(
     @Transactional
     override fun getPublishedVersion(versionId: Long): ArticleVersion {
         return (
-            repository.findByIdAndStateIn(versionId, listOf(State.PUBLISHED, State.USER_PUBLISHED))
+            repository.findByIdAndStateIn(versionId, listOf(State.PUBLISHED_AS_ARTICLE, State.PUBLISHED_AS_PROTOCOL))
                 ?: throw PublishedVersionNotFoundException("Published version to article: $versionId not found")
             )
     }
 
     override fun getUserPublishedVersions(articleId: Long): List<ArticleVersion> {
-        return repository.findAllByMainArticleIdAndState(articleId, State.USER_PUBLISHED)
+        return repository.findAllByMainArticleIdAndState(articleId, State.PUBLISHED_AS_PROTOCOL)
     }
 
     @Transactional
     override fun approveGlobal(versionId: Long) {
-        approve(versionId, State.PUBLISHED)
+        approve(versionId, State.PUBLISHED_AS_ARTICLE)
     }
 
     @Transactional
     override fun approveUserLocal(versionId: Long) {
-        approve(versionId, State.USER_PUBLISHED)
+        approve(versionId, State.PUBLISHED_AS_PROTOCOL)
     }
 
     @Transactional
@@ -94,7 +99,7 @@ class ArticleVersionServiceImpl(
     @Transactional
     override fun archive(versionId: Long) {
         val lastPublished = getById(versionId)
-        if (lastPublished.state == State.PUBLISHED) {
+        if (lastPublished.state == State.PUBLISHED_AS_ARTICLE) {
             searchService.deleteSearchUnitById(lastPublished.id)
             sectionService.deleteSearchUnits(lastPublished.sections)
             sectionService.archive(lastPublished.sections)

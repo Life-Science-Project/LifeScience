@@ -61,7 +61,7 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView(1, "master 1", 1, expectedSectionViews, State.PUBLISHED)
+        val expectedView = ArticleVersionView(1, "master 1", 1, expectedSectionViews, State.PUBLISHED_AS_ARTICLE)
 
         // Action
         val view = get(1, urlWithArticleId())
@@ -260,7 +260,7 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView(1, "changed version", 1, expectedSectionViews, State.PUBLISHED)
+        val expectedView = ArticleVersionView(1, "changed version", 1, expectedSectionViews, State.PUBLISHED_AS_ARTICLE)
 
         // Action
         val result = put(1, dto, urlWithArticleId(), ArticleVersionView::class.java)

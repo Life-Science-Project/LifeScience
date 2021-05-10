@@ -19,5 +19,5 @@ class Article(
 
 ) {
 
-    val hasPublishedVersions: Boolean get() = versions.any { it.state == State.PUBLISHED }
+    val hasPublishedVersions: Boolean get() = versions.any { it.state == State.PUBLISHED_AS_ARTICLE }
 }

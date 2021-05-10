@@ -12,7 +12,7 @@ import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
@@ -40,8 +40,8 @@ class ArticleVersionController(
         principal: Principal
     ): ArticleVersionView {
         val version = articleVersionService.getById(versionId)
-        val userCredentials = userCredentialsService.getByEmail(principal.email)
-        checkGetPermission(userCredentials, version)
+        val user = userService.getByEmail(principal.email)
+        checkGetPermission(user, version)
         return viewMapper.createView(version)
     }
 
@@ -107,14 +107,14 @@ class ArticleVersionController(
         principal: Principal
     ) {
         val articleVersion = articleVersionService.getById(versionId)
-        val userCredentials = userCredentialsService.getByEmail(principal.email)
+        val userCredentials = userService.getByEmail(principal.email)
         if (!articleVersion.canModify(userCredentials)) {
             throw AccessDeniedException("User has no access to that version")
         }
     }
 
-    private fun checkGetPermission(userCredentials: UserCredentials, articleVersion: ArticleVersion) {
-        if (!articleVersion.canRead(userCredentials)) {
+    private fun checkGetPermission(user: User, articleVersion: ArticleVersion) {
+        if (!articleVersion.canRead(user)) {
             throw AccessDeniedException("User has no access to that version")
         }
     }

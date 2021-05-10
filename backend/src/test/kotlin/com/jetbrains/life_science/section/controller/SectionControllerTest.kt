@@ -39,7 +39,6 @@ class SectionControllerTest :
             description = "desc 1.1",
             name = "name 1.1",
             contents = null,
-            parameters = emptyList(),
             order = 1,
             visible = true
         )
@@ -49,7 +48,6 @@ class SectionControllerTest :
             description = "desc 1.2",
             name = "name 1.2",
             contents = null,
-            parameters = emptyList(),
             order = 2,
             visible = true
         )
@@ -59,7 +57,6 @@ class SectionControllerTest :
             description = "desc 1.3",
             name = "name 1.3",
             contents = null,
-            parameters = emptyList(),
             order = 3,
             visible = false
         )
@@ -90,7 +87,6 @@ class SectionControllerTest :
             name = "name 1.3",
             description = "desc 1.3",
             contents = null,
-            parameters = emptyList(),
             order = 3,
             visible = false
         )
@@ -133,7 +129,6 @@ class SectionControllerTest :
             name = sectionDTO.name,
             description = sectionDTO.description,
             contents = responseSection.contents,
-            parameters = emptyList(),
             order = sectionDTO.order,
             visible = sectionDTO.visible
         )
@@ -183,7 +178,7 @@ class SectionControllerTest :
         val responseSection = put(1, 3, updateSectionDTO)
         assertEquals(3, responseSection.id)
         val updatedSection = get(1, responseSection.id)
-        val expectedParameters = listOf(
+        listOf(
             ParameterView(
                 id = 1,
                 name = "First parameter",
@@ -201,7 +196,6 @@ class SectionControllerTest :
             name = updateSectionDTO.name,
             description = updateSectionDTO.description,
             contents = responseSection.contents,
-            parameters = expectedParameters,
             order = updateSectionDTO.order,
             visible = updateSectionDTO.visible
         )

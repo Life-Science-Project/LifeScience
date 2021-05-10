@@ -23,9 +23,6 @@ class Section(
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     var articleVersion: ArticleVersion,
 
-    @OneToMany
-    var parameters: MutableList<Parameter>,
-
     var orderNumber: Int,
 
     var visible: Boolean

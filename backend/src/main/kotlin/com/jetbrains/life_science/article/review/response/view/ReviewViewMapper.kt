@@ -14,7 +14,7 @@ class ReviewViewMapper {
         )
     }
 
-    fun createViews(reviews: List<Review>): List<ReviewView> {
+    fun toViews(reviews: List<Review>): List<ReviewView> {
         return reviews.map { createView(it) }
     }
 }

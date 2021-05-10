@@ -9,7 +9,6 @@ data class SectionView(
     val name: String,
     val description: String?,
     val contents: ContentView?,
-    val parameters: List<ParameterView>,
     val order: Int,
     val visible: Boolean
 )

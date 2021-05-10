@@ -18,7 +18,6 @@ class SectionFactory(
             name = info.name,
             description = info.description,
             articleVersion = article,
-            parameters = mutableListOf(),
             orderNumber = info.order,
             visible = info.visible
         )
@@ -30,7 +29,6 @@ class SectionFactory(
             name = section.name,
             description = section.description,
             articleVersion = section.articleVersion,
-            parameters = section.parameters.toMutableList(),
             orderNumber = section.orderNumber,
             visible = section.visible
         )
@@ -40,9 +38,6 @@ class SectionFactory(
         origin.description = info.description
         origin.articleVersion = version
         origin.name = info.name
-        origin.parameters = info.parameters.map {
-            parameterService.create(it)
-        }.toMutableList()
         origin.orderNumber = info.order
         origin.visible = info.visible
     }
