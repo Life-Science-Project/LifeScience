@@ -62,7 +62,6 @@ class WebSecurityConfig(
             .authorizeRequests()
             .antMatchers(
                 "/api/articles/versions/*/reviews/**",
-                "/api/articles/versions/*",
                 "/api/articles/versions/*/copy",
                 "/api/articles/versions/*/approve",
                 "/api/articles/versions/*/archive"
