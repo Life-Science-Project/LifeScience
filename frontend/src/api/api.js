@@ -27,7 +27,6 @@ instance.interceptors.response.use(
 );
 
 
-export const METHOD_URL = "method/"
 instance.interceptors.request.use(function (config) {
     const tokens = getTokens();
     config.headers.Authorization =  'Bearer ' + tokens.jwt;

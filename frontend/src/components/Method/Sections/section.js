@@ -14,6 +14,7 @@ const Section = (props) => {
     const {name, contents} = props;
 
     //todo make constants global
+    //todo make case insensitive
     const nameToComponent = {
         "General Information": <GeneralInformation contents={contents}/>,
         "Protocol": <Protocol contents={contents}/>,

@@ -9,6 +9,7 @@ import com.jetbrains.life_science.article.review.response.repository.ReviewRepos
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.ReviewNotFoundException
+import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.user.master.entity.User
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -57,9 +58,10 @@ class ReviewServiceImpl(
 
     @Transactional
     override fun requestChanges(info: ReviewInfo) {
-        val request = reviewRequestService.getByVersionIdOrThrow(info.versionId)
-        val review = factory.create(info.resolution, info.comment, request, info.reviewer)
-        repository.save(review)
+        if (info.resolution != ReviewResolution.CHANGES_REQUESTED) {
+            throw BadRequestException("Resolution must be CHANGES_REQUESTED")
+        }
+        addReview(info)
         val articleVersion = articleVersionService.getById(info.versionId)
         articleVersion.state = State.EDITING
     }

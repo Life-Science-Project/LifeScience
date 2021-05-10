@@ -3,7 +3,7 @@ package com.jetbrains.life_science.category.service
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.factory.CategoryFactory
 import com.jetbrains.life_science.category.repository.CategoryRepository
-import com.jetbrains.life_science.exception.not_found.CategoryNotEmptyException
+import com.jetbrains.life_science.exception.not_empty.CategoryNotEmptyException
 import com.jetbrains.life_science.exception.not_found.CategoryNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
