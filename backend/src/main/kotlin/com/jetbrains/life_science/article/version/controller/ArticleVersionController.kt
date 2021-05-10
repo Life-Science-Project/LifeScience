@@ -12,6 +12,7 @@ import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
+import com.jetbrains.life_science.exception.UnauthorizedException
 import com.jetbrains.life_science.user.master.entity.UserCredentials
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
@@ -37,11 +38,14 @@ class ArticleVersionController(
     @GetMapping("/{versionId}")
     fun getVersion(
         @PathVariable versionId: Long,
-        principal: Principal
+        principal: Principal?
     ): ArticleVersionView {
         val version = articleVersionService.getById(versionId)
-        val userCredentials = userCredentialsService.getByEmail(principal.email)
-        checkGetPermission(userCredentials, version)
+        if (!version.isPublished) {
+            if (principal == null) throw UnauthorizedException("user do not have permissions")
+            val userCredentials = userCredentialsService.getByEmail(principal.email)
+            checkGetPermission(userCredentials, version)
+        }
         return viewMapper.createView(version)
     }
 
