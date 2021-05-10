@@ -48,6 +48,10 @@ class UserServiceImpl(
         getByEmail(email).refreshToken = token
     }
 
+    override fun countAll(): Long {
+        return userRepository.count()
+    }
+
     @Transactional
     override fun addFavourite(user: User, articleVersionId: Long): User {
         val version = articleVersionService.getById(articleVersionId)

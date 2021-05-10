@@ -49,6 +49,10 @@ class ArticleServiceImpl(
         repository.deleteById(articleId)
     }
 
+    override fun countAll(): Long {
+        return repository.count()
+    }
+
     private fun existById(articleId: Long) {
         if (!repository.existsById(articleId)) {
             throw ArticleNotFoundException("Article not found by id: $articleId")
