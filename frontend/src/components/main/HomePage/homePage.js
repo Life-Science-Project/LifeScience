@@ -1,15 +1,44 @@
 import React from "react";
 import './homePage.css'
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
+import {getStatisticsThunk} from "../../../redux/init-reducer";
+import * as PropTypes from "prop-types";
+import Preloader from "../../common/Preloader/preloader";
 
-const Home = ({subFolders}) => {
-    return(
-        <div className="home_container">
-            Life Science
-            <br/>
-            <br/>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab architecto facere inventore repellendus veniam. Deserunt eos esse ipsa labore neque repudiandae similique? Cupiditate deleniti fugit quidem suscipit voluptate! Assumenda deserunt doloremque est facere, harum maiores minus modi natus nemo nostrum placeat quaerat quisquam sapiente sed vel voluptas voluptatibus! Corporis eligendi facere incidunt iusto laboriosam minima molestias officia rem rerum! Amet at aut corporis deleniti ducimus eos eum facere ipsa laboriosam laborum magnam mollitia neque quia, repudiandae temporibus! Autem blanditiis consequuntur dicta eaque eum eveniet ex id, illum non odit perferendis perspiciatis reiciendis rerum sapiente tempore tenetur voluptatum. Harum iste, quis!
-        </div>
-    );
+class Home extends React.Component {
+    componentDidMount() {
+        this.props.getStatisticsThunk();
+    }
+
+    render() {
+        if (!this.props.isStatisticsInitialized) {
+            return <Preloader/>
+        }
+        let {statistics} = this.props;
+        return (
+            <div className="home_container">
+                <h1>Welcome to the Life Science project!</h1>
+                <br/>
+                <br/>
+                <h5>*insert project description*</h5>
+                <h5>
+                    We have a total of {this.props.statistics.userCount} users
+                    from {this.props.statistics.organizationsCount} different organizations.
+                    The platform currently holds {this.props.statistics.postCount} articles.
+                </h5>
+            </div>
+        );
+    }
 }
 
-export default Home;
+Home.propTypes = {statistics: PropTypes.any}
+
+const mapStateToProps = (state) => {
+    return ({
+        statistics: state.init.statistics,
+        isStatisticsInitialized: state.init.isStatisticsInitialized
+    })
+}
+
+export default connect(mapStateToProps, {getStatisticsThunk})(withRouter(Home));
