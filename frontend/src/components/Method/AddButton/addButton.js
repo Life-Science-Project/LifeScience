@@ -21,11 +21,11 @@ class AddButton extends React.Component {
     }
 
     deleteFromFavorites() {
-        this.props.deleteFromUserFavouritesThunk(this.props.userId, this.props.articleId);
+        this.props.deleteFromUserFavouritesThunk(this.props.userId, this.props.versionId);
     }
 
     addToMyFavourites() {
-        this.props.patchToUserFavouritesThunk(this.props.userId, this.props.articleId);
+        this.props.patchToUserFavouritesThunk(this.props.userId, this.props.versionId);
     }
 
 
@@ -37,7 +37,7 @@ class AddButton extends React.Component {
             return <Preloader/>
         }
 
-        const isFavourite = () => containsByField(this.props.favourites, 'id', this.props.articleId);
+        const isFavourite = () => containsByField(this.props.favourites, 'id', this.props.versionId);
 
         return (
             <div className="buttons_container">

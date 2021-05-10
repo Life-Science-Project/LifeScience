@@ -37,7 +37,7 @@ class App extends React.Component {
                     <Route path="/register" render={() => <Register/>}/>
                     <Route path="/login" render={() => <Login />}/>
                     <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
-                    <Route path="/method/:articleId" render={() => <MethodContainer/>}/>
+                    <Route path="/method/:versionId" render={() => <MethodContainer/>}/>
                     <Route path="/search" render={() => <SearchContainer/>}/>
                     <Route render={() => <NotFound/>}/>
                 </Switch>

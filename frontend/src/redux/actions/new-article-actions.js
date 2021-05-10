@@ -16,10 +16,10 @@ function postArticle() {
     }
 }
 
-function receivePostedArticle(articleId) {
+function receivePostedArticle(versionId) {
     return {
         type: RECEIVE_POSTED_ARTICLE,
-        articleId: articleId,
+        versionId: versionId,
     }
 }
 
@@ -35,7 +35,6 @@ export const addMethodThunk = (categoryId, name, sections) => async (dispatch) =
     //todo exception handling
     if (response.status !== 200) return
     let versionId = response.data.id;
-    const articleId = response.data.articleId;
     await articleApi.approve(versionId);
-    dispatch(receivePostedArticle(articleId))
+    dispatch(receivePostedArticle(versionId))
 }

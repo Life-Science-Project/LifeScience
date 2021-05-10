@@ -2,6 +2,7 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import {byField, functionWrapper} from "../../../../../utils/common";
 import "./shortMethodPreview.css";
+import {METHOD_URL} from "../../../../../constants";
 
 const ShortMethodPreview = (props) => {
     const length = 2;
@@ -16,7 +17,7 @@ const ShortMethodPreview = (props) => {
     return (
         <div className="short_method_preview_container">
             <div className="method_name">
-                <NavLink to={"/method/" + props.method.id} className="link">
+                <NavLink to={METHOD_URL + "/" + props.method.id} className="link">
                     {props.method.name}
                 </NavLink>
             </div>

@@ -9,19 +9,18 @@ import AddButton from "./AddButton/addButton";
 
 const MethodContainer = () => {
 
-    const [articleId, setArticleId] = useState(1);
+    const [versionId, setVersionId] = useState(1);
     const match = useRouteMatch()
     const dispatch = useDispatch()
 
     const name = useSelector(state => state.method.name)
     const sections = useSelector(state => state.method.sections)
-    const versionId = useSelector(state => state.method.versionId)
     const isReceived = useSelector(state => state.method.isReceived)
     const isAuthorized = useSelector(state => state.auth.isAuthorized)
 
     const getSections = () => {
-        const id = match.params.articleId;
-        setArticleId(id)
+        const id = match.params.versionId;
+        setVersionId(id)
         dispatch(fetchSections(id))
     }
 
@@ -34,7 +33,7 @@ const MethodContainer = () => {
     }, [match.params])
 
     const getAddButton = () => {
-        return isAuthorized && <AddButton articleId={articleId}/>
+        return isAuthorized && <AddButton versionId={versionId}/>
     }
 
 

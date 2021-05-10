@@ -6,16 +6,14 @@ const CLEAR_SECTIONS = 'CLEAR_SECTIONS'
 const initialState = {
     name: "",
     sections: [],
-    versionId: 1,
     isReceived: false
 }
 
 function receiveSections(data) {
     return {
         type: RECEIVE_SECTIONS,
-        sections: data.version.sections,
-        name: data.version.name,
-        versionId: data.id
+        sections: data.sections,
+        name: data.name,
     }
 }
 
@@ -25,9 +23,9 @@ export function clearSections() {
     }
 }
 
-export function fetchSections(articleId) {
+export function fetchSections(versionId) {
     return dispatch => {
-        return methodApi.getMethod(articleId)
+        return methodApi.getMethod(versionId)
             .then(response => response.data)
             .then(data => dispatch(receiveSections(data)))
     }
@@ -40,7 +38,6 @@ export default function methodReducer(state = initialState, action) {
                 ...state,
                 name: action.name,
                 sections: action.sections,
-                versionId: action.versionId,
                 isReceived: true,
             }
         case CLEAR_SECTIONS:

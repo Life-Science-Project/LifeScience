@@ -2,7 +2,7 @@ import {CLEAR_POST_STATUS, POST_ARTICLE, PostStatusEnum, RECEIVE_POSTED_ARTICLE}
 
 const initialState = {
     postStatus: PostStatusEnum.NOT_POSTED,
-    articleId: 0,
+    versionId: 0,
 }
 
 export default function newArticleReducer(state = initialState, action) {
@@ -14,12 +14,12 @@ export default function newArticleReducer(state = initialState, action) {
         case RECEIVE_POSTED_ARTICLE : return {
             ...state,
             postStatus: PostStatusEnum.POSTED,
-            articleId: action.articleId,
+            versionId: action.versionId,
         }
         case CLEAR_POST_STATUS : return {
             ...state,
             postStatus: PostStatusEnum.NOT_POSTED,
-            articleId: 0,
+            versionId: 0,
         }
         default: return state
 
