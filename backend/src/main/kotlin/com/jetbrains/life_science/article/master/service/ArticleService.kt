@@ -13,5 +13,4 @@ interface ArticleService {
     fun deleteById(articleId: Long)
 
     fun countAll(): Long
-
 }

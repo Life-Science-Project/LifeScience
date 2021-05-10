@@ -22,5 +22,4 @@ class StatisticsController(
         val articlesCount = articleService.countAll()
         return viewMapper.toView(usersCount, articlesCount)
     }
-
 }
