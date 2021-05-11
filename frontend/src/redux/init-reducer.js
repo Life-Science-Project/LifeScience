@@ -52,13 +52,14 @@ export const getStatistics = (statistics) => {
 }
 
 export const getStatisticsThunk = () => async (dispatch) => {
-    let statistics = await statisticsApi.getStatistics()
-    let organizations = await organizationsApi.getOrganizations();
+    let userStatistics = await statisticsApi.getUserStatistics()
+    let articleStatistics = await statisticsApi.getArticleStatistics()
+    let organizationsStatistics = await statisticsApi.getOrganizationsStatistics()
 
     dispatch(getStatistics({
-        userCount: statistics.data.usersCount,
-        postCount: statistics.data.articlesCount,
-        organizationsCount: organizations.data.length
+        userCount: userStatistics,
+        postCount: articleStatistics,
+        organizationsCount: organizationsStatistics
     }));
 }
 
