@@ -10,7 +10,7 @@ export const statisticsApi = {
         return instance.get(url);
     },
     getOrganizationsStatistics() {
-        const url = 'users/organizations/count';
+        const url = 'users/organisations/count';
         return instance.get(url);
     }
 }

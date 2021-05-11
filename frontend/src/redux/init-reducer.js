@@ -57,9 +57,9 @@ export const getStatisticsThunk = () => async (dispatch) => {
     let organizationsStatistics = await statisticsApi.getOrganizationsStatistics()
 
     dispatch(getStatistics({
-        userCount: userStatistics,
-        postCount: articleStatistics,
-        organizationsCount: organizationsStatistics
+        userCount: userStatistics.data,
+        postCount: articleStatistics.data,
+        organizationsCount: organizationsStatistics.data
     }));
 }
 
