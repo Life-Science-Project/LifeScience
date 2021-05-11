@@ -1,8 +1,16 @@
 import instance from './api'
 
 export const statisticsApi = {
-    getStatistics() {
-        const url = 'statistics/api/fix-versions';
+    getUserStatistics() {
+        const url = 'users/count';
+        return instance.get(url);
+    },
+    getArticleStatistics() {
+        const url = 'articles/count';
+        return instance.get(url);
+    },
+    getOrganizationsStatistics() {
+        const url = 'users/organizations/count';
         return instance.get(url);
     }
 }
