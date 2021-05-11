@@ -11,14 +11,11 @@ import org.springframework.stereotype.Component
 class ReviewFactory {
 
     fun create(
-        resolution: ReviewResolution,
-        comment: String,
-        request: ReviewRequest,
-        user: User
+        info: ReviewInfo
     ): Review {
         return Review(
             id = 0,
-            reviewRequest = request,
+            reviewRequest = info.,
             comment = comment,
             reviewer = user,
             resolution = resolution

@@ -7,10 +7,6 @@ import com.jetbrains.life_science.user.master.entity.User
 
 interface ReviewService {
 
-    fun approve(versionId: Long, reviewer: User, destination: VersionDestination)
-
-    fun requestChanges(info: ReviewInfo)
-
     fun getByVersionId(versionId: Long): Review?
 
     fun getById(reviewId: Long): Review
