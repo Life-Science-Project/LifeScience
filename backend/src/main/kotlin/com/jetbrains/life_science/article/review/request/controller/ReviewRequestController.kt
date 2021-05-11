@@ -58,7 +58,6 @@ class ReviewRequestController(
         return viewMapper.toViews(requests)
     }
 
-
     @Operation(summary = "Creates a review request. Destination available values: [PROTOCOL, ARTICLE]")
     @PatchMapping("/version/{versionId}")
     fun createRequest(

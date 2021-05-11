@@ -6,7 +6,6 @@ import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
-import com.jetbrains.life_science.article.version.view.ArticleVersionLazyView
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.service.UserService

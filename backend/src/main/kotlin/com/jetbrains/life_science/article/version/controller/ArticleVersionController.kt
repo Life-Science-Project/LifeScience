@@ -17,7 +17,6 @@ import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.exception.UnauthorizedException
 import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
@@ -71,7 +70,6 @@ class ArticleVersionController(
             else -> throw BadRequestException("Article version is not published yet")
         }
     }
-
 
     @Operation(summary = "Creates new article AND new version inside it with optional sections and content")
     @PostMapping
