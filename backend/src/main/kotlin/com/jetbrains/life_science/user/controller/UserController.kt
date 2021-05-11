@@ -10,6 +10,7 @@ import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.user.master.view.UserView
 import com.jetbrains.life_science.user.master.view.UserViewMapper
 import com.jetbrains.life_science.util.email
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -30,12 +31,20 @@ class UserController(
     val articleVersionViewMapper: ArticleVersionViewMapper
 ) {
 
+    @Operation(summary = "Returns the count of all users on the portal")
+    @GetMapping("/count")
+    fun getUsersCount(): Long {
+        return userService.countAll()
+    }
+
+    @Operation(summary = "Returns all users")
     @GetMapping
     fun getUsers(): List<UserView> {
         return userService.getAllUsers()
             .map { mapper.createView(it) }
     }
 
+    @Operation(summary = "Returns user")
     @GetMapping("/{userId}")
     fun getUser(
         @PathVariable userId: Long,
@@ -44,6 +53,7 @@ class UserController(
         return mapper.createView(user)
     }
 
+    @Operation(summary = "Returns current user")
     @GetMapping("/current")
     fun getUser(
         principal: Principal
@@ -53,6 +63,7 @@ class UserController(
     }
 
     // TODO(#141): DTO uses entities and enums, many 500 error possibilities
+    @Operation(summary = "Updates existing user")
     @PatchMapping("/{userId}")
     fun updateDetails(
         @PathVariable userId: Long,
@@ -66,6 +77,7 @@ class UserController(
         return mapper.createView(userService.update(UpdateDetailsDTOToInfoAdapter(updateDetailsDTO), user))
     }
 
+    @Operation(summary = "Deletes existing user")
     @DeleteMapping("/{userId}")
     fun deleteUser(
         @PathVariable userId: Long,
@@ -78,12 +90,14 @@ class UserController(
         userService.deleteById(userId)
     }
 
+    @Operation(summary = "Returns user's favourite versions")
     @GetMapping("/{userId}/favourites")
     fun getFavourites(@PathVariable userId: Long): List<ArticleVersionView> {
         val user = userService.getById(userId)
         return user.favouriteArticles.map { articleVersionViewMapper.createView(it) }
     }
 
+    @Operation(summary = "Adds version to user's favourites")
     @PatchMapping("/{userId}/favourites/{versionId}")
     fun addFavourite(
         @PathVariable userId: Long,
@@ -98,6 +112,7 @@ class UserController(
         return mapper.createView(updatedUser)
     }
 
+    @Operation(summary = "Deletes version to user's favourites")
     @DeleteMapping("/{userId}/favourites/{versionId}")
     fun removeFavourite(
         @PathVariable userId: Long,

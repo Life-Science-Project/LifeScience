@@ -11,4 +11,6 @@ interface ArticleService {
     fun updateById(info: ArticleInfo): Article
 
     fun deleteById(articleId: Long)
+
+    fun countAll(): Long
 }

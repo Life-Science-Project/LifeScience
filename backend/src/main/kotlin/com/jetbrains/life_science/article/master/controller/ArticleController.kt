@@ -11,6 +11,7 @@ import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
@@ -29,6 +30,13 @@ class ArticleController(
     @Autowired
     lateinit var articleVersionService: ArticleVersionService
 
+    @Operation(summary = "Returns the count of all articles on the portal")
+    @GetMapping("/count")
+    fun getArticlesCount(): Long {
+        return articleService.countAll()
+    }
+
+    @Operation(summary = "Returns all versions which are available to the user and associated with an article")
     @GetMapping("/{articleId}/versions")
     fun getVersions(@PathVariable articleId: Long, principal: Principal): List<ArticleVersionView> {
         val user = userService.getByEmail(principal.email)
@@ -40,18 +48,21 @@ class ArticleController(
         return articleVersionViewMapper.createViews(articleVersions)
     }
 
+    @Operation(summary = "Returns an article by it's id")
     @GetMapping("/{articleId}")
     fun getArticle(@PathVariable articleId: Long): ArticleView {
         val article = articleService.getById(articleId)
         return mapper.createView(article)
     }
 
+    @Operation(summary = "Returns all user-published versions which are associated with an article")
     @GetMapping("/{articleId}/user-published")
     fun getUserPublishedViews(@PathVariable articleId: Long): List<ArticleVersionLazyView> {
         val versions = articleVersionService.getUserPublishedVersions(articleId)
         return articleVersionViewMapper.createLazyViews(versions)
     }
 
+    @Operation(summary = "Creates new empty article (not a version!)")
     @PostMapping
     fun createArticle(@Validated @RequestBody dto: ArticleDTO, principal: Principal): ArticleView {
         return mapper.createView(
@@ -59,6 +70,7 @@ class ArticleController(
         )
     }
 
+    @Operation(summary = "Updates existing article")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping("/{articleId}")
     fun updateArticle(
@@ -72,6 +84,7 @@ class ArticleController(
         return mapper.createView(updatedArticle)
     }
 
+    @Operation(summary = "Deletes existing article")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{articleId}")
     fun deleteArticle(@PathVariable articleId: Long, principal: Principal) {

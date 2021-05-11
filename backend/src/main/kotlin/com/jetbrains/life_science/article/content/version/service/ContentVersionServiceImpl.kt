@@ -24,7 +24,7 @@ class ContentVersionServiceImpl(
 
     override fun create(info: ContentInfo): Content {
         val section = sectionService.getById(info.sectionId)
-        val content = factory.create(info, section.articleId)
+        val content = factory.create(info, section.articleVersion.id)
         return repository.save(content)
     }
 
@@ -55,7 +55,7 @@ class ContentVersionServiceImpl(
     override fun update(info: ContentInfo): Content {
         val content = findById(info.id)
         val section = sectionService.getById(info.sectionId)
-        factory.setParams(content, info, section.articleId)
+        factory.setParams(content, info, section.articleVersion.id)
         return repository.save(content)
     }
 
