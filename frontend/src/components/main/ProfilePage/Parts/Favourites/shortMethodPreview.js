@@ -28,7 +28,7 @@ const ShortMethodPreview = (props) => {
             </div>
             <div className="button_delete_container">
                 <button onClick={functionWrapper(props.delete, props.user.id, props.method.id)}>
-                    Unsave
+                    Remove from Favourites
                 </button>
             </div>
         </div>
