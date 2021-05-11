@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.article.review.response.repository
 
+import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.article.review.response.entity.Review
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.user.master.entity.User
@@ -15,4 +16,5 @@ interface ReviewRepository : JpaRepository<Review, Long> {
 
     fun findAllByReviewRequestVersion(version: ArticleVersion): List<Review>
 
+    fun findByReviewRequest(reviewRequest: ReviewRequest): Review?
 }

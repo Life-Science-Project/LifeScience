@@ -1,6 +1,8 @@
 package com.jetbrains.life_science.article.version.service
 
+import com.jetbrains.life_science.article.master.entity.Article
 import com.jetbrains.life_science.article.master.service.ArticleService
+import com.jetbrains.life_science.article.review.request.entity.VersionDestination
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State
@@ -46,6 +48,25 @@ class ArticleVersionServiceImpl(
         return repository.save(version)
     }
 
+    override fun approve(version: ArticleVersion, destination: VersionDestination) {
+        val state = when (destination) {
+            VersionDestination.ARTICLE -> State.PUBLISHED_AS_ARTICLE
+            VersionDestination.PROTOCOL -> State.PUBLISHED_AS_PROTOCOL
+        }
+        approve(version, state)
+    }
+
+    private fun approve(currentVersion: ArticleVersion, state: State) {
+        val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, state)
+        if (lastPublished != null) {
+            if (lastPublished.id == currentVersion.id) return
+            archive(lastPublished.id)
+        }
+        currentVersion.state = state
+        searchService.createSearchUnit(currentVersion)
+        sectionService.publish(currentVersion.sections)
+    }
+
     @Transactional
     override fun createCopy(versionId: Long, user: User): ArticleVersion {
         val publishedVersion = getPublishedVersion(versionId)
@@ -59,41 +80,17 @@ class ArticleVersionServiceImpl(
     @Transactional
     override fun getPublishedVersion(versionId: Long): ArticleVersion {
         return (
-            repository.findByIdAndStateIn(versionId, listOf(State.PUBLISHED_AS_ARTICLE, State.PUBLISHED_AS_PROTOCOL))
+            repository.findByIdAndStateIn(
+                versionId,
+                listOf(State.PUBLISHED_AS_ARTICLE, State.PUBLISHED_AS_PROTOCOL)
+            )
                 ?: throw PublishedVersionNotFoundException("Published version to article: $versionId not found")
             )
     }
 
-    override fun getUserPublishedVersions(articleId: Long): List<ArticleVersion> {
-        return repository.findAllByMainArticleIdAndState(articleId, State.PUBLISHED_AS_PROTOCOL)
-    }
-
-    @Transactional
-    override fun approveGlobal(versionId: Long) {
-        approve(versionId, State.PUBLISHED_AS_ARTICLE)
-    }
-
-    @Transactional
-    override fun approveUserLocal(versionId: Long) {
-        approve(versionId, State.PUBLISHED_AS_PROTOCOL)
-    }
-
-    @Transactional
-    override fun moveToEdit(articleVersion: ArticleVersion) {
-        articleVersion.state = State.EDITING
-        repository.save(articleVersion)
-    }
-
-    private fun approve(versionId: Long, state: State) {
-        val currentVersion = getById(versionId)
-        val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, state)
-        if (lastPublished != null) {
-            if (lastPublished.id == currentVersion.id) return
-            archive(lastPublished.id)
-        }
-        currentVersion.state = state
-        searchService.createSearchUnit(currentVersion)
-        sectionService.publish(currentVersion.sections)
+    override fun getPublishedVersionByArticle(mainArticle: Article): ArticleVersion {
+        return repository.findByMainArticleIdAndState(mainArticle.id, State.PUBLISHED_AS_ARTICLE)
+            ?: throw ArticleVersionNotFoundException("Published as article version not found")
     }
 
     @Transactional

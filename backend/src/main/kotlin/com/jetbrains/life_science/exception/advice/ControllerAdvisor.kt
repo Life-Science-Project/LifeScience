@@ -115,6 +115,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse(ex.message)
     }
 
+    @ExceptionHandler(DuplicateReviewException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleDuplicateReview(ex: DuplicateReviewException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
     @ExceptionHandler(SearchUnitTypeNotSupportedException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleSearchUnitTypeNotSupported(

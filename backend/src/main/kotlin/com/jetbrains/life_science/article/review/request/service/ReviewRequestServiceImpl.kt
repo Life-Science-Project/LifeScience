@@ -59,16 +59,12 @@ class ReviewRequestServiceImpl(
         return repository.findAllByVersionId(versionId)
     }
 
-    override fun getAllByAuthorId(authorId: Long): List<ReviewRequest> {
-        return repository.findAllByVersionAuthorId(authorId)
-    }
-
     override fun getById(reviewRequestId: Long): ReviewRequest {
         return repository.findByIdOrNull(reviewRequestId)
             ?: throw ReviewRequestNotFoundException("Review with id $reviewRequestId not found")
     }
 
     override fun getAllActiveByVersionId(versionId: Long): List<ReviewRequest> {
-        TODO("Not yet implemented")
+        return repository.findAllByVersionIdAndResolutionIsNull(versionId)
     }
 }

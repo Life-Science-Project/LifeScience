@@ -17,5 +17,4 @@ class ReviewViewMapper {
     fun toViews(reviews: List<Review>): List<ReviewView> {
         return reviews.map { toView(it) }
     }
-
 }

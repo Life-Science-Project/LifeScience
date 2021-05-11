@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.article.master.view
 
 import com.jetbrains.life_science.article.master.entity.Article
-import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import org.springframework.stereotype.Component
 
@@ -11,8 +10,8 @@ class ArticleViewMapper(
 ) {
     fun createView(article: Article): ArticleView {
         val publishedVersionView = article.versions
-            .filter { it.state == State.PUBLISHED_AS_ARTICLE }
-            .map { versionViewMapper.createView(it) }
+            .filter { it.isPublished }
+            .map { versionViewMapper.toView(it) }
             .firstOrNull()
         return ArticleView(article.id, publishedVersionView)
     }

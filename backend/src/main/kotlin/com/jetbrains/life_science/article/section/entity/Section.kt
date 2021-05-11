@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.article.section.entity
 
-import com.jetbrains.life_science.article.section.parameter.entity.Parameter
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction

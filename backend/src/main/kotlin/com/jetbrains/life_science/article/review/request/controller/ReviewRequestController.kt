@@ -12,7 +12,7 @@ import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import com.jetbrains.life_science.validator.validateEnumValue
-import com.jetbrains.life_science.validator.validateUserAndVersion
+import com.jetbrains.life_science.validator.validateUserAndVersionToEdit
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -45,10 +45,11 @@ class ReviewRequestController(
         @Validated @RequestBody dto: ReviewRequestDTO,
         principal: Principal
     ): ReviewRequestView {
-        validateEnumValue<VersionDestination>(dto.destination) { "Destination not exists" }
         val version = articleVersionService.getById(versionId)
         val user = userService.getByEmail(principal.email)
-        validateUserAndVersion(version, user) { "User do not have permission to version" }
+
+        validateEnumValue<VersionDestination>(dto.destination) { "Destination not exists" }
+        validateUserAndVersionToEdit(version, user) { "User do not have permission to version" }
 
         val reviewRequest = service.add(ReviewRequestDTOToInfoAdapter(dto, version, user))
         return viewMapper.toView(reviewRequest)
@@ -71,5 +72,4 @@ class ReviewRequestController(
         if (reviewRequest.version.author.id == user.id) return
         throw AccessDeniedException("User can not delete review")
     }
-
 }

@@ -4,5 +4,5 @@ enum class VersionDestination {
 
     PROTOCOL,
 
-    STATIC
+    ARTICLE;
 }

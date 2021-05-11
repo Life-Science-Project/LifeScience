@@ -12,8 +12,6 @@ interface ReviewRequestService {
 
     fun getAllByVersionId(versionId: Long): List<ReviewRequest>
 
-    fun getAllByAuthorId(authorId: Long): List<ReviewRequest>
-
     fun getByVersionId(versionId: Long): ReviewRequest?
 
     fun getByVersionIdOrThrow(versionId: Long): ReviewRequest

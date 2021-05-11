@@ -11,5 +11,4 @@ interface ReviewRequestInfo {
     val user: User
 
     val destination: VersionDestination
-
 }

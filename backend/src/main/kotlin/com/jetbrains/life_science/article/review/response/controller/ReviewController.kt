@@ -11,9 +11,10 @@ import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.ArticleVersionNotFoundException
 import com.jetbrains.life_science.exception.request.BadRequestException
+import com.jetbrains.life_science.exception.request.DuplicateReviewException
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
-import com.jetbrains.life_science.validator.validateUserAndVersion
+import com.jetbrains.life_science.validator.validateUserAndVersionToEdit
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
@@ -21,7 +22,7 @@ import java.security.Principal
 
 @RestController
 @RequestMapping("/api/articles/versions/{versionId}/reviews")
-class ArticleReviewController(
+class ReviewController(
     val reviewService: ReviewService,
     val articleVersionService: ArticleVersionService,
     val userService: UserService,
@@ -41,10 +42,10 @@ class ArticleReviewController(
         val version = articleVersionService.getById(versionId)
         val request = reviewRequestService.getById(requestId)
 
-        validateUserAndVersion(version, user) { "User can not get review to this version" }
-        validateRequestAndVersion(request, version)
+        validateUserAndVersionToEdit(version, user) { "User can not get review to this version" }
+        validateRequestAndVersionIds(request, version)
 
-        val review = reviewService.getByVersionId(requestId)
+        val review = reviewService.getByRequest(request)
         return review?.let { viewMapper.toView(review) }
     }
 
@@ -56,7 +57,7 @@ class ArticleReviewController(
         val user = userService.getByEmail(principal.email)
         val version = articleVersionService.getById(versionId)
 
-        validateUserAndVersion(version, user) { "User can not get review to this version" }
+        validateUserAndVersionToEdit(version, user) { "User can not get review to this version" }
 
         val reviews = if (user.isAdminOrModerator()) {
             reviewService.getAllByVersion(version)
@@ -76,11 +77,20 @@ class ArticleReviewController(
     ): ReviewView {
         val version = articleVersionService.getById(versionId)
         val user = userService.getByEmail(principal.email)
+        val request = reviewRequestService.getById(requestId)
 
         validateVersionId(version, versionId)
+        validateRequestAndVersionIds(request, version)
+        validateResponseNotExists(request)
 
-        val review = reviewService.addReview(ReviewDTOToInfoAdapter(dto, version, user))
+        val review = reviewService.addReview(ReviewDTOToInfoAdapter(dto, request, user))
         return viewMapper.toView(review)
+    }
+
+    private fun validateResponseNotExists(request: ReviewRequest) {
+        if (request.resolution != null) {
+            throw DuplicateReviewException("Review to request already exists")
+        }
     }
 
     private fun validateVersionId(version: ArticleVersion, versionId: Long) {
@@ -89,10 +99,9 @@ class ArticleReviewController(
         }
     }
 
-    private fun validateRequestAndVersion(request: ReviewRequest, version: ArticleVersion) {
+    private fun validateRequestAndVersionIds(request: ReviewRequest, version: ArticleVersion) {
         if (request.version.id != version.id) {
             throw BadRequestException("Request version id and version id do not matches")
         }
     }
-
 }

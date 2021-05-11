@@ -12,5 +12,4 @@ class ReviewRequestDTOToInfoAdapter(
 ) : ReviewRequestInfo {
 
     override val destination: VersionDestination = enumValueOf(dto.destination)
-
 }
