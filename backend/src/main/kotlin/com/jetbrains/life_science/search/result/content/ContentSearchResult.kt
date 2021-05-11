@@ -7,5 +7,5 @@ class ContentSearchResult(
     val id: String,
     val text: String,
     val sectionId: Long,
-    val articleId: Long
+    val versionId: Long
 ) : SearchResult(SearchUnitType.CONTENT.presentationName)
