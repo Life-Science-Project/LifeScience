@@ -11,11 +11,11 @@ const SearchResults = ({results, query}) => {
     const getListItem = (result) => {
         switch (result.typeName) {
             case ARTICLE : {
-                return <Article name={result.name} articleId={result.articleId}/>
+                return <Article name={result.name} versionId={result.versionId}/>
             }
             case CONTENT: {
                 return <Content text={result.text}
-                                articleId={result.articleId}
+                                versionId={result.versionId}
                                 sectionId={result.sectionId}/>
             }
             default :

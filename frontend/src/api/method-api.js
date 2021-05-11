@@ -1,8 +1,8 @@
 import instance from './api'
 
 export const methodApi = {
-    getMethod(articleId) {
-        const url = 'articles/' + articleId;
+    getMethod(id) {
+        const url = 'articles/versions/' + id;
         return instance.get(url);
     },
 
