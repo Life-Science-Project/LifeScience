@@ -1,20 +1,34 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {getLineWithSetLen} from "../../../../../../utils/common";
+import Preloader from "../../../../../common/Preloader/preloader";
 
-const UserInformation = (props) => {
+const UserInformation = ({user}) => {
+    if (!user) return <Preloader/>
+
+    function replaceNulls() {
+        const replace = (str) => ((str === null) ? "NONE" : str)
+        const keys = Object.keys(user);
+        for (const key of keys) {
+            user[key] = replace(user[key])
+        }
+    }
+
+    replaceNulls()
+
+
     return(
         <div className="user_main_information">
                     <pre>
-                        {getLineWithSetLen(25, 'Name:') + props.curUser.firstName + ' ' + props.curUser.lastName}
+                        {getLineWithSetLen(25, 'Name:') + user.firstName + ' ' + user.lastName}
                         <br/>
-                        {getLineWithSetLen(25, 'Degree:') + props.curUser.doctorDegree}
+                        {getLineWithSetLen(25, 'Degree:') + user.doctorDegree}
                         <br/>
-                        {getLineWithSetLen(25, 'Education:') + props.curUser.academicDegree}
+                        {getLineWithSetLen(25, 'Education:') + user.academicDegree}
                         <br/>
-                        {getLineWithSetLen(25, 'Orcid:') + props.curUser.orcid}
+                        {getLineWithSetLen(25, 'Orcid:') + user.orcid}
                         <br/>
-                        {getLineWithSetLen(25, 'Researcher Id:') + props.curUser.researchId}
+                        {getLineWithSetLen(25, 'Researcher Id:') + user.researchId}
                     </pre>
         </div>
     );

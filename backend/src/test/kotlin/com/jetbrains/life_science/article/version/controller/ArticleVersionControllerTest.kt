@@ -185,7 +185,7 @@ internal class ArticleVersionControllerTest :
             )
         )
 
-        val contentToSave = Content(9, 5, "text", mutableListOf("tag 1"), mutableListOf("ref 1"))
+        val contentToSave = Content(9, 9, "text", mutableListOf("tag 1"), mutableListOf("ref 1"))
         Mockito.`when`(contentRepository.save(contentToSave)).thenReturn(contentToSave)
 
         // Prepare expected result

@@ -23,4 +23,8 @@ class OrganisationServiceImpl(
     override fun getAllOrganisations(): List<Organisation> {
         return repository.findAll()
     }
+
+    override fun countAll(): Long {
+        return repository.count()
+    }
 }

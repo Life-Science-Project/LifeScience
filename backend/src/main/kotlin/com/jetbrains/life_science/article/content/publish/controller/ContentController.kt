@@ -13,6 +13,7 @@ import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
 import org.springframework.security.access.AccessDeniedException
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -27,6 +28,7 @@ class ContentController(
     val sectionService: SectionService
 ) {
 
+    @Operation(summary = "Returns section's content or null, if it's not exists")
     @GetMapping
     fun getContents(
         @PathVariable sectionId: Long,
@@ -34,6 +36,7 @@ class ContentController(
         return contentService.findBySectionId(sectionId)?.let { viewMapper.createView(it) }
     }
 
+    @Operation(summary = "Returns content", deprecated = true)
     @GetMapping("/{contentId}")
     fun getContent(
         @PathVariable sectionId: Long,
@@ -44,6 +47,7 @@ class ContentController(
         return viewMapper.createView(content)
     }
 
+    @Operation(summary = "Creates new content associated with section")
     @PostMapping
     fun createContent(
         @PathVariable sectionId: Long,
@@ -56,6 +60,7 @@ class ContentController(
         return viewMapper.createView(content)
     }
 
+    @Operation(summary = "Updates existing content")
     @PutMapping("/{contentId}")
     fun updateContent(
         @PathVariable sectionId: Long,
@@ -73,6 +78,7 @@ class ContentController(
         return viewMapper.createView(updatedContent)
     }
 
+    @Operation(summary = "Deletes existing content")
     @DeleteMapping("/{contentId}")
     fun deleteContent(
         @PathVariable sectionId: Long,

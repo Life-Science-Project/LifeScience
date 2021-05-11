@@ -1,8 +1,8 @@
 import instance from './api'
 
 export const methodApi = {
-    getMethod(articleId) {
-        const url = 'articles/' + articleId;
+    getMethod(id) {
+        const url = 'articles/versions/' + id;
         return instance.get(url);
     },
 
@@ -42,7 +42,7 @@ export const articleApi = {
         })
     },
     approve(versionId) {
-        const url = `/articles/versions/${versionId}/approve`;
+        const url = `/articles/versions/${versionId}/reviews/approve`;
         return instance.patch(url);
     }
 }

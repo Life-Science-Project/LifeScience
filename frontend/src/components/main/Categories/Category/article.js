@@ -6,7 +6,7 @@ import "./category.css"
 const Article = ({article}) => {
     return (
         <div className="method_container">
-            <Link to={"/method/" + article.id}>
+            <Link to={"/method/" + article.version.id}>
                 {article.version && article.version.name}
             </Link>
         </div>

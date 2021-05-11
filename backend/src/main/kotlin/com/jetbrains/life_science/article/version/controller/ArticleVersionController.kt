@@ -2,7 +2,6 @@ package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
-import com.jetbrains.life_science.article.master.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTO
@@ -10,12 +9,11 @@ import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTOT
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAdapter
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
-import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import com.jetbrains.life_science.exception.request.BadRequestException
-import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import org.springframework.security.access.AccessDeniedException
@@ -32,18 +30,23 @@ class ArticleVersionController(
     val sectionService: SectionService,
     val contentVersionService: ContentVersionService,
     val viewMapper: ArticleVersionViewMapper,
-    val userService: UserService
+    val userService: UserService,
+    val userCredentialsService: UserCredentialsService
 ) {
 
+    @Operation(summary = "Returns a version, if it's available to the user")
     @GetMapping("/{versionId}")
     fun getVersion(
         @PathVariable versionId: Long,
-        principal: Principal
+        principal: Principal?
     ): ArticleVersionView {
         val version = articleVersionService.getById(versionId)
-        val user = userService.getByEmail(principal.email)
-        validateViewPermission(user, version)
-        return viewMapper.toView(version)
+        if (!version.isPublished) {
+            if (principal == null) throw UnauthorizedException("user do not have permissions")
+            val userCredentials = userCredentialsService.getByEmail(principal.email)
+            checkGetPermission(userCredentials, version)
+        }
+        return viewMapper.createView(version)
     }
 
     @GetMapping("/completed/{versionId}")
@@ -64,6 +67,8 @@ class ArticleVersionController(
         }
     }
 
+
+    @Operation(summary = "Creates new article AND new version inside it with optional sections and content")
     @PostMapping
     @Transactional
     fun createNewVersion(
@@ -90,6 +95,7 @@ class ArticleVersionController(
         return viewMapper.toView(createdVersion)
     }
 
+    @Operation(summary = "Creates copy of existing version associated with same article")
     @PutMapping("/{sampleVersionId}/copy")
     fun createCopiedVersion(
         @PathVariable sampleVersionId: Long,
@@ -100,6 +106,7 @@ class ArticleVersionController(
         return viewMapper.toView(createdVersion)
     }
 
+    @Operation(summary = "Updates existing version if it's available to the user")
     @PutMapping("/{versionId}")
     fun updateVersion(
         @PathVariable versionId: Long,
@@ -112,6 +119,7 @@ class ArticleVersionController(
         return viewMapper.toView(updatedVersion)
     }
 
+    @Operation(summary = "Changes version state to ARCHIVED")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PatchMapping("/{versionId}/archive")
     fun archive(

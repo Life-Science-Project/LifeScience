@@ -12,6 +12,7 @@ import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.util.email
 import org.springframework.security.access.AccessDeniedException
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.access.annotation.Secured
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -26,6 +27,7 @@ class SectionController(
     val sectionViewMapper: SectionViewMapper
 ) {
 
+    @Operation(summary = "Returns all sections associated with version")
     @GetMapping
     fun getSections(
         @PathVariable versionId: Long,
@@ -36,6 +38,7 @@ class SectionController(
         return service.getByVersionId(versionId).map { sectionViewMapper.createView(it) }
     }
 
+    @Operation(summary = "Returns section")
     @GetMapping("/{sectionId}")
     fun getSection(
         @PathVariable versionId: Long,
@@ -48,6 +51,7 @@ class SectionController(
         return sectionViewMapper.createView(section)
     }
 
+    @Operation(summary = "Creates new section without content")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PostMapping
     fun createSection(
@@ -63,6 +67,7 @@ class SectionController(
         return sectionViewMapper.createView(section)
     }
 
+    @Operation(summary = "Updates existing section")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping("/{sectionId}")
     fun updateSection(
@@ -80,6 +85,7 @@ class SectionController(
         return sectionViewMapper.createView(updatedSection)
     }
 
+    @Operation(summary = "Deletes existing section")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{sectionId}")
     fun deleteSection(

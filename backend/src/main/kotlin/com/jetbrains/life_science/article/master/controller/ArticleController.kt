@@ -6,6 +6,7 @@ import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
+import com.jetbrains.life_science.article.version.view.ArticleVersionLazyView
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.service.UserService
@@ -28,6 +29,13 @@ class ArticleController(
     @Autowired
     lateinit var articleVersionService: ArticleVersionService
 
+    @Operation(summary = "Returns the count of all articles on the portal")
+    @GetMapping("/count")
+    fun getArticlesCount(): Long {
+        return articleService.countAll()
+    }
+
+    @Operation(summary = "Returns all versions which are available to the user and associated with an article")
     @GetMapping("/{articleId}/versions")
     fun getVersions(@PathVariable articleId: Long, principal: Principal): List<ArticleVersionView> {
         val user = userService.getByEmail(principal.email)
@@ -39,6 +47,7 @@ class ArticleController(
         return articleVersionViewMapper.toViews(articleVersions)
     }
 
+    @Operation(summary = "Returns an article by it's id")
     @GetMapping("/{articleId}")
     fun getArticle(@PathVariable articleId: Long): ArticleView {
         val article = articleService.getById(articleId)
@@ -52,6 +61,7 @@ class ArticleController(
         )
     }
 
+    @Operation(summary = "Updates existing article")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @PutMapping("/{articleId}")
     fun updateArticle(
@@ -65,6 +75,7 @@ class ArticleController(
         return mapper.createView(updatedArticle)
     }
 
+    @Operation(summary = "Deletes existing article")
     @Secured("ROLE_MODERATOR", "ROLE_ADMIN")
     @DeleteMapping("/{articleId}")
     fun deleteArticle(@PathVariable articleId: Long, principal: Principal) {

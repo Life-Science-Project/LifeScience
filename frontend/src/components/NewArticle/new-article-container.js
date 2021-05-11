@@ -1,5 +1,5 @@
 import "./NewArticle.css"
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useHistory, withRouter} from "react-router-dom";
 import {getCategoryThunk} from "../../redux/category-reducer";
 import {useDispatch, useSelector} from "react-redux";
@@ -19,7 +19,7 @@ const NewArticleContainer = () => {
     const isInitialized = useSelector(state => state.auth.isInitialized);
     const category = useSelector(state => state.categoryPage.category)
     const postStatus = useSelector(state => state.newArticle.postStatus)
-    const articleId = useSelector(state => state.newArticle.articleId);
+    const versionId = useSelector(state => state.newArticle.versionId);
 
     if (!isAuthorized && isInitialized) {
         history.push(LOGIN_URL);
@@ -40,7 +40,7 @@ const NewArticleContainer = () => {
     if (postStatus === PostStatusEnum.POSTING) return <Preloader/>
     if (postStatus === PostStatusEnum.POSTED) {
         dispatch(clearPostStatus()) //clear information for further use
-        history.push(`${METHOD_URL}/${articleId}`);
+        history.push(`${METHOD_URL}/${versionId}`);
     }
 
     return <NewArticleView category={category} onSubmit={onSubmit}/>
