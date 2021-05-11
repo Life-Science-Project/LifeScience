@@ -9,4 +9,6 @@ interface OrganisationService {
     fun getByName(name: String): Organisation?
 
     fun getAllOrganisations(): List<Organisation>
+
+    fun countAll(): Long
 }

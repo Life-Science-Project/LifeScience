@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.statistics.view
+package com.jetbrains.life_science.statistics.entity
 
-data class StatisticsView(
+data class Statistics(
     val usersCount: Long,
     val articlesCount: Long,
     val organisationsCount: Long
