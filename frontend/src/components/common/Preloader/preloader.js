@@ -5,7 +5,7 @@ const Preloader = () => {
     return (
         <div className={'preloader_container'}>
             <span>
-                Loading... ... ...
+                Loading...
             </span>
         </div>
     );

@@ -41,7 +41,15 @@ export const getCategoryThunk = (id) => async (dispatch) => {
     if (response.status === 404) {
         dispatch(getError(response.data, NOT_FOUND_CATEGORY))
     }
-    const result = id !== undefined ? response.data : response.data[0];
+    const result = id !== undefined ? response.data : {
+        id: null,
+        parentId: null,
+        name: "Categories",
+        order: 0,
+        subcategories: response.data,
+        articles: []
+    };
+    // const result = id !== undefined ? response.data : response.data[0];
     dispatch(getCategory(result))
 }
 
