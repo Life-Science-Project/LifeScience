@@ -6,8 +6,8 @@ import com.jetbrains.life_science.article.content.publish.repository.ContentRepo
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
-import com.jetbrains.life_science.exception.request.ContentAlreadyExistsException
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
+import com.jetbrains.life_science.exception.request.ContentAlreadyExistsException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -64,14 +64,14 @@ class ContentServiceImpl(
         if (repository.countBySectionId(info.sectionId) > 0) {
             throw ContentAlreadyExistsException("Content already exists is section with id: ${info.sectionId}")
         }
-        val content = factory.create(info, section.articleId)
+        val content = factory.create(info, section.articleVersion.id)
         return repository.save(content)
     }
 
     override fun update(info: ContentInfo): Content {
         val content = findById(info.id)
         val section = sectionService.getById(info.sectionId)
-        factory.setParams(content, info, section.articleId)
+        factory.setParams(content, info, section.articleVersion.id)
         return repository.save(content)
     }
 

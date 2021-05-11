@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component
 @Component
 class ContentFactory {
 
-    fun create(info: ContentInfo, articleId: Long): Content {
+    fun create(info: ContentInfo, versionId: Long): Content {
         return Content(
-            versionId = articleId,
+            versionId = versionId,
             sectionId = info.sectionId,
             text = info.text,
             tags = info.tags.toMutableList(),
@@ -29,11 +29,11 @@ class ContentFactory {
         )
     }
 
-    fun setParams(origin: Content, info: ContentInfo, articleId: Long) {
+    fun setParams(origin: Content, info: ContentInfo, versionId: Long) {
         origin.text = info.text
         origin.tags = info.tags.toMutableList()
         origin.sectionId = info.sectionId
         origin.references = info.references.toMutableList()
-        origin.versionId = articleId
+        origin.versionId = versionId
     }
 }
