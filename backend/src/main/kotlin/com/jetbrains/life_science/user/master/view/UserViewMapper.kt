@@ -18,7 +18,8 @@ class UserViewMapper(
             academicDegree = user.academicDegree,
             organisations = organisationViewMapper.toViews(user.organisations),
             orcid = user.orcid,
-            researchId = user.researchId
+            researchId = user.researchId,
+            roles = user.roles.map { it.name }
         )
     }
 }

@@ -13,5 +13,6 @@ data class UserView(
     val academicDegree: AcademicDegree,
     val organisations: List<OrganisationView>,
     val orcid: String?,
-    val researchId: String?
+    val researchId: String?,
+    val roles: List<String>
 )

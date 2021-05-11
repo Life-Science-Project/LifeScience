@@ -52,7 +52,8 @@ internal class UserControllerTest :
             academicDegree = AcademicDegree.ASSOCIATE,
             organisations = listOf(),
             orcid = "123",
-            researchId = "222"
+            researchId = "222",
+            roles = listOf("ROLE_USER", "ROLE_ADMIN", "ROLE_MODERATOR")
         )
         assertEquals(expectedUser, user)
     }
@@ -285,7 +286,8 @@ internal class UserControllerTest :
             academicDegree = dto.academicDegree,
             organisations = responseUser.organisations,
             orcid = dto.orcid,
-            researchId = dto.researchId
+            researchId = dto.researchId,
+            roles = listOf("ROLE_USER", "ROLE_ADMIN", "ROLE_MODERATOR")
         )
         assertEquals(expectedUser, updatedUser)
     }
