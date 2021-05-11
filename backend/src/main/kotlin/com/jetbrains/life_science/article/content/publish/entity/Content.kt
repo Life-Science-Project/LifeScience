@@ -12,7 +12,7 @@ data class Content(
 
     var sectionId: Long,
 
-    var articleId: Long,
+    var versionId: Long,
 
     @Field(type = FieldType.Text)
     var text: String,

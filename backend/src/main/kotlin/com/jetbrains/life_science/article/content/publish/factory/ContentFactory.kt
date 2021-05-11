@@ -9,7 +9,7 @@ class ContentFactory {
 
     fun create(info: ContentInfo, articleId: Long): Content {
         return Content(
-            articleId = articleId,
+            versionId = articleId,
             sectionId = info.sectionId,
             text = info.text,
             tags = info.tags.toMutableList(),
@@ -20,7 +20,7 @@ class ContentFactory {
 
     fun copy(origin: Content): Content {
         return Content(
-            articleId = origin.articleId,
+            versionId = origin.versionId,
             sectionId = origin.sectionId,
             text = origin.text,
             tags = origin.tags,
@@ -34,6 +34,6 @@ class ContentFactory {
         origin.tags = info.tags.toMutableList()
         origin.sectionId = info.sectionId
         origin.references = info.references.toMutableList()
-        origin.articleId = articleId
+        origin.versionId = articleId
     }
 }
