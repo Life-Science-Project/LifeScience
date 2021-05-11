@@ -31,6 +31,9 @@ class ReviewRequestServiceImpl(
     }
 
     override fun delete(request: ReviewRequest) {
+        if (request.resolution != null) {
+            throw ReviewResponseAlreadyExistsException("This review request already proceed")
+        }
         repository.delete(request)
     }
 

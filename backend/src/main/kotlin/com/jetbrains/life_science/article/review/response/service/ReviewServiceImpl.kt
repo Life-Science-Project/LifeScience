@@ -42,15 +42,7 @@ class ReviewServiceImpl(
     }
 
     override fun addReview(info: ReviewInfo): Review {
-        val request = reviewRequestService.getByVersionIdOrThrow(info.versionId)
-        val review = factory.create(info.resolution, info.comment, request, info.reviewer)
-        return repository.save(review)
-    }
 
-    @Transactional
-    override fun update(info: ReviewInfo): Review {
-        val review = getById(info.reviewId)
-        return factory.setParams(review, info, info.reviewer)
     }
 
     override fun deleteReview(id: Long) {

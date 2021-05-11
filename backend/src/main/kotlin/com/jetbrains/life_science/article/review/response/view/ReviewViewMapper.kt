@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ReviewViewMapper {
-    fun createView(review: Review): ReviewView {
+    fun toView(review: Review): ReviewView {
         return ReviewView(
             id = review.id,
             reviewRequestId = review.reviewRequest.id,
@@ -15,6 +15,7 @@ class ReviewViewMapper {
     }
 
     fun toViews(reviews: List<Review>): List<ReviewView> {
-        return reviews.map { createView(it) }
+        return reviews.map { toView(it) }
     }
+
 }

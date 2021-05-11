@@ -17,8 +17,6 @@ interface ReviewService {
 
     fun addReview(info: ReviewInfo): Review
 
-    fun update(info: ReviewInfo): Review
-
     fun deleteReview(id: Long)
 
     fun getAllByVersion(version: ArticleVersion): List<Review>
