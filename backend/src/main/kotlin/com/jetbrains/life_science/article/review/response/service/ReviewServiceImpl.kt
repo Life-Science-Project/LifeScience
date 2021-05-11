@@ -33,7 +33,7 @@ class ReviewServiceImpl(
         repository.save(review)
         when (info.resolution) {
             ReviewResolution.CHANGES_REQUESTED -> requestChanges(info.request.version)
-            ReviewResolution.SUCCESS -> approve(review)
+            ReviewResolution.APPROVE -> approve(review)
         }
         return review
     }

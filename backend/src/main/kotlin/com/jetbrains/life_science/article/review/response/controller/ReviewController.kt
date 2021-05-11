@@ -4,6 +4,7 @@ import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.article.review.request.service.ReviewRequestService
 import com.jetbrains.life_science.article.review.response.dto.ReviewDTO
 import com.jetbrains.life_science.article.review.response.dto.ReviewDTOToInfoAdapter
+import com.jetbrains.life_science.article.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.article.review.response.service.ReviewService
 import com.jetbrains.life_science.article.review.response.view.ReviewView
 import com.jetbrains.life_science.article.review.response.view.ReviewViewMapper
@@ -14,7 +15,9 @@ import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.exception.request.DuplicateReviewException
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
+import com.jetbrains.life_science.validator.validateEnumValue
 import com.jetbrains.life_science.validator.validateUserAndVersionToEdit
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
@@ -32,6 +35,7 @@ class ReviewController(
     @Autowired
     lateinit var reviewRequestService: ReviewRequestService
 
+    @Operation(summary = "Gets a list of reviews for a given version and a given review request")
     @GetMapping("/requests/{requestId}")
     fun getReview(
         @PathVariable versionId: Long,
@@ -49,6 +53,7 @@ class ReviewController(
         return review?.let { viewMapper.toView(review) }
     }
 
+    @Operation(summary = "Gets a list of reviews for the given version")
     @GetMapping()
     fun getReviews(
         @PathVariable versionId: Long,
@@ -67,6 +72,7 @@ class ReviewController(
         return viewMapper.toViews(reviews)
     }
 
+    @Operation(summary = "Creates a review and changes the status of the article depending on the resolution. Possible resolution values: [APPROVE, CHANGES_REQUESTED]")
     @Secured("ROLE_ADMIN", "ROLE_MODERATOR")
     @PostMapping("/request/{requestId}")
     fun addReview(
@@ -79,6 +85,7 @@ class ReviewController(
         val user = userService.getByEmail(principal.email)
         val request = reviewRequestService.getById(requestId)
 
+        validateEnumValue<ReviewResolution>(dto.resolution) { "Incorrect resolution. Only [APPROVE, CHANGES_REQUESTED] available" }
         validateVersionId(version, versionId)
         validateRequestAndVersionIds(request, version)
         validateResponseNotExists(request)

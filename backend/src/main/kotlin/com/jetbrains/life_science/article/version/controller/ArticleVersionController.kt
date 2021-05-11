@@ -2,6 +2,7 @@ package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
+import com.jetbrains.life_science.article.master.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTO
@@ -9,13 +10,17 @@ import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTOT
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAdapter
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
+import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
-import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.exception.UnauthorizedException
+import com.jetbrains.life_science.exception.request.BadRequestException
+import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.transaction.annotation.Transactional
@@ -30,8 +35,7 @@ class ArticleVersionController(
     val sectionService: SectionService,
     val contentVersionService: ContentVersionService,
     val viewMapper: ArticleVersionViewMapper,
-    val userService: UserService,
-    val userCredentialsService: UserCredentialsService
+    val userService: UserService
 ) {
 
     @Operation(summary = "Returns a version, if it's available to the user")
@@ -43,12 +47,13 @@ class ArticleVersionController(
         val version = articleVersionService.getById(versionId)
         if (!version.isPublished) {
             if (principal == null) throw UnauthorizedException("user do not have permissions")
-            val userCredentials = userCredentialsService.getByEmail(principal.email)
-            checkGetPermission(userCredentials, version)
+            val user = userService.getByEmail(principal.email)
+            validateViewPermission(user, version)
         }
-        return viewMapper.createView(version)
+        return viewMapper.toView(version)
     }
 
+    @Operation(summary = "Returns a version, if it's available to the user. The protocol supplements the sections of the main part.")
     @GetMapping("/completed/{versionId}")
     fun getVersionCompletedPresentation(
         @PathVariable versionId: Long,
@@ -134,8 +139,8 @@ class ArticleVersionController(
         principal: Principal
     ) {
         val articleVersion = articleVersionService.getById(versionId)
-        val userCredentials = userService.getByEmail(principal.email)
-        if (!articleVersion.canModify(userCredentials)) {
+        val user = userService.getByEmail(principal.email)
+        if (!articleVersion.canModify(user)) {
             throw AccessDeniedException("User has no access to that version")
         }
     }

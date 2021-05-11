@@ -13,6 +13,7 @@ import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import com.jetbrains.life_science.validator.validateEnumValue
 import com.jetbrains.life_science.validator.validateUserAndVersionToEdit
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -27,18 +28,38 @@ class ReviewRequestController(
     val articleVersionService: ArticleVersionService
 ) {
 
+    @Operation(summary = "Returns a list of all review requests for a given version")
     @GetMapping("/version/{versionId}")
-    fun getAllRequest(@PathVariable versionId: Long): List<ReviewRequestView> {
-        val requests = service.getAllByVersionId(versionId)
+    fun getAllRequest(
+        @PathVariable versionId: Long,
+        principal: Principal
+    ): List<ReviewRequestView> {
+        val version = articleVersionService.getPublishedVersion(versionId)
+        val user = userService.getByEmail(principal.email)
+
+        validateUserAndVersionToEdit(version, user) { "User can not watch review requests for this version" }
+
+        val requests = service.getAllByVersion(version)
         return viewMapper.toViews(requests)
     }
 
+    @Operation(summary = "Returns a list of all active review requests for a given version")
     @GetMapping("/version/active/{versionId}")
-    fun getActiveRequest(@PathVariable versionId: Long): List<ReviewRequestView> {
+    fun getActiveRequest(
+        @PathVariable versionId: Long,
+        principal: Principal
+    ): List<ReviewRequestView> {
+        val version = articleVersionService.getPublishedVersion(versionId)
+        val user = userService.getByEmail(principal.email)
+
+        validateUserAndVersionToEdit(version, user) { "User can not watch review requests for this version" }
+
         val requests = service.getAllActiveByVersionId(versionId)
         return viewMapper.toViews(requests)
     }
 
+
+    @Operation(summary = "Creates a review request. Destination available values: [PROTOCOL, ARTICLE]")
     @PatchMapping("/version/{versionId}")
     fun createRequest(
         @PathVariable versionId: Long,
@@ -55,6 +76,7 @@ class ReviewRequestController(
         return viewMapper.toView(reviewRequest)
     }
 
+    @Operation(summary = "Removes a review request if it hasn't been answered yet")
     @DeleteMapping("/{requestId}")
     fun deleteRequest(
         @PathVariable requestId: Long,
