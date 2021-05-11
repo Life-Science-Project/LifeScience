@@ -42,7 +42,7 @@ export const articleApi = {
         })
     },
     approve(versionId) {
-        const url = `/articles/versions/${versionId}/approve`;
+        const url = `/articles/versions/${versionId}/reviews/approve`;
         return instance.patch(url);
     }
 }
