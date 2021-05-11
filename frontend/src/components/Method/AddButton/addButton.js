@@ -34,7 +34,7 @@ class AddButton extends React.Component {
             return (
                 <div className="buttons_container">
                     <button onClick={this.deleteFromFavorites}>
-                        UnSave
+                        Remove from Favourites
                     </button>
                 </div>
             );
@@ -43,7 +43,7 @@ class AddButton extends React.Component {
         return (
             <div className="buttons_container">
                 <button onClick={this.addToMyFavourites}>
-                    Save
+                    Add to Favourites
                 </button>
             </div>
         )
