@@ -15,6 +15,12 @@ class OrganisationController(
     val viewMapper: OrganisationViewMapper
 ) {
 
+    @Operation(summary = "Returns the count of all organisations on the portal")
+    @GetMapping("/count")
+    fun getOrganisationsCount(): Long {
+        return organisationService.countAll()
+    }
+
     @Operation(summary = "Returns all organisations")
     @GetMapping
     fun getAllOrganisations(): List<OrganisationView> {

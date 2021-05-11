@@ -30,6 +30,12 @@ class ArticleController(
     @Autowired
     lateinit var articleVersionService: ArticleVersionService
 
+    @Operation(summary = "Returns the count of all articles on the portal")
+    @GetMapping("/count")
+    fun getArticlesCount(): Long {
+        return articleService.countAll()
+    }
+
     @Operation(summary = "Returns all versions which are available to the user and associated with an article")
     @GetMapping("/{articleId}/versions")
     fun getVersions(@PathVariable articleId: Long, principal: Principal): List<ArticleVersionView> {

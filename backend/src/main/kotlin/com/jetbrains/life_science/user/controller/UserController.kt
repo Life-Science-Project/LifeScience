@@ -31,6 +31,12 @@ class UserController(
     val articleVersionViewMapper: ArticleVersionViewMapper
 ) {
 
+    @Operation(summary = "Returns the count of all users on the portal")
+    @GetMapping("/count")
+    fun getUsersCount(): Long {
+        return userService.countAll()
+    }
+
     @Operation(summary = "Returns all users")
     @GetMapping
     fun getUsers(): List<UserView> {
