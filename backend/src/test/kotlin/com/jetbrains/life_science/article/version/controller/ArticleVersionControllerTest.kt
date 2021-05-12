@@ -6,7 +6,6 @@ import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
-import com.jetbrains.life_science.article.section.parameter.dto.ParameterDTO
 import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.search.repository.SectionSearchUnitRepository
 import com.jetbrains.life_science.article.section.view.SectionLazyView
@@ -178,7 +177,6 @@ internal class ArticleVersionControllerTest :
                 SectionInnerDTO(
                     "inner section 1",
                     "desc 1",
-                    listOf(ParameterDTO("a", "2")),
                     true,
                     ContentInnerDTO("text", listOf("ref 1"), listOf("tag 1"))
                 )
