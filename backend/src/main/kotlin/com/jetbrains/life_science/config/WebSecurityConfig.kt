@@ -64,7 +64,10 @@ class WebSecurityConfig(
                 "/api/articles/versions/*/reviews/**",
                 "/api/articles/versions/*/copy",
                 "/api/articles/versions/*/approve",
-                "/api/articles/versions/*/archive"
+                "/api/articles/versions/*/archive",
+                "/api/articles/*/versions",
+                "/api/articles/versions/completed/*",
+                "/api/review/request/**"
             ).fullyAuthenticated()
             .antMatchers("/api/users/current").fullyAuthenticated()
             .antMatchers(HttpMethod.GET).permitAll()

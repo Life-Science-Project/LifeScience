@@ -49,7 +49,7 @@ class ReviewRequestController(
         @PathVariable versionId: Long,
         principal: Principal
     ): List<ReviewRequestView> {
-        val version = articleVersionService.getPublishedVersion(versionId)
+        val version = articleVersionService.getById(versionId)
         val user = userService.getByEmail(principal.email)
 
         validateUserAndVersionToEdit(version, user) { "User can not watch review requests for this version" }

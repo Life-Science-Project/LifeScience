@@ -1,17 +1,12 @@
 package com.jetbrains.life_science.article.section.factory
 
 import com.jetbrains.life_science.article.section.entity.Section
-import com.jetbrains.life_science.article.section.parameter.factory.ParameterFactory
-import com.jetbrains.life_science.article.section.parameter.service.ParameterService
 import com.jetbrains.life_science.article.section.service.SectionInfo
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import org.springframework.stereotype.Component
 
 @Component
-class SectionFactory(
-    val parameterFactory: ParameterFactory,
-    val parameterService: ParameterService
-) {
+class SectionFactory {
     fun create(info: SectionInfo, article: ArticleVersion): Section {
         return Section(
             id = 0,
