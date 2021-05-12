@@ -9,7 +9,6 @@ data class SectionInnerDTO(
 
     val description: String = "",
 
-
     var visible: Boolean = true,
 
     val content: ContentInnerDTO? = null
