@@ -2,7 +2,7 @@ import instance from './api'
 
 export const methodApi = {
     getMethod(id) {
-        const url = 'articles/versions/' + id;
+        const url = 'articles/versions/completed/' + id;
         return instance.get(url);
     },
 

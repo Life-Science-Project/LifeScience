@@ -7,7 +7,7 @@ import {FaTimes} from "react-icons/all";
 
 const NewArticleView = ({category, onSubmit}) => {
 
-    const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
+    const SECTION_TITLES = ["General information", "Protocol", "Equipment and reagents required", "Application",
         "Method advantages and disadvantages", "Troubleshooting"];
 
     const AUTO_SECTION_TITLES = ["Find collaboration", "Education"];

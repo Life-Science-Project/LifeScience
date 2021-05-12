@@ -13,7 +13,7 @@ function receiveSections(data) {
     return {
         type: RECEIVE_SECTIONS,
         sections: data.sections,
-        name: data.name,
+        name: data.articleName,
     }
 }
 
