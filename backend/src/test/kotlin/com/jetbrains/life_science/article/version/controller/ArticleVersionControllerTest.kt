@@ -6,11 +6,10 @@ import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
-import com.jetbrains.life_science.article.section.parameter.dto.ParameterDTO
 import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.search.repository.SectionSearchUnitRepository
 import com.jetbrains.life_science.article.section.view.SectionLazyView
-import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTO
+import com.jetbrains.life_science.article.version.dto.ArticleVersionFullCreationDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
@@ -36,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional
 @WithUserDetails("admin")
 @Transactional
 internal class ArticleVersionControllerTest :
-    ControllerTest<ArticleVersionCreationDTO, ArticleVersionView>(ArticleVersionView::class.java) {
+    ControllerTest<ArticleVersionFullCreationDTO, ArticleVersionView>(ArticleVersionView::class.java) {
 
     @MockBean
     lateinit var articleVersionSearchUnitRepository: ArticleVersionSearchUnitRepository
@@ -61,7 +60,7 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView(1, "master 1", 1, expectedSectionViews, State.PUBLISHED)
+        val expectedView = ArticleVersionView(1, "master 1", 1, expectedSectionViews, State.PUBLISHED_AS_ARTICLE)
 
         // Action
         val view = get(1, urlWithArticleId())
@@ -114,7 +113,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `create empty version with wrong category id`() {
-        val dto = ArticleVersionCreationDTO(ArticleDTO(1000), "test")
+        val dto = ArticleVersionFullCreationDTO(ArticleDTO(1000), "test")
         assertNotFound(
             "Category",
             postRequest(dto, urlWithArticleId())
@@ -151,7 +150,7 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create version without sections`() {
         // Prepare test data
-        val dto = ArticleVersionCreationDTO(ArticleDTO(1), "next version")
+        val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
 
         // Prepare expected result
         val expectedView = ArticleVersionView(7, "next version", 4, listOf(), State.EDITING)
@@ -171,14 +170,13 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create version with sections and content`() {
         // Prepare test data
-        val dto = ArticleVersionCreationDTO(
+        val dto = ArticleVersionFullCreationDTO(
             articleDTO = ArticleDTO(1),
             name = "big version",
             sections = listOf(
                 SectionInnerDTO(
                     "inner section 1",
                     "desc 1",
-                    listOf(ParameterDTO("a", "2")),
                     true,
                     ContentInnerDTO("text", listOf("ref 1"), listOf("tag 1"))
                 )
@@ -260,7 +258,7 @@ internal class ArticleVersionControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView(1, "changed version", 1, expectedSectionViews, State.PUBLISHED)
+        val expectedView = ArticleVersionView(1, "changed version", 1, expectedSectionViews, State.PUBLISHED_AS_ARTICLE)
 
         // Action
         val result = put(1, dto, urlWithArticleId(), ArticleVersionView::class.java)

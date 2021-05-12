@@ -18,7 +18,7 @@ class CategoryController(
     val mapper: CategoryViewMapper
 ) {
 
-    @Operation(summary = "Returns root categories")
+    @Operation(summary = "Returns root categories", deprecated = true)
     @GetMapping("/root")
     fun getRootCategories(): List<CategoryView> {
         val rootCategories = categoryService.getRootCategories()

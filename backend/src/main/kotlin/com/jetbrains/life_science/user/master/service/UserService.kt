@@ -16,7 +16,7 @@ interface UserService {
 
     fun addFavourite(user: User, articleVersionId: Long): User
 
-    fun removeFavourite(user: User, articleId: Long)
+    fun removeFavourite(user: User, articleVersionId: Long)
 
     fun createUser(info: NewUserInfo): User
 

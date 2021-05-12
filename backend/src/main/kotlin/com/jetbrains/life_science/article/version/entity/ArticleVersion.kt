@@ -2,8 +2,8 @@ package com.jetbrains.life_science.article.version.entity
 
 import com.jetbrains.life_science.article.master.entity.Article
 import com.jetbrains.life_science.article.section.entity.Section
+import com.jetbrains.life_science.article.section.parameter.entity.Parameter
 import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.user.master.entity.UserCredentials
 import javax.persistence.*
 
 @Entity
@@ -25,21 +25,26 @@ class ArticleVersion(
     var author: User,
 
     @OneToMany(mappedBy = "articleVersion", cascade = [CascadeType.ALL])
-    var sections: MutableList<Section> = mutableListOf()
+    var sections: MutableList<Section> = mutableListOf(),
+
+    @OneToMany
+    var parameters: MutableList<Parameter> = mutableListOf()
 
 ) {
 
     val articleId: Long get() = mainArticle.id
 
-    val isPublished: Boolean get() = state == State.PUBLISHED || state == State.USER_PUBLISHED
+    val isPublished: Boolean get() = state == State.PUBLISHED_AS_ARTICLE || state == State.PUBLISHED_AS_PROTOCOL
+
+    val isNotPublished: Boolean get() = !isPublished
 
     val isArchived: Boolean get() = state == State.ARCHIVED
 
-    fun canRead(user: UserCredentials): Boolean {
-        return state == State.PUBLISHED || canModify(user)
+    fun canRead(user: User): Boolean {
+        return state == State.PUBLISHED_AS_ARTICLE || canModify(user)
     }
 
-    fun canModify(user: UserCredentials): Boolean {
+    fun canModify(user: User): Boolean {
         return author.id == user.id ||
             user.roles.any {
                 it.name == "ROLE_ADMIN" ||

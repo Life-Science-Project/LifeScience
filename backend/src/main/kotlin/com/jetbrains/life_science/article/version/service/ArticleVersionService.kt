@@ -1,17 +1,20 @@
 package com.jetbrains.life_science.article.version.service
 
+import com.jetbrains.life_science.article.master.entity.Article
+import com.jetbrains.life_science.article.review.request.entity.VersionDestination
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
+import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.user.master.entity.User
 
 interface ArticleVersionService {
 
+    fun changeState(version: ArticleVersion, state: State): ArticleVersion
+
+    fun approve(version: ArticleVersion, destination: VersionDestination)
+
     fun checkExistenceById(versionId: Long)
 
     fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion
-
-    fun approveGlobal(versionId: Long)
-
-    fun approveUserLocal(versionId: Long)
 
     fun archive(versionId: Long)
 
@@ -25,7 +28,5 @@ interface ArticleVersionService {
 
     fun updateById(info: ArticleVersionInfo): ArticleVersion
 
-    fun moveToEdit(articleVersion: ArticleVersion)
-
-    fun getUserPublishedVersions(articleId: Long): List<ArticleVersion>
+    fun getPublishedVersionByArticle(mainArticle: Article): ArticleVersion
 }

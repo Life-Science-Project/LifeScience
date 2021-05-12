@@ -59,7 +59,7 @@ internal class ArticleMasterControllerTest :
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val expectedView1 = ArticleVersionView(1, "master 1", 1, expectedSectionViews1, State.PUBLISHED)
+        val expectedView1 = ArticleVersionView(1, "master 1", 1, expectedSectionViews1, State.PUBLISHED_AS_ARTICLE)
         val expectedView2 = ArticleVersionView(2, "version 1.1", 1, listOf(), State.EDITING)
         val expectedView3 =
             ArticleVersionView(3, "version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.EDITING)
@@ -90,8 +90,9 @@ internal class ArticleMasterControllerTest :
                     SectionLazyView(id = 1, name = "name 1.1", order = 1),
                     SectionLazyView(id = 2, name = "name 1.2", order = 2),
                 ),
-                state = State.PUBLISHED
-            )
+                state = State.PUBLISHED_AS_ARTICLE,
+            ),
+            protocols = emptyList()
         )
 
         // Action

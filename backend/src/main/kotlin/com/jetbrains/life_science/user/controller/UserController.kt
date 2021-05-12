@@ -94,7 +94,7 @@ class UserController(
     @GetMapping("/{userId}/favourites")
     fun getFavourites(@PathVariable userId: Long): List<ArticleVersionView> {
         val user = userService.getById(userId)
-        return user.favouriteArticles.map { articleVersionViewMapper.createView(it) }
+        return user.favouriteArticles.map { articleVersionViewMapper.toView(it) }
     }
 
     @Operation(summary = "Adds version to user's favourites")

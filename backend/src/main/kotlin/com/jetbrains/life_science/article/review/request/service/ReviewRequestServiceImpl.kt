@@ -3,6 +3,7 @@ package com.jetbrains.life_science.article.review.request.service
 import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.article.review.request.factory.ReviewRequestFactory
 import com.jetbrains.life_science.article.review.request.repository.ReviewRequestRepository
+import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.ReviewRequestNotFoundException
@@ -21,14 +22,20 @@ class ReviewRequestServiceImpl(
 
     @Transactional
     override fun add(info: ReviewRequestInfo): ReviewRequest {
-        if (repository.existsByVersionIdAndResolutionIsNull(info.versionId)) {
-            throw DuplicateReviewRequestException("Review request for version ${info.versionId} already exists")
+        if (repository.existsByVersionAndResolutionIsNull(info.version)) {
+            throw DuplicateReviewRequestException("Review request for version ${info.version.id} already exists")
         }
-        val version = articleVersionService.getById(info.versionId)
-        version.state = State.PENDING_FOR_REVIEW
-        val request = factory.create(version, info.destination)
+        articleVersionService.changeState(info.version, State.PENDING_FOR_REVIEW)
+        val request = factory.create(info)
         repository.save(request)
         return request
+    }
+
+    override fun delete(request: ReviewRequest) {
+        if (request.resolution != null) {
+            throw ReviewResponseAlreadyExistsException("This review request already proceed")
+        }
+        repository.delete(request)
     }
 
     override fun getByVersionIdOrThrow(versionId: Long): ReviewRequest {
@@ -37,7 +44,7 @@ class ReviewRequestServiceImpl(
 
     @Transactional
     override fun removeRequest(reviewId: Long) {
-        val request = getByIdOrThrow(reviewId)
+        val request = getById(reviewId)
         if (request.resolution != null) {
             repository.delete(request)
         } else {
@@ -49,16 +56,16 @@ class ReviewRequestServiceImpl(
         return repository.findByVersionIdAndResolutionIsNull(versionId)
     }
 
-    override fun getAllByVersionId(versionId: Long): List<ReviewRequest> {
-        return repository.findAllByVersionId(versionId)
+    override fun getAllByVersion(versionId: ArticleVersion): List<ReviewRequest> {
+        return repository.findAllByVersion(versionId)
     }
 
-    override fun getAllByAuthorId(authorId: Long): List<ReviewRequest> {
-        return repository.findAllByVersionAuthorId(authorId)
-    }
-
-    override fun getByIdOrThrow(reviewRequestId: Long): ReviewRequest {
+    override fun getById(reviewRequestId: Long): ReviewRequest {
         return repository.findByIdOrNull(reviewRequestId)
             ?: throw ReviewRequestNotFoundException("Review with id $reviewRequestId not found")
+    }
+
+    override fun getAllActiveByVersionId(versionId: Long): List<ReviewRequest> {
+        return repository.findAllByVersionIdAndResolutionIsNull(versionId)
     }
 }

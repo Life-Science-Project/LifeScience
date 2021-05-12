@@ -6,7 +6,6 @@ import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.master.view.ArticleViewMapper
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
-import com.jetbrains.life_science.article.version.view.ArticleVersionLazyView
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.service.UserService
@@ -45,7 +44,7 @@ class ArticleController(
         } else {
             articleService.getById(articleId).versions.filter { it.author.id == user.id }
         }
-        return articleVersionViewMapper.createViews(articleVersions)
+        return articleVersionViewMapper.toViews(articleVersions)
     }
 
     @Operation(summary = "Returns an article by it's id")
@@ -55,14 +54,6 @@ class ArticleController(
         return mapper.createView(article)
     }
 
-    @Operation(summary = "Returns all user-published versions which are associated with an article")
-    @GetMapping("/{articleId}/user-published")
-    fun getUserPublishedViews(@PathVariable articleId: Long): List<ArticleVersionLazyView> {
-        val versions = articleVersionService.getUserPublishedVersions(articleId)
-        return articleVersionViewMapper.createLazyViews(versions)
-    }
-
-    @Operation(summary = "Creates new empty article (not a version!)")
     @PostMapping
     fun createArticle(@Validated @RequestBody dto: ArticleDTO, principal: Principal): ArticleView {
         return mapper.createView(
