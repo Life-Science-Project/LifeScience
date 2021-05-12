@@ -31,7 +31,8 @@ class ArticleVersionViewMapper(val sectionLazyMapper: SectionLazyViewMapper) {
         return ArticleFullPageView(
             articleId = articleVersion.articleId,
             articleName = articleVersion.name,
-            sections = sectionLazyMapper.createViews(articleVersion.sections)
+            sections = sectionLazyMapper.createViews(articleVersion.sections),
+            articleVersionId = articleVersion.id
         )
     }
 
@@ -45,6 +46,7 @@ class ArticleVersionViewMapper(val sectionLazyMapper: SectionLazyViewMapper) {
             articleId = articleVersion.articleId,
             articleName = articleVersion.name,
             sections = sections,
+            articleVersionId = articleVersion.id,
             protocolId = protocolVersion.id,
             protocolName = articleVersion.name
         )

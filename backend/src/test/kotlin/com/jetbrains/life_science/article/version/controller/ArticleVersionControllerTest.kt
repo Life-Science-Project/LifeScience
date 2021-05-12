@@ -10,7 +10,7 @@ import com.jetbrains.life_science.article.section.parameter.dto.ParameterDTO
 import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.search.repository.SectionSearchUnitRepository
 import com.jetbrains.life_science.article.section.view.SectionLazyView
-import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTO
+import com.jetbrains.life_science.article.version.dto.ArticleVersionFullCreationDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional
 @WithUserDetails("admin")
 @Transactional
 internal class ArticleVersionControllerTest :
-    ControllerTest<ArticleVersionCreationDTO, ArticleVersionView>(ArticleVersionView::class.java) {
+    ControllerTest<ArticleVersionFullCreationDTO, ArticleVersionView>(ArticleVersionView::class.java) {
 
     @MockBean
     lateinit var articleVersionSearchUnitRepository: ArticleVersionSearchUnitRepository
@@ -114,7 +114,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `create empty version with wrong category id`() {
-        val dto = ArticleVersionCreationDTO(ArticleDTO(1000), "test")
+        val dto = ArticleVersionFullCreationDTO(ArticleDTO(1000), "test")
         assertNotFound(
             "Category",
             postRequest(dto, urlWithArticleId())
@@ -151,7 +151,7 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create version without sections`() {
         // Prepare test data
-        val dto = ArticleVersionCreationDTO(ArticleDTO(1), "next version")
+        val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
 
         // Prepare expected result
         val expectedView = ArticleVersionView(7, "next version", 4, listOf(), State.EDITING)
@@ -171,7 +171,7 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create version with sections and content`() {
         // Prepare test data
-        val dto = ArticleVersionCreationDTO(
+        val dto = ArticleVersionFullCreationDTO(
             articleDTO = ArticleDTO(1),
             name = "big version",
             sections = listOf(

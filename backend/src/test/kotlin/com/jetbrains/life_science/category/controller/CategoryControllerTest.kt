@@ -84,7 +84,8 @@ internal class CategoryControllerTest :
                             SectionLazyView(2, "name 1.2", 2)
                         ),
                         State.PUBLISHED_AS_ARTICLE
-                    )
+                    ),
+                    protocols = emptyList()
                 )
             )
         )

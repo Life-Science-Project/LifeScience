@@ -2,13 +2,13 @@ package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
+import com.jetbrains.life_science.article.master.dto.ArticleDTOToInfoAdapter
+import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.master.view.ArticleFullPageView
+import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
-import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTO
-import com.jetbrains.life_science.article.version.dto.ArticleVersionCreationDTOToInfoAdapter
-import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
-import com.jetbrains.life_science.article.version.dto.ArticleVersionDTOToInfoAdapter
+import com.jetbrains.life_science.article.version.dto.*
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
@@ -20,6 +20,7 @@ import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.transaction.annotation.Transactional
@@ -36,6 +37,9 @@ class ArticleVersionController(
     val viewMapper: ArticleVersionViewMapper,
     val userService: UserService
 ) {
+
+    @Autowired
+    lateinit var articleService: ArticleService
 
     @Operation(summary = "Returns a version, if it's available to the user")
     @GetMapping("/{versionId}")
@@ -71,18 +75,41 @@ class ArticleVersionController(
         }
     }
 
-    @Operation(summary = "Creates new article AND new version inside it with optional sections and content")
-    @PostMapping
+    @Operation(summary = "Creates new version with optional sections and content")
+    @PostMapping("/article/{articleId}")
     @Transactional
     fun createNewVersion(
         @Validated @RequestBody dto: ArticleVersionCreationDTO,
+        principal: Principal,
+        @PathVariable articleId: Long
+    ): ArticleVersionView {
+        val user = userService.getByEmail(principal.email)
+        val article = articleService.getById(articleId)
+        val createdVersion =
+            articleVersionService.createBlank(ArticleVersionCreationDTOToInfoAdapter(dto, user, article))
+        return createArticleVersion(createdVersion, dto.sections)
+    }
+
+    @Operation(summary = "Creates new article AND new version inside it with optional sections and content")
+    @PostMapping
+    @Transactional
+    fun createNewVersionAndArticle(
+        @Validated @RequestBody dto: ArticleVersionFullCreationDTO,
         principal: Principal
     ): ArticleVersionView {
         val user = userService.getByEmail(principal.email)
+        val article = articleService.create(ArticleDTOToInfoAdapter(dto.articleDTO))
         val createdVersion = articleVersionService.createBlank(
-            ArticleVersionCreationDTOToInfoAdapter(dto, user)
+            ArticleVersionFullCreationDTOToInfoAdapter(dto, user, article)
         )
-        for ((order, sectionInnerDTO) in dto.sections.withIndex()) {
+        return createArticleVersion(createdVersion, dto.sections)
+    }
+
+    private fun createArticleVersion(
+        createdVersion: ArticleVersion,
+        sectionInnerDTOList: List<SectionInnerDTO>
+    ): ArticleVersionView {
+        for ((order, sectionInnerDTO) in sectionInnerDTOList.withIndex()) {
             val sectionInfo = SectionInnerDTOToInfoAdapter(createdVersion.id, order, sectionInnerDTO)
             val createdSection = sectionService.create(sectionInfo)
 

@@ -37,7 +37,7 @@ class ArticleVersionServiceImpl(
 
     @Transactional
     override fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion {
-        val article = articleService.create(info.articleInfo)
+        val article = info.article
         var articleVersion = factory.create(info, article)
         articleVersion = repository.save(articleVersion)
         return articleVersion

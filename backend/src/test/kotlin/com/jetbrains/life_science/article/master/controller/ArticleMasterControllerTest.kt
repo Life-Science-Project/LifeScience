@@ -90,8 +90,9 @@ internal class ArticleMasterControllerTest :
                     SectionLazyView(id = 1, name = "name 1.1", order = 1),
                     SectionLazyView(id = 2, name = "name 1.2", order = 2),
                 ),
-                state = State.PUBLISHED_AS_ARTICLE
-            )
+                state = State.PUBLISHED_AS_ARTICLE,
+            ),
+            protocols = emptyList()
         )
 
         // Action

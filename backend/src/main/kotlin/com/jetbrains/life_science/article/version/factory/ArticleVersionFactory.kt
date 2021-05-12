@@ -12,7 +12,7 @@ class ArticleVersionFactory {
 
     fun create(info: ArticleVersionCreationInfo, article: Article): ArticleVersion {
         return ArticleVersion(
-            id = info.id,
+            id = 0,
             name = info.name,
             state = State.EDITING,
             mainArticle = article,
