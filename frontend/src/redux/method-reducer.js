@@ -7,9 +7,9 @@ const RECEIVE_PROTOCOLS = 'RECEIVE_PROTOCOLS'
 const initialState = {
     name: "",
     sections: [],
-    protocols: [],
     isReceived: false,
     isMainPage: true,
+    articleId: 0,
 }
 
 function receiveSections(data) {
@@ -18,6 +18,7 @@ function receiveSections(data) {
         sections: data.sections,
         name: data.articleName,
         isMainPage: data.protocolId === null,
+        articleId: data.articleId
     }
 }
 
@@ -27,29 +28,11 @@ export function clearSections() {
     }
 }
 
-function receiveProtocols(data) {
-    return {
-        type: RECEIVE_PROTOCOLS,
-        protocols: data.protocols
-    }
-}
-
-function fetchProtocols(articleId) {
-    return dispatch => {
-        return methodApi.getProtocols(articleId)
-            .then(response => response.data)
-            .then(data => dispatch(receiveProtocols(data)))
-    }
-}
-
 export function fetchSections(versionId) {
     return dispatch => {
         return methodApi.getMethod(versionId)
             .then(response => response.data)
             .then(data => {
-                if (data.protocolId === null) {
-
-                }
                 return dispatch(receiveSections(data))
             })
     }
@@ -63,17 +46,13 @@ export default function methodReducer(state = initialState, action) {
                 name: action.name,
                 sections: action.sections,
                 isMainPage: action.isMainPage,
+                articleId: action.articleId,
                 isReceived: true,
             }
         case CLEAR_SECTIONS:
             return  {
                 ...state,
                 isReceived: false
-            }
-        case RECEIVE_PROTOCOLS:
-            return {
-                ...state,
-                //todo move to sectioncontainer (maybe), decide how to show protocols section when it doesn't have a link
             }
         default:
             return state

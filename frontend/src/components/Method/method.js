@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {BrowserRouter as Router, NavLink, Redirect, Route, Switch, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import './method.css'
 import SectionContainer from "./Sections/section-container?";
 

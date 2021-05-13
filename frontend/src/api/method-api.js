@@ -25,6 +25,11 @@ export const sectionApi = {
 }
 
 export const articleApi = {
+    getArticle(articleId) {
+      const url = `articles/${articleId}`
+      return instance.get(url)
+    },
+
     postVersion(categoryId, name, sections) {
         const url = 'articles/versions';
         return instance.post(url, {

@@ -31,7 +31,7 @@ export function clearPostStatus() {
 
 export const addMethodThunk = (categoryId, name, sections) => async (dispatch) => {
     dispatch(postArticle())
-    let response = await articleApi.postVersion(categoryId, name, sections);
+    const response = await articleApi.postVersion(categoryId, name, sections);
     //todo exception handling
     if (response.status !== 200) return
     let versionId = response.data.id;

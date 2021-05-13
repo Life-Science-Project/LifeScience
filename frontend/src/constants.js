@@ -22,3 +22,5 @@ export const INFO_SECTION_TITLES = ["General information", "Protocol", "Equipmen
 export const AUTO_SECTION_TITLES = ["Find collaboration", "Education"];
 
 export const SECTION_TITLES = INFO_SECTION_TITLES.concat(AUTO_SECTION_TITLES)
+
+export const PROTOCOLS = "Protocols"

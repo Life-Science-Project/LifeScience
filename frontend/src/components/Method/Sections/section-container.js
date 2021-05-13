@@ -13,6 +13,7 @@ const SectionContainer = (props) => {
 
     const contents = useSelector(state => state.section.contents);
     const isReceived = useSelector(state => state.section.isReceived)
+    const articleId = useSelector(state => state.method.articleId)
 
     const hasContents = section.id
 
@@ -30,7 +31,7 @@ const SectionContainer = (props) => {
 
     if (!isReceived && hasContents) return <Preloader/>
     return (
-        <Section contents={contents} name={section.name}/>
+        <Section contents={contents} name={section.name} articleId={articleId}/>
     )
 
 }

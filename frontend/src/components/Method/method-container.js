@@ -5,7 +5,12 @@ import {fetchSections, clearSections} from "../../redux/method-reducer";
 import Method from "./method";
 import Preloader from "../common/Preloader/preloader";
 import AddButton from "./AddButton/addButton";
-import {getSectionsForPreview, getSectionsForShow} from "../../utils/sections";
+import {
+    getSectionsForMain,
+    getSectionsForPreview,
+    getSectionsForProtocol,
+    getSectionsForShow
+} from "../../utils/sections";
 
 
 const MethodContainer = () => {
@@ -42,7 +47,10 @@ const MethodContainer = () => {
     if (!isReceived) return <Preloader/>
     return (
         <div>
-            <Method name={name} sections={getSectionsForPreview(sections)} versionId={versionId} addButton={getAddButton()}/>
+            <Method name={name}
+                    sections={(isMainPage) ? getSectionsForMain(sections) : getSectionsForProtocol(sections)}
+                    versionId={versionId}
+                    addButton={getAddButton()}/>
         </div>
     );
 
