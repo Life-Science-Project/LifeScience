@@ -1,8 +1,6 @@
 package com.jetbrains.life_science.util.populator
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.google.gson.Gson
 import org.elasticsearch.client.RestHighLevelClient
 import org.springframework.core.io.ClassPathResource
 
@@ -17,21 +15,7 @@ class ElasticPopulator(
     }
 
     fun prepareData() {
-        clear()
-        createIndexes()
-        populate()
-    }
-
-    private fun clear() {
-        populators.forEach { it.clear() }
-    }
-
-    private fun createIndexes() {
-        populators.forEach { it.createIndex() }
-    }
-
-    private fun populate() {
-        populators.forEach { it.populate() }
+        populators.forEach { it.prepareData() }
     }
 
     private fun loadPopulator(indexName: String, fileName: String): Populator {

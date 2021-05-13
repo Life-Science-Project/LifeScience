@@ -16,17 +16,23 @@ internal class Populator(
 
     private val dataAsStringList: List<String> = objectData.map { ObjectMapper().writeValueAsString(it) }
 
-    fun clear() {
+    fun prepareData() {
+        clear()
+        createIndex()
+        populate()
+    }
+
+    private fun clear() {
         val request = DeleteIndexRequest(indexName)
         client.indices().delete(request, RequestOptions.DEFAULT)
     }
 
-    fun createIndex() {
+    private fun createIndex() {
         val request = CreateIndexRequest(indexName)
         client.indices().create(request, RequestOptions.DEFAULT)
     }
 
-    fun populate() = dataAsStringList.forEach { content ->
+    private fun populate() = dataAsStringList.forEach { content ->
         val request = IndexRequest(indexName).source(content, XContentType.JSON)
         client.index(request, RequestOptions.DEFAULT)
     }
