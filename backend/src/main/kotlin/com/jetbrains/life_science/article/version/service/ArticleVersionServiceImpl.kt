@@ -57,11 +57,15 @@ class ArticleVersionServiceImpl(
     }
 
     private fun approve(currentVersion: ArticleVersion, state: State) {
-        val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, state)
-        if (lastPublished != null) {
-            if (lastPublished.id == currentVersion.id) return
-            archive(lastPublished.id)
+        // ARTICLE clears last article, but not PROTOCOL
+        if (state == State.PUBLISHED_AS_ARTICLE) {
+            val lastPublished = repository.findByMainArticleIdAndState(currentVersion.mainArticle.id, state)
+            if (lastPublished != null) {
+                if (lastPublished.id == currentVersion.id) return
+                archive(lastPublished.id)
+            }
         }
+
         currentVersion.state = state
         searchService.createSearchUnit(currentVersion)
         sectionService.publish(currentVersion.sections)
