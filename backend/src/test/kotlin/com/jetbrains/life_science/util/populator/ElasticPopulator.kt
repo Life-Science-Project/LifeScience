@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.util.populator
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.gson.Gson
 import org.elasticsearch.client.RestHighLevelClient
 import org.springframework.core.io.ClassPathResource
@@ -36,8 +38,8 @@ class ElasticPopulator(
         return Populator(highLevelClient, indexName, loadClasses(fileName))
     }
 
-    private fun loadClasses(fileName: String): List<Any> {
+    private fun loadClasses(fileName: String): List<*> {
         val text = ClassPathResource(fileName).file.readText()
-        return Gson().fromJson<List<Any>>(text, List::class.java)
+        return jacksonObjectMapper().readValue(text, List::class.java)
     }
 }

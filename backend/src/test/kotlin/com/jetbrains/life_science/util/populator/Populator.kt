@@ -11,7 +11,7 @@ import org.elasticsearch.common.xcontent.XContentType
 internal class Populator(
     private val client: RestHighLevelClient,
     private val indexName: String,
-    objectData: List<Any>,
+    objectData: List<*>,
 ) {
 
     private val dataAsStringList: List<String> = objectData.map { ObjectMapper().writeValueAsString(it) }
