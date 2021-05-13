@@ -43,7 +43,13 @@ export const articleVersionApi = {
         const url = `articles/versions/${versionId}/copy`;
         return instance.put(url);
     },
-    postNewArticle(categoryId, data) {
+    /**
+     * Creates new article AND new version inside it with optional sections and content
+     *
+     * @param data - article
+     * @returns {Promise<AxiosResponse<any>>}
+     */
+    postNewArticle(data) {
         const url = `articles/versions`;
         return instance.post(url, data);
     },
@@ -76,16 +82,24 @@ export const contentApi = {
 }
 
 export const reviewApi = {
+    /**
+     * Set status to article approve or needed to insert changes.
+     *
+     * @param versionId - version of article for which is making review.
+     * @param requestId - request which is reviewing.
+     * @param data - contains comment from approver and resolution. Possible resolution values: [APPROVE, CHANGES_REQUESTED].
+     * @returns {Promise<AxiosResponse<any>>}
+     */
     postAnswerRequest(versionId, requestId, data) {
-        const url = `/api/articles/versions/${versionId}/reviews/request/${requestId}`;
+        const url = `articles/versions/${versionId}/reviews/request/${requestId}`;
         return instance.post(url, data);
     },
     getReviews(versionId) {
-        const url = `/api/articles/versions/${versionId}/reviews`;
+        const url = `articles/versions/${versionId}/reviews`;
         return instance.get(url);
     },
     getReviewsOfRequest(versionId, requestId) {
-        const url = `/api/articles/versions/${versionId}/reviews/request/${requestId}`;
+        const url = `articles/versions/${versionId}/reviews/request/${requestId}`;
         return instance.get(url);
     }
 }
@@ -95,6 +109,13 @@ export const reviewRequestApi = {
         const url = `review/request/version/${versionId}`;
         return instance.get(url);
     },
+    /**
+     * Creates a review request for version of protocol or article.
+     *
+     * @param versionId - version of article
+     * @param data - destination, available values: [PROTOCOL, ARTICLE].
+     * @returns {Promise<AxiosResponse<any>>}
+     */
     patchRequest(versionId, data) {
         const url = `review/request/version/${versionId}`;
         return instance.patch(url, data);
@@ -108,4 +129,3 @@ export const reviewRequestApi = {
         return instance.delete(url);
     }
 }
-

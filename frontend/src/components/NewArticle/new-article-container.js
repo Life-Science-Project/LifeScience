@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import {useHistory, withRouter} from "react-router-dom";
 import {getCategoryThunk} from "../../redux/category-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {addMethodThunk, clearPostStatus, PostStatusEnum} from "../../redux/actions/new-article-actions";
+import {addArticleThunk, clearPostStatus, PostStatusEnum} from "../../redux/actions/new-article-actions";
 import {useRouteMatch} from "react-router";
 import Preloader from "../common/Preloader/preloader";
 import {LOGIN_URL, METHOD_URL} from "../../constants";
@@ -34,7 +34,7 @@ const NewArticleContainer = () => {
     }
 
     const onSubmit = (sections, methodName) => {
-        dispatch(addMethodThunk(categoryId, methodName, sections));
+        dispatch(addArticleThunk(categoryId, methodName, sections));
     }
 
     if (postStatus === PostStatusEnum.POSTING) return <Preloader/>
