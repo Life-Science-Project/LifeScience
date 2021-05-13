@@ -1,4 +1,4 @@
-import {articleApi, contentApi} from "../../api/method-api";
+import {articleVersionApi} from "../../api/method-api";
 
 export const POST_ARTICLE = "POST_ARTICLE";
 export const RECEIVE_POSTED_ARTICLE = "RECEIVE_POSTED_ARTICLE";
@@ -31,10 +31,10 @@ export function clearPostStatus() {
 
 export const addMethodThunk = (categoryId, name, sections) => async (dispatch) => {
     dispatch(postArticle())
-    let response = await articleApi.postVersion(categoryId, name, sections);
+    let response = await articleVersionApi.postVersion(categoryId, name, sections);
     //todo exception handling
     if (response.status !== 200) return
     let versionId = response.data.id;
-    await articleApi.approve(versionId);
+    await articleVersionApi.approve(versionId);
     dispatch(receivePostedArticle(versionId))
 }
