@@ -8,10 +8,10 @@ import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.client.indices.CreateIndexRequest
 import org.elasticsearch.common.xcontent.XContentType
 
-internal class Populator<T>(
+internal class Populator(
     private val client: RestHighLevelClient,
     private val indexName: String,
-    objectData: List<T>,
+    objectData: List<Any>,
 ) {
 
     private val dataAsStringList: List<String> = objectData.map { ObjectMapper().writeValueAsString(it) }

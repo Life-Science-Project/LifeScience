@@ -8,9 +8,9 @@ class ElasticPopulator(
     private val highLevelClient: RestHighLevelClient
 ) {
 
-    private val populators: MutableList<Populator<out Any>> = mutableListOf()
+    private val populators: MutableList<Populator> = mutableListOf()
 
-    fun <T> addPopulator(indexName: String, fileName: String) {
+    fun addPopulator(indexName: String, fileName: String) {
         populators.add(loadPopulator(indexName, fileName))
     }
 
@@ -32,12 +32,12 @@ class ElasticPopulator(
         populators.forEach { it.populate() }
     }
 
-    private fun <T> loadPopulator(indexName: String, fileName: String): Populator<T> {
+    private fun loadPopulator(indexName: String, fileName: String): Populator {
         return Populator(highLevelClient, indexName, loadClasses(fileName))
     }
 
-    private fun <T> loadClasses(fileName: String): List<T> {
+    private fun loadClasses(fileName: String): List<Any> {
         val text = ClassPathResource(fileName).file.readText()
-        return Gson().fromJson<List<T>>(text, List::class.java)
+        return Gson().fromJson<List<Any>>(text, List::class.java)
     }
 }
