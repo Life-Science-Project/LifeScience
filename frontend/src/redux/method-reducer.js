@@ -6,14 +6,18 @@ const CLEAR_SECTIONS = 'CLEAR_SECTIONS'
 const initialState = {
     name: "",
     sections: [],
-    isReceived: false
+    isReceived: false,
+    isMainPage: true,
+    articleId: 0,
 }
 
 function receiveSections(data) {
     return {
         type: RECEIVE_SECTIONS,
         sections: data.sections,
-        name: data.name,
+        name: data.articleName,
+        isMainPage: data.protocolId === null,
+        articleId: data.articleId
     }
 }
 
@@ -27,7 +31,9 @@ export function fetchSections(versionId) {
     return dispatch => {
         return methodApi.getMethod(versionId)
             .then(response => response.data)
-            .then(data => dispatch(receiveSections(data)))
+            .then(data => {
+                return dispatch(receiveSections(data))
+            })
     }
 }
 
@@ -38,6 +44,8 @@ export default function methodReducer(state = initialState, action) {
                 ...state,
                 name: action.name,
                 sections: action.sections,
+                isMainPage: action.isMainPage,
+                articleId: action.articleId,
                 isReceived: true,
             }
         case CLEAR_SECTIONS:

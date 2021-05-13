@@ -5,7 +5,7 @@ import SectionContainer from "./Sections/section-container?";
 
 const Method = (props) => {
     const link = props.match.url
-    const {name, sections, versionId, addButton} = props;
+    const {name, sections, versionId, addButton, newProtocolButton} = props;
     const buttonStyle = {
         "margin-left": "-1.5rem"
     }
@@ -26,12 +26,20 @@ const Method = (props) => {
                             </li>
                         ))
                     }
-                    {
-                        addButton &&
-                        (<li className="list-item" style={buttonStyle}>
-                            {addButton}
-                        </li>)
-                    }
+                    <div className="d-flex justify-content-start">
+                        {
+                            addButton &&
+                            (<li className="list-item" style={buttonStyle} style={{padding: "0.5rem"}}>
+                                {addButton}
+                            </li>)
+                        }
+                        {
+                            newProtocolButton &&
+                            (<li className="list-item" style={buttonStyle} style={{padding: "0.5rem"}}>
+                                {newProtocolButton}
+                            </li>)
+                        }
+                    </div>
                 </ul>
                 <Switch>
                     {
