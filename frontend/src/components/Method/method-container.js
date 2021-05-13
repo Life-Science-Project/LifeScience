@@ -5,6 +5,7 @@ import {fetchSections, clearSections} from "../../redux/method-reducer";
 import Method from "./method";
 import Preloader from "../common/Preloader/preloader";
 import AddButton from "./AddButton/addButton";
+import {getSectionsForPreview, getSectionsForShow} from "../../utils/sections";
 
 
 const MethodContainer = () => {
@@ -17,6 +18,7 @@ const MethodContainer = () => {
     const sections = useSelector(state => state.method.sections)
     const isReceived = useSelector(state => state.method.isReceived)
     const isAuthorized = useSelector(state => state.auth.isAuthorized)
+    const isMainPage = useSelector(state => state.method.isMainPage)
 
     const getSections = () => {
         const id = match.params.versionId;
@@ -40,7 +42,7 @@ const MethodContainer = () => {
     if (!isReceived) return <Preloader/>
     return (
         <div>
-            <Method name={name} sections={sections} versionId={versionId} addButton={getAddButton()}/>
+            <Method name={name} sections={getSectionsForPreview(sections)} versionId={versionId} addButton={getAddButton()}/>
         </div>
     );
 

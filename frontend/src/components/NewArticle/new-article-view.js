@@ -3,14 +3,11 @@ import React, {useState} from "react";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
+import {INFO_SECTION_TITLES} from "../../constants";
+import {getSectionsForPreview, getSectionsForShow, getSectionsForSubmit} from "../../utils/sections";
 
 
 const NewArticleView = ({category, onSubmit}) => {
-
-    const SECTION_TITLES = ["General information", "Protocol", "Equipment and reagents required", "Application",
-        "Method advantages and disadvantages", "Troubleshooting"];
-
-    const AUTO_SECTION_TITLES = ["Find collaboration", "Education"];
 
     const getNewSection = (sectionName) => {
         return {
@@ -22,7 +19,7 @@ const NewArticleView = ({category, onSubmit}) => {
     }
 
     const [preview, setPreview] = useState(false);
-    const [sections, setSections] = useState([getNewSection(SECTION_TITLES[0])]);
+    const [sections, setSections] = useState([getNewSection(INFO_SECTION_TITLES[0])]);
     const [methodName, setMethodName] = useState("")
 
     const addNewSection = () => {
@@ -55,28 +52,6 @@ const NewArticleView = ({category, onSubmit}) => {
         setPreview(!preview);
     }
 
-    function getSectionsForSubmit() {
-        const sortedSections = getSortedSections();
-        for (const title of AUTO_SECTION_TITLES) {
-            sortedSections.push({
-                name: title
-            })
-        }
-        return sortedSections
-    }
-
-    function getSortedSections() {
-        const sortedSections = [];
-        for (const title of SECTION_TITLES) {
-            for (const section of sections) {
-                if (section.name === title) {
-                    sortedSections.push(section)
-                }
-            }
-        }
-        return sortedSections;
-    }
-
     function isSectionSelected(title) {
         for (const section of sections) {
             if (section.name === title) {
@@ -98,11 +73,11 @@ const NewArticleView = ({category, onSubmit}) => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        onSubmit(getSectionsForSubmit(), methodName)
+        onSubmit(getSectionsForPreview(sections), methodName)
     }
 
     if (preview) return <MethodPreview name={methodName}
-                                       sections={getSectionsForSubmit()}
+                                       sections={getSectionsForPreview(sections)}
                                        goBack={() => setPreview(false)}/>
 
     return (
@@ -123,7 +98,7 @@ const NewArticleView = ({category, onSubmit}) => {
                 </div>
                 <div className="form-group">
                     <h2 className="col-form-label">
-                        {SECTION_TITLES[0]}
+                        {INFO_SECTION_TITLES[0]}
                     </h2>
                     <textarea className="form-control new-article-form__section-content"
                               onChange={
@@ -141,7 +116,7 @@ const NewArticleView = ({category, onSubmit}) => {
                                 <DropdownButton variant="light" id={"choose-section-" + index}
                                                 title={sections[index].name ? sections[index].name : "Choose section"}>
                                     {
-                                        SECTION_TITLES
+                                        INFO_SECTION_TITLES
                                             .filter((title) => !isSectionSelected(title))
                                             .map(type => (
                                                 <Dropdown.Item

@@ -9,6 +9,11 @@ export const methodApi = {
     addMethod(categoryId) {
         const url = 'articles/';
         return instance.post(url, {categoryId});
+    },
+
+    getProtocols(articleId) {
+        const url = 'articles/' + articleId;
+        return instance.get(url)
     }
 }
 

@@ -7,12 +7,14 @@ import Preloader from "../../common/Preloader/preloader";
 
 const SectionContainer = (props) => {
 
-    const dispatch = useDispatch()
-    const match = useRouteMatch()
+    const {versionId, section} = props
 
-    const name = useSelector(state => state.section.name);
+    const dispatch = useDispatch()
+
     const contents = useSelector(state => state.section.contents);
     const isReceived = useSelector(state => state.section.isReceived)
+
+    const hasContents = section.id
 
     useEffect(() => {
         getContents()
@@ -20,20 +22,16 @@ const SectionContainer = (props) => {
         return () => {
             dispatch(clearContents())
         }
-    }, [props.versionId, match.params])
+    }, [props])
 
     const getContents = () => {
-        const versionId = props.versionId;
-        const sectionId = match.params.sectionId;
-        dispatch(fetchContents(versionId, sectionId))
+        if (hasContents) dispatch(fetchContents(versionId, section.id))
     }
 
-    if (!isReceived) return <Preloader/>
+    if (!isReceived && hasContents) return <Preloader/>
     return (
-        <Section contents={contents} name={name}/>
+        <Section contents={contents} name={section.name}/>
     )
-
-
 
 }
 
