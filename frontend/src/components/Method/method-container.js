@@ -23,6 +23,7 @@ const MethodContainer = () => {
     const isAuthorized = useSelector(state => state.auth.isAuthorized)
     const isMainPage = useSelector(state => state.method.isMainPage)
     const passedSectionId = useSelector(state => state.method.passedSectionId)
+    const protocolName = useSelector(state => state.method.protocolName)
 
     const getSections = () => {
         const id = match.params.versionId;
@@ -46,7 +47,7 @@ const MethodContainer = () => {
     if (!isReceived) return <Preloader/>
     return (
         <div>
-            <Method name={name}
+            <Method name={name + (protocolName ? `, ${protocolName}` : "")}
                     sections={(isMainPage) ? getSectionsForMain(sections) : getSectionsForProtocol(sections)}
                     versionId={versionId}
                     addButton={getAddButton()}

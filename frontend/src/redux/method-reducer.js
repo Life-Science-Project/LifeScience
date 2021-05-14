@@ -11,6 +11,7 @@ const initialState = {
     isMainPage: true,
     articleId: 0,
     passedSectionId: null,
+    protocolName: "",
 }
 
 export function passSectionId(sectionId) {
@@ -26,7 +27,8 @@ function receiveSections(data) {
         sections: data.sections,
         name: data.articleName,
         isMainPage: data.protocolId === null,
-        articleId: data.articleId
+        articleId: data.articleId,
+        protocolName: data.protocolName,
     }
 }
 
@@ -56,6 +58,7 @@ export default function methodReducer(state = initialState, action) {
                 isMainPage: action.isMainPage,
                 articleId: action.articleId,
                 isReceived: true,
+                protocolName: action.protocolName,
             }
         case CLEAR_SECTIONS:
             return  {
