@@ -7,9 +7,7 @@ import Preloader from "../common/Preloader/preloader";
 import AddButton from "./AddButton/addButton";
 import {
     getSectionsForMain,
-    getSectionsForPreview,
-    getSectionsForProtocol,
-    getSectionsForShow
+    getSectionsForProtocol
 } from "../../utils/sections";
 
 
@@ -24,6 +22,7 @@ const MethodContainer = () => {
     const isReceived = useSelector(state => state.method.isReceived)
     const isAuthorized = useSelector(state => state.auth.isAuthorized)
     const isMainPage = useSelector(state => state.method.isMainPage)
+    const passedSectionId = useSelector(state => state.method.passedSectionId)
 
     const getSections = () => {
         const id = match.params.versionId;
@@ -50,7 +49,8 @@ const MethodContainer = () => {
             <Method name={name}
                     sections={(isMainPage) ? getSectionsForMain(sections) : getSectionsForProtocol(sections)}
                     versionId={versionId}
-                    addButton={getAddButton()}/>
+                    addButton={getAddButton()}
+                    passedSectionId={passedSectionId}/>
         </div>
     );
 

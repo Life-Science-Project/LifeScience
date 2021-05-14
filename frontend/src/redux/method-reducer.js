@@ -2,7 +2,7 @@ import {methodApi} from "../api/method-api";
 
 const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
 const CLEAR_SECTIONS = 'CLEAR_SECTIONS'
-const RECEIVE_PROTOCOLS = 'RECEIVE_PROTOCOLS'
+const PASS_SECTION_ID = "PASS_SECTION_ID"
 
 const initialState = {
     name: "",
@@ -10,6 +10,14 @@ const initialState = {
     isReceived: false,
     isMainPage: true,
     articleId: 0,
+    passedSectionId: null,
+}
+
+export function passSectionId(sectionId) {
+    return {
+        type: PASS_SECTION_ID,
+        passedSectionId: sectionId,
+    }
 }
 
 function receiveSections(data) {
@@ -52,9 +60,18 @@ export default function methodReducer(state = initialState, action) {
         case CLEAR_SECTIONS:
             return  {
                 ...state,
-                isReceived: false
+                isReceived: false,
+                passedSectionId: null,
+            }
+        case PASS_SECTION_ID:
+            return {
+                ...state,
+                passedSectionId: action.passedSectionId,
             }
         default:
             return state
     }
+}
+
+export class clearSectionId {
 }

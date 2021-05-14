@@ -4,12 +4,21 @@ import './method.css'
 import SectionContainer from "./Sections/section-container?";
 
 const Method = (props) => {
-    const {name, sections, versionId, addButton} = props;
+    const {name, sections, versionId, addButton, passedSectionId} = props;
     const buttonStyle = {
         "margin-left": "-1.5rem"
     }
-    const [activeSection, setActiveSection] = useState(0)
 
+    const getSectionIndex = (sectionId) => {
+        for (let i = 0; i < sections.length; i++) {
+            const section = sections[i]
+            if (section.id === sectionId) {
+                return i
+            }
+        }
+        return null
+    }
+    const [activeSection, setActiveSection] = useState(getSectionIndex(passedSectionId) ?? 0)
     const handleClick = (e, index) => {
         setActiveSection(index)
     }
