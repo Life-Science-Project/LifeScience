@@ -1,11 +1,9 @@
 package com.jetbrains.life_science
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 
@@ -14,9 +12,6 @@ import org.springframework.test.web.servlet.*
 abstract class ControllerTest<DTO, View>(
     private val viewToken: Class<View>
 ) {
-
-    @MockBean
-    lateinit var contentVersionRepository: ContentVersionRepository
 
     final lateinit var apiUrl: String
 

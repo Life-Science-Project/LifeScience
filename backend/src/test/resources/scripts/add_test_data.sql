@@ -16,6 +16,8 @@ insert into users (id, email, password, academic_degree, doctor_degree, first_na
 values (1, 'admin', 'admin', 0, 0, 'Admin', 'Admin-Admin', '123', '222');
 insert into users (id, email, password, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
 values (2, 'user', 'user', 1, 1, 'User', 'User-User', '123', '222');
+insert into users (id, email, password, academic_degree, doctor_degree, first_name, last_name, orcid, research_id)
+values (3, 'moderator', 'moderator', 1, 1, 'Moderator', 'Moderator-Moderator', '125', '239');
 
 insert into roles (id, name)
 values (1, 'ROLE_USER');
@@ -32,7 +34,6 @@ insert into users_roles(user_id, role_id)
 values (1, 3);
 insert into users_roles(user_id, role_id)
 values (2, 1);
-
 
 insert into article_version (id, name, state, author_id, main_article_id)
 values (1, 'master 1', 3, 1, 1);

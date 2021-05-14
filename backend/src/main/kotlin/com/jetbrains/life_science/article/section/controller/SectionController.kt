@@ -33,7 +33,6 @@ class SectionController(
         @PathVariable versionId: Long,
         principal: Principal?
     ): List<SectionView> {
-        articleVersionService.checkExistenceById(versionId)
         checkAccess(versionId, principal)
         return service.getByVersionId(versionId).map { sectionViewMapper.createView(it) }
     }
@@ -45,7 +44,6 @@ class SectionController(
         @PathVariable sectionId: Long,
         principal: Principal?
     ): SectionView {
-        articleVersionService.checkExistenceById(versionId)
         checkAccess(versionId, principal)
         val section = service.getById(sectionId)
         return sectionViewMapper.createView(section)
@@ -109,6 +107,8 @@ class SectionController(
     }
 
     private fun checkAccess(versionId: Long, principal: Principal?) {
+        // If trying to get non-existing articleVersion ot throws ArticleVersionNotFoundException
+        articleVersionService.checkExistenceById(versionId)
         val articleVersion = articleVersionService.getById(versionId)
         // If trying to get published sections
         if (articleVersion.state == State.PUBLISHED_AS_ARTICLE) return
