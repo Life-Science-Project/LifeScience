@@ -13,11 +13,11 @@ class __NavLink extends React.Component {
         });
 
         return (
-            <Link to={this.props.path}>
-                <li className={classes}>
-                    <a className="nav-link navbar__link" href="#">{name}</a>
-                </li>
-            </Link>
+            <li className={classes}>
+                <Link to={this.props.path} className="nav-link navbar__link">
+                    {name}
+                </Link>
+            </li>
         );
     };
 };
