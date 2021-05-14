@@ -30,6 +30,7 @@ const ProtocolList = ({articleId}) => {
 
     return (
         <div className="section-content">
+            {protocols.length === 0 && "No protocols found for this method."}
             <ul>
                 {
                     protocols.map((protocol) => (
