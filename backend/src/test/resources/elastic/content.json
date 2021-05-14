@@ -1,0 +1,23 @@
+[
+  {
+    "sectionId": 1,
+    "versionId": 1,
+    "text": "general info text",
+    "tags": [],
+    "references": []
+  },
+  {
+    "sectionId": 2,
+    "versionId": 1,
+    "text": "some text",
+    "tags": [],
+    "references": []
+  },
+  {
+    "sectionId": 3,
+    "versionId": 1,
+    "text": "some other text",
+    "tags": [],
+    "references": []
+  }
+]
