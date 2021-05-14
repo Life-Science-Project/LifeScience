@@ -1,4 +1,4 @@
-import "./NewArticle.css"
+import "../NewArticle/NewArticle.css"
 import React, {useEffect} from "react";
 import {useHistory, withRouter} from "react-router-dom";
 import {getCategoryThunk} from "../../redux/category-reducer";
@@ -7,39 +7,38 @@ import {addMethodThunk, clearPostStatus, PostStatusEnum} from "../../redux/actio
 import {useRouteMatch} from "react-router";
 import Preloader from "../common/Preloader/preloader";
 import {LOGIN_URL, METHOD_URL} from "../../constants";
-import NewArticleView from "./new-article-view";
+import NewArticleView from "../NewArticle/new-article-view";
+import {getArticleThunk} from "../../redux/article-reducer";
+import {addProtocolThunk} from "../../redux/new-protocol-reducer";
 
-const NewArticleContainer = () => {
+const NewProtocolContainer = () => {
     const history = useHistory()
     const dispatch = useDispatch()
     const match = useRouteMatch()
 
-    const categoryId = match.params.categoryId;
+    const articleId = match.params.articleId;
     const isAuthorized = useSelector(state => state.auth.isAuthorized);
     const isInitialized = useSelector(state => state.auth.isInitialized);
-    const category = useSelector(state => state.categoryPage.category)
-    const postStatus = useSelector(state => state.newArticle.postStatus)
-    const versionId = useSelector(state => state.newArticle.versionId);
+    const article = useSelector(state => state.article.article)
+    const postStatus = useSelector(state => state.protocol.postStatus)
+    const versionId = useSelector(state => state.protocol.versionId);
 
-    const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
-        "Method advantages and disadvantages", "Troubleshooting"];
-
-    const AUTO_SECTION_TITLES = ["Find collaboration", "Education"];
+    const SECTION_TITLES = ["Protocol"];
 
     if (!isAuthorized && isInitialized) {
         history.push(LOGIN_URL);
     }
 
     useEffect(() => {
-        refreshCategory()
+        refreshArticle()
     }, [match.params])
 
-    const refreshCategory = () => {
-        dispatch(getCategoryThunk(categoryId));
+    const refreshArticle = () => {
+        dispatch(getArticleThunk(articleId));
     }
 
-    const onSubmit = (sections, methodName) => {
-        dispatch(addMethodThunk(categoryId, methodName, sections));
+    const onSubmit = (sections, name) => {
+        dispatch(addProtocolThunk(articleId, name, sections));
     }
 
     if (postStatus === PostStatusEnum.POSTING) return <Preloader/>
@@ -48,7 +47,7 @@ const NewArticleContainer = () => {
         history.push(`${METHOD_URL}/${versionId}`);
     }
 
-    return <NewArticleView category={category} onSubmit={onSubmit} sectionTitles={SECTION_TITLES} autoSectionTitles={AUTO_SECTION_TITLES}/>
+    return (<NewArticleView article={article} onSubmit={onSubmit} sectionTitles={SECTION_TITLES} autoSectionTitles={[]}/>);
 }
 
-export default withRouter(NewArticleContainer);
+export default withRouter(NewProtocolContainer);

@@ -44,6 +44,10 @@ export const articleApi = {
     approve(versionId) {
         const url = `/articles/versions/${versionId}/reviews/approve`;
         return instance.patch(url);
+    },
+    getArticle(articleId) {
+        const url = `/articles/${articleId}`;
+        return instance.get(url);
     }
 }
 
