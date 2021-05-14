@@ -2,6 +2,7 @@ package com.jetbrains.life_science.section.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.section.dto.SectionDTO
 import com.jetbrains.life_science.article.section.parameter.dto.ParameterDTO
 import com.jetbrains.life_science.article.section.parameter.view.ParameterView
@@ -24,6 +25,9 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class SectionControllerTest :
     ControllerTest<SectionDTO, SectionView>(SectionView::class.java) {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     @MockBean
     lateinit var contentRepository: ContentRepository

@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.category.controller
 
 import com.jetbrains.life_science.ControllerTest
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.entity.State
@@ -11,6 +12,7 @@ import com.jetbrains.life_science.category.view.CategoryView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
@@ -25,6 +27,9 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 internal class CategoryControllerTest :
     ControllerTest<CategoryDTO, CategoryView>(CategoryView::class.java) {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     init {
         apiUrl = "/api/categories"

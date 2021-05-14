@@ -1,6 +1,8 @@
 package com.jetbrains.life_science.util.populator
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.apache.http.HttpHost
+import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestHighLevelClient
 import org.springframework.core.io.ClassPathResource
 

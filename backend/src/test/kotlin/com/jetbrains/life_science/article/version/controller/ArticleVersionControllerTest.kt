@@ -4,6 +4,7 @@ import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTO
 import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
 import com.jetbrains.life_science.article.section.search.SectionSearchUnit
@@ -36,6 +37,9 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 internal class ArticleVersionControllerTest :
     ControllerTest<ArticleVersionFullCreationDTO, ArticleVersionView>(ArticleVersionView::class.java) {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     @MockBean
     lateinit var articleVersionSearchUnitRepository: ArticleVersionSearchUnitRepository

@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.article.master.controller
 
 import com.jetbrains.life_science.ControllerTest
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.master.view.ArticleView
 import com.jetbrains.life_science.article.section.view.SectionLazyView
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
@@ -24,6 +26,9 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 internal class ArticleMasterControllerTest :
     ControllerTest<ArticleDTO, ArticleView>(ArticleView::class.java) {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     init {
         apiUrl = "/api/articles"
