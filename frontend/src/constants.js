@@ -14,4 +14,10 @@ export const ACADEMIC_DEGREE = [
     {value: "MASTER", name: "Master"},
     {value: "PROFESSIONAL", name: "Professional"},
     {value: "NONE", name: "None"}
-]
+];
+
+export const ROLES = Object.freeze({
+    user: "ROLE_USER",
+    admin: "ROLE_ADMIN",
+    moderator: "ROLE_MODERATOR"
+});

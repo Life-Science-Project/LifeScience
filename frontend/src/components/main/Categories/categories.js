@@ -6,6 +6,7 @@ import {byField} from "../../../utils/common";
 import Category from "./Category/category";
 import Article from "./Category/article";
 import Trouble from "../../common/Trouble/trouble";
+import {ROLES} from "../../../constants";
 
 class Categories extends React.Component {
     constructor(props) {
@@ -42,7 +43,9 @@ class Categories extends React.Component {
         }
 
         const addButton = () => {
-            if (this.props.isShowButton && this.props.category.subcategories.length === 0) {
+            if (this.props.isAuthorized && this.props.category.subcategories.length === 0
+                && this.props.userRoles
+                && (this.props.userRoles.includes(ROLES.admin) || this.props.userRoles.includes(ROLES.moderator))) {
                 return(
                     <button className="add_method_button" onClick={this.onAdd}>
                         Add Method
@@ -52,7 +55,7 @@ class Categories extends React.Component {
         }
 
         const showButton = () => {
-            if (this.props.isShowButton || this.props.category.parentId !== null) {
+            if (this.props.isAuthorized || this.props.category.parentId !== null) {
                 return(
                     <div className="buttons_container">
                         <div className="return_button">
@@ -66,47 +69,59 @@ class Categories extends React.Component {
             }
         }
 
+        const showingInformation = () => {
+            if (this.props.category.subcategories.length === 0) {
+                return (
+                    <div className="articles_container">
+                        {this.props.category.articles.filter(x => x.version !== null).map(article => <Article key={article.id} article={article}/>)}
+                    </div>
+                );
+            }
+
+            return (
+                <div className="categories_container">
+                    {this.props.category.subcategories.sort(byField('order')).map(category => <Category key={category.id} category={category}/>)}
+                </div>
+            );
+        }
+
         return (
             <div>
                 {showButton()}
                 <div className="category_name">
                     {this.props.category.name}
                 </div>
-                <div className="categories_container">
-                    {this.props.category.subcategories.sort(byField('order')).map(category => <Category category={category}/>)}
-                </div>
-                <div className="articles_container">
-                    {this.props.category.articles.filter(x => x.version !== null && this.props.category.subcategories.length === 0).map(article => <Article article={article}/>)}
-                </div>
+                {showingInformation()}
             </div>
         );
     }
 }
 
 Categories.propTypes = {
-    category: PropTypes.exact({
+    category: PropTypes.shape({
         id: PropTypes.number.isRequired,
         parentId: PropTypes.oneOfType([
             PropTypes.number,
             null
         ]).isRequired,
         subcategories: PropTypes.arrayOf(
-            PropTypes.exact({
+            PropTypes.shape({
                 id: PropTypes.number.isRequired,
                 name: PropTypes.string.isRequired,
                 order: PropTypes.number.isRequired
             })
         ).isRequired,
         articles: PropTypes.arrayOf(
-            PropTypes.exact({
+            PropTypes.shape({
                 id: PropTypes.number.isRequired,
-                version: PropTypes.exact({
+                version: PropTypes.shape({
                     name: PropTypes.string.isRequired,
-                    articleId: PropTypes.number.isRequired,
-                    sectionsIds: PropTypes.arrayOf(
-                        PropTypes.exact({
+                    id: PropTypes.number.isRequired,
+                    sections: PropTypes.arrayOf(
+                        PropTypes.shape({
                             id: PropTypes.number,
-                            name: PropTypes.string
+                            name: PropTypes.string,
+                            order: PropTypes.number
                         })
                     ).isRequired
                 })

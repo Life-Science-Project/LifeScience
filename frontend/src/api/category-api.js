@@ -2,7 +2,7 @@ import instance from './api'
 
 export const categoryApi = {
     getCategory(id) {
-        let url = 'categories/' + (id === undefined ? 'root' : id)
+        const url = 'categories/' + (id === undefined ? 1 : id);
         return instance.get(url)
     }
 }
