@@ -16,7 +16,6 @@ import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.exception.UnauthorizedException
 import com.jetbrains.life_science.exception.request.BadRequestException
-import com.jetbrains.life_science.user.master.entity.User
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
@@ -48,11 +47,7 @@ class ArticleVersionController(
         principal: Principal?
     ): ArticleVersionView {
         val version = articleVersionService.getById(versionId)
-        if (!version.isPublished) {
-            if (principal == null) throw UnauthorizedException("user do not have permissions")
-            val user = userService.getByEmail(principal.email)
-            validateViewPermission(user, version)
-        }
+        validateViewPermission(principal, version)
         return viewMapper.toView(version)
     }
 
@@ -60,11 +55,10 @@ class ArticleVersionController(
     @GetMapping("/completed/{versionId}")
     fun getVersionCompletedPresentation(
         @PathVariable versionId: Long,
-        principal: Principal
+        principal: Principal?
     ): ArticleFullPageView {
         val version = articleVersionService.getById(versionId)
-        val user = userService.getByEmail(principal.email)
-        validateViewPermission(user, version)
+        validateViewPermission(principal, version)
         return when (version.state) {
             State.PUBLISHED_AS_PROTOCOL -> {
                 val publishedArticleVersion = articleVersionService.getPublishedVersionByArticle(version.mainArticle)
@@ -170,9 +164,13 @@ class ArticleVersionController(
         }
     }
 
-    private fun validateViewPermission(user: User, articleVersion: ArticleVersion) {
-        if (!articleVersion.canRead(user)) {
-            throw AccessDeniedException("User has no access to that version")
+    private fun validateViewPermission(principal: Principal?, version: ArticleVersion) {
+        if (!version.isPublished) {
+            if (principal == null) throw UnauthorizedException("user do not have permissions")
+            val user = userService.getByEmail(principal.email)
+            if (!version.canRead(user)) {
+                throw AccessDeniedException("User has no access to that version")
+            }
         }
     }
 }
