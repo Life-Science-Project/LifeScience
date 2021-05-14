@@ -41,7 +41,7 @@ values (2, 'version 1.1', 1, 1, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
 values (3, 'version 2.1', 1, 1, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
-values (4, 'version 4.1', 1, 2, 1);
+values (4, 'version 4.1', 0, 2, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
 values (5, 'version 5.1', 1, 2, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
@@ -62,3 +62,27 @@ insert into users_favourite_articles(user_id, favourite_articles_id)
 values (2, 1);
 insert into users_favourite_articles(user_id, favourite_articles_id)
 values (2, 2);
+
+insert into review_request(id, destination, version_id)
+values (1, 1, 4);
+insert into review_request(id, destination, version_id)
+values (2, 1, 4);
+insert into review_request(id, destination, version_id)
+values (3, 0, 1);
+insert into review_request(id, destination, version_id)
+values (4, 1, 6);
+insert into review_request(id, destination, version_id)
+values (5, 1, 6);
+insert into review_request(id, destination, version_id)
+values (6, 1, 6);
+
+insert into review(id, comment, reviewer_id, resolution, review_request_id)
+values (1, 'comment 1', 1, 1, 3);
+insert into review(id, comment, reviewer_id, resolution, review_request_id)
+values (2, 'comment 2', 1, 1, 4);
+insert into review(id, comment, reviewer_id, resolution, review_request_id)
+values (3, 'comment 3', 1, 1, 5);
+insert into review(id, comment, reviewer_id, resolution, review_request_id)
+values (4, 'comment 4', 1, 1, 6);
+insert into review(id, comment, reviewer_id, resolution, review_request_id)
+values (5, 'comment 5', 1, 1, 1);
