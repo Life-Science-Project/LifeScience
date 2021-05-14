@@ -64,6 +64,10 @@ export const articleVersionApi = {
     getCompletedVersion(versionId) {
         const url = `articles/versions/completed/${versionId}`;
         return instance.get(url);
+    },
+    getArticle(articleId) {
+        const url = `/articles/${articleId}`;
+        return instance.get(url);
     }
 }
 

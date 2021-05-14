@@ -5,7 +5,7 @@ import SectionContainer from "./Sections/section-container?";
 
 const Method = (props) => {
     const link = props.match.url
-    const {name, sections, versionId, addButton} = props;
+    const {name, sections, versionId, addButton, newProtocolButton} = props;
     const buttonStyle = {
         "margin-left": "-1.5rem"
     }
@@ -28,8 +28,14 @@ const Method = (props) => {
                     }
                     {
                         addButton &&
-                        (<li className="list-item" style={buttonStyle}>
+                        (<li className="list-item">
                             {addButton}
+                        </li>)
+                    }
+                    {
+                        newProtocolButton &&
+                        (<li className="list-item">
+                            {newProtocolButton}
                         </li>)
                     }
                 </ul>
