@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import Logged from "./logged";
 import UnLogged from "./unlogged";
 import {getAuthorizedUserThunk, logoutUser} from "../../redux/auth-reducer";
-import {withRouter} from "react-router";
 
 class Header extends React.Component {
     constructor(props) {

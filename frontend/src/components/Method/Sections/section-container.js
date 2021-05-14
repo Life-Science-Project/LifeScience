@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {useRouteMatch, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchContents, clearContents} from "../../../redux/section-reducer";
 import Section from "./section";

@@ -10,6 +10,7 @@ const instance = axios.create({
 instance.interceptors.response.use(
     (response) =>  response,
     (error) => {
+        console.log(JSON.stringify(error))
         const statusCode = error.response ? error.response.status : null;
         if (statusCode === null) {
             return {status: null, message: "All bad"}
