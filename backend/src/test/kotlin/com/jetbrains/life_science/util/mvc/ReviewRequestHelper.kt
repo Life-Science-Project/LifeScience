@@ -18,5 +18,4 @@ class ReviewRequestHelper(
         }.andExpect { status { isOk() } }.andReturn().response.contentAsString
         return jsonMapper.readValue(json, ReviewRequestView::class.java)
     }
-
 }

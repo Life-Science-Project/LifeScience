@@ -156,10 +156,11 @@ internal class ReviewControllerTest {
         // Check
         assertEquals(expectedView, versionView)
         // Check available in search
-        assertTrue(articleVersionHelper.existsOnce(
-            ArticleSearchResult(2, "version 1.1", 1),
-            SearchQueryDTO("version 1.1")
-        ))
+        assertTrue(
+            articleVersionHelper.existsOnce(
+                ArticleSearchResult(2, "version 1.1", 1),
+                SearchQueryDTO("version 1.1")
+            )
+        )
     }
-
 }

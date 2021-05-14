@@ -5,5 +5,4 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 abstract class BaseTestHelper {
 
     protected val jsonMapper = jacksonObjectMapper()
-
 }

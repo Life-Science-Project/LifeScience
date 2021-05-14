@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.util.mvc
 
-import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.search.dto.SearchQueryDTO
 import com.jetbrains.life_science.search.result.article.ArticleSearchResult
@@ -47,5 +46,4 @@ class ArticleVersionHelper(
     private fun getForVersionById(id: Long): ResultActionsDsl {
         return mvc.get("/api/articles/versions/$id")
     }
-
 }

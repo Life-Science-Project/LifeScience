@@ -9,8 +9,7 @@ import org.springframework.test.web.servlet.post
 
 class SearchHelper(
     private val mvc: MockMvc
-): BaseTestHelper() {
-
+) : BaseTestHelper() {
 
     fun getSearchResults(searchQueryDTO: SearchQueryDTO): List<Map<String, String>> {
         val json = getSearchRawResults(searchQueryDTO)
@@ -20,13 +19,10 @@ class SearchHelper(
     }
 
     private fun getSearchRawResults(searchQueryDTO: SearchQueryDTO): ResultActionsDsl {
-        return mvc.post("/api/search"){
+        return mvc.post("/api/search") {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(searchQueryDTO)
             accept = MediaType.APPLICATION_JSON
         }
     }
-
-
-
 }
