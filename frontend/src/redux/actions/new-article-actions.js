@@ -48,7 +48,6 @@ export function clearPostStatus() {
         type: CLEAR_POST_STATUS,
     }
 }
-
 /**
  * Create new entity of article, and made put request to backend.
  *
@@ -74,11 +73,6 @@ export const addArticleThunk = (categoryId, name, sections) => async (dispatch) 
     //Temporary magic
 
     const requestResponse = await reviewRequestApi.patchRequest(versionId, createRequest(RequestDestination.article));
-    //console.log(JSON.stringify(requestResponse))
     const reviewResponse = await reviewApi.postAnswerRequest(versionId, requestResponse.data.id, createReview(ReviewResolution.approve, "All is perfect"));
-    //console.log(JSON.stringify(reviewResponse))
-
-    //
-
     dispatch(receivePostedArticle(versionId))
 }

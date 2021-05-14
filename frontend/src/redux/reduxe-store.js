@@ -8,6 +8,7 @@ import usersReducer from "./users-reducer";
 import initReducer from "./init-reducer";
 import searchReducer from "./search-reducer";
 import newArticleReducer from "./new-article-reducer";
+import protocolListReducer from "./protocol-list-reducer";
 import articleReducer from "./article-reducer";
 import protocolReducer from "./new-protocol-reducer";
 
@@ -22,6 +23,7 @@ let rootReducer = combineReducers({
     init: initReducer,
     search: searchReducer,
     newArticle: newArticleReducer,
+    protocolList: protocolListReducer,
 });
 
 //Вносим свои reducers в rootReducer

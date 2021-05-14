@@ -2,8 +2,18 @@ import instance from './api'
 
 export const methodApi = {
     getMethod(id) {
-        const url = 'articles/versions/' + id;
+        const url = 'articles/versions/completed/' + id;
         return instance.get(url);
+    },
+
+    addMethod(categoryId) {
+        const url = 'articles/';
+        return instance.post(url, {categoryId});
+    },
+
+    getProtocols(articleId) {
+        const url = 'articles/' + articleId;
+        return instance.get(url)
     }
 }
 
@@ -28,6 +38,35 @@ export const sectionApi = {
         const url = `articles/versions/${versionId}/sections`;
         return instance.post(url, data);
     }
+}
+
+export const articleApi = {
+    getArticle(articleId) {
+      const url = `articles/${articleId}`
+      return instance.get(url)
+    },
+
+    postVersion(categoryId, name, sections) {
+        const url = 'articles/versions';
+        return instance.post(url, {
+            articleDTO: {
+                categoryId: categoryId
+            },
+            name: name,
+            sections: sections,
+        })
+    },
+    postSection(versionId, name) {
+        const url = `/articles/versions/${versionId}/sections`
+        return instance.post(url, {
+            name: name,
+            articleVersionId: versionId,
+            description: "",
+            parameters: [],
+            order: 0,
+            visible: true
+        })
+    },
 }
 
 export const articleVersionApi = {

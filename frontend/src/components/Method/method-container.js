@@ -5,6 +5,10 @@ import {fetchSections, clearSections} from "../../redux/method-reducer";
 import Method from "./method";
 import Preloader from "../common/Preloader/preloader";
 import AddButton from "./AddButton/addButton";
+import {
+    getSectionsForMain,
+    getSectionsForProtocol
+} from "../../utils/sections";
 
 
 const MethodContainer = () => {
@@ -19,6 +23,9 @@ const MethodContainer = () => {
     const sections = useSelector(state => state.method.sections)
     const isReceived = useSelector(state => state.method.isReceived)
     const isAuthorized = useSelector(state => state.auth.isAuthorized)
+    const isMainPage = useSelector(state => state.method.isMainPage)
+    const passedSectionId = useSelector(state => state.method.passedSectionId)
+    const protocolName = useSelector(state => state.method.protocolName)
 
     const getSections = () => {
         const id = match.params.versionId;
@@ -52,10 +59,12 @@ const MethodContainer = () => {
 
     if (!isReceived) return <Preloader/>
     return (
-        <div>
-            <Method name={name} sections={sections} versionId={versionId} addButton={getAddButton()}
-                    newProtocolButton={getNewProtocolButton()}/>
-        </div>
+        <Method name={name + (protocolName ? `, ${protocolName}` : "")}
+                sections={(isMainPage) ? getSectionsForMain(sections) : getSectionsForProtocol(sections)}
+                versionId={versionId}
+                addButton={getAddButton()}
+                passedSectionId={passedSectionId}
+                newProtocolButton={getNewProtocolButton()}/>
     );
 
 }

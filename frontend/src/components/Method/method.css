@@ -1,5 +1,5 @@
 .method__main {
-    margin-top: 30px;
+    margin-top: 2rem;
     display: flex;
 }
 
@@ -9,6 +9,7 @@
 }
 
 .section-link {
+    cursor: pointer;
     color: #343a40;
 }
 
@@ -17,7 +18,8 @@
 }
 
 .section-content {
-    padding: 10px 30px 0 70px;
+    /*padding: 10px 30px 0 70px;*/
+    margin: 1rem 0 0 3rem;
     width: 50vw;
 }
 
@@ -26,8 +28,8 @@
 }
 
 .method__method-name {
-    margin-top: 30px;
-    margin-left: 40px;
+    margin-top: 2rem;
+    margin-left: 3rem;
 
 }
 

@@ -3,6 +3,8 @@ import React, {useState} from "react";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
+import {INFO_SECTION_TITLES} from "../../constants";
+import {getSectionsForPreview, getSectionsForShow, getSectionsForSubmit} from "../../utils/sections";
 
 
 const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSectionTitles}) => {
@@ -93,7 +95,7 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
 
     function handleSubmit(e) {
         e.preventDefault();
-        onSubmit(getSectionsForSubmit(), methodName)
+        onSubmit(getSectionsForPreview(sections), methodName)
     }
 
     function getHeaderBlock() {
@@ -137,7 +139,7 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
     }
 
     if (preview) return <MethodPreview name={methodName}
-                                       sections={getSectionsForSubmit()}
+                                       sections={getSectionsForPreview(sections)}
                                        goBack={() => setPreview(false)}/>
 
     return (
@@ -175,6 +177,7 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
                                                 title={sections[index].name ? sections[index].name : "Choose section"}>
                                     {
                                         sectionTitles
+
                                             .filter((title) => !isSectionSelected(title))
                                             .map(type => (
                                                 <Dropdown.Item
