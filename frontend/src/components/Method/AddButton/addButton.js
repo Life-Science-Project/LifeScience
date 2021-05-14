@@ -51,7 +51,7 @@ class AddButton extends React.Component {
 let mapStateToProps = (state) => {
     return ({
         favourites: state.usersPage.userFavourites,
-        userId: state.auth.user.id
+        userId: state.auth.user?.id
     })
 }
 
