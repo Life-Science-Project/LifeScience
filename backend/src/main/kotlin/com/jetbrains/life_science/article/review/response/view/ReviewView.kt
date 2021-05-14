@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.review.response.view
 
-class ReviewView(
+data class ReviewView(
     val id: Long,
     val reviewRequestId: Long,
     val comment: String,

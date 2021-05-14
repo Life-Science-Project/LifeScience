@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.article.review.request.service
 
 import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
-import com.jetbrains.life_science.article.version.entity.ArticleVersion
 
 interface ReviewRequestService {
 
@@ -11,7 +10,7 @@ interface ReviewRequestService {
 
     fun getById(reviewRequestId: Long): ReviewRequest
 
-    fun getAllByVersion(versionId: ArticleVersion): List<ReviewRequest>
+    fun getAllByVersionId(versionId: Long): List<ReviewRequest>
 
     fun getByVersionId(versionId: Long): ReviewRequest?
 
