@@ -24,7 +24,6 @@ export const AUTO_SECTION_TITLES = ["Find collaboration", "Education"];
 export const SECTION_TITLES = INFO_SECTION_TITLES.concat(AUTO_SECTION_TITLES)
 
 export const PROTOCOLS = "Protocols"
-];
 
 export const ROLES = Object.freeze({
     user: "ROLE_USER",
