@@ -51,7 +51,7 @@ jobs:
           stack-version: 7.6.0
 
       - name: Build with Gradle
-        run: ./gradlew buildBack
+        run: ./gradlew buildBack --info
 
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
