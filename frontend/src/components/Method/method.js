@@ -26,20 +26,18 @@ const Method = (props) => {
                             </li>
                         ))
                     }
-                    <div className="d-flex justify-content-start">
-                        {
-                            addButton &&
-                            (<li className="list-item" style={buttonStyle} style={{padding: "0.5rem"}}>
-                                {addButton}
-                            </li>)
-                        }
-                        {
-                            newProtocolButton &&
-                            (<li className="list-item" style={buttonStyle} style={{padding: "0.5rem"}}>
-                                {newProtocolButton}
-                            </li>)
-                        }
-                    </div>
+                    {
+                        addButton &&
+                        (<li className="list-item">
+                            {addButton}
+                        </li>)
+                    }
+                    {
+                        newProtocolButton &&
+                        (<li className="list-item">
+                            {newProtocolButton}
+                        </li>)
+                    }
                 </ul>
                 <Switch>
                     {

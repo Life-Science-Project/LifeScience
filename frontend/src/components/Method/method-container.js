@@ -44,7 +44,7 @@ const MethodContainer = () => {
 
     const getNewProtocolButton = () => {
         return isAuthorized &&
-            <button onClick={addProtocol} type={"button"} className={"btn btn-primary"}>
+            <button onClick={addProtocol} type={"button"}>
                 Add protocol
             </button>
     }

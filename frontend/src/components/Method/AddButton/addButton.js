@@ -40,7 +40,7 @@ class AddButton extends React.Component {
         const isFavourite = () => containsByField(this.props.favourites, 'id', this.props.versionId);
 
         return (
-            <button onClick={(isFavourite()) ? this.deleteFromFavorites : this.addToMyFavourites} type={"button"} className={"btn btn-primary"}>
+            <button onClick={(isFavourite()) ? this.deleteFromFavorites : this.addToMyFavourites} type={"button"}>
                 {isFavourite() ? REMOVE : ADD}
             </button>
         );
