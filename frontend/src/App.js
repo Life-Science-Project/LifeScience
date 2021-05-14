@@ -16,6 +16,7 @@ import Preloader from "./components/common/Preloader/preloader";
 import CategoriesContainer from './components/main/Categories/categoriesContainer'
 import SearchContainer from "./components/Search/search-container";
 import NewArticleContainer from "./components/NewArticle/new-article-container";
+import NewProtocolContainer from "./components/NewProtocol/new-protocol-container";
 
 class App extends React.Component {
     componentDidMount() {
@@ -34,6 +35,7 @@ class App extends React.Component {
                     <Route exact={true} path="/" component={Home}/>
                     <Route path="/profile" render={() => <ProfilePageContainer />}/>
                     <Route path="/new-article/:categoryId?" render={() => <NewArticleContainer/>}/>
+                    <Route path="/new-protocol/:articleId?" render={() => <NewProtocolContainer/>}/>
                     <Route path="/register" render={() => <Register/>}/>
                     <Route path="/login" render={() => <Login />}/>
                     <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>

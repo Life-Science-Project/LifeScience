@@ -1,12 +1,20 @@
 export const errorHandler = (error) => {
+    return {status: error.status, message: getMessage(error)};
+}
+
+export const getMessage = (error) => {
+    return error.trouble.message ? error.trouble.message : getStandardMessage(error)
+}
+
+export const getStandardMessage = (error) => {
     switch (error.status) {
         case 400:
-            return {status: 400, message: 'Bad request'};
+            return 'Bad request';
         case 403:
-            return {status: 403, message: 'Forbidden'};
+            return 'Forbidden';
         case 404:
-            return {status: 404, message: 'Not Found'};
+            return 'Not Found';
         default:
-            return {status: 400,  message: 'Unknown reason'};
+            return 'Unknown reason';
     }
 }

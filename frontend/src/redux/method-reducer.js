@@ -75,6 +75,3 @@ export default function methodReducer(state = initialState, action) {
             return state
     }
 }
-
-export class clearSectionId {
-}

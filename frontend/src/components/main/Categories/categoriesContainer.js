@@ -22,7 +22,7 @@ class CategoriesContainer extends React.Component {
 
     render() {
         return (
-            <Categories {...this.props} category={this.props.category} isShowButton={this.props.isAuthorized}/>
+            <Categories {...this.props} category={this.props.category}/>
         )
     }
 }
@@ -30,7 +30,8 @@ class CategoriesContainer extends React.Component {
 let mapStateToProps = (state) => {
     return ({
         category: state.categoryPage.category,
-        isAuthorized: state.auth.isAuthorized
+        isAuthorized: state.auth.isAuthorized,
+        userRoles: state.auth.user?.roles,
     })
 }
 

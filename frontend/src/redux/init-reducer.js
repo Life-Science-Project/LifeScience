@@ -1,9 +1,6 @@
 import {getAuthorizedUserThunk} from "./auth-reducer";
 import {getTokens} from "../utils/auth";
-import {initApi} from "../api/init-api";
 import {statisticsApi} from "../api/statistics-api";
-import {categoryApi} from "../api/category-api";
-import {organizationsApi} from "../api/organizations-api";
 
 const INIT = 'init';
 const STATISTICS = 'statistics';
@@ -40,11 +37,10 @@ export const getInitData = (initData) => {
 
 export const getInitDataThunk = () => async (dispatch) => {
     const tokens = getTokens();
-    if (tokens.jwt !== null) {
+    if (tokens.jwt) {
         dispatch(getAuthorizedUserThunk());
-    } else {
-        dispatch(getInitData())
     }
+    dispatch(getInitData())
 }
 
 export const getStatistics = (statistics) => {

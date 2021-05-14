@@ -7,7 +7,7 @@ import {INFO_SECTION_TITLES} from "../../constants";
 import {getSectionsForPreview, getSectionsForShow, getSectionsForSubmit} from "../../utils/sections";
 
 
-const NewArticleView = ({category, onSubmit}) => {
+const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSectionTitles}) => {
 
     const getNewSection = (sectionName) => {
         return {
@@ -19,7 +19,7 @@ const NewArticleView = ({category, onSubmit}) => {
     }
 
     const [preview, setPreview] = useState(false);
-    const [sections, setSections] = useState([getNewSection(INFO_SECTION_TITLES[0])]);
+    const [sections, setSections] = useState([getNewSection(sectionTitles[0])]);
     const [methodName, setMethodName] = useState("")
 
     const addNewSection = () => {
@@ -52,6 +52,28 @@ const NewArticleView = ({category, onSubmit}) => {
         setPreview(!preview);
     }
 
+    function getSectionsForSubmit() {
+        const sortedSections = getSortedSections();
+        for (const title of autoSectionTitles) {
+            sortedSections.push({
+                name: title
+            })
+        }
+        return sortedSections
+    }
+
+    function getSortedSections() {
+        const sortedSections = [];
+        for (const title of sectionTitles) {
+            for (const section of sections) {
+                if (section.name === title) {
+                    sortedSections.push(section)
+                }
+            }
+        }
+        return sortedSections;
+    }
+
     function isSectionSelected(title) {
         for (const section of sections) {
             if (section.name === title) {
@@ -76,29 +98,67 @@ const NewArticleView = ({category, onSubmit}) => {
         onSubmit(getSectionsForPreview(sections), methodName)
     }
 
+    function getHeaderBlock() {
+        if (article) {
+            return (
+                <h4>
+                    Article: {article && article.version.name}
+                </h4>
+            );
+        } else {
+            return (
+                <h4>
+                    Category: {category && category.name}
+                </h4>
+            );
+        }
+    }
+
+    function getNameField() {
+        if (article) {
+            return (
+                <h4>
+                    Protocol name
+                </h4>
+            );
+        } else {
+            return (
+                <h4>
+                    Method name
+                </h4>
+            );
+        }
+    }
+
+    function getNamePlaceholder() {
+        if (article) {
+            return "Input protocol name";
+        } else {
+            return "Input method name";
+        }
+    }
+
     if (preview) return <MethodPreview name={methodName}
                                        sections={getSectionsForPreview(sections)}
                                        goBack={() => setPreview(false)}/>
 
     return (
         <form className="new-article-form">
-            <h4>
-                Category: {category && category.name}
-            </h4>
+            {getHeaderBlock()}
             <div>
                 <div className="new-article-form__method-name">
                     <h2 className="col-form-label">
-                        Method name
+                        {getNameField()}
                     </h2>
                     <textarea className="form-control"
                               onChange={handleMethodNameChange}
                               value={methodName}
-                              placeholder="Input method name"
+                              placeholder={getNamePlaceholder()}
                     />
                 </div>
                 <div className="form-group">
                     <h2 className="col-form-label">
-                        {INFO_SECTION_TITLES[0]}
+                        {sectionTitles[0]}
                     </h2>
                     <textarea className="form-control new-article-form__section-content"
                               onChange={
@@ -116,7 +176,8 @@ const NewArticleView = ({category, onSubmit}) => {
                                 <DropdownButton variant="light" id={"choose-section-" + index}
                                                 title={sections[index].name ? sections[index].name : "Choose section"}>
                                     {
-                                        INFO_SECTION_TITLES
+                                        sectionTitles
+
                                             .filter((title) => !isSectionSelected(title))
                                             .map(type => (
                                                 <Dropdown.Item

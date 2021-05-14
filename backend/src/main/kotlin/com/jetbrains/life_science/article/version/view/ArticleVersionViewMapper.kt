@@ -48,7 +48,7 @@ class ArticleVersionViewMapper(val sectionLazyMapper: SectionLazyViewMapper) {
             sections = sections,
             articleVersionId = articleVersion.id,
             protocolId = protocolVersion.id,
-            protocolName = articleVersion.name
+            protocolName = protocolVersion.name
         )
     }
 }

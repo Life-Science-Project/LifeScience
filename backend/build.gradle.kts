@@ -37,11 +37,14 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
     implementation("org.junit.jupiter:junit-jupiter:5.4.2")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test:5.4.6")
+
     testImplementation("com.h2database:h2:1.4.200")
+
     implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.6")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.6")
 
