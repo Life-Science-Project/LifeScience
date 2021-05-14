@@ -100,10 +100,7 @@ class Categories extends React.Component {
 Categories.propTypes = {
     category: PropTypes.shape({
         id: PropTypes.number.isRequired,
-        parentId: PropTypes.oneOfType([
-            PropTypes.number,
-            PropTypes.instanceOf(null)
-        ]).isRequired,
+        parentId: PropTypes.number,
         subcategories: PropTypes.arrayOf(
             PropTypes.shape({
                 id: PropTypes.number.isRequired,

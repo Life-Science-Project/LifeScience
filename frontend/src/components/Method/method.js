@@ -35,7 +35,7 @@ const Method = (props) => {
                 <ul className="method__section-list">
                     {
                         sections.map((section, index) => (
-                            <li className="list-item">
+                            <li key={index} className="list-item">
                                 <div className={"section-link" + ((index === activeSection) ? " active-section" : "")}
                                      onClick={e => handleClick(e, index)}>
                                     {section.name}
@@ -45,13 +45,13 @@ const Method = (props) => {
                     }
                     {
                         addButton &&
-                        (<li className="list-item">
+                        (<li key={sections.length} className="list-item">
                             {addButton}
                         </li>)
                     }
                     {
                         newProtocolButton &&
-                        (<li className="list-item">
+                        (<li key={sections.length + 1} className="list-item">
                             {newProtocolButton}
                         </li>)
                     }
