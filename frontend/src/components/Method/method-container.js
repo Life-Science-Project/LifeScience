@@ -46,13 +46,11 @@ const MethodContainer = () => {
 
     if (!isReceived) return <Preloader/>
     return (
-        <div>
-            <Method name={name + (protocolName ? `, ${protocolName}` : "")}
-                    sections={(isMainPage) ? getSectionsForMain(sections) : getSectionsForProtocol(sections)}
-                    versionId={versionId}
-                    addButton={getAddButton()}
-                    passedSectionId={passedSectionId}/>
-        </div>
+        <Method name={name + (protocolName ? `, ${protocolName}` : "")}
+                sections={(isMainPage) ? getSectionsForMain(sections) : getSectionsForProtocol(sections)}
+                versionId={versionId}
+                addButton={getAddButton()}
+                passedSectionId={passedSectionId}/>
     );
 
 }
