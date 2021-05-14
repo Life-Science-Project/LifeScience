@@ -14,7 +14,7 @@ const Category = ({category}) => {
 };
 
 Category.propsTypes = {
-    section: PropTypes.exact({
+    section: PropTypes.shape({
         id: PropTypes.number,
         name: PropTypes.string
     }).isRequired

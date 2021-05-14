@@ -24,7 +24,7 @@ const Logged = (props) => {
 }
 
 Logged.propTypes = {
-    user: PropTypes.exact({
+    user: PropTypes.shape({
         id: PropTypes.number.isRequired,
         firstName: PropTypes.string.isRequired,
         lastName: PropTypes.string.isRequired

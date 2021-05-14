@@ -72,10 +72,12 @@ export const addArticleThunk = (categoryId, name, sections) => async (dispatch) 
     const versionId = response.data.id;
 
     //Temporary magic
+
     const requestResponse = await reviewRequestApi.patchRequest(versionId, createRequest(RequestDestination.article));
-    console.log(JSON.stringify(requestResponse))
+    //console.log(JSON.stringify(requestResponse))
     const reviewResponse = await reviewApi.postAnswerRequest(versionId, requestResponse.data.id, createReview(ReviewResolution.approve, "All is perfect"));
-    console.log(JSON.stringify(reviewResponse))
+    //console.log(JSON.stringify(reviewResponse))
+
     //
 
     dispatch(receivePostedArticle(versionId))

@@ -14,13 +14,13 @@ const Article = ({article}) => {
 };
 
 Article.propsTypes = {
-   method: PropTypes.exact({
+   method: PropTypes.shape({
        id: PropTypes.number.isRequired,
-       version: PropTypes.exact({
+       version: PropTypes.shape({
            name: PropTypes.string.isRequired,
-           articleId: PropTypes.number.isRequired,
+           id: PropTypes.number.isRequired,
            sections: PropTypes.arrayOf(
-               PropTypes.exact({
+               PropTypes.shape({
                    id: PropTypes.number.isRequired,
                    name: PropTypes.string.isRequired,
                    order: PropTypes.number.isRequired
