@@ -47,6 +47,8 @@ insert into article_version (id, name, state, author_id, main_article_id)
 values (5, 'version 5.1', 1, 2, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
 values (6, 'version 5.1', 1, 1, 2);
+insert into article_version (id, name, state, author_id, main_article_id)
+values (7, 'version 1.2', 4, 1, 1);
 
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (1, 'desc 1.1', 'name 1.1', 1, 1, true);

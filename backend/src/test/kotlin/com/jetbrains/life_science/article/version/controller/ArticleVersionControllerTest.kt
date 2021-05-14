@@ -3,14 +3,19 @@ package com.jetbrains.life_science.article.version.controller
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTO
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
+import com.jetbrains.life_science.article.master.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.dto.ArticleVersionFullCreationDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
+import com.jetbrains.life_science.util.populator.ElasticPopulator
+import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithAnonymousUser
@@ -20,6 +25,7 @@ import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.put
 import org.springframework.transaction.annotation.Transactional
+import javax.annotation.PostConstruct
 
 @SpringBootTest
 @Sql("/scripts/add_test_data.sql")
@@ -30,6 +36,27 @@ internal class ArticleVersionControllerTest :
 
     init {
         apiUrl = "/api/articles/versions"
+    }
+
+    @Autowired
+    lateinit var highLevelClient: RestHighLevelClient
+
+    lateinit var elasticPopulator: ElasticPopulator
+
+    @PostConstruct
+    fun setup() {
+        elasticPopulator = ElasticPopulator(highLevelClient).apply {
+            addPopulator("content", "elastic/content.json")
+            addPopulator("content_version", "elastic/content_version.json")
+            addPopulator("article", "elastic/article.json")
+            addPopulator("section", "elastic/section.json")
+            prepareData()
+        }
+    }
+
+    @BeforeEach
+    fun resetElastic() {
+        elasticPopulator.prepareData()
     }
 
     /**
@@ -84,6 +111,80 @@ internal class ArticleVersionControllerTest :
     }
 
     /**
+     * Trying to get full article with a non-existent articleVersion identifier.
+     * The controller should return a 404 status code.
+     */
+    @Test
+    fun `get full article version by wrong article version id`() {
+        assertNotFound("Article version", getRequest(-1, "$apiUrl/completed"))
+    }
+
+    /**
+     * Trying to get a full version not owned by the user.
+     * The controller should return a 403 status code.
+     */
+    @Test
+    @WithUserDetails("user")
+    fun `get full article version with wrong user`() {
+        assertForbidden(getRequest(3, "$apiUrl/completed"))
+    }
+
+    /**
+     * Trying to get a full article version from anonymous user.
+     * The controller should return a 401 status code.
+     */
+    @Test
+    @WithAnonymousUser
+    fun `get full article version with anonymous user`() {
+        assertUnauthenticated(getRequest(3, "$apiUrl/completed"))
+    }
+
+    /**
+     * The controller should return a view of the full article.
+     */
+    @Test
+    fun `get full article version of article published version`() {
+        val expectedSectionViews = listOf(
+            SectionLazyView(1, "name 1.1", 1),
+            SectionLazyView(2, "name 1.2", 2)
+        )
+        val expectedView = ArticleFullPageView(
+            "master 1", 1, 1, expectedSectionViews
+        )
+
+        val view = get(1, "$apiUrl/completed")
+
+        assertEquals(expectedView, view)
+    }
+
+    /**
+     * The controller should return a view of the full article.
+     */
+    @Test
+    fun `get full article version of protocol published version`() {
+        val expectedSectionViews = listOf(
+            SectionLazyView(1, "name 1.1", 1),
+            SectionLazyView(2, "name 1.2", 2)
+        )
+        val expectedView = ArticleFullPageView(
+            "master 1", 1, 1, expectedSectionViews
+        )
+
+        val view = get(7, "$apiUrl/completed")
+
+        assertEquals(expectedView, view)
+    }
+
+    /**
+     * Try to get full article by non-published.
+     * Should return BAD_REQUEST status.
+     */
+    @Test
+    fun `get full article version of non-published version`() {
+        assertBadRequest("Article version is not published yet", getRequest(2, "$apiUrl/completed"))
+    }
+
+    /**
      * An attempt was made to create empty version with an invalid category ID.
      * Controller should return 404 status code.
      */
@@ -129,7 +230,7 @@ internal class ArticleVersionControllerTest :
         val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
 
         // Prepare expected result
-        val expectedView = ArticleVersionView(7, "next version", 4, listOf(), State.EDITING)
+        val expectedView = ArticleVersionView(8, "next version", 4, listOf(), State.EDITING)
 
         // Action
         val result = post(dto)
@@ -162,8 +263,8 @@ internal class ArticleVersionControllerTest :
         // Prepare expected result
         val expectedView =
             ArticleVersionView(
-                9, "big version", 5,
-                listOf(SectionLazyView(9, "inner section 1", 0)), State.EDITING
+                12, "big version", 5,
+                listOf(SectionLazyView(10, "inner section 1", 0)), State.EDITING
             )
 
         // Action
@@ -185,10 +286,10 @@ internal class ArticleVersionControllerTest :
 
         // Prepare expected result
         val expectedSectionViews = listOf(
-            SectionLazyView(6, "name 1.1", 1),
-            SectionLazyView(7, "name 1.2", 2)
+            SectionLazyView(7, "name 1.1", 1),
+            SectionLazyView(8, "name 1.2", 2)
         )
-        val expectedView = ArticleVersionView(8, "master 1", 1, expectedSectionViews, State.EDITING)
+        val expectedView = ArticleVersionView(10, "master 1", 1, expectedSectionViews, State.EDITING)
 
         // Action
         val result = putCopy(publishedVersionId)
@@ -246,145 +347,6 @@ internal class ArticleVersionControllerTest :
         assertEquals(expectedView, result)
         assertEquals(expectedView, updated)
     }
-
-    /**
-     * An attempt to publish an article from anonymous user.
-     * The controller should return a 401 status code.
-     */
-//     @Test
-//     @WithAnonymousUser
-//     fun `approve with anonymous user`() {
-//        assertUnauthenticated(apiUrl + "/1/approve")
-//         mockMvc.patch("$apiUrl/1/approve")
-//             .andExpect { status { isUnauthorized() } }
-//             .andReturn()
-//     }
-
-    /**
-     * An attempt to publish an article from a user without moderator or administrator rights.
-     * The controller should return a 403 status code.
-     */
-    // @Test
-    // @WithUserDetails("user")
-    // fun `approve with regular user`() {
-    //     mockMvc.patch(urlWithArticleId() + "/1/approve")
-    //         .andExpect { status { isForbidden() } }
-    //         .andReturn()
-    // }
-
-    /**
-     * An attempt was made to approve a version with an invalid article ID.
-     * Controller should return 404 status code.
-     */
-    // @Test
-    // fun `approve article with wrong version id`() {
-    //     mockMvc.patch(urlWithArticleId() + "/1000/approve")
-    //         .andExpect { status { isNotFound() } }
-    //         .andReturn()
-    // }
-
-    /**
-     * The test verifies the correctness of the article publication.
-     * Test steps:
-     * 1) find the replacement version
-     * 2) if it is not equal to the new one, then archive it by moving the content to the repository for versions
-     * 3) remove all search units associated with the old version
-     * 4) mark the new version as published
-     * 5) create search units for the new version
-     * 6) remove the content of the new version from the repository for versions and create in the main repositories
-     */
-    // @Test
-    // fun `approve article`() {
-    //     // Configure mocks
-    //     Mockito.`when`(articleVersionSearchUnitRepository.existsById(1)).thenReturn(true)
-    //
-    //     Mockito.`when`(sectionSearchUnitRepository.existsById(1)).thenReturn(true)
-    //     Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true)
-    //     Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true)
-    //
-    //     val lastContent = Content(1, 1, "test last text", mutableListOf("b"), mutableListOf("1"))
-    //     Mockito.`when`(contentRepository.findBySectionId(1)).thenReturn(lastContent)
-    //
-    //     val content = Content(4, 1, "test new text", mutableListOf("a"), mutableListOf("2"))
-    //     Mockito.`when`(contentVersionRepository.findBySectionId(4)).thenReturn(content)
-    //
-    //     // Prepare test data
-    //     val expectedToPublishVersionView =
-    //         ArticleVersionView(3, "version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.PUBLISHED)
-    //     val sectionLazyViews = listOf(
-    //         SectionLazyView(1, "name 1.1", 1),
-    //         SectionLazyView(2, "name 1.2", 2)
-    //     )
-    //     val exceptedToArchiveVersionView = ArticleVersionView(1, "master 1", 1, sectionLazyViews, State.ARCHIVED)
-    //
-    //     // Action
-    //     mockMvc.patch(urlWithArticleId() + "/3/approve")
-    //         .andExpect { status { isOk() } }
-    //         .andReturn()
-    //
-    //     // Checks
-    //     val publishedVersion = get(3, urlWithArticleId())
-    //     val archivedVersion = get(1, urlWithArticleId())
-    //
-    //     assertEquals(expectedToPublishVersionView, publishedVersion)
-    //     assertEquals(exceptedToArchiveVersionView, archivedVersion)
-    //
-    //     // Verify elastic modified
-    //     verifyElasticOperationsAfterApprove(lastContent, content)
-    // }
-
-    /**
-     * The test checks for no action when publishing an already published version
-     */
-    // @Test
-    // fun `approve already approved article`() {
-    //     // Preparing expected data
-    //     val expectedMainSectionViews = listOf(
-    //         SectionLazyView(1, "name 1.1", 1),
-    //         SectionLazyView(2, "name 1.2", 2)
-    //     )
-    //     val expectedView = ArticleVersionView(1, "master 1", 1, expectedMainSectionViews, State.PUBLISHED)
-    //
-    //     // Action
-    //     mockMvc.patch(urlWithArticleId() + "/1/approve")
-    //         .andExpect { status { isOk() } }
-    //         .andReturn()
-    //     val mainVersionView = get(1, urlWithArticleId())
-    //
-    //     // Check
-    //     assertEquals(expectedView, mainVersionView)
-    // }
-
-    /**
-     * Test to publish a version of an article for which a published version does not yet exist
-     */
-    // @Test
-    // fun `approve article with no master version existent`() {
-    //     val content = Content(5, 1, "test new text", mutableListOf("xx"), mutableListOf("yy"))
-    //     Mockito.`when`(contentVersionRepository.findBySectionId(5)).thenReturn(content)
-    //
-    //     // Prepare test data
-    //     val expectedToPublishVersionView =
-    //         ArticleVersionView(6, "version 5.1", 2, listOf(SectionLazyView(5, "name 3", 1)), State.PUBLISHED)
-    //
-    //     // Action
-    //     mockMvc.patch(urlWithArticleId() + "/6/approve")
-    //         .andExpect { status { isOk() } }
-    //         .andReturn()
-    //
-    //     // Checks
-    //     val publishedVersion = get(6, urlWithArticleId())
-    //
-    //     assertEquals(expectedToPublishVersionView, publishedVersion)
-    //     // Saving new version search units
-    //     Mockito.verify(articleVersionSearchUnitRepository, times(1)).save(ArticleVersionSearchUnit(6, 2, "version 5.1"))
-    //     // Creating new section search units
-    //     Mockito.verify(sectionSearchUnitRepository, times(1)).save(SectionSearchUnit(5, "desc 3", 6))
-    //     // Removing new main content version from versions repository
-    //     Mockito.verify(contentVersionRepository, times(1)).deleteBySectionId(5)
-    //     // Saving main content version to main repository
-    //     Mockito.verify(contentRepository, times(1)).save(content)
-    // }
 
     /**
      * An attempt to archive an article from anonymous user.
@@ -445,51 +407,107 @@ internal class ArticleVersionControllerTest :
         assertEquals(exceptedToArchiveVersionView, archivedVersion)
     }
 
-    /*/**
+    /**
      * Test for archiving the version of the article.
      * 1) Create search units for the article, sections and move the old content to the index for versions
      * 2) Change the state of the version to "Archived"
      */
     @Test
     fun `archive article`() {
-        // Configure mocks
-        Mockito.`when`(articleVersionSearchUnitRepository.existsById(1)).thenReturn(true)
-
-        Mockito.`when`(sectionSearchUnitRepository.existsById(1)).thenReturn(true)
-        Mockito.`when`(sectionSearchUnitRepository.existsById(2)).thenReturn(true)
-        Mockito.`when`(sectionSearchUnitRepository.existsById(3)).thenReturn(true)
-
-        val lastContent = Content(1, 1, "test last text", mutableListOf("b"), mutableListOf("1"))
-        Mockito.`when`(contentRepository.findBySectionId(1)).thenReturn(lastContent)
-
         // Prepare expected data
         val sectionLazyViews = listOf(
             SectionLazyView(1, "name 1.1", 1),
             SectionLazyView(2, "name 1.2", 2)
         )
-        val exceptedToArchiveVersionView = ArticleVersionView(1, "master 1", 1, sectionLazyViews, State.ARCHIVED)
+        val exceptedToArchiveVersionView = ArticleVersionView(
+            1, "master 1", 1,
+            sectionLazyViews, State.ARCHIVED
+        )
 
         // Action
-        mockMvc.patch(urlWithArticleId() + "/1/archive")
+        mockMvc.patch("$apiUrl/1/archive")
             .andExpect { status { isOk() } }
             .andReturn()
 
         // Check query
-        val archivedVersion = get(1, urlWithArticleId())
+        val archivedVersion = get(1)
 
         // Check
         assertEquals(exceptedToArchiveVersionView, archivedVersion)
-        // Deleting old version search units
-        Mockito.verify(articleVersionSearchUnitRepository, times(1)).deleteById(1)
-        // Deleting old section search units
-        Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(1)
-        Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(2)
-        Mockito.verify(sectionSearchUnitRepository, times(1)).deleteById(3)
-        // Removing last main content from main index
-        Mockito.verify(contentRepository, times(1)).deleteAllBySectionId(1)
-        // Saving last main content to versions index
-        Mockito.verify(contentVersionRepository, times(1)).save(lastContent)
-    }*/
+    }
+
+    /**
+     * Create new articleVersion by non-existing articleId.
+     * The controller should return a 404 status code.
+     */
+    @Test
+    fun `create articleVersion from non-existing article`() {
+        val newProtocolDTO = ArticleVersionFullCreationDTO(
+            articleDTO = ArticleDTO(1),
+            name = "new version"
+        )
+        assertNotFound("Article", postRequest(newProtocolDTO, "$apiUrl/article/4"))
+    }
+
+    /**
+     * User tries to create new articleVersion from existing article.
+     * The controller should return a 401 status code.
+     */
+    @Test
+    @WithAnonymousUser
+    fun `guest creates articleVersion from existing article`() {
+        val newProtocolDTO = ArticleVersionFullCreationDTO(
+            articleDTO = ArticleDTO(1),
+            name = "new version"
+        )
+        assertUnauthenticated(postRequest(newProtocolDTO, "$apiUrl/article/1"))
+    }
+
+    /**
+     * Create new articleVersion for existing article.
+     */
+    @Test
+    fun `create articleVersion without sections from existing article`() {
+        val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
+        val expectedView = ArticleVersionView(11, "next version", 1, listOf(), State.EDITING)
+
+        val result = post(dto, "$apiUrl/article/1")
+        val created = get(result.id)
+
+        assertEquals(expectedView, result)
+        assertEquals(expectedView, created)
+    }
+
+    /**
+     * Create new protocol for article.
+     */
+    @Test
+    fun `create articleVersion from existing article`() {
+        val newProtocolDTO = ArticleVersionFullCreationDTO(
+            articleDTO = ArticleDTO(1),
+            name = "new version",
+            sections = listOf(
+                SectionInnerDTO(
+                    "inner section 239",
+                    "desc 1",
+                    true,
+                    ContentInnerDTO("text", listOf("ref 1"), listOf("tag 1"))
+                )
+            )
+        )
+
+        val expectedView = ArticleVersionView(
+            9, "new version", 1,
+            listOf(SectionLazyView(6, "inner section 239", 0)), State.EDITING
+        )
+        // Action
+        val result = post(newProtocolDTO, "$apiUrl/article/1")
+        val created = get(result.id)
+
+        // Check
+        assertEquals(expectedView, result)
+        assertEquals(expectedView, created)
+    }
 
     private fun putCopy(id: Long): ArticleVersionView {
         val viewJson = putCopyRequest(id)
