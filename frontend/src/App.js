@@ -57,4 +57,3 @@ const mapStateToProps = (state) => {
 let WithRouterAppContainer = withRouter(App);
 
 export default connect(mapStateToProps, {getInitDataThunk})(WithRouterAppContainer);
-

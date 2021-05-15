@@ -1,9 +1,9 @@
 export const errorHandler = (error) => {
-    return {status: error.status, message: getMessage(error)};
+    return {status: error.response.status, message: getMessage(error)};
 }
 
 export const getMessage = (error) => {
-    return error.trouble.message ? error.trouble.message : getStandardMessage(error)
+    return error.message ? error.message : getStandardMessage(error)
 }
 
 export const getStandardMessage = (error) => {

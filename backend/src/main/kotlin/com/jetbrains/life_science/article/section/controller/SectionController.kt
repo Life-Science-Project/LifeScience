@@ -5,7 +5,6 @@ import com.jetbrains.life_science.article.section.dto.SectionDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.article.section.view.SectionViewMapper
-import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.UnauthorizedException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
@@ -33,7 +32,6 @@ class SectionController(
         @PathVariable versionId: Long,
         principal: Principal?
     ): List<SectionView> {
-        articleVersionService.checkExistenceById(versionId)
         checkAccess(versionId, principal)
         return service.getByVersionId(versionId).map { sectionViewMapper.createView(it) }
     }
@@ -45,7 +43,6 @@ class SectionController(
         @PathVariable sectionId: Long,
         principal: Principal?
     ): SectionView {
-        articleVersionService.checkExistenceById(versionId)
         checkAccess(versionId, principal)
         val section = service.getById(sectionId)
         return sectionViewMapper.createView(section)
@@ -109,6 +106,8 @@ class SectionController(
     }
 
     private fun checkAccess(versionId: Long, principal: Principal?) {
+        // If trying to get non-existing articleVersion ot throws ArticleVersionNotFoundException
+        articleVersionService.checkExistenceById(versionId)
         val articleVersion = articleVersionService.getById(versionId)
         // If trying to get published sections
         if (articleVersion.isPublished) return

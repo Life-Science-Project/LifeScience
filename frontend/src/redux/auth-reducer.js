@@ -6,7 +6,8 @@ const LOGOUT = 'logout';
 const SIGN_IN = 'signin';
 const SIGN_UP = 'signup';
 const ERROR = 'error';
-const UNDEFINED_USER = 'undefineduser'
+const UNDEFINED_USER = 'undefineduser';
+const REFRESH = 'refresh';
 
 let initialState = {
     user: null,
@@ -21,12 +22,14 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.user,
-                isAuthorized: true
+                isAuthorized: true,
+                errorMsg: ""
             };
         case SIGN_UP:
             return {
                 ...state,
-                status: true
+                status: true,
+                errorMsg: ""
             }
         case ERROR:
             return {
@@ -38,11 +41,24 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: null,
-                isAuthorized: false
+                isAuthorized: false,
+                errorMsg: ""
+            }
+        case REFRESH:
+            return {
+                ...state,
+                errorMsg: ""
             }
         default:
-            return state;
+            return {
+                ...state,
+                errorMsg: ""
+            };
     }
+}
+
+export const refresh = () => {
+    return {type: REFRESH};
 }
 
 export const error = (_errorMsg) => {
@@ -116,6 +132,10 @@ export const signUpUserThunk = (input) => async (dispatch) => {
         setTokens(response.data.tokens);
         dispatch(signInUser(response.data.user));
         return;
+    }
+
+    if (response.status === 404) {
+        response.message = "Email is already in use"
     }
 
     dispatch(error(response.message))

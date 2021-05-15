@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {byField} from "../../../utils/common";
 import Category from "./Category/category";
 import Article from "./Category/article";
-import Trouble from "../../common/Trouble/trouble";
+import Error from "../../common/Error/error";
 import {ROLES} from "../../../constants";
 
 class Categories extends React.Component {
@@ -24,11 +24,11 @@ class Categories extends React.Component {
     }
 
     render() {
-        if (this.props.trouble !== undefined && this.props.trouble !== null) {
-            return <Trouble trouble={this.props.trouble}/>
+        if (this.props.error) {
+            return <Error error={this.props.error}/>
         }
 
-        if (this.props.category === null || this.props.category === undefined) {
+        if (!this.props.isReceived) {
             return <Preloader/>;
         }
 
@@ -100,10 +100,7 @@ class Categories extends React.Component {
 Categories.propTypes = {
     category: PropTypes.shape({
         id: PropTypes.number.isRequired,
-        parentId: PropTypes.oneOfType([
-            PropTypes.number,
-            null
-        ]).isRequired,
+        parentId: PropTypes.number,
         subcategories: PropTypes.arrayOf(
             PropTypes.shape({
                 id: PropTypes.number.isRequired,

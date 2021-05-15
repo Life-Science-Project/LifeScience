@@ -20,14 +20,18 @@ abstract class ControllerTest<DTO, View>(
 
     protected val jsonMapper = jacksonObjectMapper()
 
-    protected fun get(id: Long, url: String = apiUrl): View {
+    protected fun <V> get(id: Long, viewToken: Class<V>, url: String = apiUrl): V {
         val entity = getRequest(id, url)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
             }
             .andReturn().response.contentAsString
-        return getViewFromJson(entity)
+        return getViewFromJson(entity, viewToken)
+    }
+
+    protected fun get(id: Long, url: String = apiUrl): View {
+        return get(id, viewToken, url)
     }
 
     protected fun post(dto: DTO, url: String = apiUrl): View {
