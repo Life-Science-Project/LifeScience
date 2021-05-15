@@ -31,13 +31,7 @@ abstract class ControllerTest<DTO, View>(
     }
 
     protected fun get(id: Long, url: String = apiUrl): View {
-        val entity = getRequest(id, url)
-            .andExpect {
-                status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
-            }
-            .andReturn().response.contentAsString
-        return getViewFromJson(entity)
+        return get(id, viewToken, url)
     }
 
     protected fun post(dto: DTO, url: String = apiUrl): View {
