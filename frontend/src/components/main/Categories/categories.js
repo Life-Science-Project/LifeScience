@@ -28,7 +28,7 @@ class Categories extends React.Component {
             return <Error error={this.props.error}/>
         }
 
-        if (!this.props.category) {
+        if (!this.props.isReceived) {
             return <Preloader/>;
         }
 

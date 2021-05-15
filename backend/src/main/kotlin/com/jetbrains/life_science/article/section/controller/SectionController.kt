@@ -5,7 +5,6 @@ import com.jetbrains.life_science.article.section.dto.SectionDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.section.view.SectionView
 import com.jetbrains.life_science.article.section.view.SectionViewMapper
-import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.UnauthorizedException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
@@ -111,7 +110,7 @@ class SectionController(
     private fun checkAccess(versionId: Long, principal: Principal?) {
         val articleVersion = articleVersionService.getById(versionId)
         // If trying to get published sections
-        if (articleVersion.state == State.PUBLISHED_AS_ARTICLE) return
+        if (articleVersion.isPublished) return
         // If guest tries to get non-published sections
         if (principal == null) {
             throw UnauthorizedException("User is not authorized")

@@ -14,5 +14,5 @@ interface ReviewRequestRepository : JpaRepository<ReviewRequest, Long> {
 
     fun findByVersionIdAndResolutionIsNull(versionId: Long): ReviewRequest?
 
-    fun findAllByVersion(versionId: ArticleVersion): List<ReviewRequest>
+    fun findAllByVersionId(versionId: Long): List<ReviewRequest>
 }

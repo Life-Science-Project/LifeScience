@@ -37,7 +37,7 @@ internal class ArticleMasterControllerTest :
     @WithUserDetails("user")
     fun `get all versions with user`() {
         // Preparing expected data
-        val expectedView1 = ArticleVersionView(4, "version 4.1", 1, listOf(), State.EDITING)
+        val expectedView1 = ArticleVersionView(4, "version 4.1", 1, listOf(), State.PENDING_FOR_REVIEW)
         val expectedView2 = ArticleVersionView(5, "version 5.1", 1, listOf(), State.EDITING)
         val expectedResult = listOf(expectedView1, expectedView2)
 
@@ -63,7 +63,7 @@ internal class ArticleMasterControllerTest :
         val expectedView2 = ArticleVersionView(2, "version 1.1", 1, listOf(), State.EDITING)
         val expectedView3 =
             ArticleVersionView(3, "version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.EDITING)
-        val expectedView4 = ArticleVersionView(4, "version 4.1", 1, listOf(), State.EDITING)
+        val expectedView4 = ArticleVersionView(4, "version 4.1", 1, listOf(), State.PENDING_FOR_REVIEW)
         val expectedView5 = ArticleVersionView(5, "version 5.1", 1, listOf(), State.EDITING)
         val expectedResult = listOf(expectedView1, expectedView2, expectedView3, expectedView4, expectedView5)
 
