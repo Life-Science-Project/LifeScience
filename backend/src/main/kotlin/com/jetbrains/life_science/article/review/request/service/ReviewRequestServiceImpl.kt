@@ -3,7 +3,6 @@ package com.jetbrains.life_science.article.review.request.service
 import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.article.review.request.factory.ReviewRequestFactory
 import com.jetbrains.life_science.article.review.request.repository.ReviewRequestRepository
-import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.ReviewRequestNotFoundException
@@ -35,6 +34,7 @@ class ReviewRequestServiceImpl(
         if (request.resolution != null) {
             throw ReviewResponseAlreadyExistsException("This review request already proceed")
         }
+        articleVersionService.changeState(request.version, State.EDITING)
         repository.delete(request)
     }
 
@@ -56,8 +56,8 @@ class ReviewRequestServiceImpl(
         return repository.findByVersionIdAndResolutionIsNull(versionId)
     }
 
-    override fun getAllByVersion(versionId: ArticleVersion): List<ReviewRequest> {
-        return repository.findAllByVersion(versionId)
+    override fun getAllByVersionId(versionId: Long): List<ReviewRequest> {
+        return repository.findAllByVersionId(versionId)
     }
 
     override fun getById(reviewRequestId: Long): ReviewRequest {

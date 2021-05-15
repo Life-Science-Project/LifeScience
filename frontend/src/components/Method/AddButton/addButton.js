@@ -40,11 +40,9 @@ class AddButton extends React.Component {
         const isFavourite = () => containsByField(this.props.favourites, 'id', this.props.versionId);
 
         return (
-            <div className="buttons_container">
-                <button onClick={(isFavourite()) ? this.deleteFromFavorites : this.addToMyFavourites}>
-                    {isFavourite() ? REMOVE : ADD}
-                </button>
-            </div>
+            <button onClick={(isFavourite()) ? this.deleteFromFavorites : this.addToMyFavourites} type={"button"}>
+                {isFavourite() ? REMOVE : ADD}
+            </button>
         );
 
     }
@@ -53,7 +51,7 @@ class AddButton extends React.Component {
 let mapStateToProps = (state) => {
     return ({
         favourites: state.usersPage.userFavourites,
-        userId: state.auth.user.id
+        userId: state.auth.user?.id
     })
 }
 

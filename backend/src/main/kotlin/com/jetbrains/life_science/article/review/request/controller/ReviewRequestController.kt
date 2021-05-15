@@ -39,7 +39,7 @@ class ReviewRequestController(
 
         validateUserAndVersionToEdit(version, user) { "User can not watch review requests for this version" }
 
-        val requests = service.getAllByVersion(version)
+        val requests = service.getAllByVersionId(versionId)
         return viewMapper.toViews(requests)
     }
 

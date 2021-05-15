@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import {useHistory, withRouter} from "react-router-dom";
 import {getCategoryThunk} from "../../redux/category-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {addMethodThunk, clearPostStatus, PostStatusEnum} from "../../redux/actions/new-article-actions";
+import {addArticleThunk, clearPostStatus, PostStatusEnum} from "../../redux/actions/new-article-actions";
 import {useRouteMatch} from "react-router";
 import Preloader from "../common/Preloader/preloader";
 import {LOGIN_URL, METHOD_URL} from "../../constants";
@@ -21,6 +21,11 @@ const NewArticleContainer = () => {
     const postStatus = useSelector(state => state.newArticle.postStatus)
     const versionId = useSelector(state => state.newArticle.versionId);
 
+    const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
+        "Method advantages and disadvantages", "Troubleshooting"];
+
+    const AUTO_SECTION_TITLES = ["Find collaboration", "Education"];
+
     if (!isAuthorized && isInitialized) {
         history.push(LOGIN_URL);
     }
@@ -34,7 +39,7 @@ const NewArticleContainer = () => {
     }
 
     const onSubmit = (sections, methodName) => {
-        dispatch(addMethodThunk(categoryId, methodName, sections));
+        dispatch(addArticleThunk(categoryId, methodName, sections));
     }
 
     if (postStatus === PostStatusEnum.POSTING) return <Preloader/>
@@ -43,7 +48,7 @@ const NewArticleContainer = () => {
         history.push(`${METHOD_URL}/${versionId}`);
     }
 
-    return <NewArticleView category={category} onSubmit={onSubmit}/>
+    return <NewArticleView category={category} onSubmit={onSubmit} sectionTitles={SECTION_TITLES} autoSectionTitles={AUTO_SECTION_TITLES}/>
 }
 
 export default withRouter(NewArticleContainer);

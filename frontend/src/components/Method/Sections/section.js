@@ -7,16 +7,18 @@ import Troubleshooting from "./Troubleshooting/troubleshooting";
 import Collaboration from "./FindCollaboration/collaboration";
 import Education from "./Education/education";
 import SectionPage from "../../Page/SectionPage";
+import ProtocolList from "./ProtocolList/protocol-list";
 
 
 const Section = (props) => {
 
-    const {name, contents} = props;
+    const {name, contents, articleId} = props;
+    console.log(articleId)
 
     //todo make constants global
     //todo make case insensitive
     const nameToComponent = {
-        "General Information": <GeneralInformation contents={contents}/>,
+        "General information": <GeneralInformation contents={contents}/>,
         "Protocol": <Protocol contents={contents}/>,
         "Equipment and reagents required": <Equipment contents={contents}/>,
         "Application": <Application contents={contents || undefined}/>,
@@ -24,6 +26,7 @@ const Section = (props) => {
         "Troubleshooting": <Troubleshooting contents={contents}/>,
         "Find collaboration": <Collaboration contents={contents}/>,
         "Education": <Education contents={contents}/>,
+        "Protocols": <ProtocolList articleId={articleId}/>
     }
 
     function getSection() {

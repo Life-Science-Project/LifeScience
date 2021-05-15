@@ -2,18 +2,33 @@ import {methodApi} from "../api/method-api";
 
 const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
 const CLEAR_SECTIONS = 'CLEAR_SECTIONS'
+const PASS_SECTION_ID = "PASS_SECTION_ID"
 
 const initialState = {
     name: "",
     sections: [],
-    isReceived: false
+    isReceived: false,
+    isMainPage: true,
+    articleId: 0,
+    passedSectionId: null,
+    protocolName: "",
+}
+
+export function passSectionId(sectionId) {
+    return {
+        type: PASS_SECTION_ID,
+        passedSectionId: sectionId,
+    }
 }
 
 function receiveSections(data) {
     return {
         type: RECEIVE_SECTIONS,
         sections: data.sections,
-        name: data.name,
+        name: data.articleName,
+        isMainPage: data.protocolId === null,
+        articleId: data.articleId,
+        protocolName: data.protocolName,
     }
 }
 
@@ -27,7 +42,9 @@ export function fetchSections(versionId) {
     return dispatch => {
         return methodApi.getMethod(versionId)
             .then(response => response.data)
-            .then(data => dispatch(receiveSections(data)))
+            .then(data => {
+                return dispatch(receiveSections(data))
+            })
     }
 }
 
@@ -38,12 +55,21 @@ export default function methodReducer(state = initialState, action) {
                 ...state,
                 name: action.name,
                 sections: action.sections,
+                isMainPage: action.isMainPage,
+                articleId: action.articleId,
                 isReceived: true,
+                protocolName: action.protocolName,
             }
         case CLEAR_SECTIONS:
             return  {
                 ...state,
-                isReceived: false
+                isReceived: false,
+                passedSectionId: null,
+            }
+        case PASS_SECTION_ID:
+            return {
+                ...state,
+                passedSectionId: action.passedSectionId,
             }
         default:
             return state

@@ -1,4 +1,10 @@
-import {CLEAR_POST_STATUS, POST_ARTICLE, PostStatusEnum, RECEIVE_POSTED_ARTICLE} from "./actions/new-article-actions";
+import {
+    CLEAR_POST_STATUS,
+    ERROR_WHILE_POSTING,
+    POST_ARTICLE,
+    PostStatusEnum,
+    RECEIVE_POSTED_ARTICLE
+} from "./actions/new-article-actions";
 
 const initialState = {
     postStatus: PostStatusEnum.NOT_POSTED,
@@ -21,7 +27,11 @@ export default function newArticleReducer(state = initialState, action) {
             postStatus: PostStatusEnum.NOT_POSTED,
             versionId: 0,
         }
+        case ERROR_WHILE_POSTING : return {
+            ...state,
+            postStatus: PostStatusEnum.ERROR,
+            errorMessage: action.message
+        }
         default: return state
-
     }
 }
