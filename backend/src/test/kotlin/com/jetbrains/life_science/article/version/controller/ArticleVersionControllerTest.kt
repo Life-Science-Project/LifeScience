@@ -6,8 +6,8 @@ import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.master.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
 import com.jetbrains.life_science.article.section.view.SectionLazyView
-import com.jetbrains.life_science.article.version.dto.ArticleVersionFullCreationDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
+import com.jetbrains.life_science.article.version.dto.ArticleVersionFullCreationDTO
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
@@ -145,13 +145,14 @@ internal class ArticleVersionControllerTest :
     fun `get full article version of article published version`() {
         val expectedSectionViews = listOf(
             SectionLazyView(1, "name 1.1", 1),
-            SectionLazyView(2, "name 1.2", 2)
+            SectionLazyView(2, "name 1.2", 2),
+            SectionLazyView(3, "name 1.3", 3)
         )
         val expectedView = ArticleFullPageView(
             "master 1", 1, 1, expectedSectionViews
         )
 
-        val view = get(1, "$apiUrl/completed")
+        val view = get(1, ArticleFullPageView::class.java, "$apiUrl/completed")
 
         assertEquals(expectedView, view)
     }
@@ -163,13 +164,20 @@ internal class ArticleVersionControllerTest :
     fun `get full article version of protocol published version`() {
         val expectedSectionViews = listOf(
             SectionLazyView(1, "name 1.1", 1),
-            SectionLazyView(2, "name 1.2", 2)
+            SectionLazyView(2, "name 1.2", 2),
+            SectionLazyView(3, "name 1.3", 3),
+            SectionLazyView(6, "name 4", 1)
         )
         val expectedView = ArticleFullPageView(
-            "master 1", 1, 1, expectedSectionViews
+            articleName = "master 1",
+            articleVersionId = 1,
+            articleId = 1,
+            sections = expectedSectionViews,
+            protocolId = 7,
+            protocolName = "version 1.2"
         )
 
-        val view = get(7, "$apiUrl/completed")
+        val view = get(7, ArticleFullPageView::class.java, "$apiUrl/completed")
 
         assertEquals(expectedView, view)
     }
@@ -263,7 +271,7 @@ internal class ArticleVersionControllerTest :
         val expectedView =
             ArticleVersionView(
                 12, "big version", 5,
-                listOf(SectionLazyView(10, "inner section 1", 0)), State.EDITING
+                listOf(SectionLazyView(11, "inner section 1", 0)), State.EDITING
             )
 
         // Action
@@ -285,8 +293,8 @@ internal class ArticleVersionControllerTest :
 
         // Prepare expected result
         val expectedSectionViews = listOf(
-            SectionLazyView(7, "name 1.1", 1),
-            SectionLazyView(8, "name 1.2", 2)
+            SectionLazyView(8, "name 1.1", 1),
+            SectionLazyView(9, "name 1.2", 2)
         )
         val expectedView = ArticleVersionView(10, "master 1", 1, expectedSectionViews, State.EDITING)
 
@@ -497,7 +505,7 @@ internal class ArticleVersionControllerTest :
 
         val expectedView = ArticleVersionView(
             9, "new version", 1,
-            listOf(SectionLazyView(6, "inner section 239", 0)), State.EDITING
+            listOf(SectionLazyView(7, "inner section 239", 0)), State.EDITING
         )
         // Action
         val result = post(newProtocolDTO, "$apiUrl/article/1")

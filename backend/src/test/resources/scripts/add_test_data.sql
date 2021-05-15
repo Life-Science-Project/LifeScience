@@ -60,6 +60,8 @@ insert into section (id, description, name, article_version_id, order_number, vi
 values (4, 'desc 2', 'name 2', 3, 3, true);
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (5, 'desc 3', 'name 3', 6, 1, true);
+insert into section (id, description, name, article_version_id, order_number, visible)
+values (6, 'desc 4', 'name 4', 7, 1, true);
 
 insert into users_favourite_articles(user_id, favourite_articles_id)
 values (2, 1);
