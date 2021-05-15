@@ -85,7 +85,15 @@ internal class CategoryControllerTest :
                         ),
                         State.PUBLISHED_AS_ARTICLE
                     ),
-                    protocols = emptyList()
+                    protocols = listOf(
+                        ArticleVersionView(
+                            7,
+                            "version 1.2",
+                            1,
+                            listOf(SectionLazyView(6, "name 4", 1)),
+                            State.PUBLISHED_AS_PROTOCOL
+                        )
+                    )
                 )
             )
         )

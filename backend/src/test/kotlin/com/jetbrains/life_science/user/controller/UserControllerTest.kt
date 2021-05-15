@@ -122,7 +122,7 @@ internal class UserControllerTest :
     @WithUserDetails("user")
     internal fun `delete existing user`() {
         delete(2)
-        assertNotFound("User", getRequest(3))
+        assertNotFound("User", getRequest(2))
     }
 
     /**

@@ -18,6 +18,10 @@ class ElasticPopulator(
         populators.forEach { it.prepareData() }
     }
 
+    fun createIndexes() {
+        populators.forEach { it.createIndex() }
+    }
+
     private fun loadPopulator(indexName: String, fileName: String): Populator {
         return Populator(highLevelClient, indexName, loadClasses(fileName))
     }

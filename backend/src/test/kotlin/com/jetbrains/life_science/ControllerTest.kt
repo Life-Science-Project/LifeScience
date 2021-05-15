@@ -1,11 +1,9 @@
 package com.jetbrains.life_science
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 
@@ -15,9 +13,6 @@ abstract class ControllerTest<DTO, View>(
     private val viewToken: Class<View>
 ) {
 
-    @MockBean
-    lateinit var contentVersionRepository: ContentVersionRepository
-
     final lateinit var apiUrl: String
 
     @Autowired
@@ -25,14 +20,18 @@ abstract class ControllerTest<DTO, View>(
 
     protected val jsonMapper = jacksonObjectMapper()
 
-    protected fun get(id: Long, url: String = apiUrl): View {
+    protected fun <V> get(id: Long, viewToken: Class<V>, url: String = apiUrl): V {
         val entity = getRequest(id, url)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
             }
             .andReturn().response.contentAsString
-        return getViewFromJson(entity)
+        return getViewFromJson(entity, viewToken)
+    }
+
+    protected fun get(id: Long, url: String = apiUrl): View {
+        return get(id, viewToken, url)
     }
 
     protected fun post(dto: DTO, url: String = apiUrl): View {

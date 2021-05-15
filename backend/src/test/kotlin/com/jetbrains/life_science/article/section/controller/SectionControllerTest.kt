@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.section.controller
+package com.jetbrains.life_science.article.section.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.repository.ContentRepository
