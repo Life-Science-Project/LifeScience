@@ -13,7 +13,6 @@ import ProtocolList from "./ProtocolList/protocol-list";
 const Section = (props) => {
 
     const {name, contents, articleId} = props;
-    console.log(articleId)
 
     //todo make constants global
     //todo make case insensitive

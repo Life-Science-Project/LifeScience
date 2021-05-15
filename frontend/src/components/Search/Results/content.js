@@ -2,13 +2,13 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {METHOD_URL} from "../../../constants";
 import {useDispatch} from "react-redux";
-import {passSectionId} from "../../../redux/method-reducer";
+import {passSectionFunc} from "../../../redux/method-reducer";
 
 const Content = ({text, versionId, sectionId}) => {
     const dispatch = useDispatch()
 
     const handleClick = () => {
-        dispatch(passSectionId(sectionId))
+        dispatch(passSectionFunc(section => section.id === sectionId))
     }
 
     return (

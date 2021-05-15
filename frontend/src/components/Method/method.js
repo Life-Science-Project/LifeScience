@@ -4,22 +4,21 @@ import './method.css'
 import SectionContainer from "./Sections/section-container?";
 
 const Method = (props) => {  
-    const {name, sections, versionId, addButton, newProtocolButton, passedSectionId} = props;
+    const {name, sections, versionId, addButton, newProtocolButton, isSectionSelected, backToProtocolsButton} = props;
 
-    const buttonStyle = {
-        "margin-left": "-1.5rem"
-    }
+    console.log(name + ", function here: " + !!(isSectionSelected))
 
-    const getSectionIndex = (sectionId) => {
+    const getSectionIndex = () => {
+        if (!isSectionSelected) return null
         for (let i = 0; i < sections.length; i++) {
             const section = sections[i]
-            if (section.id === sectionId) {
+            if (isSectionSelected(section)) {
                 return i
             }
         }
         return null
     }
-    const [activeSection, setActiveSection] = useState(getSectionIndex(passedSectionId) ?? 0)
+    const [activeSection, setActiveSection] = useState(getSectionIndex() ?? 0)
     const handleClick = (e, index) => {
         setActiveSection(index)
     }
@@ -53,6 +52,12 @@ const Method = (props) => {
                         newProtocolButton &&
                         (<li className="list-item">
                             {newProtocolButton}
+                        </li>)
+                    }
+                    {
+                        backToProtocolsButton &&
+                        (<li className="list-item">
+                            {backToProtocolsButton}
                         </li>)
                     }
                 </ul>
