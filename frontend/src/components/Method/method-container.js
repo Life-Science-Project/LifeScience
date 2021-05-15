@@ -29,8 +29,6 @@ const MethodContainer = () => {
     const protocolName = useSelector(state => state.method.protocolName)
     const articleVersionId = useSelector(state => state.method.articleVersionId)
 
-    let isClearFunction = true
-
     const getSections = () => {
         const id = match.params.versionId;
         setVersionId(id)
@@ -45,9 +43,8 @@ const MethodContainer = () => {
         getSections()
 
         return () => {
-            console.log("cleaning: " + isClearFunction)
             dispatch(clearSections())
-            if (isClearFunction) {
+            if (!history.location.state?.fromMethod) {
                 dispatch(clearSectionFunction())
             }
         }
@@ -58,10 +55,9 @@ const MethodContainer = () => {
     }
 
     const getBackToProtocols = () => {
-        dispatch(passSectionFunc(section => section.name === PROTOCOLS))
-        isClearFunction = false
-        console.log("isClear: " + isClearFunction)
-        history.push(`${METHOD_URL}/${articleVersionId}`)
+        const func = section => section.name === PROTOCOLS
+        dispatch(passSectionFunc(func))
+        history.push({pathname: `${METHOD_URL}/${articleVersionId}`, state: {fromMethod: true}})
     }
 
     const getNewProtocolButton = () => {
