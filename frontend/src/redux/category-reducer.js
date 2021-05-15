@@ -54,11 +54,60 @@ export const clearCategory = () => {
 }
 
 export const getCategoryThunk = (id) => async (dispatch) => {
-    let response = await categoryApi.getCategory(id);
+    const response = await categoryApi.getCategory(id);
     if (response.status !== 200) {
         dispatch(getError(ERROR, response))
         return;
     }
+    dispatch(getCategory(response.data))
+}
+
+/**
+ * Adding category in db.
+ *
+ * @param data - contains category information [name, parentId, order].
+ * @returns {(function(*): Promise<void>)|*}
+ */
+export const postCategoryThunk = (data) => async (dispatch) => {
+    const response = await categoryApi.postCategory(data);
+
+    if (response.status !== 200) {
+        dispatch(getError(ERROR, response))
+        return;
+    }
+
+    dispatch(getCategory(response.data))
+}
+
+/**
+ * Delete category from db.
+ *
+ * @param id - deleting category id.
+ * @returns {(function(*): Promise<void>)|*}
+ */
+export const deleteCategoryThunk = (id) => async (dispatch) => {
+    const response = await categoryApi.deleteCategory(id);
+
+    if (response.status !== 200) {
+        dispatch(getError(ERROR, response))
+    }
+}
+
+/**
+ * Updates existing category.
+ *
+ * @param id - updating category id.
+ * @param data - contains  category information [name, parentId, order].
+ * @returns {(function(*): Promise<void>)|*}
+ */
+export const putCategoryThunk = (id, data) => async (dispatch) => {
+    const response = await categoryApi.putCategory(id, data);
+
+    if (response.status !== 200) {
+        dispatch(getError(ERROR, response))
+        return;
+    }
+
     dispatch(getCategory(response.data))
 }
 
