@@ -1,14 +1,22 @@
 import React from "react";
 import {withRouter} from "react-router";
-import {deleteCategoryThunk, postCategoryThunk, putCategoryThunk} from "../../../../redux/actions/category-actions";
+import {
+    deleteCategoryThunk,
+    getCategoryThunk,
+    postCategoryThunk,
+    putCategoryThunk
+} from "../../../../redux/actions/category-actions";
 import {connect} from "react-redux";
 import "./editCategory.css";
 import Preloader from "../../../common/Preloader/preloader";
-import {Route, Switch} from "react-router-dom";
-import NewCategory from "./newCategory";
-import DevelopingPage from "../../../common/Developing/developingPage";
+import {
+    Route,
+    Switch
+} from "react-router-dom";
+import NewCategory from "./Parts/newCategory";
 import NotFound from "../../../common/NotFound/notFound";
 import {getAuthorizedUserThunk} from "../../../../redux/auth-reducer";
+import EditCategory from "./Parts/editCategory";
 
 class EditCategoryContainer extends React.Component {
     componentDidMount() {
@@ -32,7 +40,7 @@ class EditCategoryContainer extends React.Component {
         return (
             <Switch>
                 <Route exact={true} path="/category/add/:parentId" render={() => <NewCategory {...this.props} />}/>
-                <Route exact={true} path="/category/edit/:id" render={() => <DevelopingPage pageName="mail"/>}/>
+                <Route exact={true} path="/category/edit/:id" render={() => <EditCategory {...this.props} />}/>
                 <Route render={() => <NotFound />}/>
             </Switch>
         )
@@ -49,4 +57,4 @@ let mapStateToProps = (state) => {
 
 let WithDataContainerComponent = withRouter(EditCategoryContainer);
 
-export default connect(mapStateToProps, {postCategoryThunk, putCategoryThunk, deleteCategoryThunk, getAuthorizedUserThunk})(WithDataContainerComponent);
+export default connect(mapStateToProps, {postCategoryThunk, putCategoryThunk, deleteCategoryThunk, getAuthorizedUserThunk, getCategoryThunk})(WithDataContainerComponent);

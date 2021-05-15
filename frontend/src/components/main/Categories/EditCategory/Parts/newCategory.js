@@ -1,8 +1,8 @@
 import React from "react";
 import {Redirect, withRouter} from "react-router";
-import {ROLES} from "../../../../constants";
+import {ROLES} from "../../../../../constants";
 import {Button, Form} from "react-bootstrap";
-import "./editCategory.css";
+import "../editCategory.css";
 
 class NewCategory extends React.Component {
     constructor(props) {
