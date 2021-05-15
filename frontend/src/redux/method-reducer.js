@@ -43,6 +43,12 @@ export function clearSections() {
     }
 }
 
+export function clearSectionFunction() {
+     return {
+         type: CLEAR_SECTION_FUNCTION
+     }
+}
+
 export function getError(_error) {
     return {
         type: ERROR,
