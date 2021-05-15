@@ -66,7 +66,6 @@ class WebSecurityConfig(
                 "/api/articles/versions/*/approve",
                 "/api/articles/versions/*/archive",
                 "/api/articles/*/versions",
-                "/api/articles/versions/completed/*",
                 "/api/review/request/**"
             ).fullyAuthenticated()
             .antMatchers("/api/users/current").fullyAuthenticated()
