@@ -50,7 +50,6 @@ internal class ArticleVersionControllerTest :
             addPopulator("content_version", "elastic/content_version.json")
             addPopulator("article", "elastic/article.json")
             addPopulator("section", "elastic/section.json")
-            prepareData()
         }
     }
 
