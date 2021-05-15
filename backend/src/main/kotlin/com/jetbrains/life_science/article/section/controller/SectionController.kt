@@ -111,7 +111,7 @@ class SectionController(
     private fun checkAccess(versionId: Long, principal: Principal?) {
         val articleVersion = articleVersionService.getById(versionId)
         // If trying to get published sections
-        if (articleVersion.state == State.PUBLISHED_AS_ARTICLE) return
+        if (articleVersion.isPublished) return
         // If guest tries to get non-published sections
         if (principal == null) {
             throw UnauthorizedException("User is not authorized")
