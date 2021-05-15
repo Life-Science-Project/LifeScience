@@ -38,7 +38,7 @@ export const getInitData = (initData) => {
 export const getInitDataThunk = () => async (dispatch) => {
     const tokens = getTokens();
     if (tokens.jwt) {
-        dispatch(getAuthorizedUserThunk());
+        await dispatch(getAuthorizedUserThunk());
     }
     dispatch(getInitData())
 }
@@ -59,4 +59,4 @@ export const getStatisticsThunk = () => async (dispatch) => {
     }));
 }
 
-export default initReducer;
+export default initReducer

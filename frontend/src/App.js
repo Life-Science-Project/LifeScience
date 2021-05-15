@@ -17,6 +17,7 @@ import CategoriesContainer from './components/main/Categories/categoriesContaine
 import SearchContainer from "./components/Search/search-container";
 import NewArticleContainer from "./components/NewArticle/new-article-container";
 import NewProtocolContainer from "./components/NewProtocol/new-protocol-container";
+import EditCategoryContainer from "./components/main/Categories/EditCategory/editCategoryContainer";
 
 class App extends React.Component {
     componentDidMount() {
@@ -38,7 +39,8 @@ class App extends React.Component {
                     <Route path="/new-protocol/:articleId?" render={() => <NewProtocolContainer/>}/>
                     <Route path="/register" render={() => <Register/>}/>
                     <Route path="/login" render={() => <Login />}/>
-                    <Route path="/categories/:categoryId?" render={() => <CategoriesContainer />}/>
+                    <Route path="/categories/:categoryId?" render={() => <CategoriesContainer/>}/>
+                    <Route path="/category" render={() => <EditCategoryContainer />}/>
                     <Route path="/method/:versionId" render={() => <MethodContainer/>}/>
                     <Route path="/search" render={() => <SearchContainer/>}/>
                     <Route render={() => <NotFound/>}/>
