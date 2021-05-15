@@ -6,8 +6,6 @@ import SectionContainer from "./Sections/section-container?";
 const Method = (props) => {  
     const {name, sections, versionId, addButton, newProtocolButton, isSectionSelected, backToProtocolsButton} = props;
 
-    console.log(name + ", function here: " + !!(isSectionSelected))
-
     const getSectionIndex = () => {
         if (!isSectionSelected) return null
         for (let i = 0; i < sections.length; i++) {
