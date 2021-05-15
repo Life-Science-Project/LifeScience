@@ -19,13 +19,13 @@ const categoryReducer = (state = initialState, action) => {
             return {
                 ...state,
                 category: action.category,
-                error: null
+                error: null,
                 isReceived: true,
             };
         case ERROR:
             return {
                 ...state,
-                error: action.error
+                error: action.error,
                 isReceived: false,
             }
         case CLEAR_CATEGORY:
