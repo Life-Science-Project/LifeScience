@@ -12,7 +12,6 @@ import {
 import Error from "../common/Error/error";
 import {METHOD_URL, PROTOCOLS} from "../../constants";
 
-
 const MethodContainer = () => {
 
     const [versionId, setVersionId] = useState(1);
@@ -75,7 +74,7 @@ const MethodContainer = () => {
                 Back to protocols
             </button>
     }
-
+    
     if (!isReceived) return <Preloader/>
     if (error) return <Error error={error}/>
     return (

@@ -20,7 +20,7 @@ const categoryReducer = (state = initialState, action) => {
                 ...state,
                 category: action.category,
                 error: null,
-                isReceived: true,
+                isReceived: true
             };
         case ERROR:
             return {
@@ -31,7 +31,7 @@ const categoryReducer = (state = initialState, action) => {
         case CLEAR_CATEGORY:
             return {
                 ...state,
-                isReceived: false,
+                isReceived: false
             }
         default:
             return state;
@@ -41,7 +41,6 @@ const categoryReducer = (state = initialState, action) => {
 export const getCategory = (_id) => {
     return {type: GET_CATEGORY, category: _id}
 }
-
 
 export const getError = (reason, error) => {
     return {type: reason, error: error}
