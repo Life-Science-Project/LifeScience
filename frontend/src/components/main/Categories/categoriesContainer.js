@@ -37,7 +37,7 @@ let mapStateToProps = (state) => {
         isAuthorized: state.auth.isAuthorized,
         userRoles: state.auth.user?.roles,
         error: state.categoryPage.error,
-        isReceived: state.categoryPage.isReceived,
+        isReceived: state.categoryPage.isReceived
     })
 }
 

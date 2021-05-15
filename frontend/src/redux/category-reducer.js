@@ -12,13 +12,14 @@ let initialState = {
 };
 
 const categoryReducer = (state = initialState, action) => {
+
     switch (action.type) {
         case GET_CATEGORY:
             return {
                 ...state,
                 category: action.category,
                 error: null,
-                isReceived: true,
+                isReceived: true
             };
         case ERROR:
             return {
@@ -29,7 +30,7 @@ const categoryReducer = (state = initialState, action) => {
         case CLEAR_CATEGORY:
             return {
                 ...state,
-                isReceived: false,
+                isReceived: false
             }
         default:
             return state;
