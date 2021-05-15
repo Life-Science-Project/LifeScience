@@ -3,7 +3,7 @@ import {withRouter} from "react-router-dom";
 import './method.css'
 import SectionContainer from "./Sections/section-container?";
 
-const Method = (props) => {  
+const Method = (props) => {
     const {name, sections, versionId, addButton, newProtocolButton, isSectionSelected, backToProtocolsButton} = props;
 
     const getSectionIndex = () => {
@@ -32,7 +32,7 @@ const Method = (props) => {
                 <ul className="method__section-list">
                     {
                         sections.map((section, index) => (
-                            <li className="list-item">
+                            <li className="list-item" key={index}>
                                 <div className={"section-link" + ((index === activeSection) ? " active-section" : "")}
                                      onClick={e => handleClick(e, index)}>
                                     {section.name}
@@ -41,25 +41,27 @@ const Method = (props) => {
                         ))
                     }
                     {
-                        addButton &&
-                        (<li className="list-item">
-                            {addButton}
-                        </li>)
-                    }
-                    {
-                        newProtocolButton &&
-                        (<li className="list-item">
-                            {newProtocolButton}
-                        </li>)
-                    }
-                    {
                         backToProtocolsButton &&
-                        (<li className="list-item">
+                        (<li className="list-item" key={sections.length}>
                             {backToProtocolsButton}
                         </li>)
                     }
                 </ul>
                 <SectionContainer versionId={versionId} section={sections[activeSection]}/>
+                <ul className="method__button-list">
+                    {
+                        addButton &&
+                        (<li className="list-item" key={1}>
+                            {addButton}
+                        </li>)
+                    }
+                    {
+                        newProtocolButton &&
+                        (<li className="list-item" key={2}>
+                            {newProtocolButton}
+                        </li>)
+                    }
+                </ul>
             </div>
         </>
     )
