@@ -79,7 +79,7 @@ export default function methodReducer(state = initialState, action) {
                 ...state,
                 isReceived: false,
                 passedSectionId: null,
-                error: null
+                error: null,
             }
         case PASS_SECTION_FUNC:
             return {
@@ -96,7 +96,7 @@ export default function methodReducer(state = initialState, action) {
                 ...state,
                 isReceived: true,
                 passedSectionId: null,
-                error: action.error
+                error: action.error,
             }
         default:
             return state
