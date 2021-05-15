@@ -9,6 +9,7 @@ import {
     getSectionsForMain,
     getSectionsForProtocol
 } from "../../utils/sections";
+import Error from "../common/Error/error";
 import {METHOD_URL, PROTOCOLS} from "../../constants";
 
 
@@ -19,6 +20,7 @@ const MethodContainer = () => {
     const dispatch = useDispatch()
     const history = useHistory();
 
+    const error = useSelector(state => state.method.error)
     const name = useSelector(state => state.method.name)
     const articleId = useSelector(state => state.method.articleId)
     const sections = useSelector(state => state.method.sections)
@@ -74,8 +76,8 @@ const MethodContainer = () => {
             </button>
     }
 
-
     if (!isReceived) return <Preloader/>
+    if (error) return <Error error={error}/>
     return (
         <Method name={name + (protocolName ? `, ${protocolName}` : "")}
                 sections={(isMainPage) ? getSectionsForMain(sections) : getSectionsForProtocol(sections)}

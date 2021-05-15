@@ -2,6 +2,8 @@ import {methodApi} from "../api/method-api";
 
 const RECEIVE_SECTIONS = 'RECEIVE_SECTIONS'
 const CLEAR_SECTIONS = 'CLEAR_SECTIONS'
+const PASS_SECTION_ID = "PASS_SECTION_ID"
+const ERROR = "ERROR"
 const PASS_SECTION_FUNC = "PASS_SECTION_FUNC"
 const CLEAR_SECTION_FUNCTION = "CLEAR_SECTION_FUNCTION"
 
@@ -42,19 +44,27 @@ export function clearSections() {
 }
 
 export function clearSectionFunction() {
+     return {
+         type: CLEAR_SECTION_FUNCTION
+     }
+}
+
+export function getError(_error) {
     return {
-        type: CLEAR_SECTION_FUNCTION,
+        type: ERROR,
+        error: _error
     }
 }
 
-export function fetchSections(versionId) {
-    return dispatch => {
-        return methodApi.getMethod(versionId)
-            .then(response => response.data)
-            .then(data => {
-                return dispatch(receiveSections(data))
-            })
+export const fetchSections = (versionId) => async (dispatch) => {
+    const response = await methodApi.getMethod(versionId);
+
+    if (response.status !== 200) {
+        dispatch(getError(response));
+        return;
     }
+
+    dispatch(receiveSections(response.data));
 }
 
 export default function methodReducer(state = initialState, action) {
@@ -74,6 +84,8 @@ export default function methodReducer(state = initialState, action) {
             return  {
                 ...state,
                 isReceived: false,
+                passedSectionId: null,
+                error: null,
             }
         case PASS_SECTION_FUNC:
             return {
@@ -84,6 +96,13 @@ export default function methodReducer(state = initialState, action) {
             return {
                 ...state,
                 isSectionSelected: null,
+            }
+        case ERROR:
+            return  {
+                ...state,
+                isReceived: true,
+                passedSectionId: null,
+                error: action.error,
             }
         default:
             return state
