@@ -17,6 +17,7 @@ import NewCategory from "./Parts/newCategory";
 import NotFound from "../../../common/NotFound/notFound";
 import {getAuthorizedUserThunk} from "../../../../redux/auth-reducer";
 import EditCategory from "./Parts/editCategory";
+import ShortCategory from "./shortCategory";
 
 class EditCategoryContainer extends React.Component {
     componentDidMount() {
@@ -41,6 +42,7 @@ class EditCategoryContainer extends React.Component {
             <Switch>
                 <Route exact={true} path="/category/add/:parentId" render={() => <NewCategory {...this.props} />}/>
                 <Route exact={true} path="/category/edit/:id" render={() => <EditCategory {...this.props} />}/>
+                <Route exact={true} path="/category/:id" render={() => <ShortCategory {...this.props} />}/>
                 <Route render={() => <NotFound />}/>
             </Switch>
         )

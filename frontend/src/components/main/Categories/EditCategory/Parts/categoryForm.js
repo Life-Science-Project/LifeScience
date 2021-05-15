@@ -1,7 +1,7 @@
 import React from "react";
 import {Button, Form} from "react-bootstrap";
 
-const CategoryForm = ({onSubmit, data, message, btnMessage, canChgParentId}) => {
+const CategoryForm = ({onSubmit, data, message, btnMessage, canChgParentId, error}) => {
     return (
         <div className="addCategory_container">
             <div className="form_container">
@@ -16,6 +16,7 @@ const CategoryForm = ({onSubmit, data, message, btnMessage, canChgParentId}) => 
                     <Form.Group controlId="parentId">
                         <Form.Label>Parent category id</Form.Label>
                         <Form.Control readOnly={!canChgParentId} size="lg" defaultValue={data.parentId} />
+                        {error && error.message}
                     </Form.Group>
                     <Form.Group controlId="order">
                         <Form.Label>Order</Form.Label>

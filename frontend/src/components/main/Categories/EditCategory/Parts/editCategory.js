@@ -5,11 +5,13 @@ import CategoryForm from "./categoryForm";
 import Preloader from "../../../../common/Preloader/preloader";
 import {clearCategory, getCategoryThunk} from "../../../../../redux/actions/category-actions";
 import {connect} from "react-redux";
+import "../editCategory.css";
 
 class EditCategory extends React.Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {error: null}
     }
 
     componentDidMount() {
@@ -39,8 +41,13 @@ class EditCategory extends React.Component {
             parentId: event.target.elements.parentId.value,
             order: event.target.elements.order.value
         }
-        this.props.putCategoryThunk(this.props.match.params.id, data)
-        this.props.history.push(`/categories/${this.props.match.params.id}`);
+        if (data.parentId > 0) {
+            this.props.putCategoryThunk(this.props.match.params.id, data)
+            this.props.history.push(`/categories/${this.props.match.params.id}`);
+            return
+        }
+        const error = {message: <span className="error">Parent id must be more than 0</span>};
+        this.setState({error: error})
     }
 
     render() {
@@ -55,14 +62,14 @@ class EditCategory extends React.Component {
         const data = {
             name: this.props.category.name,
             parentId: this.props.category.parentId,
-            order: this.props.order
+            order: this.props.category.order
         }
 
         return (
             <CategoryForm onSubmit={this.handleSubmit}
                           message={"Edit Category"}
                           data={data} btnMessage={"Edit"}
-                          canChgParentId={true} />
+                          canChgParentId={true} error={this.state?.error}/>
         )
     }
 }

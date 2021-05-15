@@ -14,3 +14,12 @@
     text-transform: uppercase;
     text-align: center;
 }
+
+.short_category_container {
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.error {
+    color: red;
+}
