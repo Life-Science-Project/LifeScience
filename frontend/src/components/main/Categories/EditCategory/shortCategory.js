@@ -15,6 +15,7 @@ class ShortCategory extends React.Component {
         super(props);
         this.onDelete = this.onDelete.bind(this);
         this.onEdit = this.onEdit.bind(this);
+        this.onAdd = this.onAdd.bind(this);
     }
 
     componentDidMount() {
@@ -49,13 +50,38 @@ class ShortCategory extends React.Component {
         this.props.history.push(`/category/edit/${this.props.category.id}`)
     }
 
+    onAdd(event) {
+        event.preventDefault();
+        this.props.history.push(`/category/add/${this.props.category.id}`)
+    }
+
     render() {
         if (!this.props.isReceived) {
             return <Preloader/>
         }
 
+        const addButton = () => {
+            if (this.props.category.articles.length === 0) {
+                return(
+                    <Button variant="success" size="lg" block onClick={this.addNew}>
+                        Add new category to this
+                    </Button>
+                );
+            }
+        }
+
+        const deleteButton = () => {
+            if (this.props.category.articles.length === 0) {
+                return(
+                    <Button variant="danger" size="lg" block onClick={this.onDelete}>
+                        Delete Category
+                    </Button>
+                );
+            }
+        }
+
         const showingButtons = () => {
-            if (!(this.props.user.roles.includes(ROLES.admin) || this.props.user.roles.includes(ROLES.moderator)) || this.props.match.params.id === 1) {
+            if (!this.props.user || !(this.props.user.roles.includes(ROLES.admin) || this.props.user.roles.includes(ROLES.moderator)) || this.props.match.params.id === 1) {
                 return;
             }
 
@@ -64,9 +90,8 @@ class ShortCategory extends React.Component {
                     <Button variant="secondary" size="lg" block onClick={this.onEdit}>
                         Edit Category
                     </Button>
-                    {<Button variant="danger" size="lg" block onClick={this.onDelete}>
-                        Delete Category
-                    </Button>}
+                    {addButton()}
+                    {deleteButton()}
                 </div>
             );
         }

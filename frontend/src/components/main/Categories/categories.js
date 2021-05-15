@@ -7,6 +7,7 @@ import Category from "./Category/category";
 import Article from "./Category/article";
 import Error from "../../common/Error/error";
 import {ROLES} from "../../../constants";
+import {Link} from "react-router-dom";
 
 class Categories extends React.Component {
     constructor(props) {
@@ -88,9 +89,11 @@ class Categories extends React.Component {
         return (
             <div>
                 {showButton()}
-                <div className="category_name">
-                    {this.props.category.name}
-                </div>
+                <Link to={"/category/" + this.props.category.id}>
+                    <div className="category_name">
+                        {this.props.category.name}
+                    </div>
+                </Link>
                 {showingInformation()}
             </div>
         );

@@ -33,11 +33,6 @@ class EditCategoryContainer extends React.Component {
             return <Preloader/>
         }
 
-        if (!this.props.isAuthorized) {
-            this.props.history.push('/login');
-            return <Preloader/>
-        }
-
         return (
             <Switch>
                 <Route exact={true} path="/category/add/:parentId" render={() => <NewCategory {...this.props} />}/>
