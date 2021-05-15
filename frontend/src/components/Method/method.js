@@ -24,9 +24,9 @@ const Method = (props) => {
     return (
         <>
             <div className="method__method-name">
-                <h2>
+                <h3>
                     {name}
-                </h2>
+                </h3>
             </div>
             <div className="method__main">
                 <ul className="method__section-list">
