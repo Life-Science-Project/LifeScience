@@ -2,7 +2,7 @@ import React from "react";
 import Categories from "./categories";
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
-import {getCategoryThunk} from "../../../redux/category-reducer";
+import {clearCategory, getCategoryThunk} from "../../../redux/category-reducer";
 
 class CategoriesContainer extends React.Component {
     componentDidMount() {
@@ -20,9 +20,13 @@ class CategoriesContainer extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        this.props.clearCategory()
+    }
+
     render() {
         return (
-            <Categories {...this.props} category={this.props.category}/>
+            <Categories {...this.props} category={this.props.category} isReceived={this.props.isReceived}/>
         )
     }
 }
@@ -32,9 +36,10 @@ let mapStateToProps = (state) => {
         category: state.categoryPage.category,
         isAuthorized: state.auth.isAuthorized,
         userRoles: state.auth.user?.roles,
+        isReceived: state.categoryPage.isReceived,
     })
 }
 
 let WithDataContainerComponent = withRouter(CategoriesContainer);
 
-export default connect(mapStateToProps, {getCategoryThunk})(WithDataContainerComponent);
+export default connect(mapStateToProps, {getCategoryThunk, clearCategory})(WithDataContainerComponent);

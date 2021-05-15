@@ -27,8 +27,7 @@ class Categories extends React.Component {
         if (this.props.trouble !== undefined && this.props.trouble !== null) {
             return <Trouble trouble={this.props.trouble}/>
         }
-
-        if (this.props.category === null || this.props.category === undefined) {
+        if (!this.props.isReceived) {
             return <Preloader/>;
         }
 
