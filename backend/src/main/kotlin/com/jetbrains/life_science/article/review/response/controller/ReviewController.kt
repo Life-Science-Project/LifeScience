@@ -64,11 +64,7 @@ class ReviewController(
 
         validateUserAndVersionToEdit(version, user) { "User can not get review to this version" }
 
-        val reviews = if (user.isAdminOrModerator()) {
-            reviewService.getAllByVersion(version)
-        } else {
-            reviewService.getAllByVersionAndUser(version, user)
-        }
+        val reviews = reviewService.getAllByVersion(version)
         return viewMapper.toViews(reviews)
     }
 
