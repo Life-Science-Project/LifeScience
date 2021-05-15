@@ -46,6 +46,10 @@ internal class ArticleMasterControllerTest :
 
         // Check
         assertEquals(expectedResult.toSet(), result.toSet())
+
+        val l = (0..10).toList()
+        val m = l.map { it to it * 2 }
+
     }
 
     /**
@@ -65,7 +69,15 @@ internal class ArticleMasterControllerTest :
             ArticleVersionView(3, "version 2.1", 1, listOf(SectionLazyView(4, "name 2", 3)), State.EDITING)
         val expectedView4 = ArticleVersionView(4, "version 4.1", 1, listOf(), State.EDITING)
         val expectedView5 = ArticleVersionView(5, "version 5.1", 1, listOf(), State.EDITING)
-        val expectedResult = listOf(expectedView1, expectedView2, expectedView3, expectedView4, expectedView5)
+        val protocolView = ArticleVersionView(
+            7,
+            "version 1.2",
+            1,
+            listOf(SectionLazyView(6, "name 4", 1)),
+            State.PUBLISHED_AS_PROTOCOL
+        )
+        val expectedResult =
+            listOf(expectedView1, expectedView2, expectedView3, expectedView4, expectedView5, protocolView)
 
         // Action
         val result = getAllVersions(1)
@@ -92,7 +104,13 @@ internal class ArticleMasterControllerTest :
                 ),
                 state = State.PUBLISHED_AS_ARTICLE,
             ),
-            protocols = emptyList()
+            protocols = listOf(ArticleVersionView(
+                7,
+                "version 1.2",
+                1,
+                listOf(SectionLazyView(6, "name 4", 1)),
+                State.PUBLISHED_AS_PROTOCOL
+            ))
         )
 
         // Action
