@@ -49,7 +49,6 @@ internal class ArticleMasterControllerTest :
 
         val l = (0..10).toList()
         val m = l.map { it to it * 2 }
-
     }
 
     /**
@@ -104,13 +103,15 @@ internal class ArticleMasterControllerTest :
                 ),
                 state = State.PUBLISHED_AS_ARTICLE,
             ),
-            protocols = listOf(ArticleVersionView(
-                7,
-                "version 1.2",
-                1,
-                listOf(SectionLazyView(6, "name 4", 1)),
-                State.PUBLISHED_AS_PROTOCOL
-            ))
+            protocols = listOf(
+                ArticleVersionView(
+                    7,
+                    "version 1.2",
+                    1,
+                    listOf(SectionLazyView(6, "name 4", 1)),
+                    State.PUBLISHED_AS_PROTOCOL
+                )
+            )
         )
 
         // Action
