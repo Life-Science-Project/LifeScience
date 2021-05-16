@@ -57,7 +57,6 @@ internal class ReviewControllerTest :
             addPopulator("content_version", "elastic/content_version.json")
             addPopulator("article", "elastic/article.json")
             addPopulator("section", "elastic/section.json")
-            prepareData()
         }
 
         reviewRequestHelper = ReviewRequestHelper(mockMvc)
@@ -74,6 +73,10 @@ internal class ReviewControllerTest :
     @Test
     @WithAnonymousUser
     fun `anonymous privileges`() {
+
+        assertUnauthenticated(getRequest("/api/articles/versions/2/reviews"))
+        assertUnauthenticated(getRequest("/api/articles/versions/2/reviews/requests/1"))
+
         with(reviewHelper) {
             assertUnauthorizedGetAllDenied(versionId = 2)
             assertUnauthorizedGetDenied(2, 1)

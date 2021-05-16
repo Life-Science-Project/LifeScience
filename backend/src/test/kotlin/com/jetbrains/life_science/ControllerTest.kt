@@ -79,8 +79,12 @@ abstract class ControllerTest<DTO, View>(
             }
     }
 
+    protected fun getRequest(url: String): ResultActionsDsl {
+        return mockMvc.get(url)
+    }
+
     protected fun getRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
-        return mockMvc.get("$url/{id}", id)
+        return getRequest("$url/$id")
     }
 
     protected fun postRequest(dto: DTO, url: String = apiUrl): ResultActionsDsl {
