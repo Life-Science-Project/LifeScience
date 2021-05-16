@@ -3,8 +3,9 @@ import React, {useState} from "react";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
-import {getSectionsForPreview} from "../../utils/sections";
+import {getSectionsForPreview, getSectionsForShow} from "../../utils/sections";
 import {PROTOCOL} from "../../constants";
+import Preloader from "../common/Preloader/preloader";
 
 
 const NewArticleView = ({article, category, onSubmit, sectionTitles}) => {
@@ -80,8 +81,8 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles}) => {
     function getHeaderBlock() {
         return (
             <h4>
-                {article ? ("Article: " + article && article.version.name)
-                    : ("Category: " + category && category.name)}
+                {article ? ("Article: " + article.version?.name)
+                    : ("Category: " + category?.name)}
             </h4>
         );
     }
@@ -98,8 +99,10 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles}) => {
         return article ? "Input protocol name" : "Input method name"
     }
 
+    if (!category && !article) return <Preloader/>
+
     if (preview) return <MethodPreview name={methodName}
-                                       sections={getSectionsForPreview(sections)}
+                                       sections={category ? getSectionsForPreview(sections) : getSectionsForShow(sections)}
                                        goBack={() => setPreview(false)}/>
 
     return (
@@ -163,10 +166,13 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles}) => {
                 })}
             </div>
             <div className="d-flex bd-highlight mb-3">
-                <button
-                    className={"btn btn-large btn-primary new-article-form__button mr-auto p-2 bd-highlight"}
-                    onClick={addNewSection} disabled={!addSectionEnabled()}>Add Section
-                </button>
+                {
+                    !article &&
+                    <button
+                        className={"btn btn-large btn-primary new-article-form__button mr-auto p-2 bd-highlight"}
+                        onClick={addNewSection} disabled={!addSectionEnabled()}>Add Section
+                    </button>
+                }
                 <button type="submit"
                         className="btn btn-large btn-secondary new-article-form__button p-2 bd-highlight"
                         disabled={submitDisabled()}
