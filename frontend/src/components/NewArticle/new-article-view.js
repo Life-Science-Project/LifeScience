@@ -78,43 +78,24 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles}) => {
     }
 
     function getHeaderBlock() {
-        if (article) {
-            return (
-                <h4>
-                    Article: {article && article.version.name}
-                </h4>
-            );
-        } else {
-            return (
-                <h4>
-                    Category: {category && category.name}
-                </h4>
-            );
-        }
+        return (
+            <h4>
+                {article ? ("Article: " + article && article.version.name)
+                    : ("Category: " + category && category.name)}
+            </h4>
+        );
     }
 
     function getNameField() {
-        if (article) {
-            return (
-                <h4>
-                    Protocol name
-                </h4>
-            );
-        } else {
-            return (
-                <h4>
-                    Method name
-                </h4>
-            );
-        }
+        return (
+            <h4>
+                {article ? "Protocol name" : "Method name"}
+            </h4>
+        );
     }
 
     function getNamePlaceholder() {
-        if (article) {
-            return "Input protocol name";
-        } else {
-            return "Input method name";
-        }
+        return article ? "Input protocol name" : "Input method name"
     }
 
     if (preview) return <MethodPreview name={methodName}
@@ -197,7 +178,8 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles}) => {
                         onClick={handleSubmit}>Submit
                 </button>
             </div>
-        </form>)
+        </form>
+    )
 
 
 }
