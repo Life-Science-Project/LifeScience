@@ -1,7 +1,7 @@
 import "./NewArticle.css"
 import React, {useEffect} from "react";
 import {useHistory, withRouter} from "react-router-dom";
-import {getCategoryThunk} from "../../redux/category-reducer";
+import {getCategoryThunk} from "../../redux/actions/category-actions";
 import {useDispatch, useSelector} from "react-redux";
 import {addArticleThunk, clearPostStatus, PostStatusEnum} from "../../redux/actions/new-article-actions";
 import {useRouteMatch} from "react-router";
