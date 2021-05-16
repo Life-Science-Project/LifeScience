@@ -4,7 +4,8 @@ import {clearProtocols, fetchProtocols} from "../../../../redux/actions/protocol
 import Preloader from "../../../common/Preloader/preloader";
 import {Link} from "react-router-dom";
 import {withRouter} from "react-router";
-import {METHOD_URL} from "../../../../constants";
+import {METHOD_URL, SECTION_TITLES} from "../../../../constants";
+import {passSectionFunc} from "../../../../redux/method-reducer";
 
 
 const ProtocolList = ({articleId}) => {
@@ -26,6 +27,10 @@ const ProtocolList = ({articleId}) => {
     const protocols = useSelector(state => state.protocolList.protocols)
     const isReceived = useSelector(state => state.protocolList.isReceived)
 
+    const handleClick = () => {
+        dispatch(passSectionFunc(section => section.name === SECTION_TITLES[1]))
+    }
+
     if (!isReceived) return <Preloader/>
 
     return (
@@ -35,7 +40,8 @@ const ProtocolList = ({articleId}) => {
                 {
                     protocols.map((protocol) => (
                         <li>
-                            <Link to={METHOD_URL + "/" + protocol.id}>
+                            <Link to={{pathname: METHOD_URL +"/" + protocol.id, state: {fromMethod: true}}}
+                                  onClick={handleClick}>
                                 {protocol.name}
                             </Link>
                         </li>
