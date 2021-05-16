@@ -63,7 +63,7 @@ class ShortCategory extends React.Component {
         const addButton = () => {
             if (this.props.category.articles.length === 0) {
                 return(
-                    <Button variant="success" size="lg" block onClick={this.addNew}>
+                    <Button variant="success" size="lg" block onClick={this.onAdd}>
                         Add new category to this
                     </Button>
                 );
