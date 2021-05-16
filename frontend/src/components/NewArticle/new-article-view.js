@@ -4,9 +4,10 @@ import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
 import {getSectionsForPreview} from "../../utils/sections";
+import {PROTOCOL} from "../../constants";
 
 
-const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSectionTitles}) => {
+const NewArticleView = ({article, category, onSubmit, sectionTitles}) => {
 
     const getNewSection = (sectionName) => {
         return {
@@ -51,35 +52,14 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
         setPreview(!preview);
     }
 
-    function getSectionsForSubmit() {
-        const sortedSections = getSortedSections();
-        for (const title of autoSectionTitles) {
-            sortedSections.push({
-                name: title
-            })
-        }
-        return sortedSections
-    }
-
-    function getSortedSections() {
-        const sortedSections = [];
-        for (const title of sectionTitles) {
-            for (const section of sections) {
-                if (section.name === title) {
-                    sortedSections.push(section)
-                }
-            }
-        }
-        return sortedSections;
-    }
-
-    function isSectionSelected(title) {
+    function sectionCanBeChosen(title) {
+        if (title === PROTOCOL) return false
         for (const section of sections) {
             if (section.name === title) {
-                return true
+                return false
             }
         }
-        return false
+        return true
     }
 
     function submitDisabled() {
@@ -177,7 +157,7 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
                                     {
                                         sectionTitles
 
-                                            .filter((title) => !isSectionSelected(title))
+                                            .filter(sectionCanBeChosen)
                                             .map(type => (
                                                 <Dropdown.Item
                                                     eventKey={type}
