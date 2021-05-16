@@ -1,19 +1,19 @@
 package com.jetbrains.life_science.article.content.publish.controller
 
 import com.jetbrains.life_science.article.content.publish.dto.ContentDTO
-import com.jetbrains.life_science.article.content.publish.view.ContentView
-import com.jetbrains.life_science.article.content.publish.view.ContentViewMapper
 import com.jetbrains.life_science.article.content.publish.dto.ContentDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.publish.service.ContentService
+import com.jetbrains.life_science.article.content.publish.view.ContentView
+import com.jetbrains.life_science.article.content.publish.view.ContentViewMapper
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.entity.State
-import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
-import org.springframework.security.access.AccessDeniedException
+import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.security.Principal
@@ -33,7 +33,13 @@ class ContentController(
     fun getContents(
         @PathVariable sectionId: Long,
     ): ContentView? {
-        return contentService.findBySectionId(sectionId)?.let { viewMapper.createView(it) }
+        val section = sectionService.getById(sectionId)
+        val content = if (section.articleVersion.isPublished) {
+            contentService.findBySectionId(sectionId)
+        } else {
+            contentVersionService.findBySectionId(sectionId)
+        }
+        return content?.let { viewMapper.createView(it) }
     }
 
     @Operation(summary = "Returns content", deprecated = true)
