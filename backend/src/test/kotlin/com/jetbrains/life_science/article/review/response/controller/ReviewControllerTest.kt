@@ -76,16 +76,13 @@ internal class ReviewControllerTest :
 
         assertUnauthenticated(getRequest("/api/articles/versions/2/reviews"))
         assertUnauthenticated(getRequest("/api/articles/versions/2/reviews/requests/1"))
-
-        with(reviewHelper) {
-            assertUnauthorizedGetAllDenied(versionId = 2)
-            assertUnauthorizedGetDenied(2, 1)
-            assertUnauthorizedPostDenied(
-                2,
-                1,
-                ReviewDTO("edit please", ReviewResolution.CHANGES_REQUESTED.name)
+        assertUnauthenticated(
+            postRequest(
+                ReviewDTO("edit please", ReviewResolution.CHANGES_REQUESTED.name),
+                "/api/articles/versions/2/reviews/request/1"
             )
-        }
+        )
+
     }
 
     @Test
