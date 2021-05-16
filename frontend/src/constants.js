@@ -25,6 +25,8 @@ export const SECTION_TITLES = INFO_SECTION_TITLES.concat(AUTO_SECTION_TITLES)
 
 export const PROTOCOLS = "Protocols"
 
+export const PROTOCOL = INFO_SECTION_TITLES[1]
+
 export const ROLES = Object.freeze({
     user: "ROLE_USER",
     admin: "ROLE_ADMIN",

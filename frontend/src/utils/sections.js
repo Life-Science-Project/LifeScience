@@ -6,6 +6,7 @@ export const getSectionsForShow = (sections) => {
 
 //todo rename
 export const getSectionsForPreview = (sections) => {
+    console.log(sections)
     const sortedSections = sortSectionsBy(sections, INFO_SECTION_TITLES);
     pushAutoSections(sortedSections)
     return sortedSections
@@ -43,4 +44,7 @@ const sortSectionsBy = (sections, example) => {
         }
     }
     return sortedSections;
+}
+
+export class getSectionsForSubmit {
 }

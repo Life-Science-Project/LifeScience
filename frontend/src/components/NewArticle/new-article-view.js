@@ -3,8 +3,7 @@ import React, {useState} from "react";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
-import {INFO_SECTION_TITLES} from "../../constants";
-import {getSectionsForPreview, getSectionsForShow, getSectionsForSubmit} from "../../utils/sections";
+import {getSectionsForPreview} from "../../utils/sections";
 
 
 const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSectionTitles}) => {
@@ -209,6 +208,7 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
                 </button>
                 <button type="submit"
                         className="btn btn-large btn-secondary new-article-form__button p-2 bd-highlight"
+                        disabled={submitDisabled()}
                         onClick={handlePreview}>Preview
                 </button>
                 <button type="submit"

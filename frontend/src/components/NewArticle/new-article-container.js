@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addArticleThunk, clearPostStatus, PostStatusEnum} from "../../redux/actions/new-article-actions";
 import {useRouteMatch} from "react-router";
 import Preloader from "../common/Preloader/preloader";
-import {LOGIN_URL, METHOD_URL} from "../../constants";
+import {AUTO_SECTION_TITLES, LOGIN_URL, METHOD_URL, SECTION_TITLES} from "../../constants";
 import NewArticleView from "./new-article-view";
 
 const NewArticleContainer = () => {
@@ -20,11 +20,6 @@ const NewArticleContainer = () => {
     const category = useSelector(state => state.categoryPage.category)
     const postStatus = useSelector(state => state.newArticle.postStatus)
     const versionId = useSelector(state => state.newArticle.versionId);
-
-    const SECTION_TITLES = ["General Information", "Protocol", "Equipment and reagents required", "Application",
-        "Method advantages and disadvantages", "Troubleshooting"];
-
-    const AUTO_SECTION_TITLES = ["Find collaboration", "Education"];
 
     if (!isAuthorized && isInitialized) {
         history.push(LOGIN_URL);

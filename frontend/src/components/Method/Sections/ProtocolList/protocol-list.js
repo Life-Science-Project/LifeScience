@@ -4,7 +4,7 @@ import {clearProtocols, fetchProtocols} from "../../../../redux/actions/protocol
 import Preloader from "../../../common/Preloader/preloader";
 import {Link} from "react-router-dom";
 import {withRouter} from "react-router";
-import {METHOD_URL, SECTION_TITLES} from "../../../../constants";
+import {METHOD_URL, PROTOCOL} from "../../../../constants";
 import {passSectionFunc} from "../../../../redux/method-reducer";
 
 
@@ -28,7 +28,7 @@ const ProtocolList = ({articleId}) => {
     const isReceived = useSelector(state => state.protocolList.isReceived)
 
     const handleClick = () => {
-        dispatch(passSectionFunc(section => section.name === SECTION_TITLES[1]))
+        dispatch(passSectionFunc(section => section.name === PROTOCOL))
     }
 
     if (!isReceived) return <Preloader/>
