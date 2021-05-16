@@ -46,7 +46,7 @@ const NewProtocolContainer = () => {
         history.push(`${METHOD_URL}/${versionId}`);
     }
 
-    return (<NewArticleView article={article} onSubmit={onSubmit} sectionTitles={SECTION_TITLES} autoSectionTitles={[]}/>);
+    return (<NewArticleView article={article} onSubmit={onSubmit} sectionTitles={SECTION_TITLES}/>);
 }
 
 export default withRouter(NewProtocolContainer);

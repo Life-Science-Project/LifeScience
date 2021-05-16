@@ -3,11 +3,12 @@ import React, {useState} from "react";
 import MethodPreview from "../Method/MethodPreview/method-preview";
 import {Dropdown, DropdownButton} from "react-bootstrap";
 import {FaTimes} from "react-icons/all";
-import {INFO_SECTION_TITLES} from "../../constants";
-import {getSectionsForPreview, getSectionsForShow, getSectionsForSubmit} from "../../utils/sections";
+import {getSectionsForPreview, getSectionsForShow} from "../../utils/sections";
+import {PROTOCOL} from "../../constants";
+import Preloader from "../common/Preloader/preloader";
 
 
-const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSectionTitles}) => {
+const NewArticleView = ({article, category, onSubmit, sectionTitles}) => {
 
     const getNewSection = (sectionName) => {
         return {
@@ -52,35 +53,14 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
         setPreview(!preview);
     }
 
-    function getSectionsForSubmit() {
-        const sortedSections = getSortedSections();
-        for (const title of autoSectionTitles) {
-            sortedSections.push({
-                name: title
-            })
-        }
-        return sortedSections
-    }
-
-    function getSortedSections() {
-        const sortedSections = [];
-        for (const title of sectionTitles) {
-            for (const section of sections) {
-                if (section.name === title) {
-                    sortedSections.push(section)
-                }
-            }
-        }
-        return sortedSections;
-    }
-
-    function isSectionSelected(title) {
+    function sectionCanBeChosen(title) {
+        if (title === PROTOCOL) return false
         for (const section of sections) {
             if (section.name === title) {
-                return true
+                return false
             }
         }
-        return false
+        return true
     }
 
     function submitDisabled() {
@@ -99,47 +79,30 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
     }
 
     function getHeaderBlock() {
-        if (article) {
-            return (
-                <h4>
-                    Article: {article && article.version.name}
-                </h4>
-            );
-        } else {
-            return (
-                <h4>
-                    Category: {category && category.name}
-                </h4>
-            );
-        }
+        return (
+            <h4>
+                {article ? ("Article: " + article.version?.name)
+                    : ("Category: " + category?.name)}
+            </h4>
+        );
     }
 
     function getNameField() {
-        if (article) {
-            return (
-                <h4>
-                    Protocol name
-                </h4>
-            );
-        } else {
-            return (
-                <h4>
-                    Method name
-                </h4>
-            );
-        }
+        return (
+            <h4>
+                {article ? "Protocol name" : "Method name"}
+            </h4>
+        );
     }
 
     function getNamePlaceholder() {
-        if (article) {
-            return "Input protocol name";
-        } else {
-            return "Input method name";
-        }
+        return article ? "Input protocol name" : "Input method name"
     }
 
+    if (!category && !article) return <Preloader/>
+
     if (preview) return <MethodPreview name={methodName}
-                                       sections={getSectionsForPreview(sections)}
+                                       sections={category ? getSectionsForPreview(sections) : getSectionsForShow(sections)}
                                        goBack={() => setPreview(false)}/>
 
     return (
@@ -178,7 +141,7 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
                                     {
                                         sectionTitles
 
-                                            .filter((title) => !isSectionSelected(title))
+                                            .filter(sectionCanBeChosen)
                                             .map(type => (
                                                 <Dropdown.Item
                                                     eventKey={type}
@@ -203,12 +166,16 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
                 })}
             </div>
             <div className="d-flex bd-highlight mb-3">
-                <button
-                    className={"btn btn-large btn-primary new-article-form__button mr-auto p-2 bd-highlight"}
-                    onClick={addNewSection} disabled={!addSectionEnabled()}>Add Section
-                </button>
+                {
+                    !article &&
+                    <button
+                        className={"btn btn-large btn-primary new-article-form__button mr-auto p-2 bd-highlight"}
+                        onClick={addNewSection} disabled={!addSectionEnabled()}>Add Section
+                    </button>
+                }
                 <button type="submit"
                         className="btn btn-large btn-secondary new-article-form__button p-2 bd-highlight"
+                        disabled={submitDisabled()}
                         onClick={handlePreview}>Preview
                 </button>
                 <button type="submit"
@@ -217,7 +184,8 @@ const NewArticleView = ({article, category, onSubmit, sectionTitles, autoSection
                         onClick={handleSubmit}>Submit
                 </button>
             </div>
-        </form>)
+        </form>
+    )
 
 
 }

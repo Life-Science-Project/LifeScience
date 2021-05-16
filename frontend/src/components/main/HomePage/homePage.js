@@ -1,21 +1,9 @@
 import React from "react";
 import './homePage.css'
-import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
-import {getStatisticsThunk} from "../../../redux/init-reducer";
-import * as PropTypes from "prop-types";
-import Preloader from "../../common/Preloader/preloader";
 
 class Home extends React.Component {
-    componentDidMount() {
-        this.props.getStatisticsThunk();
-    }
 
     render() {
-        if (!this.props.isStatisticsInitialized) {
-            return <Preloader/>
-        }
-        let {statistics} = this.props;
         return (
             <div className="home_container">
                 <h1 className={"home_page__text"}>We are glad to welcome you on the Life Science platform!</h1>
@@ -36,24 +24,10 @@ class Home extends React.Component {
                 <h5 className={"home_page__text"}>
                     We invite you to join the platform community! Use and replenish the data with us!
                 </h5>
-                <br/>
-                <h5 className={"home_page__text"}>
-                    We have a total of {this.props.statistics.userCount} users
-                    from {this.props.statistics.organizationsCount} different organizations.
-                    The platform currently holds {this.props.statistics.postCount} articles.
-                </h5>
             </div>
         );
     }
 }
 
-Home.propTypes = {statistics: PropTypes.any}
 
-const mapStateToProps = (state) => {
-    return ({
-        statistics: state.init.statistics,
-        isStatisticsInitialized: state.init.isStatisticsInitialized
-    })
-}
-
-export default connect(mapStateToProps, {getStatisticsThunk})(withRouter(Home));
+export default Home;
