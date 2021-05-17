@@ -172,7 +172,7 @@ internal class ReviewControllerTest :
             ReviewRequestView::class.java
         )
         // Check not available in search
-        print(searchHelper.getSearchResults(SearchQueryDTO("version 1.1")))
+        print("my_check" + searchHelper.getSearchResults(SearchQueryDTO("version 1.1")))
         assertTrue(searchHelper.getSearchResults(SearchQueryDTO("version 1.1")).isEmpty())
 
         // Creating response
