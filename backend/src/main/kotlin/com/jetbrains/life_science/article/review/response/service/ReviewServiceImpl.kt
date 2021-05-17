@@ -29,8 +29,9 @@ class ReviewServiceImpl(
 
     @Transactional
     override fun addReview(info: ReviewInfo): Review {
-        val review = factory.create(info)
-        repository.save(review)
+        var review = factory.create(info)
+        review = repository.save(review)
+        reviewRequestService.addReview(info.request, review)
         when (info.resolution) {
             ReviewResolution.CHANGES_REQUESTED -> requestChanges(info.request.version)
             ReviewResolution.APPROVE -> approve(review)

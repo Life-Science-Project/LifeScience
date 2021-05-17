@@ -235,14 +235,11 @@ internal class ArticleVersionControllerTest :
     fun `create version without sections`() {
         // Prepare test data
         val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
-
-        // Prepare expected result
-        val expectedView = ArticleVersionView(8, "next version", 4, listOf(), State.EDITING)
-
         // Action
         val result = post(dto)
         val created = get(result.id)
-
+        // Prepare expected result
+        val expectedView = ArticleVersionView(result.id, "next version", result.articleId, listOf(), State.EDITING)
         // Check
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
@@ -266,18 +263,15 @@ internal class ArticleVersionControllerTest :
                 )
             )
         )
-
-        // Prepare expected result
-        val expectedView =
-            ArticleVersionView(
-                12, "big version", 5,
-                listOf(SectionLazyView(11, "inner section 1", 0)), State.EDITING
-            )
-
         // Action
         val result = post(dto)
         val created = get(result.id)
-
+        // Prepare expected result
+        val expectedView =
+            ArticleVersionView(
+                result.id, "big version", result.articleId,
+                listOf(SectionLazyView(result.sections[0].id, "inner section 1", 0)), State.EDITING
+            )
         // Check
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
@@ -291,16 +285,16 @@ internal class ArticleVersionControllerTest :
         // Prepare test data
         val publishedVersionId = 1L
 
-        // Prepare expected result
-        val expectedSectionViews = listOf(
-            SectionLazyView(8, "name 1.1", 1),
-            SectionLazyView(9, "name 1.2", 2)
-        )
-        val expectedView = ArticleVersionView(10, "master 1", 1, expectedSectionViews, State.EDITING)
-
         // Action
         val result = putCopy(publishedVersionId)
         val created = get(result.id)
+
+        // Prepare expected result
+        val expectedSectionViews = listOf(
+            SectionLazyView(result.sections[0].id, "name 1.1", 1),
+            SectionLazyView(result.sections[1].id, "name 1.2", 2)
+        )
+        val expectedView = ArticleVersionView(result.id, "master 1", 1, expectedSectionViews, State.EDITING)
 
         // Check
         assertEquals(expectedView, result)
@@ -476,10 +470,10 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create articleVersion without sections from existing article`() {
         val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
-        val expectedView = ArticleVersionView(11, "next version", 1, listOf(), State.EDITING)
 
         val result = post(dto, "$apiUrl/article/1")
         val created = get(result.id)
+        val expectedView = ArticleVersionView(result.id, "next version", 1, listOf(), State.EDITING)
 
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
@@ -503,13 +497,14 @@ internal class ArticleVersionControllerTest :
             )
         )
 
-        val expectedView = ArticleVersionView(
-            9, "new version", 1,
-            listOf(SectionLazyView(7, "inner section 239", 0)), State.EDITING
-        )
         // Action
         val result = post(newProtocolDTO, "$apiUrl/article/1")
         val created = get(result.id)
+
+        val expectedView = ArticleVersionView(
+            result.id, "new version", 1,
+            listOf(SectionLazyView(result.sections[0].id, "inner section 239", 0)), State.EDITING
+        )
 
         // Check
         assertEquals(expectedView, result)

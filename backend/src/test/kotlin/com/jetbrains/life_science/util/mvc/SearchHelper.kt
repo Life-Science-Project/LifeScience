@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.*
 
 class SearchHelper(
     val mvc: MockMvc
-)  {
+) {
 
     private val jsonMapper = jacksonObjectMapper()
 
@@ -47,5 +47,4 @@ class SearchHelper(
             accept = MediaType.APPLICATION_JSON
         }
     }
-
 }

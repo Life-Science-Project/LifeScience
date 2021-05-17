@@ -3,6 +3,7 @@ package com.jetbrains.life_science.article.review.request.service
 import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.article.review.request.factory.ReviewRequestFactory
 import com.jetbrains.life_science.article.review.request.repository.ReviewRequestRepository
+import com.jetbrains.life_science.article.review.response.entity.Review
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.ReviewRequestNotFoundException
@@ -36,6 +37,11 @@ class ReviewRequestServiceImpl(
         }
         articleVersionService.changeState(request.version, State.EDITING)
         repository.delete(request)
+    }
+
+    override fun addReview(request: ReviewRequest, review: Review) {
+        request.resolution = review
+        repository.save(request)
     }
 
     override fun getByVersionIdOrThrow(versionId: Long): ReviewRequest {

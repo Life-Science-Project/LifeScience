@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.article.review.request.service
 
 import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
+import com.jetbrains.life_science.article.review.response.entity.Review
 
 interface ReviewRequestService {
 
@@ -19,4 +20,6 @@ interface ReviewRequestService {
     fun getAllActiveByVersionId(versionId: Long): List<ReviewRequest>
 
     fun delete(request: ReviewRequest)
+
+    fun addReview(request: ReviewRequest, review: Review)
 }

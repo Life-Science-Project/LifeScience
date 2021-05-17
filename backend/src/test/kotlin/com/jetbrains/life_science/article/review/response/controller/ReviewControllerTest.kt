@@ -12,9 +12,6 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.search.dto.SearchQueryDTO
 import com.jetbrains.life_science.search.result.article.ArticleSearchResult
-import com.jetbrains.life_science.util.mvc.ArticleVersionHelper
-import com.jetbrains.life_science.util.mvc.ReviewHelper
-import com.jetbrains.life_science.util.mvc.ReviewRequestHelper
 import com.jetbrains.life_science.util.mvc.SearchHelper
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
@@ -44,13 +41,7 @@ internal class ReviewControllerTest :
 
     lateinit var elasticPopulator: ElasticPopulator
 
-    lateinit var articleVersionHelper: ArticleVersionHelper
-
     lateinit var searchHelper: SearchHelper
-
-    lateinit var reviewRequestHelper: ReviewRequestHelper
-
-    lateinit var reviewHelper: ReviewHelper
 
     @PostConstruct
     fun setup() {
@@ -60,11 +51,7 @@ internal class ReviewControllerTest :
             addPopulator("article", "elastic/article.json")
             addPopulator("section", "elastic/section.json")
         }
-
-        reviewRequestHelper = ReviewRequestHelper(mockMvc)
         searchHelper = SearchHelper(mockMvc)
-        articleVersionHelper = ArticleVersionHelper(mockMvc)
-        reviewHelper = ReviewHelper(mockMvc)
     }
 
     @BeforeEach
@@ -72,6 +59,9 @@ internal class ReviewControllerTest :
         elasticPopulator.prepareData()
     }
 
+    /**
+     * The test checks that an unregistered user is not able to work with the review
+     */
     @Test
     @WithAnonymousUser
     fun `anonymous privileges`() {
@@ -85,6 +75,9 @@ internal class ReviewControllerTest :
         )
     }
 
+    /**
+     * Test checks 404 code when requesting a non-existent review
+     */
     @Test
     fun `get non-existing review test`() {
         // Creating request
@@ -98,6 +91,9 @@ internal class ReviewControllerTest :
         assertNotFound("Review", getRequest(requestView.id, "/api/articles/versions/2/reviews/requests/"))
     }
 
+    /**
+     * The test checks that a regular user receives a review for their versions
+     */
     @Test
     @WithUserDetails("user")
     fun `get all reviews test for user`() {
@@ -112,6 +108,9 @@ internal class ReviewControllerTest :
         assertEquals(expectedReviewViews, reviewViews)
     }
 
+    /**
+     * The test checks that the admin receives all reviews
+     */
     @Test
     fun `get all reviews test`() {
         // Getting reviews
@@ -126,6 +125,9 @@ internal class ReviewControllerTest :
         assertEquals(expectedReviewViews, reviewViews)
     }
 
+    /**
+     * The test checks the receipt of the review after its creation
+     */
     @Test
     fun `get created review test`() {
         // Creating request
@@ -151,6 +153,15 @@ internal class ReviewControllerTest :
         assertEquals(expectedView, reviewView)
     }
 
+    /**
+     * The test verifies the scenario
+     *
+     *  - Create a request for the publication of the protocol
+     *  - Make sure that the version is not published
+     *  - A review is created to make changes
+     *  - Make sure that the version has changed its status to "edit"
+     *  - Make sure that the version is not available in the search
+     */
     @Test
     fun `create review to make changes for protocol`() {
         // Creating request
@@ -180,6 +191,15 @@ internal class ReviewControllerTest :
         assertTrue(searchHelper.getSearchResults(SearchQueryDTO("version 1.1")).isEmpty())
     }
 
+    /**
+     * The test verifies the scenario
+     *
+     *  - Create a request for the publication of the protocol
+     *  - Make sure that the version is not published
+     *  - A review is created to make changes
+     *  - Make sure that the version has changed its status to "approved"
+     *  - Make sure that the version is available in the search
+     */
     @Test
     fun `create review to approve protocol`() {
         // Creating request
@@ -207,11 +227,18 @@ internal class ReviewControllerTest :
         assertEquals(expectedView, versionView)
 
         // Check available in search
-        val expectedSearchResult = ArticleSearchResult(2, "version 1.1", 1)
-        val hits = searchHelper.countHits(SearchQueryDTO("version 1.1"), expectedSearchResult)
-        assertEquals(1, hits)
+        assertExistsOnceInSearch(SearchQueryDTO("version 1.1"), ArticleSearchResult(2, "version 1.1", 1))
     }
 
+    /**
+     * The test verifies the scenario
+     *
+     *  - Create a request for the publication of the article
+     *  - Make sure that the version is not published
+     *  - A review is created to make changes
+     *  - Make sure that the version has changed its status to "edit"
+     *  - Make sure that the version is not available in the search
+     */
     @Test
     fun `create review to request changes for article`() {
         // Creating request
@@ -241,6 +268,15 @@ internal class ReviewControllerTest :
         assertTrue(searchHelper.getSearchResults(SearchQueryDTO("version 1.1")).isEmpty())
     }
 
+    /**
+     * The test verifies the scenario
+     *
+     *  - Create a review for the publication of the protocol
+     *  - Make sure that the version is not published
+     *  - A review is created to make changes
+     *  - Make sure that the version has changed its status to "approved"
+     *  - Make sure that the version is available in the search
+     */
     @Test
     fun `create review to approve article`() {
         // Creating request
@@ -268,14 +304,14 @@ internal class ReviewControllerTest :
         assertEquals(expectedView, versionView)
 
         // Check available in search
-        val expectedSearchResult = ArticleSearchResult(2, "version 1.1", 1)
-        val hits = searchHelper.countHits(SearchQueryDTO("version 1.1"), expectedSearchResult)
-        assertEquals(1, hits)
+        assertExistsOnceInSearch(SearchQueryDTO("version 1.1"), ArticleSearchResult(2, "version 1.1", 1))
     }
 
+    /**
+     * The test checks that a 404 code is received when trying to review a non-existent request
+     */
     @Test
     fun `attempt to review to wrong request id`() {
-
         assertNotFound(
             "Review request",
             postRequest(
@@ -285,15 +321,19 @@ internal class ReviewControllerTest :
         )
     }
 
+    /**
+     * The test checks to receive a 404 code when trying to review a non-existent version
+     */
     @Test
     fun `attempt to review to wrong version id`() {
+        // Creating request
         val requestView = patch(
             2,
             ReviewRequestDTO(VersionDestination.ARTICLE.name),
             "/api/review/request/version/",
             ReviewRequestView::class.java
         )
-
+        // Check
         assertNotFound(
             "Article version",
             postRequest(
@@ -303,48 +343,112 @@ internal class ReviewControllerTest :
         )
     }
 
+    /**
+     * The test verifies the scenario:
+     * - Create request 1 to publish the protocol
+     * - Create request 2 to publish the protocol
+     * - Make sure that both versions are not published
+     * - Review 1 is created for confirmation
+     * - Review 2 is created for confirmation
+     * - Make sure that both versions have changed their status to "published"
+     * - Make sure that both versions are available in the search
+     */
     @Test
     fun `two protocols creation test`() {
-        // Creating request
-        val requestView1 = reviewRequestHelper.makeRequest(2, ReviewRequestDTO(VersionDestination.PROTOCOL.name))
-        // Check not available in search
-        assertTrue(articleVersionHelper.notExistsInSearch(SearchQueryDTO("version 1.1")))
-        // Creating request1
-        val requestView2 = reviewRequestHelper.makeRequest(3, ReviewRequestDTO(VersionDestination.PROTOCOL.name))
-        // Check not available in search
-        assertTrue(articleVersionHelper.notExistsInSearch(SearchQueryDTO("version 2.1")))
-        // Creating response
-        val reviewView1 =
-            reviewHelper.makeReview(2, requestView1!!.id, ReviewDTO("ok1", ReviewResolution.APPROVE.name))
-        val reviewView2 =
-            reviewHelper.makeReview(3, requestView2!!.id, ReviewDTO("ok2", ReviewResolution.APPROVE.name))
-        // Get version1
-        val versionView1 = articleVersionHelper.getVersion(2)
-        // Creating expected result
+        // Creating request 1
+        val requestView1 = patch(
+            2,
+            ReviewRequestDTO(VersionDestination.PROTOCOL.name),
+            "/api/review/request/version/",
+            ReviewRequestView::class.java
+        )
+        // Creating request 2
+        val requestView2 = patch(
+            3,
+            ReviewRequestDTO(VersionDestination.PROTOCOL.name),
+            "/api/review/request/version/",
+            ReviewRequestView::class.java
+        )
+        // Check both are not available in search
+        assertTrue(searchHelper.getSearchResults(SearchQueryDTO("version 1.1")).isEmpty())
+        assertTrue(searchHelper.getSearchResults(SearchQueryDTO("version 2.1")).isEmpty())
+
+        // Approve both of them
+        post(
+            ReviewDTO("ok1", ReviewResolution.APPROVE.name),
+            "/api/articles/versions/2/reviews/request/${requestView1.id}"
+        )
+        post(
+            ReviewDTO("ok2", ReviewResolution.APPROVE.name),
+            "/api/articles/versions/3/reviews/request/${requestView2.id}"
+        )
+
+        // Get versions
+        val versionView1 = get(2, ArticleVersionView::class.java, "/api/articles/versions")
+        val versionView2 = get(3, ArticleVersionView::class.java, "/api/articles/versions")
+
+        // Creating expected results
         val expectedView1 = ArticleVersionView(2, "version 1.1", 1, emptyList(), State.PUBLISHED_AS_PROTOCOL)
-        // Check
-        assertEquals(expectedView1, versionView1)
-        // Get version2
-        val versionView2 = articleVersionHelper.getVersion(3)
-        // Creating expected result
         val expectedView2 = ArticleVersionView(
             3,
             "version 2.1",
             1,
-            listOf(SectionLazyView(4, "name 2", 3)),
+            listOf(SectionLazyView(id = 4, name = "name 2", order = 3)),
             State.PUBLISHED_AS_PROTOCOL
         )
         // Check
+        assertEquals(expectedView1, versionView1)
         assertEquals(expectedView2, versionView2)
-        // Check 1 available in search
-        articleVersionHelper.existsOnce(
-            ArticleSearchResult(2, "version 1.2", 1),
-            SearchQueryDTO("version 1.2")
+
+        // Check available in search
+        assertExistsOnceInSearch(SearchQueryDTO("version 1.1"), ArticleSearchResult(2, "version 1.1", 1))
+        assertExistsOnceInSearch(SearchQueryDTO("version 2.1"), ArticleSearchResult(3, "version 2.1", 1))
+    }
+
+    /**
+     * The test checks that the code 400 is received when trying to give a review twice for one request
+     */
+    @Test
+    fun `two reviews error check test`() {
+        // Creating request
+        val requestView = patch(
+            2,
+            ReviewRequestDTO(VersionDestination.PROTOCOL.name),
+            "/api/review/request/version/",
+            ReviewRequestView::class.java
         )
-        // Check 2 available in search
-        articleVersionHelper.existsOnce(
-            ArticleSearchResult(2, "version 2.1", 1),
-            SearchQueryDTO("version 2.1")
+        // Creating response
+        val dto = ReviewDTO("edit please", ReviewResolution.CHANGES_REQUESTED.name)
+        post(dto, "/api/articles/versions/2/reviews/request/${requestView.id}")
+        // Creating duplicate response
+        assertBadRequest(
+            "Review to request already exists",
+            postRequest(dto, "/api/articles/versions/2/reviews/request/${requestView.id}")
         )
+    }
+
+    /**
+     * The test verifies that code 400 is received when the ID of the article version from the request and the submitted
+     */
+    @Test
+    fun `invalid version and request check test`() {
+        // Creating request
+        val requestView = patch(
+            2,
+            ReviewRequestDTO(VersionDestination.PROTOCOL.name),
+            "/api/review/request/version/",
+            ReviewRequestView::class.java
+        )
+        val dto = ReviewDTO("edit please", ReviewResolution.CHANGES_REQUESTED.name)
+        // Creating response with wrong version id
+        assertBadRequest(
+            "Request version id and version id do not matches",
+            postRequest(dto, "/api/articles/versions/3/reviews/request/${requestView.id}")
+        )
+    }
+
+    private fun assertExistsOnceInSearch(searchQueryDTO: SearchQueryDTO, result: ArticleSearchResult) {
+        val hits2 = searchHelper.countHits(searchQueryDTO, result)
+        assertEquals(1, hits2)
     }
 }
