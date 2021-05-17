@@ -24,7 +24,6 @@ abstract class ControllerTest<DTO, View>(
         val entity = getRequest(id, url)
             .andExpect {
                 status { isOk() }
-                content { contentType(MediaType.APPLICATION_JSON) }
             }
             .andReturn().response.contentAsString
         return getViewFromJson(entity, viewToken)
@@ -168,6 +167,11 @@ abstract class ControllerTest<DTO, View>(
 
     protected fun <U> getViewFromJson(json: String, customViewToken: Class<U>): U {
         return jsonMapper.readValue(json, customViewToken)
+    }
+
+    protected fun <U> getViewsFromJson(result: ResultActionsDsl, customViewToken: Class<U>): List<U> {
+        val json = result.andReturn().response.contentAsString
+        return getViewsFromJson(json, customViewToken)
     }
 
     protected fun getViewsFromJson(json: String): List<View> {

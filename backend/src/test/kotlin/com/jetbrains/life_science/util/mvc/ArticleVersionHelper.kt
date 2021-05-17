@@ -19,10 +19,7 @@ class ArticleVersionHelper(
     }
 
     private fun search(searchQueryDTO: SearchQueryDTO): List<ArticleSearchResult> {
-        val searchResults = searchHelper.getSearchResults(searchQueryDTO)
-        return searchResults
-            .filter { it["typeName"].equals("Article") }
-            .map { mapToArticleVersionSearchResult(it) }
+        TODO()
     }
 
     private fun mapToArticleVersionSearchResult(map: Map<String, String>): ArticleSearchResult {

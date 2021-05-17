@@ -63,7 +63,7 @@ class ReviewServiceImpl(
         return repository.findByReviewRequestVersionId(versionId)
     }
 
-    override fun getByRequest(request: ReviewRequest): Review? {
-        return repository.findByReviewRequest(request)
+    override fun getByRequest(request: ReviewRequest): Review {
+        return repository.findByReviewRequest(request) ?: throw ReviewNotFoundException("Review not found")
     }
 }
