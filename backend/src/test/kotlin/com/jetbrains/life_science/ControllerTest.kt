@@ -35,13 +35,17 @@ abstract class ControllerTest<DTO, View>(
     }
 
     protected fun post(dto: DTO, url: String = apiUrl): View {
+        return post(dto, url, viewToken)
+    }
+
+    protected fun <U, V> post(dto: U, url: String = apiUrl, customViewToken: Class<V>): V {
         val viewJson = postRequest(dto, url)
             .andExpect {
                 status { isOk() }
                 content { contentType(MediaType.APPLICATION_JSON) }
             }
             .andReturn().response.contentAsString
-        return getViewFromJson(viewJson)
+        return getViewFromJson(viewJson, customViewToken)
     }
 
     protected fun put(id: Long, dto: DTO, url: String = apiUrl): View {
@@ -87,7 +91,7 @@ abstract class ControllerTest<DTO, View>(
         return getRequest("$url/$id")
     }
 
-    protected fun postRequest(dto: DTO, url: String = apiUrl): ResultActionsDsl {
+    protected fun <U> postRequest(dto: U, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.post(url) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
@@ -159,6 +163,14 @@ abstract class ControllerTest<DTO, View>(
     protected fun assertUnauthenticated(result: ResultActionsDsl) {
         result.andExpect {
             status { isUnauthorized() }
+        }
+    }
+
+    protected fun assertUnauthenticated(message: String, result: ResultActionsDsl) {
+        result.andExpect {
+            status { isUnauthorized() }
+            content { contentType(MediaType.APPLICATION_JSON) }
+            jsonPath("$.message") { value(message) }
         }
     }
 
