@@ -75,10 +75,22 @@ class ShortCategory extends React.Component {
         }
 
         const deleteButton = () => {
-            if (this.props.category.articles.length === 0) {
+            if (this.props.category.articles.length === 0
+                && this.props.category.subcategories.length === 0
+                && this.props.category.id !== 1) {
                 return(
                     <Button variant="danger" size="lg" block onClick={this.onDelete}>
                         Delete Category
+                    </Button>
+                );
+            }
+        }
+
+        const editButton = () => {
+            if (this.props.category.id !== 1) {
+                return(
+                    <Button variant="secondary" size="lg" block onClick={this.onEdit}>
+                        Edit Category
                     </Button>
                 );
             }
@@ -91,9 +103,7 @@ class ShortCategory extends React.Component {
 
             return(
                 <div className="buttons">
-                    <Button variant="secondary" size="lg" block onClick={this.onEdit}>
-                        Edit Category
-                    </Button>
+                    {editButton()}
                     {addButton()}
                     {deleteButton()}
                 </div>

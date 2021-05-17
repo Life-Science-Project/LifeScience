@@ -14,13 +14,18 @@ class CategoriesContainer extends React.Component {
         this.props.getCategoryThunk(categoryId);
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.match.params.categoryId !== prevProps.match.params.categoryId ||
-            this.props.category?.id !== this.props.match.params.categoryId ||
-            this.props.category?.articles.length !== prevProps.category?.articles.length ||
-            this.props.category?.subcategories.length !== prevProps.category?.subcategories.length) {
-            this.refreshCategories();
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        if (this.props.match.params.categoryId !== nextProps.match.params.categoryId ||
+            (this.props.match.params?.categoryId && this.props.match.params?.categoryId != this.props.category?.id) || //Не менять на !== (все летит)
+            this.props.category?.articles.length !== nextProps.category?.articles.length ||
+            this.props.category?.subcategories.length !== nextProps.category?.subcategories.length) {
+            return true;
         }
+        return false;
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.refreshCategories();
     }
 
     componentWillUnmount() {
