@@ -24,6 +24,7 @@ abstract class ControllerTest<DTO, View>(
         val entity = getRequest(id, url)
             .andExpect {
                 status { isOk() }
+                content { contentType(MediaType.APPLICATION_JSON) }
             }
             .andReturn().response.contentAsString
         return getViewFromJson(entity, viewToken)
