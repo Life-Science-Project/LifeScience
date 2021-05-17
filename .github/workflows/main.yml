@@ -44,7 +44,7 @@ jobs:
       - name: Run Elasticsearch
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
-          stack-version: 7.6.0
+          stack-version: 7.12.0
 
       - name: Build with Gradle
         run: ./gradlew build --info

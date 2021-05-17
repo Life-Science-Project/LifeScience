@@ -19,5 +19,5 @@ interface ReviewService {
 
     fun getAllByVersionAndUser(version: ArticleVersion, user: User): List<Review>
 
-    fun getByRequest(request: ReviewRequest): Review?
+    fun getByRequest(request: ReviewRequest): Review
 }

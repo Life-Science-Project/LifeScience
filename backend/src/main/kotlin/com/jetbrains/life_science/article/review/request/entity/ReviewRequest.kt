@@ -18,5 +18,5 @@ class ReviewRequest(
     val destination: VersionDestination,
 
     @OneToOne(mappedBy = "reviewRequest")
-    val resolution: Review?
+    var resolution: Review?
 )

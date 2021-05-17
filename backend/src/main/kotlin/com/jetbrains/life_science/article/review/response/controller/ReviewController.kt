@@ -10,7 +10,6 @@ import com.jetbrains.life_science.article.review.response.view.ReviewView
 import com.jetbrains.life_science.article.review.response.view.ReviewViewMapper
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
-import com.jetbrains.life_science.exception.not_found.ArticleVersionNotFoundException
 import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.exception.request.DuplicateReviewException
 import com.jetbrains.life_science.user.master.service.UserService
@@ -64,11 +63,7 @@ class ReviewController(
 
         validateUserAndVersionToEdit(version, user) { "User can not get review to this version" }
 
-        val reviews = if (user.isAdminOrModerator()) {
-            reviewService.getAllByVersion(version)
-        } else {
-            reviewService.getAllByVersionAndUser(version, user)
-        }
+        val reviews = reviewService.getAllByVersion(version)
         return viewMapper.toViews(reviews)
     }
 
@@ -86,7 +81,6 @@ class ReviewController(
         val request = reviewRequestService.getById(requestId)
 
         validateEnumValue<ReviewResolution>(dto.resolution) { "Incorrect resolution. Only [APPROVE, CHANGES_REQUESTED] available" }
-        validateVersionId(version, versionId)
         validateRequestAndVersionIds(request, version)
         validateResponseNotExists(request)
 
@@ -97,12 +91,6 @@ class ReviewController(
     private fun validateResponseNotExists(request: ReviewRequest) {
         if (request.resolution != null) {
             throw DuplicateReviewException("Review to request already exists")
-        }
-    }
-
-    private fun validateVersionId(version: ArticleVersion, versionId: Long) {
-        if (version.id != versionId) {
-            throw ArticleVersionNotFoundException("Article version with id: $version does not matches with request version id")
         }
     }
 

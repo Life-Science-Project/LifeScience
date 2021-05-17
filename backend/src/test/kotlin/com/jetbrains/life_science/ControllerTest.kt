@@ -79,8 +79,12 @@ abstract class ControllerTest<DTO, View>(
             }
     }
 
+    protected fun getRequest(url: String): ResultActionsDsl {
+        return mockMvc.get(url)
+    }
+
     protected fun getRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
-        return mockMvc.get("$url/{id}", id)
+        return getRequest("$url/$id")
     }
 
     protected fun postRequest(dto: DTO, url: String = apiUrl): ResultActionsDsl {
@@ -164,6 +168,11 @@ abstract class ControllerTest<DTO, View>(
 
     protected fun <U> getViewFromJson(json: String, customViewToken: Class<U>): U {
         return jsonMapper.readValue(json, customViewToken)
+    }
+
+    protected fun <U> getViewsFromJson(result: ResultActionsDsl, customViewToken: Class<U>): List<U> {
+        val json = result.andReturn().response.contentAsString
+        return getViewsFromJson(json, customViewToken)
     }
 
     protected fun getViewsFromJson(json: String): List<View> {

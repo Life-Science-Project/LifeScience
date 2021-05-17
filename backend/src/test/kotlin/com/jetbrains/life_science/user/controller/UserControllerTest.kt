@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.user.controller
 
 import com.jetbrains.life_science.ControllerTest
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
@@ -9,6 +10,7 @@ import com.jetbrains.life_science.user.master.view.UserView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.security.test.context.support.WithAnonymousUser
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.context.jdbc.Sql
@@ -23,6 +25,9 @@ import org.springframework.transaction.annotation.Transactional
 @WithUserDetails("admin")
 internal class UserControllerTest :
     ControllerTest<UpdateDetailsDTO, UserView>(UserView::class.java) {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     init {
         apiUrl = "/api/users"

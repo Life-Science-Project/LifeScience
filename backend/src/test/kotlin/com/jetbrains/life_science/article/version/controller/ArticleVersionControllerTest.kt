@@ -2,13 +2,16 @@ package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTO
+import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.master.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
+import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionFullCreationDTO
 import com.jetbrains.life_science.article.version.entity.State
+import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
@@ -41,15 +44,16 @@ internal class ArticleVersionControllerTest :
     @Autowired
     lateinit var highLevelClient: RestHighLevelClient
 
+    @Autowired
     lateinit var elasticPopulator: ElasticPopulator
 
     @PostConstruct
     fun setup() {
-        elasticPopulator = ElasticPopulator(highLevelClient).apply {
-            addPopulator("content", "elastic/content.json")
-            addPopulator("content_version", "elastic/content_version.json")
-            addPopulator("article", "elastic/article.json")
-            addPopulator("section", "elastic/section.json")
+        with(elasticPopulator) {
+            addPopulator("content", "elastic/content.json", Content::class.java)
+            addPopulator("content_version", "elastic/content_version.json", Content::class.java)
+            addPopulator("article", "elastic/article.json", ArticleVersionSearchUnit::class.java)
+            addPopulator("section", "elastic/section.json", SectionSearchUnit::class.java)
         }
     }
 
@@ -235,14 +239,11 @@ internal class ArticleVersionControllerTest :
     fun `create version without sections`() {
         // Prepare test data
         val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
-
-        // Prepare expected result
-        val expectedView = ArticleVersionView(8, "next version", 4, listOf(), State.EDITING)
-
         // Action
         val result = post(dto)
         val created = get(result.id)
-
+        // Prepare expected result
+        val expectedView = ArticleVersionView(result.id, "next version", result.articleId, listOf(), State.EDITING)
         // Check
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
@@ -266,18 +267,15 @@ internal class ArticleVersionControllerTest :
                 )
             )
         )
-
-        // Prepare expected result
-        val expectedView =
-            ArticleVersionView(
-                12, "big version", 5,
-                listOf(SectionLazyView(11, "inner section 1", 0)), State.EDITING
-            )
-
         // Action
         val result = post(dto)
         val created = get(result.id)
-
+        // Prepare expected result
+        val expectedView =
+            ArticleVersionView(
+                result.id, "big version", result.articleId,
+                listOf(SectionLazyView(result.sections[0].id, "inner section 1", 0)), State.EDITING
+            )
         // Check
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
@@ -291,16 +289,16 @@ internal class ArticleVersionControllerTest :
         // Prepare test data
         val publishedVersionId = 1L
 
-        // Prepare expected result
-        val expectedSectionViews = listOf(
-            SectionLazyView(8, "name 1.1", 1),
-            SectionLazyView(9, "name 1.2", 2)
-        )
-        val expectedView = ArticleVersionView(10, "master 1", 1, expectedSectionViews, State.EDITING)
-
         // Action
         val result = putCopy(publishedVersionId)
         val created = get(result.id)
+
+        // Prepare expected result
+        val expectedSectionViews = listOf(
+            SectionLazyView(result.sections[0].id, "name 1.1", 1),
+            SectionLazyView(result.sections[1].id, "name 1.2", 2)
+        )
+        val expectedView = ArticleVersionView(result.id, "master 1", 1, expectedSectionViews, State.EDITING)
 
         // Check
         assertEquals(expectedView, result)
@@ -476,10 +474,10 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create articleVersion without sections from existing article`() {
         val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
-        val expectedView = ArticleVersionView(11, "next version", 1, listOf(), State.EDITING)
 
         val result = post(dto, "$apiUrl/article/1")
         val created = get(result.id)
+        val expectedView = ArticleVersionView(result.id, "next version", 1, listOf(), State.EDITING)
 
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
@@ -503,13 +501,14 @@ internal class ArticleVersionControllerTest :
             )
         )
 
-        val expectedView = ArticleVersionView(
-            9, "new version", 1,
-            listOf(SectionLazyView(7, "inner section 239", 0)), State.EDITING
-        )
         // Action
         val result = post(newProtocolDTO, "$apiUrl/article/1")
         val created = get(result.id)
+
+        val expectedView = ArticleVersionView(
+            result.id, "new version", 1,
+            listOf(SectionLazyView(result.sections[0].id, "inner section 239", 0)), State.EDITING
+        )
 
         // Check
         assertEquals(expectedView, result)
