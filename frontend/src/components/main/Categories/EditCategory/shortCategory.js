@@ -13,6 +13,7 @@ import {
     Card
 } from "react-bootstrap";
 import "./editCategory.css"
+import SendByUrlButton from "../../../common/Button/sendByUrlButton";
 
 class ShortCategory extends React.Component {
     constructor(props) {
@@ -106,17 +107,22 @@ class ShortCategory extends React.Component {
         }
 
         return (
-            <div className="short_category_container">
-                <Card>
-                    <Card.Body>
-                        <Card.Title>{data.name}</Card.Title>
-                        <Card.Text>
-                            ParentId of category: {data.parentId} <br/>
-                            Category has order number: {data.order}
-                        </Card.Text>
-                        {showingButtons()}
-                    </Card.Body>
-                </Card>
+            <div>
+                <div className="buttons_container">
+                    <SendByUrlButton message="Previous" url={"/categories/" + this.props.match.params.id} {...this.props} />
+                </div>
+                <div className="short_category_container">
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>{data.name}</Card.Title>
+                            <Card.Text>
+                                ParentId of category: {data.parentId} <br/>
+                                Category has order number: {data.order}
+                            </Card.Text>
+                            {showingButtons()}
+                        </Card.Body>
+                    </Card>
+                </div>
             </div>
         )
     }

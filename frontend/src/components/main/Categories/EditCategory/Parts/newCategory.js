@@ -6,6 +6,7 @@ import {
 import {ROLES} from "../../../../../constants";
 import "../editCategory.css";
 import CategoryForm from "./categoryForm";
+import SendByUrlButton from "../../../../common/Button/sendByUrlButton";
 
 class NewCategory extends React.Component {
     constructor(props) {
@@ -36,10 +37,15 @@ class NewCategory extends React.Component {
         }
 
         return (
-            <CategoryForm onSubmit={this.handleSubmit}
-                          message={"Add Category"}
-                          data={data} btnMessage={"Save"}
-                          canChgParentId={false} />
+            <div>
+                <div className="buttons_container">
+                    <SendByUrlButton message="Previous" url={"/category/" + this.props.match.params.parentId} {...this.props} />
+                </div>
+                <CategoryForm onSubmit={this.handleSubmit}
+                              message={"Add Category"}
+                              data={data} btnMessage={"Save"}
+                              canChgParentId={false} />
+            </div>
         )
     }
 }

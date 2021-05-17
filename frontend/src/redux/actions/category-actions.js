@@ -21,6 +21,7 @@ export const clearCategory = () => {
 }
 
 export const getCategoryThunk = (id) => async (dispatch) => {
+    dispatch(clearCategory())
     const response = await categoryApi.getCategory(id);
 
     if (response.status !== 200) {
@@ -38,6 +39,7 @@ export const getCategoryThunk = (id) => async (dispatch) => {
  * @returns {(function(*): Promise<void>)|*}
  */
 export const postCategoryThunk = (data) => async (dispatch) => {
+    dispatch(clearCategory())
     const response = await categoryApi.postCategory(data);
 
     if (response.status !== 200) {
@@ -55,6 +57,7 @@ export const postCategoryThunk = (data) => async (dispatch) => {
  * @returns {(function(*): Promise<void>)|*}
  */
 export const deleteCategoryThunk = (id) => async (dispatch) => {
+    dispatch(clearCategory())
     const response = await categoryApi.deleteCategory(id);
 
     if (response.status !== 200) {

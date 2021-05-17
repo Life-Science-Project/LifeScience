@@ -16,7 +16,7 @@ export class SendByUrlButton extends React.Component {
     render() {
         return (
             <div className="button_container">
-                <button className={this.props.message + "_container"} onClick={this.onSubmit}>
+                <button className={this.props.message + "_button_container"} onClick={this.onSubmit}>
                     {this.props.message}
                 </button>
             </div>
