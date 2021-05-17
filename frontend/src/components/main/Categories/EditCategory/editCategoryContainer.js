@@ -1,6 +1,7 @@
 import React from "react";
 import {withRouter} from "react-router";
 import {
+    clearCategory,
     deleteCategoryThunk,
     getCategoryThunk,
     postCategoryThunk,
@@ -54,4 +55,4 @@ let mapStateToProps = (state) => {
 
 let WithDataContainerComponent = withRouter(EditCategoryContainer);
 
-export default connect(mapStateToProps, {postCategoryThunk, putCategoryThunk, deleteCategoryThunk, getAuthorizedUserThunk, getCategoryThunk})(WithDataContainerComponent);
+export default connect(mapStateToProps, {postCategoryThunk, putCategoryThunk, deleteCategoryThunk, getAuthorizedUserThunk, getCategoryThunk, clearCategory})(WithDataContainerComponent);

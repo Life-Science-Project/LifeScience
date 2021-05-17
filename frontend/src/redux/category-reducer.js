@@ -30,7 +30,8 @@ const categoryReducer = (state = initialState, action) => {
         case CLEAR_CATEGORY:
             return {
                 ...state,
-                isReceived: false
+                isReceived: false,
+                category: null,
             }
         default:
             return state;

@@ -3,12 +3,17 @@ import {ROLES} from "../../../../constants";
 import {withRouter} from "react-router";
 import Preloader from "../../../common/Preloader/preloader";
 import {connect} from "react-redux";
-import {clearCategory, deleteCategoryThunk, getCategoryThunk} from "../../../../redux/actions/category-actions";
+import {
+    clearCategory,
+    deleteCategoryThunk,
+    getCategoryThunk
+} from "../../../../redux/actions/category-actions";
 import {
     Button,
     Card
 } from "react-bootstrap";
 import "./editCategory.css"
+import SendByUrlButton from "../../../common/Button/sendByUrlButton";
 
 class ShortCategory extends React.Component {
     constructor(props) {
@@ -41,7 +46,6 @@ class ShortCategory extends React.Component {
     onDelete(event) {
         event.preventDefault();
         this.props.deleteCategoryThunk(this.props.match.params.id);
-        this.props.clearCategory();
         this.props.history.push(`/categories/${this.props.category.parentId}`)
     }
 
@@ -71,10 +75,22 @@ class ShortCategory extends React.Component {
         }
 
         const deleteButton = () => {
-            if (this.props.category.articles.length === 0) {
+            if (this.props.category.articles.length === 0
+                && this.props.category.subcategories.length === 0
+                && this.props.category.id !== 1) {
                 return(
                     <Button variant="danger" size="lg" block onClick={this.onDelete}>
                         Delete Category
+                    </Button>
+                );
+            }
+        }
+
+        const editButton = () => {
+            if (this.props.category.id !== 1) {
+                return(
+                    <Button variant="secondary" size="lg" block onClick={this.onEdit}>
+                        Edit Category
                     </Button>
                 );
             }
@@ -87,9 +103,7 @@ class ShortCategory extends React.Component {
 
             return(
                 <div className="buttons">
-                    <Button variant="secondary" size="lg" block onClick={this.onEdit}>
-                        Edit Category
-                    </Button>
+                    {editButton()}
                     {addButton()}
                     {deleteButton()}
                 </div>
@@ -103,17 +117,21 @@ class ShortCategory extends React.Component {
         }
 
         return (
-            <div className="short_category_container">
-                <Card>
-                    <Card.Body>
-                        <Card.Title>{data.name}</Card.Title>
-                        <Card.Text>
-                            ParentId of category: {data.parentId} <br/>
-                            Category has order number: {data.order}
-                        </Card.Text>
-                        {showingButtons()}
-                    </Card.Body>
-                </Card>
+            <div>
+                <div className="buttons_container">
+                    <SendByUrlButton message="Previous" url={"/categories/" + this.props.match.params.id} {...this.props} />
+                </div>
+                <div className="short_category_container">
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>{data.name}</Card.Title>
+                            <Card.Text>
+                                Category has showing priority: {data.order}
+                            </Card.Text>
+                            {showingButtons()}
+                        </Card.Body>
+                    </Card>
+                </div>
             </div>
         )
     }
