@@ -3,7 +3,11 @@ import {ROLES} from "../../../../constants";
 import {withRouter} from "react-router";
 import Preloader from "../../../common/Preloader/preloader";
 import {connect} from "react-redux";
-import {clearCategory, deleteCategoryThunk, getCategoryThunk} from "../../../../redux/actions/category-actions";
+import {
+    clearCategory,
+    deleteCategoryThunk,
+    getCategoryThunk
+} from "../../../../redux/actions/category-actions";
 import {
     Button,
     Card
@@ -41,7 +45,6 @@ class ShortCategory extends React.Component {
     onDelete(event) {
         event.preventDefault();
         this.props.deleteCategoryThunk(this.props.match.params.id);
-        this.props.clearCategory();
         this.props.history.push(`/categories/${this.props.category.parentId}`)
     }
 

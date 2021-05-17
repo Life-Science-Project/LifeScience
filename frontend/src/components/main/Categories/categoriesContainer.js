@@ -15,7 +15,10 @@ class CategoriesContainer extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.match.params.categoryId !== prevProps.match.params.categoryId ) {
+        if (this.props.match.params.categoryId !== prevProps.match.params.categoryId ||
+            this.props.category?.id !== this.props.match.params.categoryId ||
+            this.props.category?.articles.length !== prevProps.category?.articles.length ||
+            this.props.category?.subcategories.length !== prevProps.category?.subcategories.length) {
             this.refreshCategories();
         }
     }

@@ -17,10 +17,11 @@ class NewCategory extends React.Component {
         event.preventDefault();
         const data = {
             name: event.target.elements.name.value,
-            parentId: event.target.elements.parentId.value,
+            parentId: this.props.match.params.parentId,
             order: event.target.elements.order.value
         }
         this.props.postCategoryThunk(data)
+        this.props.clearCategory();
         this.props.history.push(`/categories/${this.props.match.params.parentId}`);
     }
 

@@ -38,16 +38,11 @@ class EditCategory extends React.Component {
         event.preventDefault();
         const data = {
             name: event.target.elements.name.value,
-            parentId: event.target.elements.parentId.value,
+            parentId: this.props.category.parentId,
             order: event.target.elements.order.value
         }
-        if (data.parentId > 0) {
-            this.props.putCategoryThunk(this.props.match.params.id, data)
-            this.props.history.push(`/categories/${this.props.match.params.id}`);
-            return
-        }
-        const error = {message: <span className="error">Parent id must be more than 0</span>};
-        this.setState({error: error})
+        this.props.clearCategory();
+        this.props.history.push(`/categories/${this.props.match.params.id}`);
     }
 
     render() {
