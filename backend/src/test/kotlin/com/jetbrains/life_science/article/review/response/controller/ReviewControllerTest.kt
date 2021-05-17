@@ -272,7 +272,6 @@ internal class ReviewControllerTest :
      * The test verifies the scenario
      *
      *  - Create a review for the publication of the protocol
-     *  - Make sure that the version is not published
      *  - A review is created to make changes
      *  - Make sure that the version has changed its status to "approved"
      *  - Make sure that the version is available in the search
@@ -286,8 +285,6 @@ internal class ReviewControllerTest :
             "/api/review/request/version/",
             ReviewRequestView::class.java
         )
-        // Check not available in search
-        assertTrue(searchHelper.getSearchResults(SearchQueryDTO("version 1.1")).isEmpty())
 
         // Creating response
         val reviewView = post(
