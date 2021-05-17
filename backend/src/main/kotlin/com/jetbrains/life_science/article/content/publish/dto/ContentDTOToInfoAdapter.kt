@@ -13,9 +13,9 @@ class ContentDTOToInfoAdapter(
     override val text: String
         get() = dto.text
 
-    override val references: MutableList<String>
+    override val references: List<String>
         get() = dto.references
 
-    override val tags: MutableList<String>
+    override val tags: List<String>
         get() = dto.tags
 }

@@ -9,7 +9,7 @@ class ContentDTO(
 
     val text: String,
 
-    val references: MutableList<String> = mutableListOf(),
+    val references: List<String> = emptyList(),
 
-    val tags: MutableList<String> = mutableListOf()
+    val tags: List<String> = emptyList()
 )

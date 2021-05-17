@@ -40,12 +40,13 @@ internal class ReviewControllerTest :
     ControllerTest<ReviewDTO, ReviewView>(ReviewView::class.java) {
 
     @Autowired
-    lateinit var highLevelClient: RestHighLevelClient
-
-    @Autowired
     lateinit var elasticPopulator: ElasticPopulator
 
     lateinit var searchHelper: SearchHelper
+
+    init {
+        apiUrl = "/api/"
+    }
 
     @PostConstruct
     fun setup() {

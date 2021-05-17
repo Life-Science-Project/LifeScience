@@ -1,6 +1,7 @@
 package com.jetbrains.life_science
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.jetbrains.life_science.article.content.publish.view.ContentView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -9,7 +10,7 @@ import org.springframework.test.web.servlet.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-abstract class ControllerTest<DTO, View>(
+abstract class ControllerTest<DTO,View>(
     private val viewToken: Class<View>
 ) {
 
@@ -20,7 +21,7 @@ abstract class ControllerTest<DTO, View>(
 
     protected val jsonMapper = jacksonObjectMapper()
 
-    protected fun <V> get(id: Long, viewToken: Class<V>, url: String = apiUrl): V {
+    protected fun <V> get(id: Any, viewToken: Class<V>, url: String = apiUrl): V {
         val entity = getRequest(id, url)
             .andExpect {
                 status { isOk() }
@@ -30,7 +31,7 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(entity, viewToken)
     }
 
-    protected fun get(id: Long, url: String = apiUrl): View {
+    protected fun get(id: Any, url: String = apiUrl): View {
         return get(id, viewToken, url)
     }
 
@@ -83,7 +84,7 @@ abstract class ControllerTest<DTO, View>(
         return mockMvc.get(url)
     }
 
-    protected fun getRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
+    protected fun getRequest(id: Any, url: String = apiUrl): ResultActionsDsl {
         return getRequest("$url/$id")
     }
 

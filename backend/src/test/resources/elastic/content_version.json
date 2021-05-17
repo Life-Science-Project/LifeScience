@@ -1,5 +1,6 @@
 [
   {
+    "id": "0ab",
     "sectionId": 4,
     "versionId": 3,
     "text": "sample text 123",
@@ -7,6 +8,7 @@
     "references": []
   },
   {
+    "id": "3cd",
     "sectionId": 5,
     "versionId": 6,
     "text": "some other sample text",
