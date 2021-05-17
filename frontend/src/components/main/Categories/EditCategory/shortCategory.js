@@ -126,8 +126,7 @@ class ShortCategory extends React.Component {
                         <Card.Body>
                             <Card.Title>{data.name}</Card.Title>
                             <Card.Text>
-                                ParentId of category: {data.parentId} <br/>
-                                Category has order number: {data.order}
+                                Category has showing priority: {data.order}
                             </Card.Text>
                             {showingButtons()}
                         </Card.Body>
