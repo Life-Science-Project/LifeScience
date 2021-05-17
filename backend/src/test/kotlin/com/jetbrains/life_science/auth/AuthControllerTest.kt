@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.auth
 
 import com.jetbrains.life_science.ControllerTest
+import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.master.dto.NewUserDTO
@@ -8,6 +9,7 @@ import com.jetbrains.life_science.user.master.view.UserView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.ResultActionsDsl
@@ -19,6 +21,9 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 internal class AuthControllerTest :
     ControllerTest<NewUserDTO, AuthResponse>(AuthResponse::class.java) {
+
+    @MockBean
+    lateinit var contentVersionRepository: ContentVersionRepository
 
     init {
         apiUrl = "/api/auth"
