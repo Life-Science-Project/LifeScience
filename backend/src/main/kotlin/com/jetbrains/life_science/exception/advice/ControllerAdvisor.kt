@@ -75,7 +75,7 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(UserAlreadyExistsException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleUserAlreadyExists(ex: UserAlreadyExistsException, request: WebRequest): ApiErrorResponse {
         return ApiErrorResponse("User already exists")
     }

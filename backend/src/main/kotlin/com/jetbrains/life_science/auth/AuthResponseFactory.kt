@@ -11,6 +11,6 @@ class AuthResponseFactory(
 
     fun create(tokens: AuthTokens, user: User): AuthResponse {
         val userView = userViewMapper.createView(user)
-        return AuthResponse(tokens, userView, user.roles.map { it.name })
+        return AuthResponse(tokens, userView)
     }
 }
