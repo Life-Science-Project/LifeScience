@@ -9,6 +9,7 @@ import com.jetbrains.life_science.article.review.response.entity.ReviewResolutio
 import com.jetbrains.life_science.article.review.response.view.ReviewView
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.entity.State
+import com.jetbrains.life_science.article.version.search.repository.ArticleVersionSearchUnitRepository
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.search.dto.SearchQueryDTO
 import com.jetbrains.life_science.search.result.article.ArticleSearchResult
@@ -39,6 +40,9 @@ internal class ReviewControllerTest :
     @Autowired
     lateinit var highLevelClient: RestHighLevelClient
 
+    @Autowired
+    lateinit var articleVersionSearchUnitRepository: ArticleVersionSearchUnitRepository
+
     lateinit var elasticPopulator: ElasticPopulator
 
     lateinit var searchHelper: SearchHelper
@@ -56,6 +60,7 @@ internal class ReviewControllerTest :
 
     @BeforeEach
     fun resetElastic() {
+        articleVersionSearchUnitRepository.deleteAll()
         elasticPopulator.prepareData()
     }
 
