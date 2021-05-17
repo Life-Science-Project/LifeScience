@@ -1,15 +1,17 @@
 package com.jetbrains.life_science.article.review.response.controller
 
 import com.jetbrains.life_science.ControllerTest
+import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.review.request.dto.ReviewRequestDTO
 import com.jetbrains.life_science.article.review.request.entity.VersionDestination
 import com.jetbrains.life_science.article.review.request.view.ReviewRequestView
 import com.jetbrains.life_science.article.review.response.dto.ReviewDTO
 import com.jetbrains.life_science.article.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.article.review.response.view.ReviewView
+import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.entity.State
-import com.jetbrains.life_science.article.version.search.repository.ArticleVersionSearchUnitRepository
+import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.search.dto.SearchQueryDTO
 import com.jetbrains.life_science.search.result.article.ArticleSearchResult
@@ -41,26 +43,23 @@ internal class ReviewControllerTest :
     lateinit var highLevelClient: RestHighLevelClient
 
     @Autowired
-    lateinit var articleVersionSearchUnitRepository: ArticleVersionSearchUnitRepository
-
     lateinit var elasticPopulator: ElasticPopulator
 
     lateinit var searchHelper: SearchHelper
 
     @PostConstruct
     fun setup() {
-        elasticPopulator = ElasticPopulator(highLevelClient).apply {
-            addPopulator("content", "elastic/content.json")
-            addPopulator("content_version", "elastic/content_version.json")
-            addPopulator("article", "elastic/article.json")
-            addPopulator("section", "elastic/section.json")
+        with(elasticPopulator) {
+            addPopulator("content", "elastic/content.json", Content::class.java)
+            addPopulator("content_version", "elastic/content_version.json", Content::class.java)
+            addPopulator("article", "elastic/article.json", ArticleVersionSearchUnit::class.java)
+            addPopulator("section", "elastic/section.json", SectionSearchUnit::class.java)
         }
         searchHelper = SearchHelper(mockMvc)
     }
 
     @BeforeEach
     fun resetElastic() {
-        articleVersionSearchUnitRepository.deleteAll()
         elasticPopulator.prepareData()
     }
 

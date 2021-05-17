@@ -2,13 +2,16 @@ package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTO
+import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.master.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
+import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionFullCreationDTO
 import com.jetbrains.life_science.article.version.entity.State
+import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
@@ -41,15 +44,16 @@ internal class ArticleVersionControllerTest :
     @Autowired
     lateinit var highLevelClient: RestHighLevelClient
 
+    @Autowired
     lateinit var elasticPopulator: ElasticPopulator
 
     @PostConstruct
     fun setup() {
-        elasticPopulator = ElasticPopulator(highLevelClient).apply {
-            addPopulator("content", "elastic/content.json")
-            addPopulator("content_version", "elastic/content_version.json")
-            addPopulator("article", "elastic/article.json")
-            addPopulator("section", "elastic/section.json")
+        with(elasticPopulator) {
+            addPopulator("content", "elastic/content.json", Content::class.java)
+            addPopulator("content_version", "elastic/content_version.json", Content::class.java)
+            addPopulator("article", "elastic/article.json", ArticleVersionSearchUnit::class.java)
+            addPopulator("section", "elastic/section.json", SectionSearchUnit::class.java)
         }
     }
 
