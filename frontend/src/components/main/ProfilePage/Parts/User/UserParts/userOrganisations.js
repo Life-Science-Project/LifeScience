@@ -6,7 +6,7 @@ const UserOrganisations = ({organisations}) => {
         if (organisations.length  === 0) {
             return <p>None</p>
         }
-        return organisations.map(comp => <li>{comp.name}</li>);
+        return organisations.map(comp => <li key={comp.name}>{comp.name}</li>);
     }
     return(
         <div className="organisations_container">

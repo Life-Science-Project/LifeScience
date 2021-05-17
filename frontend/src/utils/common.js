@@ -41,7 +41,7 @@ export const getUserWrap = (user) => {
     return {
         doctorDegree: user.doctorDegree,
         academicDegree: user.academicDegree,
-        organisations: user.organisations,
+        organisations: user.organisations.map(x => x.name),
         orcid: user.orcid,
         researchId: user.researchId
     }

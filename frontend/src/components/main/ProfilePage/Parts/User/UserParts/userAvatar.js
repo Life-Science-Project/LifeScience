@@ -11,7 +11,7 @@ const UserAvatar = (props) => {
 }
 
 UserAvatar.propTypes = {
-    avatarSource: PropTypes.object
+    avatarSource: PropTypes.string
 }
 
 UserAvatar.defaultProps = {

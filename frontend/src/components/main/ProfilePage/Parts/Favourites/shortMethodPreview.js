@@ -8,7 +8,7 @@ const ShortMethodPreview = (props) => {
     const length = 2;
     const getSections = () => {
         return props.method.sections.slice(0, length).sort(byField('order')).map(x =>
-            <li>
+            <li key={x.id}>
                 <NavLink to={"/method/" + props.method.id + "/" + x.id} className="link">
                     {x.name}
                 </NavLink>

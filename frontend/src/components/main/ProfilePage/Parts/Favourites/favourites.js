@@ -20,7 +20,7 @@ class Favourites extends React.Component {
 
         return(
             <div className="user_favorites">
-                {this.props.favourites.map(x => <ShortMethodPreview method={x} user={this.props.user} delete={this.props.deleteFromUserFavouritesThunk}/> )}
+                {this.props.favourites.map(x => <ShortMethodPreview method={x} user={this.props.user} delete={this.props.deleteFromUserFavouritesThunk} key={x.id}/> )}
             </div>
         );
     }
