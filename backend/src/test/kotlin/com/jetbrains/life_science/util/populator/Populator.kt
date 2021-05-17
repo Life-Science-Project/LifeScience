@@ -7,12 +7,10 @@ import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.client.indices.CreateIndexRequest
 import org.elasticsearch.common.xcontent.XContentType
 import org.elasticsearch.index.query.QueryBuilders
-import org.elasticsearch.index.reindex.DeleteByQueryRequest
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder
 import org.springframework.data.elasticsearch.core.query.Query
-import org.springframework.data.elasticsearch.repository.support.SimpleElasticsearchRepository.OperationsCallback
 
 internal class Populator(
     private val elasticsearchOperations: ElasticsearchOperations,
