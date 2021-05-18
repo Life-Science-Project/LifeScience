@@ -1,5 +1,5 @@
 import {protocolApi} from "../api/protocol-api";
-import {CLEAR_POST_STATUS, POST_ARTICLE, PostStatusEnum, RECEIVE_POSTED_ARTICLE} from "./actions/new-article-actions";
+import {PostStatusEnum} from "./actions/new-article-actions";
 
 const GET_PROTOCOL = 'GET_PROTOCOL'
 const POST_PROTOCOL = 'POST_PROTOCOL'
