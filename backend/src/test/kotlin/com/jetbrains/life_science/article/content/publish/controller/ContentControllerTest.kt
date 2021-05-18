@@ -10,6 +10,7 @@ import com.jetbrains.life_science.util.mvc.SearchHelper
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -30,14 +31,16 @@ import javax.annotation.PostConstruct
 internal class ContentControllerTest :
     ControllerTest<ContentDTO, ContentView>(ContentView::class.java) {
 
-    @Autowired
     lateinit var elasticPopulator: ElasticPopulator
 
     lateinit var searchHelper: SearchHelper
 
+    @Autowired
+    lateinit var highLevelClient: RestHighLevelClient
+
     @PostConstruct
     fun setup() {
-        with(elasticPopulator) {
+        elasticPopulator = ElasticPopulator(highLevelClient).apply {
             addPopulator("content", "elastic/content.json", Content::class.java)
             addPopulator("content_version", "elastic/content_version.json", Content::class.java)
             addPopulator("article", "elastic/article.json", ArticleVersionSearchUnit::class.java)
