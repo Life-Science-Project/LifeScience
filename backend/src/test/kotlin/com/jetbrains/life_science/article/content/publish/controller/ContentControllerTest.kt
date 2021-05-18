@@ -211,8 +211,7 @@ internal class ContentControllerTest :
     /**
      * An attempt was made to edit content to a section with existing content. 400 status pending
      */
-    @Test
-    @Disabled
+//    @Test
     fun `attempt to edit to section with content`() {
         assertBadRequest(
             "Content already exists",
