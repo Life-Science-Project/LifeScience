@@ -10,7 +10,6 @@ import com.jetbrains.life_science.util.mvc.SearchHelper
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -31,16 +30,13 @@ import javax.annotation.PostConstruct
 internal class ContentControllerTest :
     ControllerTest<ContentDTO, ContentView>(ContentView::class.java) {
 
+    @Autowired
     lateinit var elasticPopulator: ElasticPopulator
 
     lateinit var searchHelper: SearchHelper
 
-    @Autowired
-    lateinit var highLevelClient: RestHighLevelClient
-
     @PostConstruct
     fun setup() {
-        elasticPopulator = ElasticPopulator(highLevelClient)
         with(elasticPopulator) {
             addPopulator("content", "elastic/content.json", Content::class.java)
             addPopulator("content_version", "elastic/content_version.json", Content::class.java)
@@ -159,7 +155,7 @@ internal class ContentControllerTest :
      * Test for getting code 400 when trying to create content in a section with an id that does not match the id in the DTO
      */
     @Test
-    fun `attempt create content to with wrong ids`() {
+    fun `attempt create content with wrong ids`() {
         assertBadRequest(
             "Content's section id and request section id doesn't match",
             postRequest(ContentDTO(4, "", listOf(), listOf()), "/api/articles/versions/sections/3/contents")
@@ -183,7 +179,7 @@ internal class ContentControllerTest :
             "/api/articles/versions/sections/7/contents"
         )
         // Waiting for test elastic to save
-        delay(500)
+        delay(1000)
         // Get saved content
         val content = get("7/contents", "/api/articles/versions/sections")
         // Prepare excepted data
@@ -201,7 +197,7 @@ internal class ContentControllerTest :
             "/api/articles/versions/sections/4/contents"
         )
         // Waiting for test elastic to save
-        delay(500)
+        delay(1000)
         // Get saved content
         val content = get("4/contents", "/api/articles/versions/sections")
         // Prepare excepted data
@@ -209,5 +205,126 @@ internal class ContentControllerTest :
         // Check
         assertEquals(expectedContent, updatedContent)
         assertEquals(expectedContent, content)
+    }
+
+    /**
+     * An attempt was made to edit content to a section with existing content. 400 status pending
+     */
+    @Test
+    fun `attempt to edit to section with content`() {
+        assertBadRequest(
+            "Content already exists",
+            putRequest(
+                "6ef",
+                ContentDTO(9, "my test text", listOf(), listOf()),
+                "/api/articles/versions/sections/8/contents"
+            )
+        )
+    }
+
+    /**
+     * The test checks to receive a 404 code when trying to edit content to a non-existing section
+     */
+    @Test
+    fun `attempt to edit content to not-existent section`() {
+        assertNotFound(
+            "Section",
+            putRequest("0ab", ContentDTO(300, "", listOf(), listOf()), "/api/articles/versions/sections/300/contents")
+        )
+    }
+
+    /**
+     * Test for getting code 400 when trying to edit content in a section with an id that does not match the id in the DTO
+     */
+    @Test
+    fun `attempt edit content with wrong ids`() {
+        assertBadRequest(
+            "Content's section id and request section id doesn't match",
+            putRequest(
+                "6ef",
+                ContentDTO(4, "", listOf(), listOf()), "/api/articles/versions/sections/9/contents"
+            )
+        )
+    }
+
+    /**
+     * An attempt was made to edit content to another user's version. 403 status pending
+     */
+    @Test
+    @WithUserDetails("user")
+    fun `attempt to edit content to other user's version`() {
+        assertForbidden(
+            putRequest(
+                "13rt",
+                ContentDTO(7, "my text 123", listOf("ref 1"), listOf("tag 1")),
+                "/api/articles/versions/sections/10/contents"
+            )
+        )
+    }
+
+    /**
+     * An attempt was made to delete content to another user's version. 403 status pending
+     */
+    @Test
+    fun `attempt to delete content of other user's version`() {
+        assertForbidden(
+            deleteRequest(
+                "13rt",
+                "/api/articles/versions/sections/10/contents"
+            )
+        )
+    }
+
+    /**
+     * The test checks to receive a 404 code when trying to delete content to a non-existing section
+     */
+    @Test
+    fun `attempt to delete content to not-existent section`() {
+        assertNotFound(
+            "Section",
+            deleteRequest("0ab", "/api/articles/versions/sections/300/contents")
+        )
+    }
+
+    /**
+     * Test for getting code 400 when trying to edit content in a section with an id that does not match the id in the DTO
+     */
+    @Test
+    fun `attempt delete content with wrong ids`() {
+        assertBadRequest(
+            "Content's section id and request section id doesn't match",
+            deleteRequest(
+                "6ef",
+                "/api/articles/versions/sections/9/contents"
+            )
+        )
+    }
+
+    /**
+     * An attempt to delete content from a section in published version. 404 status expected
+     */
+    @Test
+    fun `attempt to delete content from a section in published version`() {
+        assertNotFound(
+            "Content",
+            deleteRequest("123", "/api/articles/versions/sections/1/contents")
+        )
+    }
+
+    /**
+     * An attempt to delete content from a section in published version.
+     */
+    @Test
+    fun `delete content test`() = runBlocking {
+        // Check content exists
+        `get existing content`()
+        // Delete content
+        delete("0ab", "/api/articles/versions/sections/4/contents")
+        // Waiting for elastic to apply changes
+        delay(1000)
+        // Check that result is empty so content was deleted
+        val json = getRequest("/api/articles/versions/sections/4/contents")
+            .andExpect { status { isOk() } }.andReturn().response.contentAsString
+        assertTrue(json.isEmpty())
     }
 }

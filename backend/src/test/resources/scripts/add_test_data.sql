@@ -56,6 +56,8 @@ values (7, 'version 1.2', 4, 1, 1);
 -- Article 2
 insert into article_version (id, name, state, author_id, main_article_id)
 values (8, 'version 8', 1, 1, 2);
+insert into article_version (id, name, state, author_id, main_article_id)
+values (9, 'version 9', 1, 2, 2);
 
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (1, 'desc 1.1', 'name 1.1', 1, 1, true);
@@ -79,6 +81,9 @@ values (8, 'desc 8', 'name 8', 8, 1, true);
 --  Section with content
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (9, 'desc 9', 'name 9', 8, 1, true);
+--  Section with content of user
+insert into section (id, description, name, article_version_id, order_number, visible)
+values (10, 'desc 10', 'name 10', 9, 1, true);
 
 insert into users_favourite_articles(user_id, favourite_articles_id)
 values (2, 1);

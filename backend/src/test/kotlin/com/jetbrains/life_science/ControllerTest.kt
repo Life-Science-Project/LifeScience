@@ -76,7 +76,7 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(viewJson, customViewToken)
     }
 
-    protected fun delete(id: Long, url: String = apiUrl) {
+    protected fun delete(id: Any, url: String = apiUrl) {
         deleteRequest(id, url)
             .andExpect {
                 status { isOk() }
@@ -115,7 +115,7 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-    protected fun deleteRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
+    protected fun deleteRequest(id: Any, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.delete("$url/{id}", id)
     }
 

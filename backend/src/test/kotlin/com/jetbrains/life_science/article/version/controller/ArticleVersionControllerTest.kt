@@ -14,7 +14,6 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
-import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,14 +40,12 @@ internal class ArticleVersionControllerTest :
         apiUrl = "/api/articles/versions"
     }
 
-    lateinit var elasticPopulator: ElasticPopulator
-
     @Autowired
-    lateinit var highLevelClient: RestHighLevelClient
+    lateinit var elasticPopulator: ElasticPopulator
 
     @PostConstruct
     fun setup() {
-        elasticPopulator = ElasticPopulator(highLevelClient).apply {
+        with(elasticPopulator) {
             addPopulator("content", "elastic/content.json", Content::class.java)
             addPopulator("content_version", "elastic/content_version.json", Content::class.java)
             addPopulator("article", "elastic/article.json", ArticleVersionSearchUnit::class.java)

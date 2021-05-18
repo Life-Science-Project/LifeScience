@@ -1,23 +1,27 @@
+
 package com.jetbrains.life_science.util.populator
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.elasticsearch.action.delete.DeleteRequest
 import org.elasticsearch.action.index.IndexRequest
-import org.elasticsearch.action.search.SearchRequest
-import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.client.indices.CreateIndexRequest
 import org.elasticsearch.common.xcontent.XContentType
 import org.elasticsearch.index.query.QueryBuilders
-import org.elasticsearch.search.builder.SearchSourceBuilder
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder
+import org.springframework.data.elasticsearch.core.query.Query
 
 internal class Populator(
+    private val elasticsearchOperations: ElasticsearchOperations,
     private val client: RestHighLevelClient,
     private val indexName: String,
     private val token: Class<*>,
     objectData: List<*>
 ) {
+
+    private val indexCoordinates = IndexCoordinates.of(indexName)
 
     private val objectMapper = jacksonObjectMapper()
 
@@ -29,19 +33,8 @@ internal class Populator(
     }
 
     private fun clear() {
-        val result = searchForAllData()
-        result.hits.forEach { hit ->
-            client.delete(DeleteRequest(indexName, hit.id), RequestOptions.DEFAULT)
-        }
-    }
-
-    private fun searchForAllData(): SearchResponse {
-        val searchRequest = SearchRequest()
-        val searchSourceBuilder = SearchSourceBuilder()
-        searchSourceBuilder.query(QueryBuilders.matchAllQuery())
-        searchRequest.source(searchSourceBuilder)
-        searchRequest.indices(indexName)
-        return client.search(searchRequest, RequestOptions.DEFAULT)
+        val query: Query = NativeSearchQueryBuilder().withQuery(QueryBuilders.matchAllQuery()).build()
+        elasticsearchOperations.delete(query, token, indexCoordinates)
     }
 
     fun createIndex() {

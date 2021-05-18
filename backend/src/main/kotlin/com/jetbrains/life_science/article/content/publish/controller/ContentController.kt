@@ -73,9 +73,12 @@ class ContentController(
         principal: Principal
     ): ContentView {
         checkAccessToEdit(principal, sectionId)
+        if (sectionId != dto.sectionId) {
+            checkAccessToEdit(principal, dto.sectionId)
+        }
+
         val content = contentVersionService.findById(contentId)
         checkIdEquality(sectionId, content.sectionId)
-        checkIdEquality(sectionId, dto.sectionId)
         val updatedContent = contentVersionService.update(
             ContentDTOToInfoAdapter(dto, contentId)
         )
