@@ -180,7 +180,7 @@ internal class ContentControllerTest :
             "/api/articles/versions/sections/7/contents"
         )
         // Waiting for test elastic to save
-        delay(1000)
+        delay(2000)
         // Get saved content
         val content = get("7/contents", "/api/articles/versions/sections")
         // Prepare excepted data
@@ -198,7 +198,7 @@ internal class ContentControllerTest :
             "/api/articles/versions/sections/4/contents"
         )
         // Waiting for test elastic to save
-        delay(1000)
+        delay(2000)
         // Get saved content
         val content = get("4/contents", "/api/articles/versions/sections")
         // Prepare excepted data
@@ -323,7 +323,7 @@ internal class ContentControllerTest :
         // Delete content
         delete("0ab", "/api/articles/versions/sections/4/contents")
         // Waiting for elastic to apply changes
-        delay(1000)
+        delay(2000)
         // Check that result is empty so content was deleted
         val json = getRequest("/api/articles/versions/sections/4/contents")
             .andExpect { status { isOk() } }.andReturn().response.contentAsString
