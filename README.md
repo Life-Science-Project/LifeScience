@@ -16,7 +16,7 @@ provides fast configurable search by keyword, making protocols easy to find.
 ## New Protocols
 
 The platform lets you create new methods and protocols, as well as modify existing ones. Add new protocols using the
-method builders with Markdown support*, and pass moderation to publish your work. Propose changes to improve other
+method builder with Markdown support*, and pass moderation to publish your work. Propose changes to improve other
 methods or add additional information.
 
 ## Moderation
