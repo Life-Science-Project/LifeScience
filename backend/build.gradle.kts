@@ -42,6 +42,7 @@ dependencies {
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test:5.4.6")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
 
     testImplementation("com.h2database:h2:1.4.200")
 

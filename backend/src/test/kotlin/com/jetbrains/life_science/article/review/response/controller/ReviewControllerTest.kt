@@ -39,17 +39,19 @@ import javax.annotation.PostConstruct
 internal class ReviewControllerTest :
     ControllerTest<ReviewDTO, ReviewView>(ReviewView::class.java) {
 
-    @Autowired
-    lateinit var highLevelClient: RestHighLevelClient
-
-    @Autowired
     lateinit var elasticPopulator: ElasticPopulator
 
     lateinit var searchHelper: SearchHelper
 
+    init {
+        apiUrl = "/api/"
+    }
+    @Autowired
+    lateinit var highLevelClient: RestHighLevelClient
+
     @PostConstruct
     fun setup() {
-        with(elasticPopulator) {
+        elasticPopulator = ElasticPopulator(highLevelClient).apply {
             addPopulator("content", "elastic/content.json", Content::class.java)
             addPopulator("content_version", "elastic/content_version.json", Content::class.java)
             addPopulator("article", "elastic/article.json", ArticleVersionSearchUnit::class.java)

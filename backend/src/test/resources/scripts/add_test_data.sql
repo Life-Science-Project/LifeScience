@@ -36,6 +36,8 @@ values (1, 3);
 insert into users_roles(user_id, role_id)
 values (2, 1);
 
+-- Article 1
+-- Article published
 insert into article_version (id, name, state, author_id, main_article_id)
 values (1, 'master 1', 3, 1, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
@@ -48,8 +50,14 @@ insert into article_version (id, name, state, author_id, main_article_id)
 values (5, 'version 5.1', 1, 2, 1);
 insert into article_version (id, name, state, author_id, main_article_id)
 values (6, 'version 5.1', 1, 1, 2);
+-- Protocol published
 insert into article_version (id, name, state, author_id, main_article_id)
 values (7, 'version 1.2', 4, 1, 1);
+-- Article 2
+insert into article_version (id, name, state, author_id, main_article_id)
+values (8, 'version 8', 1, 1, 2);
+insert into article_version (id, name, state, author_id, main_article_id)
+values (9, 'version 9', 1, 2, 2);
 
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (1, 'desc 1.1', 'name 1.1', 1, 1, true);
@@ -63,6 +71,19 @@ insert into section (id, description, name, article_version_id, order_number, vi
 values (5, 'desc 3', 'name 3', 6, 1, true);
 insert into section (id, description, name, article_version_id, order_number, visible)
 values (6, 'desc 4', 'name 4', 7, 1, true);
+-- Article version 8
+--  Section with no content
+insert into section (id, description, name, article_version_id, order_number, visible)
+values (7, 'desc 6', 'name 6', 8, 1, true);
+--  Section with content
+insert into section (id, description, name, article_version_id, order_number, visible)
+values (8, 'desc 8', 'name 8', 8, 1, true);
+--  Section with content
+insert into section (id, description, name, article_version_id, order_number, visible)
+values (9, 'desc 9', 'name 9', 8, 1, true);
+--  Section with content of user
+insert into section (id, description, name, article_version_id, order_number, visible)
+values (10, 'desc 10', 'name 10', 9, 1, true);
 
 insert into users_favourite_articles(user_id, favourite_articles_id)
 values (2, 1);

@@ -7,9 +7,7 @@ import com.jetbrains.life_science.article.content.publish.view.ContentView
 import com.jetbrains.life_science.article.content.publish.view.ContentViewMapper
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.service.SectionService
-import com.jetbrains.life_science.article.version.entity.State
-import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
-import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
+import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
@@ -75,9 +73,12 @@ class ContentController(
         principal: Principal
     ): ContentView {
         checkAccessToEdit(principal, sectionId)
+        if (sectionId != dto.sectionId) {
+            checkAccessToEdit(principal, dto.sectionId)
+        }
+
         val content = contentVersionService.findById(contentId)
         checkIdEquality(sectionId, content.sectionId)
-        checkIdEquality(sectionId, dto.sectionId)
         val updatedContent = contentVersionService.update(
             ContentDTOToInfoAdapter(dto, contentId)
         )
@@ -104,9 +105,6 @@ class ContentController(
         if (user.id != sectionOwner.id) {
             throw AccessDeniedException("Section $sectionId not belongs to user ${principal.email}")
         }
-        if (section.articleVersion.state != State.EDITING) {
-            throw ContentIsNotEditableException("Content is not editable")
-        }
     }
 
     private fun checkIdEquality(
@@ -114,7 +112,7 @@ class ContentController(
         entityId: Long
     ) {
         if (sectionId != entityId) {
-            throw ContentNotFoundException("Content's section id and request section id doesn't match")
+            throw BadRequestException("Content's section id and request section id doesn't match")
         }
     }
 }

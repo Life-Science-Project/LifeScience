@@ -20,7 +20,7 @@ abstract class ControllerTest<DTO, View>(
 
     protected val jsonMapper = jacksonObjectMapper()
 
-    protected fun <V> get(id: Long, viewToken: Class<V>, url: String = apiUrl): V {
+    protected fun <V> get(id: Any, viewToken: Class<V>, url: String = apiUrl): V {
         val entity = getRequest(id, url)
             .andExpect {
                 status { isOk() }
@@ -30,7 +30,7 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(entity, viewToken)
     }
 
-    protected fun get(id: Long, url: String = apiUrl): View {
+    protected fun get(id: Any, url: String = apiUrl): View {
         return get(id, viewToken, url)
     }
 
@@ -48,11 +48,11 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(viewJson, customViewToken)
     }
 
-    protected fun put(id: Long, dto: DTO, url: String = apiUrl): View {
+    protected fun put(id: Any, dto: DTO, url: String = apiUrl): View {
         return put(id, dto, url, viewToken)
     }
 
-    protected fun <U, V> put(id: Long, dto: U, url: String = apiUrl, customViewToken: Class<V>): V {
+    protected fun <U, V> put(id: Any, dto: U, url: String = apiUrl, customViewToken: Class<V>): V {
         val viewJson = putRequest(id, dto, url)
             .andExpect {
                 status { isOk() }
@@ -76,7 +76,7 @@ abstract class ControllerTest<DTO, View>(
         return getViewFromJson(viewJson, customViewToken)
     }
 
-    protected fun delete(id: Long, url: String = apiUrl) {
+    protected fun delete(id: Any, url: String = apiUrl) {
         deleteRequest(id, url)
             .andExpect {
                 status { isOk() }
@@ -87,7 +87,7 @@ abstract class ControllerTest<DTO, View>(
         return mockMvc.get(url)
     }
 
-    protected fun getRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
+    protected fun getRequest(id: Any, url: String = apiUrl): ResultActionsDsl {
         return getRequest("$url/$id")
     }
 
@@ -99,7 +99,7 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-    protected fun <U> putRequest(id: Long, dto: U, url: String = apiUrl): ResultActionsDsl {
+    protected fun <U> putRequest(id: Any, dto: U, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.put("$url/{id}", id) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)
@@ -115,7 +115,7 @@ abstract class ControllerTest<DTO, View>(
         }
     }
 
-    protected fun deleteRequest(id: Long, url: String = apiUrl): ResultActionsDsl {
+    protected fun deleteRequest(id: Any, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.delete("$url/{id}", id)
     }
 

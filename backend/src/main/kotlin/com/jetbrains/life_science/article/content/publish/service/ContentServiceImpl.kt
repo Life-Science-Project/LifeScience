@@ -7,7 +7,6 @@ import com.jetbrains.life_science.article.content.version.service.ContentVersion
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
-import com.jetbrains.life_science.exception.request.ContentAlreadyExistsException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -58,22 +57,6 @@ class ContentServiceImpl(
         copy.sectionId = newSection.id
         copy.versionId = newSection.articleVersion.id
         contentVersionService.saveCopy(copy)
-    }
-
-    override fun create(info: ContentInfo): Content {
-        val section = sectionService.getById(info.sectionId)
-        if (repository.countBySectionId(info.sectionId) > 0) {
-            throw ContentAlreadyExistsException("Content already exists is section with id: ${info.sectionId}")
-        }
-        val content = factory.create(info, section.articleVersion.id)
-        return repository.save(content)
-    }
-
-    override fun update(info: ContentInfo): Content {
-        val content = findById(info.id)
-        val section = sectionService.getById(info.sectionId)
-        factory.setParams(content, info, section.articleVersion.id)
-        return repository.save(content)
     }
 
     override fun delete(id: String) {

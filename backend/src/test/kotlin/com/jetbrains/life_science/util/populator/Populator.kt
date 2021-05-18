@@ -1,3 +1,4 @@
+
 package com.jetbrains.life_science.util.populator
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -7,16 +8,12 @@ import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.client.indices.CreateIndexRequest
 import org.elasticsearch.common.xcontent.XContentType
 import org.elasticsearch.index.query.QueryBuilders
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.elasticsearch.index.reindex.DeleteByQueryRequest
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder
-import org.springframework.data.elasticsearch.core.query.Query
 
 internal class Populator(
-    private val elasticsearchOperations: ElasticsearchOperations,
     private val client: RestHighLevelClient,
     private val indexName: String,
-    private val token: Class<*>,
     objectData: List<*>
 ) {
 
@@ -32,8 +29,8 @@ internal class Populator(
     }
 
     private fun clear() {
-        val query: Query = NativeSearchQueryBuilder().withQuery(QueryBuilders.matchAllQuery()).build()
-        elasticsearchOperations.delete(query, token, indexCoordinates)
+        val request = DeleteByQueryRequest(indexName).setQuery(QueryBuilders.matchAllQuery())
+        client.deleteByQuery(request, RequestOptions.DEFAULT)
     }
 
     fun createIndex() {

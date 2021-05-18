@@ -5,8 +5,12 @@ import com.jetbrains.life_science.article.content.publish.factory.ContentFactory
 import com.jetbrains.life_science.article.content.publish.service.ContentInfo
 import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
+import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.service.SectionService
+import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
+import com.jetbrains.life_science.exception.request.ContentAlreadyExistsException
+import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -24,6 +28,8 @@ class ContentVersionServiceImpl(
 
     override fun create(info: ContentInfo): Content {
         val section = sectionService.getById(info.sectionId)
+        validateContentNotExists(section)
+        validateSectionIsEditable(section)
         val content = factory.create(info, section.articleVersion.id)
         return repository.save(content)
     }
@@ -54,9 +60,28 @@ class ContentVersionServiceImpl(
 
     override fun update(info: ContentInfo): Content {
         val content = findById(info.id)
+        val oldSection = sectionService.getById(content.sectionId)
         val section = sectionService.getById(info.sectionId)
+
+        validateSectionIsEditable(oldSection)
+        validateSectionIsEditable(section)
+        if (section.id != oldSection.id) {
+            validateContentNotExists(section)
+        }
         factory.setParams(content, info, section.articleVersion.id)
         return repository.save(content)
+    }
+
+    private fun validateContentNotExists(section: Section) {
+        if (repository.findBySectionId(section.id) != null) {
+            throw ContentAlreadyExistsException("Content already exists")
+        }
+    }
+
+    private fun validateSectionIsEditable(section: Section) {
+        if (section.articleVersion.state != State.EDITING) {
+            throw ContentIsNotEditableException("Content is not editable")
+        }
     }
 
     override fun findBySectionId(sectionId: Long): Content? {

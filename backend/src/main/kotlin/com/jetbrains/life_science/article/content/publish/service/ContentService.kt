@@ -5,10 +5,6 @@ import com.jetbrains.life_science.article.section.entity.Section
 
 interface ContentService {
 
-    fun create(info: ContentInfo): Content
-
-    fun update(info: ContentInfo): Content
-
     fun delete(id: String)
 
     fun deleteBySectionId(sectionId: Long)
