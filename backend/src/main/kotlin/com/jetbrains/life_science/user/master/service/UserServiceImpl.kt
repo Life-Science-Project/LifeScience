@@ -25,7 +25,7 @@ class UserServiceImpl(
     }
 
     override fun getByEmail(email: String): User {
-        return userRepository.getByEmail(email)
+        return userRepository.findByEmail(email).orElseThrow { UserNotFoundException("User not found") }
     }
 
     override fun getById(id: Long): User {

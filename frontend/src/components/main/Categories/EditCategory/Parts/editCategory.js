@@ -6,6 +6,7 @@ import Preloader from "../../../../common/Preloader/preloader";
 import {clearCategory, getCategoryThunk} from "../../../../../redux/actions/category-actions";
 import {connect} from "react-redux";
 import "../editCategory.css";
+import SendByUrlButton from "../../../../common/Button/sendByUrlButton";
 
 class EditCategory extends React.Component {
     constructor(props) {
@@ -38,16 +39,12 @@ class EditCategory extends React.Component {
         event.preventDefault();
         const data = {
             name: event.target.elements.name.value,
-            parentId: event.target.elements.parentId.value,
+            parentId: this.props.category.parentId,
             order: event.target.elements.order.value
         }
-        if (data.parentId > 0) {
-            this.props.putCategoryThunk(this.props.match.params.id, data)
-            this.props.history.push(`/categories/${this.props.match.params.id}`);
-            return
-        }
-        const error = {message: <span className="error">Parent id must be more than 0</span>};
-        this.setState({error: error})
+        this.props.putCategoryThunk(this.props.match.params.id, data);
+        this.props.clearCategory();
+        this.props.history.push(`/categories/${this.props.match.params.id}`);
     }
 
     render() {
@@ -66,10 +63,15 @@ class EditCategory extends React.Component {
         }
 
         return (
-            <CategoryForm onSubmit={this.handleSubmit}
-                          message={"Edit Category"}
-                          data={data} btnMessage={"Edit"}
-                          canChgParentId={true} error={this.state?.error}/>
+            <div>
+                <div className="buttons_container">
+                    <SendByUrlButton message="Previous" url={"/category/" + this.props.match.params.id} {...this.props} />
+                </div>
+                <CategoryForm onSubmit={this.handleSubmit}
+                              message={"Edit Category"}
+                              data={data} btnMessage={"Edit"}
+                              canChgParentId={true} error={this.state?.error}/>
+            </div>
         )
     }
 }

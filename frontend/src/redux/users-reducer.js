@@ -50,46 +50,46 @@ export const getUserFavourites = (favourites) => {
 export const getUsersThunk = (id) => async (dispatch) => {
     let response = await usersApi.getUser(id);
     if (response.status !== 200) {
-        dispatch(getError(response.data, ERROR))
-    } else {
-        dispatch(getUser(response.data));
+        dispatch(getError(response, ERROR))
+        return;
     }
+    dispatch(getUser(response.data));
 };
 
 export const getUserFavouritesThunk = (id) => async (dispatch) => {
     let response = await usersApi.getUserFavorites(id);
     if (response.status !== 200) {
-        dispatch(getError(response.data, ERROR))
-    } else {
-        dispatch(getUserFavourites(response.data));
+        dispatch(getError(response, ERROR))
+        return;
     }
+    dispatch(getUserFavourites(response.data));
 };
 
 export const patchUserDataThunk = (id, data) => async (dispatch) => {
     let response = await usersApi.patchToUserData(id, data);
     if (response.status !== 200) {
-        dispatch(getError(response.data, ERROR))
-    } else {
-        dispatch(getAuthorizedUserThunk())
+        dispatch(getError(response, ERROR))
+        return;
     }
+    dispatch(getAuthorizedUserThunk())
 }
 
 export const patchToUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
     let response = await usersApi.patchToUserFavorites(userId, articleId);
     if (response.status !== 200) {
-        dispatch(getError(response.data, ERROR))
-    } else {
-        dispatch(getUserFavouritesThunk(userId));
+        dispatch(getError(response, ERROR))
+        return;
     }
+    dispatch(getUserFavouritesThunk(userId));
 }
 
 export const deleteFromUserFavouritesThunk = (userId, articleId) => async (dispatch) => {
     let response = await usersApi.deleteFromUserFavourites(userId, articleId);
     if (response.status !== 200) {
-        dispatch(getError(response.data, ERROR));
-    } else {
-        dispatch(getUserFavouritesThunk(userId));
+        dispatch(getError(response, ERROR));
+        return;
     }
-
+    dispatch(getUserFavouritesThunk(userId));
 }
+
 export default usersReducer;

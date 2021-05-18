@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.config.jwt
 
 import com.jetbrains.life_science.util.getLogger
+import org.springframework.http.MediaType
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -18,7 +19,8 @@ class JWTAuthEntryPoint : AuthenticationEntryPoint {
     ) {
         logger.error("Unauthorized error. Message - {}", e.message)
         response.status = HttpServletResponse.SC_UNAUTHORIZED
-        response.writer.println("HTTP Status 401 - " + e.message)
+        response.contentType = MediaType.APPLICATION_JSON_VALUE
+        response.writer.println("{ message: ${e.message} }")
     }
 
     companion object {

@@ -6,13 +6,11 @@ import SearchForm from "./search-form";
 const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav">
-                    <NavLink path="/" name="Home"/>
-                    <NavLink path="/categories" name="Categories"/>
-                </ul>
-                <SearchForm/>
-            </div>
+            <ul className="navbar-nav">
+                <NavLink path="/" name="Home"/>
+                <NavLink path="/categories" name="Categories"/>
+            </ul>
+            <SearchForm/>
         </nav>
     );
 }

@@ -24,14 +24,14 @@ const UserPerformance = ({curUser}) => {
 }
 
 UserPerformance.propType = {
-    curUser: PropTypes.exact({
+    curUser: PropTypes.shape({
         userDetailsId: PropTypes.number.isRequired,
         firstName: PropTypes.string.isRequired,
         lastName: PropTypes.string.isRequired,
         doctorDegree: PropTypes.string.isRequired,
         academicDegree: PropTypes.string.isRequired,
         organisations: PropTypes.arrayOf(
-            PropTypes.exact({
+            PropTypes.shape({
                 id: PropTypes.number.isRequired,
                 name: PropTypes.string.isRequired
             })

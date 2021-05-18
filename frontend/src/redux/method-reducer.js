@@ -104,13 +104,6 @@ export default function methodReducer(state = initialState, action) {
                 passedSectionId: null,
                 error: action.error,
             }
-        case ERROR:
-            return  {
-                ...state,
-                isReceived: true,
-                passedSectionId: null,
-                error: action.error
-            }
         default:
             return state
     }

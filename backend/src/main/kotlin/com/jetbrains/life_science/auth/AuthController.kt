@@ -27,8 +27,8 @@ class AuthController(
     @Operation(summary = "Sign in")
     @PostMapping("/signin")
     fun authenticateUser(@Validated @RequestBody authRequest: AuthRequest): AuthResponse {
-        authenticate(authRequest)
         val user = userService.getByEmail(authRequest.email)
+        authenticate(authRequest)
         return authResponse(user)
     }
 
@@ -39,10 +39,14 @@ class AuthController(
         return authResponse(user, true)
     }
 
-    @Operation(summary = "Refreshes JWT token")
+    @Operation(summary = "Refreshes JWT and Refresh tokens")
     @PostMapping("/refresh")
     fun refreshToken(@Validated @RequestBody refreshRequest: AuthRefreshRequest): AuthResponse {
-        val username = jwtService.getUserNameFromExpiredJwtToken(refreshRequest.jwt)
+        val username = try {
+            jwtService.getUserNameFromExpiredJwtToken(refreshRequest.jwt)
+        } catch (e: Exception) {
+            throw BadCredentialsException("Invalid JWT token")
+        }
         val user = userService.getByEmail(username)
         if (user.refreshToken != refreshRequest.refreshToken) {
             throw BadCredentialsException("Invalid refresh token")
