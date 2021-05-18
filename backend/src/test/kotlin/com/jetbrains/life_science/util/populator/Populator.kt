@@ -32,7 +32,6 @@ internal class Populator(
     fun prepareData() {
         clear()
         populate()
-        runBlocking { delay(100) }
     }
 
     private fun clear() {

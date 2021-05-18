@@ -1,6 +1,8 @@
 package com.jetbrains.life_science.util.populator
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.elasticsearch.client.RestHighLevelClient
 import org.springframework.core.io.ClassPathResource
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
@@ -27,6 +29,7 @@ class ElasticPopulator(
 
     fun prepareData() {
         populators.forEach { it.prepareData() }
+        runBlocking { delay(100) }
     }
 
     fun createIndexes() {
