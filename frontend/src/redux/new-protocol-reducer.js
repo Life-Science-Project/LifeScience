@@ -47,8 +47,9 @@ export const addProtocolThunk = (articleId, name, sections) => async (dispatch) 
     console.log(response)
     if (response.status !== 200) return
     let requestId = response.data.id;
+    let protocol = response.data.version.id;
 
     response = await protocolApi.approveProtocol(versionId, requestId);
     console.log(response);
-    dispatch(getProtocol(articleId))
+    dispatch(getProtocol(protocol))
 }
