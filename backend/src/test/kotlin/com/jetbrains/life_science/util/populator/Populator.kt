@@ -2,8 +2,6 @@
 package com.jetbrains.life_science.util.populator
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import org.elasticsearch.action.index.IndexRequest
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestHighLevelClient
