@@ -143,6 +143,12 @@ class ControllerAdvisor : ResponseEntityExceptionHandler() {
         return ApiErrorResponse(ex.message)
     }
 
+    @ExceptionHandler(ContentAlreadyExistsException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun reviewContentAlreadyExists(ex: ContentAlreadyExistsException, request: WebRequest): ApiErrorResponse {
+        return ApiErrorResponse(ex.message)
+    }
+
     private fun notFoundResponse(entity: String): ApiErrorResponse {
         return ApiErrorResponse("$entity not found")
     }

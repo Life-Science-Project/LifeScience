@@ -1,7 +1,6 @@
 package com.jetbrains.life_science
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.jetbrains.life_science.article.content.publish.view.ContentView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -10,7 +9,7 @@ import org.springframework.test.web.servlet.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-abstract class ControllerTest<DTO,View>(
+abstract class ControllerTest<DTO, View>(
     private val viewToken: Class<View>
 ) {
 
@@ -45,11 +44,11 @@ abstract class ControllerTest<DTO,View>(
         return getViewFromJson(viewJson)
     }
 
-    protected fun put(id: Long, dto: DTO, url: String = apiUrl): View {
+    protected fun put(id: Any, dto: DTO, url: String = apiUrl): View {
         return put(id, dto, url, viewToken)
     }
 
-    protected fun <U, V> put(id: Long, dto: U, url: String = apiUrl, customViewToken: Class<V>): V {
+    protected fun <U, V> put(id: Any, dto: U, url: String = apiUrl, customViewToken: Class<V>): V {
         val viewJson = putRequest(id, dto, url)
             .andExpect {
                 status { isOk() }
@@ -96,7 +95,7 @@ abstract class ControllerTest<DTO,View>(
         }
     }
 
-    protected fun <U> putRequest(id: Long, dto: U, url: String = apiUrl): ResultActionsDsl {
+    protected fun <U> putRequest(id: Any, dto: U, url: String = apiUrl): ResultActionsDsl {
         return mockMvc.put("$url/{id}", id) {
             contentType = MediaType.APPLICATION_JSON
             content = jsonMapper.writeValueAsString(dto)

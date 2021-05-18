@@ -8,7 +8,11 @@ import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.util.mvc.SearchHelper
 import com.jetbrains.life_science.util.populator.ElasticPopulator
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,16 +28,19 @@ import javax.annotation.PostConstruct
 @WithUserDetails("admin")
 @Transactional
 @AutoConfigureMockMvc
-internal class ContentControllerTest
-    : ControllerTest<ContentDTO, ContentView>(ContentView::class.java) {
+internal class ContentControllerTest :
+    ControllerTest<ContentDTO, ContentView>(ContentView::class.java) {
 
-    @Autowired
     lateinit var elasticPopulator: ElasticPopulator
 
     lateinit var searchHelper: SearchHelper
 
+    @Autowired
+    lateinit var highLevelClient: RestHighLevelClient
+
     @PostConstruct
     fun setup() {
+        elasticPopulator = ElasticPopulator(highLevelClient)
         with(elasticPopulator) {
             addPopulator("content", "elastic/content.json", Content::class.java)
             addPopulator("content_version", "elastic/content_version.json", Content::class.java)
@@ -99,15 +106,108 @@ internal class ContentControllerTest
     }
 
     /**
-     * An attempt to add content to a section that already contains content. 400 status expected
+     * An attempt to add content to a section in published version. 400 status expected
      */
     @Test
-    fun `attempt to add content to a section`() {
-        // Request for content
+    fun `attempt to add content to a section in published version`() {
         assertBadRequest(
             "Content is not editable",
             postRequest(ContentDTO(3, "", listOf(), listOf()), "/api/articles/versions/sections/3/contents")
         )
     }
 
+    /**
+     * An attempt was made to add content to another user's version. 403 status pending
+     */
+    @Test
+    @WithUserDetails("user")
+    fun `attempt to add content to other user's version`() {
+        assertForbidden(
+            postRequest(
+                ContentDTO(7, "my text 123", listOf("ref 1"), listOf("tag 1")),
+                "/api/articles/versions/sections/7/contents"
+            )
+        )
+    }
+
+    /**
+     * An attempt was made to add content to a section with existing content. 400 status pendingg
+     */
+    @Test
+    fun `attempt to add content to section with content`() {
+        assertBadRequest(
+            "Content already exists",
+            postRequest(
+                ContentDTO(9, "my test text", listOf(), listOf()),
+                "/api/articles/versions/sections/9/contents"
+            )
+        )
+    }
+
+    /**
+     * The test checks to receive a 404 code when trying to add content to a non-existing section
+     */
+    @Test
+    fun `attempt to add content to not-existent section`() {
+        assertNotFound(
+            "Section",
+            postRequest(ContentDTO(300, "", listOf(), listOf()), "/api/articles/versions/sections/300/contents")
+        )
+    }
+
+    /**
+     * Test for getting code 400 when trying to create content in a section with an id that does not match the id in the DTO
+     */
+    @Test
+    fun `attempt create content to with wrong ids`() {
+        assertBadRequest(
+            "Content's section id and request section id doesn't match",
+            postRequest(ContentDTO(4, "", listOf(), listOf()), "/api/articles/versions/sections/3/contents")
+        )
+    }
+
+    /**
+     * The test checks the creation of content and receiving it through the GET method
+     */
+    @Test
+    fun `add content to section test`() = runBlocking {
+        // Check that there is no content in this section
+        assertTrue(
+            getRequest("/api/articles/versions/sections/7/contents").andExpect {
+                status { isOk() }
+            }.andReturn().response.contentAsString.isEmpty()
+        )
+        // Action
+        val createdContent = post(
+            ContentDTO(7, "my text 123", listOf("ref 1"), listOf("tag 1")),
+            "/api/articles/versions/sections/7/contents"
+        )
+        // Waiting for test elastic to save
+        delay(500)
+        // Get saved content
+        val content = get("7/contents", "/api/articles/versions/sections")
+        // Prepare excepted data
+        val expectedContent = ContentView(createdContent.id, "my text 123", listOf("ref 1"))
+        // Check
+        assertEquals(expectedContent, createdContent)
+        assertEquals(expectedContent, content)
+    }
+
+    @Test
+    fun `update content test`() = runBlocking {
+        // Update content
+        val updatedContent = put(
+            "0ab", ContentDTO(4, "my text 123", listOf("ref 1"), listOf("tag 1")),
+            "/api/articles/versions/sections/4/contents"
+        )
+        // Waiting for test elastic to save
+        delay(500)
+        // Get saved content
+        val content = get("4/contents", "/api/articles/versions/sections")
+        // Prepare excepted data
+        val expectedContent = ContentView(updatedContent.id, "my text 123", listOf("ref 1"))
+        // Check
+        assertEquals(expectedContent, updatedContent)
+        assertEquals(expectedContent, content)
+    }
 }
