@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.user.controller
+package com.jetbrains.life_science.controller
 
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper

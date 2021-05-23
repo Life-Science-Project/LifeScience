@@ -1,5 +1,9 @@
-package com.jetbrains.life_science.auth
+package com.jetbrains.life_science.controller
 
+import com.jetbrains.life_science.auth.AuthRefreshRequest
+import com.jetbrains.life_science.auth.AuthRequest
+import com.jetbrains.life_science.auth.AuthResponse
+import com.jetbrains.life_science.auth.AuthResponseFactory
 import com.jetbrains.life_science.config.jwt.JWTService
 import com.jetbrains.life_science.user.master.dto.NewUserDTO
 import com.jetbrains.life_science.user.master.dto.NewUserDTOToInfoAdapter

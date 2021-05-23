@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.review.request.controller
+package com.jetbrains.life_science.controller
 
 import com.jetbrains.life_science.article.review.request.dto.ReviewRequestDTO
 import com.jetbrains.life_science.article.review.request.dto.ReviewRequestDTOToInfoAdapter

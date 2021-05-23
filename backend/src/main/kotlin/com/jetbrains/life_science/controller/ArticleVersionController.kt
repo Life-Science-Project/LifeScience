@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.version.controller
+package com.jetbrains.life_science.controller
 
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
