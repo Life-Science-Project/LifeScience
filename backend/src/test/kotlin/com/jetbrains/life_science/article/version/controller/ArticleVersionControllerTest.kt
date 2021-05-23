@@ -3,6 +3,7 @@ package com.jetbrains.life_science.article.version.controller
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTO
 import com.jetbrains.life_science.article.content.publish.entity.Content
+import com.jetbrains.life_science.article.content.publish.view.ContentView
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.master.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
@@ -14,6 +15,8 @@ import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -252,7 +255,7 @@ internal class ArticleVersionControllerTest :
      * Article versioning test with sections and content
      */
     @Test
-    fun `create version with sections and content`() {
+    fun `create version with sections and content`() = runBlocking {
         // Prepare test data
         val dto = ArticleVersionFullCreationDTO(
             articleDTO = ArticleDTO(1),
@@ -275,9 +278,14 @@ internal class ArticleVersionControllerTest :
                 result.id, "big version", result.articleId,
                 listOf(SectionLazyView(result.sections[0].id, "inner section 1", 0)), State.EDITING
             )
-        // Check
+        delay(1000)
+        val contentView =
+            get("${expectedView.sections[0].id}/contents", ContentView::class.java, "/api/articles/versions/sections")
+        val expectedContentView = ContentView(contentView.id, "text", listOf("ref 1"))
+        // Checks
         assertEquals(expectedView, result)
         assertEquals(expectedView, created)
+        assertEquals(expectedContentView, contentView)
     }
 
     /**
