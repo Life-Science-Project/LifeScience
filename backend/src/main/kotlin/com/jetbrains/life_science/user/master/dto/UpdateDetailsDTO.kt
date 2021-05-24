@@ -3,7 +3,7 @@ package com.jetbrains.life_science.user.master.dto
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 
-class UpdateDetailsDTO(
+data class UpdateDetailsDTO(
 
     val doctorDegree: DoctorDegree,
 
