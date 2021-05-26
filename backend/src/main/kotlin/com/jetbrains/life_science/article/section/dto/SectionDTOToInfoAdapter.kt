@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.article.section.dto
 
 import com.jetbrains.life_science.article.content.publish.service.ContentCreationInfo
-import com.jetbrains.life_science.article.section.service.SectionCreationInfo
 import com.jetbrains.life_science.article.section.service.SectionInfo
 
 class SectionDTOToInfoAdapter(

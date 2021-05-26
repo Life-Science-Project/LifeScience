@@ -1,17 +1,14 @@
 package com.jetbrains.life_science.article.review.response.controller
 
 import com.jetbrains.life_science.ControllerTest
-import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.review.request.dto.ReviewRequestDTO
 import com.jetbrains.life_science.article.review.request.entity.VersionDestination
 import com.jetbrains.life_science.article.review.request.view.ReviewRequestView
 import com.jetbrains.life_science.article.review.response.dto.ReviewDTO
 import com.jetbrains.life_science.article.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.article.review.response.view.ReviewView
-import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.entity.State
-import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.search.dto.SearchQueryDTO
 import com.jetbrains.life_science.search.result.article.ArticleSearchResult

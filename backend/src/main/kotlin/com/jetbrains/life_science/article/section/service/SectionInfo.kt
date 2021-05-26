@@ -17,5 +17,4 @@ interface SectionInfo {
     val visible: Boolean
 
     val contentInfo: ContentCreationInfo?
-
 }

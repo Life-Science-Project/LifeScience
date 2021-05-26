@@ -95,7 +95,6 @@ class ArticleVersionController(
         return viewMapper.toView(createdVersion)
     }
 
-
     @Operation(summary = "Creates copy of existing version associated with same article")
     @PutMapping("/{sampleVersionId}/copy")
     fun createCopiedVersion(

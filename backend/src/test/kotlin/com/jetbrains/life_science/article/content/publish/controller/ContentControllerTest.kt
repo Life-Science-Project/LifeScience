@@ -2,10 +2,7 @@ package com.jetbrains.life_science.article.content.publish.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentDTO
-import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.content.publish.view.ContentView
-import com.jetbrains.life_science.article.section.search.SectionSearchUnit
-import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.util.mvc.SearchHelper
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import kotlinx.coroutines.delay

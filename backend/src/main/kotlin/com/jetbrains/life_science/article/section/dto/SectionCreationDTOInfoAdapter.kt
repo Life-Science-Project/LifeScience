@@ -13,9 +13,11 @@ class SectionCreationDTOInfoAdapter(
 
     override val visible: Boolean = dto.visible
 
-    override val contentCreationInfo: ContentCreationInfo? = dto.content?.let { object: ContentCreationInfo {
-        override val text: String = dto.content.text
-        override val references: List<String> = dto.content.references
-        override val tags: List<String> = dto.content.tags
-    }  }
+    override val contentCreationInfo: ContentCreationInfo? = dto.content?.let {
+        object : ContentCreationInfo {
+            override val text: String = dto.content.text
+            override val references: List<String> = dto.content.references
+            override val tags: List<String> = dto.content.tags
+        }
+    }
 }

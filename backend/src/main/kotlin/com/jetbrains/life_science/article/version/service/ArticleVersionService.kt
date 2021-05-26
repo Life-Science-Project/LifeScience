@@ -29,5 +29,4 @@ interface ArticleVersionService {
     fun updateById(info: ArticleVersionInfo): ArticleVersion
 
     fun getPublishedByArticle(mainArticle: Article): ArticleVersion
-
 }

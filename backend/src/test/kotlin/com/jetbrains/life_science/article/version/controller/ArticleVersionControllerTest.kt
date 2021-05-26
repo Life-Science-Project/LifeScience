@@ -2,17 +2,14 @@ package com.jetbrains.life_science.article.version.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTO
-import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.content.publish.view.ContentView
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.master.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
-import com.jetbrains.life_science.article.section.search.SectionSearchUnit
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO
 import com.jetbrains.life_science.article.version.dto.ArticleVersionFullCreationDTO
 import com.jetbrains.life_science.article.version.entity.State
-import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import kotlinx.coroutines.delay
