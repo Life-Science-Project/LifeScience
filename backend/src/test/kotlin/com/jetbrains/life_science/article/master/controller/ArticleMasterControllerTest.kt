@@ -51,9 +51,6 @@ internal class ArticleMasterControllerTest :
 
         // Check
         assertEquals(expectedResult.toSet(), result.toSet())
-
-        val l = (0..10).toList()
-        val m = l.map { it to it * 2 }
     }
 
     /**

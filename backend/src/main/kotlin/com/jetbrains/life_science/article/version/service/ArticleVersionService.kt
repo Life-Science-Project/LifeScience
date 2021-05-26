@@ -14,13 +14,13 @@ interface ArticleVersionService {
 
     fun checkExistenceById(versionId: Long)
 
-    fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion
+    fun create(info: ArticleVersionCreationInfo): ArticleVersion
 
     fun archive(versionId: Long)
 
     fun createCopy(versionId: Long, user: User): ArticleVersion
 
-    fun getPublishedVersion(versionId: Long): ArticleVersion
+    fun getPublished(versionId: Long): ArticleVersion
 
     fun getById(id: Long): ArticleVersion
 
@@ -28,5 +28,6 @@ interface ArticleVersionService {
 
     fun updateById(info: ArticleVersionInfo): ArticleVersion
 
-    fun getPublishedVersionByArticle(mainArticle: Article): ArticleVersion
+    fun getPublishedByArticle(mainArticle: Article): ArticleVersion
+
 }

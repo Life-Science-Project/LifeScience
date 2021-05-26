@@ -4,20 +4,18 @@ import com.jetbrains.life_science.article.content.publish.service.ContentCreatio
 import com.jetbrains.life_science.article.section.service.SectionCreationInfo
 import com.jetbrains.life_science.article.section.service.SectionInfo
 
-class SectionDTOToInfoAdapter(
-    dto: SectionDTO,
+class SectionInnerCreationToInfoAdapter(
+    override val articleVersionId: Long,
+    override val order: Int,
+    info: SectionCreationInfo,
     override val id: Long = 0,
 ) : SectionInfo {
 
-    override val name = dto.name
+    override val name = info.name
 
-    override val description = dto.description
+    override val description = info.description
 
-    override val articleVersionId = dto.articleVersionId
+    override val visible = info.visible
 
-    override val order = dto.order
-
-    override val visible = dto.visible
-
-    override val contentInfo: ContentCreationInfo? = null
+    override val contentInfo: ContentCreationInfo? = info.contentCreationInfo
 }

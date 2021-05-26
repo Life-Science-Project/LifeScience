@@ -12,7 +12,7 @@ class ElasticPopulator(
 
     private val populators: MutableList<Populator> = mutableListOf()
 
-    fun addPopulator(indexName: String, fileName: String, token: Class<*>) {
+    fun addPopulator(indexName: String, fileName: String) {
         val populator = Populator(
             client = highLevelClient,
             indexName = indexName,
