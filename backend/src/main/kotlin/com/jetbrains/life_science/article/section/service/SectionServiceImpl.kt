@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.article.section.service
 
+import com.jetbrains.life_science.article.content.publish.dto.ContentCreationToInfoAdapter
 import com.jetbrains.life_science.article.content.publish.service.ContentService
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.entity.Section
@@ -33,8 +34,11 @@ class SectionServiceImpl(
     override fun create(info: SectionInfo): Section {
         val article = articleVersionService.getById(info.articleVersionId)
         var section = factory.create(info, article)
-        // Creating row in database
         section = repository.save(section)
+        val innerContent = info.contentInfo
+        if (innerContent != null) {
+            contentVersionService.create(ContentCreationToInfoAdapter(section.id, innerContent))
+        }
         return section
     }
 

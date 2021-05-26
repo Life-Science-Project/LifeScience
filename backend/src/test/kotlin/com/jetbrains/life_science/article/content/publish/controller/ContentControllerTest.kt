@@ -2,10 +2,7 @@ package com.jetbrains.life_science.article.content.publish.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentDTO
-import com.jetbrains.life_science.article.content.publish.entity.Content
 import com.jetbrains.life_science.article.content.publish.view.ContentView
-import com.jetbrains.life_science.article.section.search.SectionSearchUnit
-import com.jetbrains.life_science.article.version.search.ArticleVersionSearchUnit
 import com.jetbrains.life_science.util.mvc.SearchHelper
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import kotlinx.coroutines.delay
@@ -41,10 +38,10 @@ internal class ContentControllerTest :
     @PostConstruct
     fun setup() {
         elasticPopulator = ElasticPopulator(highLevelClient).apply {
-            addPopulator("content", "elastic/content.json", Content::class.java)
-            addPopulator("content_version", "elastic/content_version.json", Content::class.java)
-            addPopulator("article", "elastic/article.json", ArticleVersionSearchUnit::class.java)
-            addPopulator("section", "elastic/section.json", SectionSearchUnit::class.java)
+            addPopulator("content", "elastic/content.json")
+            addPopulator("content_version", "elastic/content_version.json")
+            addPopulator("article", "elastic/article.json")
+            addPopulator("section", "elastic/section.json")
         }
         searchHelper = SearchHelper(mockMvc)
     }

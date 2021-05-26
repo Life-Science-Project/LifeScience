@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.article.section.dto
 
+import com.jetbrains.life_science.article.content.publish.service.ContentCreationInfo
 import com.jetbrains.life_science.article.section.service.SectionInfo
 
 class SectionDTOToInfoAdapter(
@@ -16,4 +17,6 @@ class SectionDTOToInfoAdapter(
     override val order = dto.order
 
     override val visible = dto.visible
+
+    override val contentInfo: ContentCreationInfo? = null
 }

@@ -1,12 +1,9 @@
 package com.jetbrains.life_science.controller
 
-import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.master.dto.ArticleDTOToInfoAdapter
 import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.master.view.ArticleFullPageView
-import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
-import com.jetbrains.life_science.article.section.dto.SectionInnerDTOToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.dto.*
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
@@ -61,7 +58,7 @@ class ArticleVersionController(
         validateViewPermission(principal, version)
         return when (version.state) {
             State.PUBLISHED_AS_PROTOCOL -> {
-                val publishedArticleVersion = articleVersionService.getPublishedVersionByArticle(version.mainArticle)
+                val publishedArticleVersion = articleVersionService.getPublishedByArticle(version.mainArticle)
                 viewMapper.toCompletedView(version, publishedArticleVersion)
             }
             State.PUBLISHED_AS_ARTICLE -> viewMapper.toCompletedView(version)
@@ -71,7 +68,6 @@ class ArticleVersionController(
 
     @Operation(summary = "Creates new version with optional sections and content")
     @PostMapping("/article/{articleId}")
-    @Transactional
     fun createNewVersion(
         @Validated @RequestBody dto: ArticleVersionCreationDTO,
         principal: Principal,
@@ -80,8 +76,8 @@ class ArticleVersionController(
         val user = userService.getByEmail(principal.email)
         val article = articleService.getById(articleId)
         val createdVersion =
-            articleVersionService.createBlank(ArticleVersionCreationDTOToInfoAdapter(dto, user, article))
-        return createArticleVersion(createdVersion, dto.sections)
+            articleVersionService.create(ArticleVersionCreationDTOToInfoAdapter(dto, user, article))
+        return viewMapper.toView(createdVersion)
     }
 
     @Operation(summary = "Creates new article AND new version inside it with optional sections and content")
@@ -93,29 +89,9 @@ class ArticleVersionController(
     ): ArticleVersionView {
         val user = userService.getByEmail(principal.email)
         val article = articleService.create(ArticleDTOToInfoAdapter(dto.articleDTO))
-        val createdVersion = articleVersionService.createBlank(
-            ArticleVersionFullCreationDTOToInfoAdapter(dto, user, article)
+        val createdVersion = articleVersionService.create(
+            ArticleVersionCreationDTOToInfoAdapter(dto, user, article)
         )
-        return createArticleVersion(createdVersion, dto.sections)
-    }
-
-    private fun createArticleVersion(
-        createdVersion: ArticleVersion,
-        sectionInnerDTOList: List<SectionInnerDTO>
-    ): ArticleVersionView {
-        for ((order, sectionInnerDTO) in sectionInnerDTOList.withIndex()) {
-            val sectionInfo = SectionInnerDTOToInfoAdapter(createdVersion.id, order, sectionInnerDTO)
-            val createdSection = sectionService.create(sectionInfo)
-
-            val content = sectionInnerDTO.content
-
-            if (content != null) {
-                val contentInfo = ContentInnerDTOToInfoAdapter(createdSection.id, content)
-                contentVersionService.create(contentInfo)
-
-                createdVersion.sections.add(createdSection)
-            }
-        }
         return viewMapper.toView(createdVersion)
     }
 
