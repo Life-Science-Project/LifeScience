@@ -3,7 +3,7 @@ package com.jetbrains.life_science.user.master.dto
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
-class NewUserDTO(
+data class NewUserDTO(
 
     @field:NotBlank
     val firstName: String,

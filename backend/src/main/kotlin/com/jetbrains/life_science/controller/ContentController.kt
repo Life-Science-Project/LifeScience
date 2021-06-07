@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.content.publish.controller
+package com.jetbrains.life_science.controller
 
 import com.jetbrains.life_science.article.content.publish.dto.ContentDTO
 import com.jetbrains.life_science.article.content.publish.dto.ContentDTOToInfoAdapter

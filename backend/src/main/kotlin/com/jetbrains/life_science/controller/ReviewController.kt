@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.review.response.controller
+package com.jetbrains.life_science.controller
 
 import com.jetbrains.life_science.article.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.article.review.request.service.ReviewRequestService

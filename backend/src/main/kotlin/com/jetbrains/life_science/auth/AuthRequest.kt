@@ -3,7 +3,7 @@ package com.jetbrains.life_science.auth
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
-class AuthRequest(
+data class AuthRequest(
 
     @field:Email
     val email: String,

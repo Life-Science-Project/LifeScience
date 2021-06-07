@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.section.controller
+package com.jetbrains.life_science.controller
 
 import com.jetbrains.life_science.article.section.dto.SectionDTO
 import com.jetbrains.life_science.article.section.dto.SectionDTOToInfoAdapter

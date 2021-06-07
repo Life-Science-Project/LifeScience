@@ -3,6 +3,7 @@ package com.jetbrains.life_science.article.version.service
 import com.jetbrains.life_science.article.master.entity.Article
 import com.jetbrains.life_science.article.master.service.ArticleService
 import com.jetbrains.life_science.article.review.request.entity.VersionDestination
+import com.jetbrains.life_science.article.section.dto.SectionInnerCreationToInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State
@@ -36,10 +37,15 @@ class ArticleVersionServiceImpl(
     }
 
     @Transactional
-    override fun createBlank(info: ArticleVersionCreationInfo): ArticleVersion {
+    override fun create(info: ArticleVersionCreationInfo): ArticleVersion {
         val article = info.article
         var articleVersion = factory.create(info, article)
         articleVersion = repository.save(articleVersion)
+        val createdSections = info.sectionsInfo.mapIndexed { index, sectionCreationInfo ->
+            val sectionInfo = SectionInnerCreationToInfoAdapter(articleVersion.id, index, sectionCreationInfo)
+            sectionService.create(sectionInfo)
+        }
+        articleVersion.sections.addAll(createdSections)
         return articleVersion
     }
 
@@ -73,7 +79,7 @@ class ArticleVersionServiceImpl(
 
     @Transactional
     override fun createCopy(versionId: Long, user: User): ArticleVersion {
-        val publishedVersion = getPublishedVersion(versionId)
+        val publishedVersion = getPublished(versionId)
         val copy = factory.createCopy(publishedVersion)
         copy.author = user
         repository.save(copy)
@@ -82,7 +88,7 @@ class ArticleVersionServiceImpl(
     }
 
     @Transactional
-    override fun getPublishedVersion(versionId: Long): ArticleVersion {
+    override fun getPublished(versionId: Long): ArticleVersion {
         return (
             repository.findByIdAndStateIn(
                 versionId,
@@ -92,7 +98,7 @@ class ArticleVersionServiceImpl(
             )
     }
 
-    override fun getPublishedVersionByArticle(mainArticle: Article): ArticleVersion {
+    override fun getPublishedByArticle(mainArticle: Article): ArticleVersion {
         return repository.findByMainArticleIdAndState(mainArticle.id, State.PUBLISHED_AS_ARTICLE)
             ?: throw ArticleVersionNotFoundException("Published as article version not found")
     }

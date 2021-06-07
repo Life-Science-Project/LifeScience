@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.master.controller
+package com.jetbrains.life_science.controller
 
 import com.jetbrains.life_science.article.master.dto.ArticleDTO
 import com.jetbrains.life_science.article.master.dto.ArticleDTOToInfoAdapter

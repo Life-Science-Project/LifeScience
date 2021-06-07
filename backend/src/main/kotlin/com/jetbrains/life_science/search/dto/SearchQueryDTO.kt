@@ -4,7 +4,7 @@ import javax.validation.constraints.Max
 import javax.validation.constraints.Positive
 import javax.validation.constraints.PositiveOrZero
 
-class SearchQueryDTO(
+data class SearchQueryDTO(
 
     val text: String,
 
