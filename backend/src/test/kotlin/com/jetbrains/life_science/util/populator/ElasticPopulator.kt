@@ -23,7 +23,7 @@ class ElasticPopulator(
 
     fun prepareData() {
         populators.forEach { it.prepareData() }
-        runBlocking { delay(400) }
+        runBlocking { delay(600) }
     }
 
     fun createIndexes() {
