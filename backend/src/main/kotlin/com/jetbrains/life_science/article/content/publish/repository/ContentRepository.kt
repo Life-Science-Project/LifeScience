@@ -11,5 +11,4 @@ interface ContentRepository : ElasticsearchRepository<Content, String>, ContentR
 
     fun deleteAllBySectionId(sectionId: Long)
 
-    fun countBySectionId(sectionId: Long): Long
 }
