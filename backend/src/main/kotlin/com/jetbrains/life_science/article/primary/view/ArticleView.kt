@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.master.view
+package com.jetbrains.life_science.article.primary.view
 
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 

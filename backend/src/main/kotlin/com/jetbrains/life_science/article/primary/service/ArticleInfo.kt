@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.master.service
+package com.jetbrains.life_science.article.primary.service
 
 interface ArticleInfo {
 

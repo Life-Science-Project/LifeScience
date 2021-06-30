@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.category.view
 
-import com.jetbrains.life_science.article.master.view.ArticleViewMapper
+import com.jetbrains.life_science.article.primary.view.ArticleViewMapper
 import com.jetbrains.life_science.category.entity.Category
 import org.springframework.stereotype.Component
 
