@@ -10,5 +10,4 @@ interface ContentRepository : ElasticsearchRepository<Content, String>, ContentR
     fun findBySectionId(sectionId: Long): Content?
 
     fun deleteAllBySectionId(sectionId: Long)
-
 }
