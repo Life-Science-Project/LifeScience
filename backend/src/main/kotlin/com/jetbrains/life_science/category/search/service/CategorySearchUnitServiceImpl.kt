@@ -3,7 +3,7 @@ package com.jetbrains.life_science.category.search.service
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.search.factory.CategorySearchUnitFactory
 import com.jetbrains.life_science.category.search.repository.CategorySearchUnitRepository
-import com.jetbrains.life_science.exception.not_found.CategorySearchUnitNotFoundException
+import com.jetbrains.life_science.exception.search_unit.CategorySearchUnitNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
