@@ -1,9 +1,9 @@
-package com.jetbrains.life_science.article.master.controller
+package com.jetbrains.life_science.article.primary.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
-import com.jetbrains.life_science.article.master.dto.ArticleDTO
-import com.jetbrains.life_science.article.master.view.ArticleView
+import com.jetbrains.life_science.article.primary.dto.ArticleDTO
+import com.jetbrains.life_science.article.primary.view.ArticleView
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.article.version.view.ArticleVersionView

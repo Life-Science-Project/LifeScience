@@ -193,16 +193,16 @@ internal class ReviewRequestControllerTest :
             ),
             state = State.PENDING_FOR_REVIEW
         )
-        val expectedRequest = ReviewRequestView(
-            id = 8,
-            destination = VersionDestination.ARTICLE,
-            version = expectedVersion,
-            resolution = null
-        )
         val requestDTO = ReviewRequestDTO("ARTICLE")
         // Action
         val result = patch(6, requestDTO, "/api/review/request/version/")
         // Check
+        val expectedRequest = ReviewRequestView(
+            id = result.id,
+            destination = VersionDestination.ARTICLE,
+            version = expectedVersion,
+            resolution = null
+        )
         assertEquals(expectedRequest, result)
     }
 

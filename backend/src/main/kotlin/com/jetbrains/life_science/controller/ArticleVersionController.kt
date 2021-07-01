@@ -1,9 +1,9 @@
 package com.jetbrains.life_science.controller
 
 import com.jetbrains.life_science.article.content.version.service.ContentVersionService
-import com.jetbrains.life_science.article.master.dto.ArticleDTOToInfoAdapter
-import com.jetbrains.life_science.article.master.service.ArticleService
-import com.jetbrains.life_science.article.master.view.ArticleFullPageView
+import com.jetbrains.life_science.article.primary.dto.ArticleDTOToInfoAdapter
+import com.jetbrains.life_science.article.primary.service.ArticleService
+import com.jetbrains.life_science.article.primary.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.article.version.dto.*
 import com.jetbrains.life_science.article.version.entity.ArticleVersion

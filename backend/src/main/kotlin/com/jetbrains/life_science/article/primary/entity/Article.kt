@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.article.master.entity
+package com.jetbrains.life_science.article.primary.entity
 
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State

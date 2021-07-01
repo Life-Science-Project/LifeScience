@@ -1,8 +1,8 @@
-package com.jetbrains.life_science.article.master.service
+package com.jetbrains.life_science.article.primary.service
 
-import com.jetbrains.life_science.article.master.entity.Article
-import com.jetbrains.life_science.article.master.factory.ArticleFactory
-import com.jetbrains.life_science.article.master.repository.ArticleRepository
+import com.jetbrains.life_science.article.primary.entity.Article
+import com.jetbrains.life_science.article.primary.factory.ArticleFactory
+import com.jetbrains.life_science.article.primary.repository.ArticleRepository
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.exception.not_empty.ArticleNotEmptyException

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.category.view
 
-import com.jetbrains.life_science.article.master.view.ArticleView
+import com.jetbrains.life_science.article.primary.view.ArticleView
 
 data class CategoryView(
     val id: Long,

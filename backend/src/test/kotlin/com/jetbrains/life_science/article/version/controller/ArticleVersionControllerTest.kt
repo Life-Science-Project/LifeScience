@@ -3,8 +3,8 @@ package com.jetbrains.life_science.article.version.controller
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.article.content.publish.dto.ContentInnerDTO
 import com.jetbrains.life_science.article.content.publish.view.ContentView
-import com.jetbrains.life_science.article.master.dto.ArticleDTO
-import com.jetbrains.life_science.article.master.view.ArticleFullPageView
+import com.jetbrains.life_science.article.primary.dto.ArticleDTO
+import com.jetbrains.life_science.article.primary.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.dto.SectionInnerDTO
 import com.jetbrains.life_science.article.section.view.SectionLazyView
 import com.jetbrains.life_science.article.version.dto.ArticleVersionDTO

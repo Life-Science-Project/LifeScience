@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.article.master.dto
+package com.jetbrains.life_science.article.primary.dto
 
-import com.jetbrains.life_science.article.master.service.ArticleInfo
+import com.jetbrains.life_science.article.primary.service.ArticleInfo
 
 class ArticleDTOToInfoAdapter(
     val dto: ArticleDTO,
