@@ -31,8 +31,8 @@ class CategoryServiceImpl(
         if (category.subCategories.isNotEmpty() || category.articles.isNotEmpty()) {
             throw CategoryNotEmptyException("Category with id $id is not empty")
         }
-        searchService.deleteSearchUnitById(id)
         categoryRepository.deleteById(id)
+        searchService.deleteSearchUnitById(id)
     }
 
     override fun getCategory(id: Long): Category {

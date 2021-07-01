@@ -2,9 +2,12 @@ package com.jetbrains.life_science.category.service
 
 import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.category.repository.CategoryRepository
+import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.exception.not_found.CategoryNotFoundException
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +22,9 @@ internal class CategoryServiceImplTest {
 
     @MockBean
     lateinit var contentVersionRepository: ContentVersionRepository
+
+    @MockBean
+    lateinit var searchService: CategorySearchUnitService
 
     @Autowired
     lateinit var categoryService: CategoryService
@@ -38,6 +44,7 @@ internal class CategoryServiceImplTest {
         val savedcategory = categoryRepository.findById(category.id).orElseThrow()
 
         assertEquals("sample category", savedcategory.name)
+        verify(searchService, times(1)).createSearchUnit(category)
         assertNull(savedcategory.parent)
     }
 
@@ -53,6 +60,7 @@ internal class CategoryServiceImplTest {
         val savedcategory = categoryRepository.findById(category.id).orElseThrow()
 
         assertEquals("sample category", savedcategory.name)
+        verify(searchService, times(1)).createSearchUnit(category)
         assertNotNull(category.parent)
         assertEquals("root", category.parent?.name)
         assertEquals(1, category.parent?.id)
@@ -63,12 +71,14 @@ internal class CategoryServiceImplTest {
     internal fun `delete a category`() {
         categoryService.deleteCategory(3)
         assertFalse(categoryRepository.existsById(3))
+        verify(searchService, times(1)).deleteSearchUnitById(3)
     }
 
     @Test
     @Transactional
     internal fun `delete a non-existent category`() {
         assertThrows(CategoryNotFoundException::class.java) { categoryService.deleteCategory(-1L) }
+        verify(searchService, times(0)).deleteSearchUnitById(-1L)
     }
 
     @Test
