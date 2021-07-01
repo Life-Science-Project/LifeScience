@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.version.view
 
-import com.jetbrains.life_science.article.master.view.ArticleFullPageView
+import com.jetbrains.life_science.article.primary.view.ArticleFullPageView
 import com.jetbrains.life_science.article.section.view.SectionLazyViewMapper
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State

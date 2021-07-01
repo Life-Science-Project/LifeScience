@@ -9,7 +9,7 @@ import org.elasticsearch.common.xcontent.XContentType
 import org.springframework.stereotype.Repository
 
 @Repository
-class ContentRepositoryImpl(
+class ContentRepositoryCustomImpl(
     val client: RestHighLevelClient
 ) : ContentRepositoryCustom {
 

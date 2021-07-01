@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.category.entity
 
-import com.jetbrains.life_science.article.master.entity.Article
+import com.jetbrains.life_science.article.primary.entity.Article
 import javax.persistence.*
 
 @Entity

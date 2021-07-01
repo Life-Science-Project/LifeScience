@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.article.master.service
+package com.jetbrains.life_science.article.primary.service
 
-import com.jetbrains.life_science.article.master.entity.Article
+import com.jetbrains.life_science.article.primary.entity.Article
 
 interface ArticleService {
 

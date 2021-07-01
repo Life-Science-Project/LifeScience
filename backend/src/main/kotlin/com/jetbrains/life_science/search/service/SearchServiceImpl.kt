@@ -26,6 +26,7 @@ class SearchServiceImpl(
     lateinit var searchUnitServices: Map<String, UnitSearchService>
 
     override val supportedTypes: List<SearchUnitType> = listOf(
+        SearchUnitType.CATEGORY,
         SearchUnitType.CONTENT,
         SearchUnitType.ARTICLE
     )

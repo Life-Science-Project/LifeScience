@@ -1,10 +1,10 @@
 package com.jetbrains.life_science.controller
 
-import com.jetbrains.life_science.article.master.dto.ArticleDTO
-import com.jetbrains.life_science.article.master.dto.ArticleDTOToInfoAdapter
-import com.jetbrains.life_science.article.master.service.ArticleService
-import com.jetbrains.life_science.article.master.view.ArticleView
-import com.jetbrains.life_science.article.master.view.ArticleViewMapper
+import com.jetbrains.life_science.article.primary.dto.ArticleDTO
+import com.jetbrains.life_science.article.primary.dto.ArticleDTOToInfoAdapter
+import com.jetbrains.life_science.article.primary.service.ArticleService
+import com.jetbrains.life_science.article.primary.view.ArticleView
+import com.jetbrains.life_science.article.primary.view.ArticleViewMapper
 import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper

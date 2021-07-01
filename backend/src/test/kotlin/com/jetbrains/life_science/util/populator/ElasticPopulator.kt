@@ -23,7 +23,7 @@ class ElasticPopulator(
 
     fun prepareData() {
         populators.forEach { it.prepareData() }
-        runBlocking { delay(400) }
+        runBlocking { delay(ELASTIC_WAIT_TIME_MS) }
     }
 
     fun createIndexes() {
@@ -35,3 +35,5 @@ class ElasticPopulator(
         return jacksonObjectMapper().readValue(text, List::class.java)
     }
 }
+
+private const val ELASTIC_WAIT_TIME_MS = 1000L

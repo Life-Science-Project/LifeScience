@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.article.master.repository
+package com.jetbrains.life_science.article.primary.repository
 
-import com.jetbrains.life_science.article.master.entity.Article
+import com.jetbrains.life_science.article.primary.entity.Article
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.version.dto
 
-import com.jetbrains.life_science.article.master.entity.Article
+import com.jetbrains.life_science.article.primary.entity.Article
 import com.jetbrains.life_science.article.section.dto.SectionCreationDTOInfoAdapter
 import com.jetbrains.life_science.article.section.service.SectionCreationInfo
 import com.jetbrains.life_science.article.version.service.ArticleVersionCreationInfo

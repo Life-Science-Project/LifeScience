@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.version.service
 
-import com.jetbrains.life_science.article.master.entity.Article
+import com.jetbrains.life_science.article.primary.entity.Article
 import com.jetbrains.life_science.article.review.request.entity.VersionDestination
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State

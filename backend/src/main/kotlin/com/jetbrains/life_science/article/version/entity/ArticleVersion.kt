@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.article.version.entity
 
-import com.jetbrains.life_science.article.master.entity.Article
+import com.jetbrains.life_science.article.primary.entity.Article
 import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.article.section.parameter.entity.Parameter
 import com.jetbrains.life_science.user.master.entity.User
