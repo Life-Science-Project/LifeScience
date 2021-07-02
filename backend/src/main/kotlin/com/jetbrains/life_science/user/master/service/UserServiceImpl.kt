@@ -9,10 +9,8 @@ import com.jetbrains.life_science.user.master.repository.RoleRepository
 import com.jetbrains.life_science.user.master.repository.UserRepository
 import com.jetbrains.life_science.user.organisation.service.OrganisationService
 import com.jetbrains.life_science.util.email
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.security.Principal
 
 @Service
 class UserServiceImpl(
