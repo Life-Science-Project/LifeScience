@@ -8,8 +8,11 @@ import com.jetbrains.life_science.user.master.factory.UserFactory
 import com.jetbrains.life_science.user.master.repository.RoleRepository
 import com.jetbrains.life_science.user.master.repository.UserRepository
 import com.jetbrains.life_science.user.organisation.service.OrganisationService
+import com.jetbrains.life_science.util.email
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.security.Principal
 
 @Service
 class UserServiceImpl(
@@ -17,7 +20,8 @@ class UserServiceImpl(
     val userRepository: UserRepository,
     val roleRepository: RoleRepository,
     val articleVersionService: ArticleVersionService,
-    val organisationService: OrganisationService
+    val organisationService: OrganisationService,
+    val userCredentialsService: UserCredentialsService
 ) : UserService {
 
     override fun getAllUsers(): List<User> {
@@ -32,7 +36,11 @@ class UserServiceImpl(
         return userRepository.findById(id).orElseThrow { UserNotFoundException("User not found by id $id") }
     }
 
-    override fun deleteById(id: Long) {
+    override fun deleteById(id: Long, principal: Principal) {
+        val user = getById(id)
+        if (!checkAdminAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to delete this user account.")
+        }
         userRepository.deleteById(id)
     }
 
@@ -53,7 +61,10 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun addFavourite(user: User, articleVersionId: Long): User {
+    override fun addFavourite(user: User, articleVersionId: Long, principal: Principal): User {
+        if (!checkUserAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to add this protocol to favourite.")
+        }
         val version = articleVersionService.getById(articleVersionId)
         if (!user.favouriteArticles.any { it.id == articleVersionId }) {
             user.favouriteArticles.add(version)
@@ -62,7 +73,10 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun removeFavourite(user: User, articleVersionId: Long) {
+    override fun removeFavourite(user: User, articleVersionId: Long, principal: Principal) {
+        if (!checkUserAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to delete this protocol from favourite.")
+        }
         val version = articleVersionService.getById(articleVersionId)
         if (user.favouriteArticles.any { it.id == articleVersionId }) {
             user.favouriteArticles.remove(version)
@@ -70,7 +84,10 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun update(info: UpdateDetailsInfo, user: User): User {
+    override fun update(info: UpdateDetailsInfo, user: User, principal: Principal): User {
+        if (!checkAdminAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to edit this user.")
+        }
         val organisations = info.organisations.map {
             organisationService.getByName(it) ?: organisationService.create(it)
         }
@@ -79,7 +96,19 @@ class UserServiceImpl(
 
     fun checkUserNotExists(email: String) {
         if (userRepository.existsByEmail(email)) {
-            throw UserAlreadyExistsException("user with email $email already exists")
+            throw UserAlreadyExistsException("User with email $email already exists.")
+        }
+    }
+
+    private fun checkUserAccess(user: User, principal: Principal): Boolean {
+        val credentials = userCredentialsService.getByEmail(principal.email)
+        return user.id == credentials.id
+    }
+
+    private fun checkAdminAccess(user: User, principal: Principal): Boolean {
+        val credentials = userCredentialsService.getByEmail(principal.email)
+        return user.id == credentials.id || credentials.roles.any {
+            it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
         }
     }
 }

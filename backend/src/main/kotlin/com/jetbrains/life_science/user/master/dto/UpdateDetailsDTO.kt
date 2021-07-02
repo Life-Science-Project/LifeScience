@@ -5,6 +5,7 @@ import com.jetbrains.life_science.user.degree.DoctorDegree
 
 data class UpdateDetailsDTO(
 
+    // TODO:: String; adapter stringToEnum, если не нашли то адекватное исключение
     val doctorDegree: DoctorDegree,
 
     val academicDegree: AcademicDegree,
