@@ -62,7 +62,6 @@ class UserController(
         return mapper.createView(user)
     }
 
-    // TODO(#141): DTO uses entities and enums, many 500 error possibilities
     @Operation(summary = "Updates existing user")
     @PatchMapping("/{userId}")
     fun updateDetails(
