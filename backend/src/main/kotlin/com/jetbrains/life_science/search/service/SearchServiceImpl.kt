@@ -30,7 +30,13 @@ class SearchServiceImpl(
     private val sortScriptResource: Resource
 ) : SearchService {
 
-    private val sortScript = Script(sortScriptResource.file.readText())
+    private val sortScript: Script
+
+    init {
+        val scriptText = sortScriptResource.inputStream.bufferedReader().readText()
+        sortScript = Script(scriptText)
+    }
+
     private val sortBuilder = SortBuilders
         .scriptSort(sortScript, ScriptSortBuilder.ScriptSortType.NUMBER)
         .order(SortOrder.DESC)
