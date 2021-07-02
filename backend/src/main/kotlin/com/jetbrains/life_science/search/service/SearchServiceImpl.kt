@@ -19,26 +19,18 @@ import org.elasticsearch.search.sort.ScriptSortBuilder
 import org.elasticsearch.search.sort.SortBuilders
 import org.elasticsearch.search.sort.SortOrder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 
 @Service
 class SearchServiceImpl(
-    val client: RestHighLevelClient
+    val client: RestHighLevelClient,
+    @Value("classpath:search/sortScript.txt")
+    val sortScriptResource: Resource
 ) : SearchService {
 
-    val sortScript = Script(
-        """
-            if(doc['_class.keyword'].value == 'Category') {
-                return 3;
-            }
-            if(doc['_class.keyword'].value == 'Article') {
-                return 2;
-            }
-            if(doc['_class.keyword'].value == 'Content') {
-                return 1;
-            }
-        """
-    )
+
 
     val logger = getLogger()
 
@@ -78,6 +70,7 @@ class SearchServiceImpl(
                 QueryBuilders.matchPhrasePrefixQuery("text", query.text)
             )
 
+        val sortScript = Script(sortScriptResource.file.readText())
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
             .from(query.from)
