@@ -27,8 +27,11 @@ import org.springframework.stereotype.Service
 class SearchServiceImpl(
     val client: RestHighLevelClient,
     @Value("classpath:search/sortScript.txt")
-    val sortScriptResource: Resource
+    private val sortScriptResource: Resource
 ) : SearchService {
+
+    private val sortScript = Script(sortScriptResource.file.readText())
+    private val sortBuilder = SortBuilders.scriptSort(sortScript, ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC)
 
     val logger = getLogger()
 
@@ -68,12 +71,11 @@ class SearchServiceImpl(
                 QueryBuilders.matchPhrasePrefixQuery("text", query.text)
             )
 
-        val sortScript = Script(sortScriptResource.file.readText())
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
             .from(query.from)
             .size(query.size)
-            .sort(SortBuilders.scriptSort(sortScript, ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC))
+            .sort(sortBuilder)
 
         return SearchRequest()
             .source(searchBuilder)
