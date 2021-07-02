@@ -10,9 +10,14 @@ import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestHighLevelClient
+import org.elasticsearch.common.unit.Fuzziness
 import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.script.Script
 import org.elasticsearch.search.SearchHit
 import org.elasticsearch.search.builder.SearchSourceBuilder
+import org.elasticsearch.search.sort.ScriptSortBuilder
+import org.elasticsearch.search.sort.SortBuilders
+import org.elasticsearch.search.sort.SortOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -20,6 +25,20 @@ import org.springframework.stereotype.Service
 class SearchServiceImpl(
     val client: RestHighLevelClient
 ) : SearchService {
+
+    val sortScript = Script(
+        """
+            if(doc['_class.keyword'].value == 'Category') {
+                return 3;
+            }
+            if(doc['_class.keyword'].value == 'Article') {
+                return 2;
+            }
+            if(doc['_class.keyword'].value == 'Content') {
+                return 1;
+            }
+        """
+    )
 
     val logger = getLogger()
 
@@ -48,13 +67,22 @@ class SearchServiceImpl(
 
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
         val queryBuilder = QueryBuilders.boolQuery()
-            .must(QueryBuilders.matchPhrasePrefixQuery("text", query.text))
-            .should(QueryBuilders.matchQuery("_class", "Article"))
+            .should(
+                QueryBuilders.matchQuery("text", query.text)
+                    .fuzziness(Fuzziness.AUTO)
+                    .prefixLength(0)
+                    .maxExpansions(15)
+                    .fuzzyTranspositions(true)
+            )
+            .should(
+                QueryBuilders.matchPhrasePrefixQuery("text", query.text)
+            )
 
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
             .from(query.from)
             .size(query.size)
+            .sort(SortBuilders.scriptSort(sortScript, ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC))
 
         return SearchRequest()
             .source(searchBuilder)
