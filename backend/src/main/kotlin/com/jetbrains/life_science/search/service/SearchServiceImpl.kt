@@ -31,7 +31,9 @@ class SearchServiceImpl(
 ) : SearchService {
 
     private val sortScript = Script(sortScriptResource.file.readText())
-    private val sortBuilder = SortBuilders.scriptSort(sortScript, ScriptSortBuilder.ScriptSortType.NUMBER).order(SortOrder.DESC)
+    private val sortBuilder = SortBuilders
+        .scriptSort(sortScript, ScriptSortBuilder.ScriptSortType.NUMBER)
+        .order(SortOrder.DESC)
 
     val logger = getLogger()
 
