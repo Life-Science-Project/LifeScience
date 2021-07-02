@@ -8,7 +8,7 @@ data class SearchQueryDTO(
 
     val text: String,
 
-    val includeTypes: List<String> = listOf("ARTICLE", "CONTENT"),
+    val includeTypes: List<String> = listOf("CATEGORY", "ARTICLE", "CONTENT"),
 
     @field:Max(100)
     @field:Positive

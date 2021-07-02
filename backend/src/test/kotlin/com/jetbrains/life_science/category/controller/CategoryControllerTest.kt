@@ -9,8 +9,15 @@ import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.category.dto.CategoryDTO
 import com.jetbrains.life_science.category.view.CategorySubcategoryView
 import com.jetbrains.life_science.category.view.CategoryView
+import com.jetbrains.life_science.search.dto.SearchQueryDTO
+import com.jetbrains.life_science.search.result.category.CategorySearchResult
+import com.jetbrains.life_science.util.mvc.SearchHelper
+import com.jetbrains.life_science.util.populator.ElasticPopulator
+import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
@@ -20,6 +27,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.get
 import org.springframework.transaction.annotation.Transactional
+import javax.annotation.PostConstruct
 
 @SpringBootTest
 @Sql("/scripts/add_test_data.sql")
@@ -33,6 +41,26 @@ internal class CategoryControllerTest :
 
     init {
         apiUrl = "/api/categories"
+    }
+
+    lateinit var searchHelper: SearchHelper
+
+    lateinit var elasticPopulator: ElasticPopulator
+
+    @Autowired
+    lateinit var highLevelClient: RestHighLevelClient
+
+    @PostConstruct
+    fun setup() {
+        elasticPopulator = ElasticPopulator(highLevelClient).apply {
+            addPopulator("category", "elastic/category.json")
+        }
+        searchHelper = SearchHelper(mockMvc)
+    }
+
+    @BeforeEach
+    fun resetElastic() {
+        elasticPopulator.prepareData()
     }
 
     /**
@@ -102,7 +130,13 @@ internal class CategoryControllerTest :
                 )
             )
         )
+
         assertEquals(expectedCategory, category)
+        assertInSearch(
+            SearchQueryDTO("root"),
+            CategorySearchResult(1, "root"),
+            1
+        )
     }
 
     /**
@@ -120,6 +154,12 @@ internal class CategoryControllerTest :
     internal fun `create category`() {
         val categoryDto = CategoryDTO("sample category", 1, 0)
         createCategory(categoryDto)
+
+        assertInSearch(
+            SearchQueryDTO("sample category"),
+            CategorySearchResult(4, "sample category"),
+            1
+        )
     }
 
     /**
@@ -127,12 +167,12 @@ internal class CategoryControllerTest :
      */
     @Test
     internal fun `create category with no parent`() {
-        val rootCategories = getRootCategories().size
+        val rootCategoriesSize = getRootCategories().size
         val categoryDto = CategoryDTO("sample category", null, 0)
         createCategory(categoryDto)
-        val categories = getRootCategories()
-        assertEquals(rootCategories + 1, categories.size)
-        for (category in categories) {
+        val rootCategories = getRootCategories()
+        assertEquals(rootCategoriesSize + 1, rootCategories.size)
+        for (category in rootCategories) {
             assertNull(category.parentId)
         }
     }
@@ -153,6 +193,11 @@ internal class CategoryControllerTest :
     internal fun `update existing category`() {
         val categoryDto = CategoryDTO("updated sample category", null, 150)
         updateCategory(1, categoryDto)
+        assertInSearch(
+            SearchQueryDTO("updated sample category"),
+            CategorySearchResult(1, "updated sample category"),
+            1
+        )
     }
 
     /**
@@ -201,12 +246,18 @@ internal class CategoryControllerTest :
     }
 
     /**
-     * Should delete existing user
+     * Should delete existing category
      */
     @Test
     internal fun `delete existing category`() {
         delete(3)
+
         assertNotFound("Category", getRequest(3))
+        assertInSearch(
+            SearchQueryDTO("child category 2"),
+            CategorySearchResult(3, "child category 2"),
+            0
+        )
     }
 
     /**
@@ -252,6 +303,11 @@ internal class CategoryControllerTest :
         assertUnauthenticated(postRequest(categoryDto))
         assertUnauthenticated(putRequest(1, categoryDto))
         assertUnauthenticated(deleteRequest(3))
+    }
+
+    private fun assertInSearch(searchQueryDTO: SearchQueryDTO, result: CategorySearchResult, count: Int = 0) {
+        val hits = searchHelper.countHits(searchQueryDTO, result)
+        assertEquals(count, hits)
     }
 
     private fun getRootCategories(): List<CategoryView> {

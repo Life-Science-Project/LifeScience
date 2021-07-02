@@ -3,6 +3,7 @@ package com.jetbrains.life_science.category.service
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.factory.CategoryFactory
 import com.jetbrains.life_science.category.repository.CategoryRepository
+import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.exception.not_empty.CategoryNotEmptyException
 import com.jetbrains.life_science.exception.not_found.CategoryNotFoundException
 import org.springframework.stereotype.Service
@@ -11,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CategoryServiceImpl(
     val categoryRepository: CategoryRepository,
-    val categoryFactory: CategoryFactory
+    val categoryFactory: CategoryFactory,
+    val searchService: CategorySearchUnitService
 ) : CategoryService {
 
     override fun createCategory(categoryInfo: CategoryInfo): Category {
@@ -19,7 +21,9 @@ class CategoryServiceImpl(
             existById(it)
             categoryRepository.findById(it).get()
         }
-        return categoryRepository.save(categoryFactory.createCategory(categoryInfo, parent))
+        val saved = categoryRepository.save(categoryFactory.createCategory(categoryInfo, parent))
+        searchService.createSearchUnit(saved)
+        return saved
     }
 
     override fun deleteCategory(id: Long) {
@@ -28,6 +32,7 @@ class CategoryServiceImpl(
             throw CategoryNotEmptyException("Category with id $id is not empty")
         }
         categoryRepository.deleteById(id)
+        searchService.deleteSearchUnitById(id)
     }
 
     override fun getCategory(id: Long): Category {
@@ -41,6 +46,7 @@ class CategoryServiceImpl(
         val parent = categoryInfo.parentId?.let { getCategory(it) }
         categoryFactory.setParams(category, categoryInfo, parent)
         parent?.subCategories?.add(category)
+        searchService.update(category)
         return category
     }
 

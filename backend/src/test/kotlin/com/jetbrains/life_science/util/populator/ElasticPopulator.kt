@@ -36,4 +36,4 @@ class ElasticPopulator(
     }
 }
 
-private const val ELASTIC_WAIT_TIME_MS = 500L
+private const val ELASTIC_WAIT_TIME_MS = 1000L
