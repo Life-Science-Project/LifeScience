@@ -11,7 +11,7 @@ class UpdateDetailsDTOToInfoAdapter(
 
     private val doctorDegreeMap = mapOf(
         "PhD" to DoctorDegree.PhD,
-        "None" to DoctorDegree.NONE
+        "NONE" to DoctorDegree.NONE
     )
 
     private val academicDegreeMap = mapOf(
