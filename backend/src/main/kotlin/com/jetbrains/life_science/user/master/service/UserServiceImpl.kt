@@ -8,7 +8,6 @@ import com.jetbrains.life_science.user.master.factory.UserFactory
 import com.jetbrains.life_science.user.master.repository.RoleRepository
 import com.jetbrains.life_science.user.master.repository.UserRepository
 import com.jetbrains.life_science.user.organisation.service.OrganisationService
-import com.jetbrains.life_science.util.email
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -53,7 +52,6 @@ class UserServiceImpl(
         return userRepository.count()
     }
 
-    @Transactional
     override fun addFavourite(user: User, articleVersionId: Long): User {
         val version = articleVersionService.getById(articleVersionId)
         if (!user.favouriteArticles.any { it.id == articleVersionId }) {
@@ -62,7 +60,6 @@ class UserServiceImpl(
         return user
     }
 
-    @Transactional
     override fun removeFavourite(user: User, articleVersionId: Long) {
         val version = articleVersionService.getById(articleVersionId)
         if (user.favouriteArticles.any { it.id == articleVersionId }) {
@@ -70,13 +67,8 @@ class UserServiceImpl(
         }
     }
 
-    // убрать transactional везде где 1 изменение
-    @Transactional
     override fun update(info: UpdateDetailsInfo, user: User): User {
-        // в фабрику
-        val organisations = info.organisations.map {
-            organisationService.getByName(it) ?: organisationService.create(it)
-        }
+        val organisations = organisationService.createListOfOrganizations(info.organisations)
         return userFactory.setParams(info, organisations, user)
     }
 

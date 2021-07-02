@@ -97,8 +97,8 @@ internal class UserControllerTest :
     @Test
     internal fun `update existing user`() {
         val updateDetailsDto = UpdateDetailsDTO(
-            doctorDegree = "NONE",
-            academicDegree = "PROFESSIONAL",
+            doctorDegree = DoctorDegree.NONE.name,
+            academicDegree = AcademicDegree.PROFESSIONAL.name,
             organisations = listOf("abc", "def"),
             orcid = "babla",
             researchId = "5555"
@@ -112,8 +112,8 @@ internal class UserControllerTest :
     @Test
     internal fun `update non-existent user`() {
         val updateDetailsDto = UpdateDetailsDTO(
-            doctorDegree = "NONE",
-            academicDegree = "PROFESSIONAL",
+            doctorDegree = DoctorDegree.NONE.name,
+            academicDegree = AcademicDegree.PROFESSIONAL.name,
             organisations = listOf("abc", "def"),
             orcid = "babla",
             researchId = "5555"

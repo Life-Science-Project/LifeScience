@@ -9,18 +9,9 @@ class UpdateDetailsDTOToInfoAdapter(
     dto: UpdateDetailsDTO
 ) : UpdateDetailsInfo {
 
-    private val doctorDegreeMap = mapOf(
-        "PhD" to DoctorDegree.PhD,
-        "NONE" to DoctorDegree.NONE
-    )
+    private val doctorDegreeMap: Map<String, DoctorDegree> = DoctorDegree.values().associateBy { it.name }
 
-    private val academicDegreeMap = mapOf(
-        "ASSOCIATE" to AcademicDegree.ASSOCIATE,
-        "BACHELOR" to AcademicDegree.BACHELOR,
-        "MASTER" to AcademicDegree.MASTER,
-        "PROFESSIONAL" to AcademicDegree.PROFESSIONAL,
-        "NONE" to AcademicDegree.NONE
-    )
+    private val academicDegreeMap: Map<String, AcademicDegree> = AcademicDegree.values().associateBy { it.name }
 
     override val doctorDegree = doctorDegreeMap[dto.doctorDegree]
         ?: throw DegreeNotFoundException("Doctor degree ${dto.doctorDegree} doesn't exist.")

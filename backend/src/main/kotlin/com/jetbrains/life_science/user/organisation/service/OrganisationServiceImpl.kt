@@ -16,6 +16,12 @@ class OrganisationServiceImpl(
         return repository.save(organisation)
     }
 
+    override fun createListOfOrganizations(organisationNames: List<String>): List<Organisation> {
+        return organisationNames.map {
+            getByName(it) ?: create(it)
+        }
+    }
+
     override fun getByName(name: String): Organisation? {
         return repository.findByName(name)
     }
