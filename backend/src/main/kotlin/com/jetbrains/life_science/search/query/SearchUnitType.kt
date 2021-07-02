@@ -15,6 +15,11 @@ enum class SearchUnitType {
     CONTENT {
         override val presentationName = "Content"
         override val indexName: String = "content"
+    },
+
+    CATEGORY {
+        override val presentationName = "Category"
+        override val indexName: String = "category"
     };
 
     abstract val presentationName: String
@@ -22,7 +27,6 @@ enum class SearchUnitType {
     abstract val indexName: String
 
     companion object {
-
         val names = values().map { it.name }.toSet()
 
         val types = values().map { it.presentationName }.toSet()
