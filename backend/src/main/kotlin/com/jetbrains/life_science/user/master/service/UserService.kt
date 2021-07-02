@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.user.master.service
 
 import com.jetbrains.life_science.user.master.entity.User
-import java.security.Principal
 
 interface UserService {
 
@@ -11,13 +10,13 @@ interface UserService {
 
     fun getById(id: Long): User
 
-    fun update(info: UpdateDetailsInfo, user: User, principal: Principal): User
+    fun update(info: UpdateDetailsInfo, user: User): User
 
-    fun deleteById(id: Long, principal: Principal)
+    fun deleteById(id: Long)
 
-    fun addFavourite(user: User, articleVersionId: Long, principal: Principal): User
+    fun addFavourite(user: User, articleVersionId: Long): User
 
-    fun removeFavourite(user: User, articleVersionId: Long, principal: Principal)
+    fun removeFavourite(user: User, articleVersionId: Long)
 
     fun createUser(info: NewUserInfo): User
 

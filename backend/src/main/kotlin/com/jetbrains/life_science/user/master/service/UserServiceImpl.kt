@@ -20,8 +20,7 @@ class UserServiceImpl(
     val userRepository: UserRepository,
     val roleRepository: RoleRepository,
     val articleVersionService: ArticleVersionService,
-    val organisationService: OrganisationService,
-    val userCredentialsService: UserCredentialsService
+    val organisationService: OrganisationService
 ) : UserService {
 
     override fun getAllUsers(): List<User> {
@@ -36,11 +35,7 @@ class UserServiceImpl(
         return userRepository.findById(id).orElseThrow { UserNotFoundException("User not found by id $id") }
     }
 
-    override fun deleteById(id: Long, principal: Principal) {
-        val user = getById(id)
-        if (!checkAdminAccess(user, principal)) {
-            throw AccessDeniedException("You haven't got enough permissions to delete this user account.")
-        }
+    override fun deleteById(id: Long) {
         userRepository.deleteById(id)
     }
 
@@ -61,10 +56,7 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun addFavourite(user: User, articleVersionId: Long, principal: Principal): User {
-        if (!checkUserAccess(user, principal)) {
-            throw AccessDeniedException("You haven't got enough permissions to add this protocol to favourite.")
-        }
+    override fun addFavourite(user: User, articleVersionId: Long): User {
         val version = articleVersionService.getById(articleVersionId)
         if (!user.favouriteArticles.any { it.id == articleVersionId }) {
             user.favouriteArticles.add(version)
@@ -73,21 +65,17 @@ class UserServiceImpl(
     }
 
     @Transactional
-    override fun removeFavourite(user: User, articleVersionId: Long, principal: Principal) {
-        if (!checkUserAccess(user, principal)) {
-            throw AccessDeniedException("You haven't got enough permissions to delete this protocol from favourite.")
-        }
+    override fun removeFavourite(user: User, articleVersionId: Long) {
         val version = articleVersionService.getById(articleVersionId)
         if (user.favouriteArticles.any { it.id == articleVersionId }) {
             user.favouriteArticles.remove(version)
         }
     }
 
+    // убрать transactional везде где 1 изменение
     @Transactional
-    override fun update(info: UpdateDetailsInfo, user: User, principal: Principal): User {
-        if (!checkAdminAccess(user, principal)) {
-            throw AccessDeniedException("You haven't got enough permissions to edit this user.")
-        }
+    override fun update(info: UpdateDetailsInfo, user: User): User {
+        // в фабрику
         val organisations = info.organisations.map {
             organisationService.getByName(it) ?: organisationService.create(it)
         }
@@ -97,18 +85,6 @@ class UserServiceImpl(
     fun checkUserNotExists(email: String) {
         if (userRepository.existsByEmail(email)) {
             throw UserAlreadyExistsException("User with email $email already exists.")
-        }
-    }
-
-    private fun checkUserAccess(user: User, principal: Principal): Boolean {
-        val credentials = userCredentialsService.getByEmail(principal.email)
-        return user.id == credentials.id
-    }
-
-    private fun checkAdminAccess(user: User, principal: Principal): Boolean {
-        val credentials = userCredentialsService.getByEmail(principal.email)
-        return user.id == credentials.id || credentials.roles.any {
-            it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
         }
     }
 }

@@ -4,11 +4,14 @@ import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTOToInfoAdapter
+import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.master.service.UserCredentialsService
 import com.jetbrains.life_science.user.master.service.UserService
 import com.jetbrains.life_science.user.master.view.UserView
 import com.jetbrains.life_science.user.master.view.UserViewMapper
 import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,6 +26,7 @@ import java.security.Principal
 @RequestMapping("/api/users")
 class UserController(
     val userService: UserService,
+    val userCredentialsService: UserCredentialsService,
     val mapper: UserViewMapper,
     val articleVersionViewMapper: ArticleVersionViewMapper
 ) {
@@ -67,7 +71,10 @@ class UserController(
         principal: Principal
     ): UserView {
         val user = userService.getById(userId)
-        return mapper.createView(userService.update(UpdateDetailsDTOToInfoAdapter(updateDetailsDTO), user, principal))
+        if (!checkUserAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to edit this user.")
+        }
+        return mapper.createView(userService.update(UpdateDetailsDTOToInfoAdapter(updateDetailsDTO), user))
     }
 
     @Operation(summary = "Deletes existing user")
@@ -76,7 +83,11 @@ class UserController(
         @PathVariable userId: Long,
         principal: Principal
     ) {
-        userService.deleteById(userId, principal)
+        val user = userService.getById(userId)
+        if (!checkAdminAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to delete this user account.")
+        }
+        userService.deleteById(userId)
     }
 
     @Operation(summary = "Returns user's favourite versions")
@@ -94,7 +105,10 @@ class UserController(
         principal: Principal
     ): UserView {
         val user = userService.getById(userId)
-        val updatedUser = userService.addFavourite(user, versionId, principal)
+        if (!checkUserAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to add this protocol to favourite.")
+        }
+        val updatedUser = userService.addFavourite(user, versionId)
         return mapper.createView(updatedUser)
     }
 
@@ -106,6 +120,21 @@ class UserController(
         principal: Principal
     ) {
         val user = userService.getById(userId)
-        userService.removeFavourite(user, versionId, principal)
+        if (!checkUserAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to delete this protocol from favourite.")
+        }
+        userService.removeFavourite(user, versionId)
+    }
+
+    private fun checkUserAccess(user: User, principal: Principal): Boolean {
+        val credentials = userCredentialsService.getByEmail(principal.email)
+        return user.id == credentials.id
+    }
+
+    private fun checkAdminAccess(user: User, principal: Principal): Boolean {
+        val credentials = userCredentialsService.getByEmail(principal.email)
+        return user.id == credentials.id || credentials.roles.any {
+            it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"
+        }
     }
 }
