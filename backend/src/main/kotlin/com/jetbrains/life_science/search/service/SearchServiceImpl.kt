@@ -30,8 +30,6 @@ class SearchServiceImpl(
     val sortScriptResource: Resource
 ) : SearchService {
 
-
-
     val logger = getLogger()
 
     lateinit var searchUnitServices: Map<String, UnitSearchService>
