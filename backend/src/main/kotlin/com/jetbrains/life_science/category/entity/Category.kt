@@ -19,7 +19,7 @@ class Category(
     @OneToMany(mappedBy = "parent")
     val subCategories: MutableList<Category>,
 
-    @OneToMany(mappedBy = "category")
+    @ManyToMany(mappedBy = "categories")
     val articles: MutableList<Article>,
 
     var orderNumber: Int

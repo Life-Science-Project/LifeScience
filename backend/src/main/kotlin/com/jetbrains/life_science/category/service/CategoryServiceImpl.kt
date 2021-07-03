@@ -40,6 +40,10 @@ class CategoryServiceImpl(
         return categoryRepository.findById(id).get()
     }
 
+    override fun getCategories(ids: List<Long>): MutableList<Category> {
+        return ids.map { getCategory(it) } as MutableList<Category>
+    }
+
     @Transactional
     override fun updateCategory(categoryInfo: CategoryInfo): Category {
         val category = getCategory(categoryInfo.id)

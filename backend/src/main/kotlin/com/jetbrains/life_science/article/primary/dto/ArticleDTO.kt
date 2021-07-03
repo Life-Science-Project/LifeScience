@@ -4,5 +4,5 @@ import javax.validation.constraints.Positive
 
 data class ArticleDTO(
     @field:Positive
-    val categoryId: Long,
+    val categoryIds: List<Long>
 )

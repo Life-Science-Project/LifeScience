@@ -4,5 +4,5 @@ interface ArticleInfo {
 
     val id: Long
 
-    val categoryId: Long
+    val categoryIds: List<Long>
 }

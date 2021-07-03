@@ -10,6 +10,8 @@ interface CategoryService {
 
     fun getCategory(id: Long): Category
 
+    fun getCategories(ids: List<Long>): MutableList<Category>
+
     fun updateCategory(categoryInfo: CategoryInfo): Category
 
     fun getRootCategories(): List<Category>

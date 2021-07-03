@@ -7,5 +7,5 @@ class ArticleDTOToInfoAdapter(
     override val id: Long = 0
 ) : ArticleInfo {
 
-    override val categoryId = dto.categoryId
+    override val categoryIds = dto.categoryIds
 }

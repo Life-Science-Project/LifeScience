@@ -23,8 +23,8 @@ class ArticleServiceImpl(
 
     @Transactional
     override fun create(info: ArticleInfo): Article {
-        val category = categoryService.getCategory(info.categoryId)
-        val article = factory.create(category)
+        val categories = categoryService.getCategories(info.categoryIds)
+        val article = factory.create(categories)
         return repository.save(article)
     }
 
@@ -36,7 +36,7 @@ class ArticleServiceImpl(
     @Transactional
     override fun updateById(info: ArticleInfo): Article {
         val article = getById(info.id)
-        val category = categoryService.getCategory(info.categoryId)
+        val category = categoryService.getCategories(info.categoryIds)
         factory.setParams(article, category)
         return article
     }

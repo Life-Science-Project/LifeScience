@@ -3,6 +3,8 @@ package com.jetbrains.life_science.article.primary.entity
 import com.jetbrains.life_science.article.version.entity.ArticleVersion
 import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.category.entity.Category
+import org.hibernate.annotations.LazyCollection
+import org.hibernate.annotations.LazyCollectionOption
 import javax.persistence.*
 
 @Entity
@@ -11,8 +13,14 @@ class Article(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @ManyToOne
-    var category: Category,
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JoinTable(
+        name = "categories_articles",
+        joinColumns = [JoinColumn(name = "article_id")],
+        inverseJoinColumns = [JoinColumn(name = "category_id")]
+    )
+    var categories: MutableList<Category>,
 
     @OneToMany(mappedBy = "mainArticle")
     val versions: MutableList<ArticleVersion>,
