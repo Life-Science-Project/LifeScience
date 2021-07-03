@@ -33,7 +33,9 @@ class SearchServiceImpl(
     private val sortScript: Script
 
     init {
-        val scriptText = sortScriptResource.inputStream.bufferedReader().readText()
+        val scriptText = sortScriptResource.inputStream.bufferedReader().use {
+            it.readText()
+        }
         sortScript = Script(scriptText)
     }
 
