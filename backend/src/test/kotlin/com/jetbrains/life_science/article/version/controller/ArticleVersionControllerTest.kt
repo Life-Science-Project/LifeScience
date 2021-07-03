@@ -200,7 +200,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `create empty version with wrong category id`() {
-        val dto = ArticleVersionFullCreationDTO(ArticleDTO(1000), "test")
+        val dto = ArticleVersionFullCreationDTO(ArticleDTO(listOf(1000)), "test")
         assertNotFound(
             "Category",
             postRequest(dto)
@@ -237,7 +237,7 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create version without sections`() {
         // Prepare test data
-        val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
+        val dto = ArticleVersionFullCreationDTO(ArticleDTO(listOf(1)), "next version")
         // Action
         val result = post(dto)
         val created = get(result.id)
@@ -255,7 +255,7 @@ internal class ArticleVersionControllerTest :
     fun `create version with sections and content`() = runBlocking {
         // Prepare test data
         val dto = ArticleVersionFullCreationDTO(
-            articleDTO = ArticleDTO(1),
+            articleDTO = ArticleDTO(listOf(1)),
             name = "big version",
             sections = listOf(
                 SectionInnerDTO(
@@ -452,7 +452,7 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create articleVersion from non-existing article`() {
         val newProtocolDTO = ArticleVersionFullCreationDTO(
-            articleDTO = ArticleDTO(1),
+            articleDTO = ArticleDTO(listOf(1)),
             name = "new version"
         )
         assertNotFound("Article", postRequest(newProtocolDTO, "$apiUrl/article/4"))
@@ -466,7 +466,7 @@ internal class ArticleVersionControllerTest :
     @WithAnonymousUser
     fun `guest creates articleVersion from existing article`() {
         val newProtocolDTO = ArticleVersionFullCreationDTO(
-            articleDTO = ArticleDTO(1),
+            articleDTO = ArticleDTO(listOf(1)),
             name = "new version"
         )
         assertUnauthenticated(postRequest(newProtocolDTO, "$apiUrl/article/1"))
@@ -477,7 +477,7 @@ internal class ArticleVersionControllerTest :
      */
     @Test
     fun `create articleVersion without sections from existing article`() {
-        val dto = ArticleVersionFullCreationDTO(ArticleDTO(1), "next version")
+        val dto = ArticleVersionFullCreationDTO(ArticleDTO(listOf(1)), "next version")
 
         val result = post(dto, "$apiUrl/article/1")
         val created = get(result.id)
@@ -493,7 +493,7 @@ internal class ArticleVersionControllerTest :
     @Test
     fun `create articleVersion from existing article`() {
         val newProtocolDTO = ArticleVersionFullCreationDTO(
-            articleDTO = ArticleDTO(1),
+            articleDTO = ArticleDTO(listOf(1)),
             name = "new version",
             sections = listOf(
                 SectionInnerDTO(

@@ -5,11 +5,18 @@ values (2, 'child category 1', 2, 1);
 insert into category
 values (3, 'child category 2', 3, 1);
 
-insert into article (id, category_id)
+insert into article (id)
+values (1);
+insert into article (id)
+values (2);
+insert into article (id)
+values (3);
+
+insert into categories_articles (article_id, category_id)
 values (1, 1);
-insert into article (id, category_id)
+insert into categories_articles (article_id, category_id)
 values (2, 2);
-insert into article (id, category_id)
+insert into categories_articles (article_id, category_id)
 values (3, 1);
 
 insert into users (id, email, password, academic_degree, doctor_degree, first_name, last_name, orcid, research_id, refresh_token)
