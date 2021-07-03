@@ -105,7 +105,8 @@ internal class CategoryControllerTest :
             order = 1,
             subcategories = listOf(
                 CategorySubcategoryView(id = 2, name = "child category 1", order = 2),
-                CategorySubcategoryView(id = 3, name = "child category 2", order = 3)
+                CategorySubcategoryView(id = 3, name = "child category 2", order = 3),
+                CategorySubcategoryView(id = 4, name = "child category 3", order = 4)
             ),
             articles = listOf(
                 ArticleView(
@@ -157,7 +158,7 @@ internal class CategoryControllerTest :
 
         assertInSearch(
             SearchQueryDTO("sample category"),
-            CategorySearchResult(4, "sample category"),
+            CategorySearchResult(5, "sample category"),
             1
         )
     }
@@ -250,12 +251,12 @@ internal class CategoryControllerTest :
      */
     @Test
     internal fun `delete existing category`() {
-        delete(3)
+        delete(4)
 
-        assertNotFound("Category", getRequest(3))
+        assertNotFound("Category", getRequest(4))
         assertInSearch(
-            SearchQueryDTO("child category 2"),
-            CategorySearchResult(3, "child category 2"),
+            SearchQueryDTO("child category 3"),
+            CategorySearchResult(4, "child category 3"),
             0
         )
     }

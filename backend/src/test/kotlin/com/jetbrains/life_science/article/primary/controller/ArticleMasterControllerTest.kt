@@ -138,7 +138,7 @@ internal class ArticleMasterControllerTest :
     @Test
     internal fun `create article`() {
         // Preparing request data
-        val articleDTO = ArticleDTO(listOf(3))
+        val articleDTO = ArticleDTO(listOf(2, 3))
 
         // Request with check
         createArticle(articleDTO)
@@ -162,7 +162,7 @@ internal class ArticleMasterControllerTest :
     @Test
     internal fun `update existing category`() {
         // Preparing request data
-        val articleDTO = ArticleDTO(listOf(2))
+        val articleDTO = ArticleDTO(listOf(2, 3))
 
         // Request with check
         updateArticle(1, articleDTO)
@@ -174,7 +174,7 @@ internal class ArticleMasterControllerTest :
     @Test
     internal fun `update non-existent category`() {
         // Preparing request data
-        val articleDTO = ArticleDTO(listOf(111))
+        val articleDTO = ArticleDTO(listOf(2, 3, 111))
 
         // Request with check
         assertNotFound("Article", putRequest(100, articleDTO))
@@ -218,7 +218,7 @@ internal class ArticleMasterControllerTest :
     @WithUserDetails("user")
     internal fun `user privileges`() {
         // Prepare request data
-        val articleDto = ArticleDTO(listOf(2))
+        val articleDto = ArticleDTO(listOf(2, 3))
 
         // Requests with check
         assertOk(getRequest(1))
@@ -234,7 +234,7 @@ internal class ArticleMasterControllerTest :
     @WithAnonymousUser
     internal fun `anonymous privileges`() {
         // Prepare request data
-        val articleDto = ArticleDTO(listOf(2))
+        val articleDto = ArticleDTO(listOf(2, 3))
 
         // Requests with check
         assertOk(getRequest(1))

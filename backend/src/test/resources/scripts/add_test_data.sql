@@ -4,6 +4,8 @@ insert into category
 values (2, 'child category 1', 2, 1);
 insert into category
 values (3, 'child category 2', 3, 1);
+insert into category
+values (4, 'child category 3', 4, 1);
 
 insert into article (id)
 values (1);
@@ -16,6 +18,8 @@ insert into categories_articles (article_id, category_id)
 values (1, 1);
 insert into categories_articles (article_id, category_id)
 values (2, 2);
+insert into categories_articles (article_id, category_id)
+values (2, 3);
 insert into categories_articles (article_id, category_id)
 values (3, 1);
 

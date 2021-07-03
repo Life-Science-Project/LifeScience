@@ -13,5 +13,10 @@
     "_class": "Category",
     "id": 3,
     "text": "child category 2"
+  },
+  {
+    "_class": "Category",
+    "id": 4,
+    "text": "child category 3"
   }
 ]
