@@ -52,7 +52,6 @@ class UserServiceImpl(
         return userRepository.count()
     }
 
-    @Transactional
     override fun addFavourite(user: User, articleVersionId: Long): User {
         val version = articleVersionService.getById(articleVersionId)
         if (!user.favouriteArticles.any { it.id == articleVersionId }) {
@@ -61,7 +60,6 @@ class UserServiceImpl(
         return user
     }
 
-    @Transactional
     override fun removeFavourite(user: User, articleVersionId: Long) {
         val version = articleVersionService.getById(articleVersionId)
         if (user.favouriteArticles.any { it.id == articleVersionId }) {
@@ -69,17 +67,14 @@ class UserServiceImpl(
         }
     }
 
-    @Transactional
     override fun update(info: UpdateDetailsInfo, user: User): User {
-        val organisations = info.organisations.map {
-            organisationService.getByName(it) ?: organisationService.create(it)
-        }
+        val organisations = organisationService.createListOfOrganizations(info.organisations)
         return userFactory.setParams(info, organisations, user)
     }
 
     fun checkUserNotExists(email: String) {
         if (userRepository.existsByEmail(email)) {
-            throw UserAlreadyExistsException("user with email $email already exists")
+            throw UserAlreadyExistsException("User with email $email already exists.")
         }
     }
 }

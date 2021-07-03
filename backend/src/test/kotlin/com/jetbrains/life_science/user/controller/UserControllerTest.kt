@@ -6,6 +6,7 @@ import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
+import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.view.UserView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -96,8 +97,8 @@ internal class UserControllerTest :
     @Test
     internal fun `update existing user`() {
         val updateDetailsDto = UpdateDetailsDTO(
-            doctorDegree = DoctorDegree.NONE,
-            academicDegree = AcademicDegree.PROFESSIONAL,
+            doctorDegree = DoctorDegree.NONE.name,
+            academicDegree = AcademicDegree.PROFESSIONAL.name,
             organisations = listOf("abc", "def"),
             orcid = "babla",
             researchId = "5555"
@@ -111,8 +112,8 @@ internal class UserControllerTest :
     @Test
     internal fun `update non-existent user`() {
         val updateDetailsDto = UpdateDetailsDTO(
-            doctorDegree = DoctorDegree.NONE,
-            academicDegree = AcademicDegree.PROFESSIONAL,
+            doctorDegree = DoctorDegree.NONE.name,
+            academicDegree = AcademicDegree.PROFESSIONAL.name,
             organisations = listOf("abc", "def"),
             orcid = "babla",
             researchId = "5555"
@@ -228,8 +229,8 @@ internal class UserControllerTest :
         assertOk(getCurrentUserRequest())
 
         assertOk(getFavouritesRequest(userId))
-        assertOk(updateFavouritesRequest(userId, 3))
-        assertOk(deleteFavouriteRequest(userId, 1))
+        assertForbidden(updateFavouritesRequest(userId, 3))
+        assertForbidden(deleteFavouriteRequest(userId, 1))
 
         assertOk(deleteRequest(userId))
         assertNotFound("User", getRequest(userId))
@@ -282,16 +283,17 @@ internal class UserControllerTest :
         assertEquals(dto.organisations.size, responseOrgs.size)
         dto.organisations.forEach { assertTrue(responseOrgs.contains(it)) }
         val updatedUser = get(responseUser.id)
+        val userUpdateInfo = UpdateDetailsDTOToInfoAdapter(dto)
         val expectedUser = UserView(
             id = userId,
             email = oldUser.email,
             firstName = oldUser.firstName,
             lastName = oldUser.lastName,
-            doctorDegree = dto.doctorDegree,
-            academicDegree = dto.academicDegree,
+            doctorDegree = userUpdateInfo.doctorDegree,
+            academicDegree = userUpdateInfo.academicDegree,
             organisations = responseUser.organisations,
-            orcid = dto.orcid,
-            researchId = dto.researchId,
+            orcid = userUpdateInfo.orcid,
+            researchId = userUpdateInfo.researchId,
             roles = listOf("ROLE_USER", "ROLE_ADMIN", "ROLE_MODERATOR")
         )
         assertEquals(expectedUser, updatedUser)

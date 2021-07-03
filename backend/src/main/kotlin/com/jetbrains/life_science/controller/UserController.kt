@@ -62,7 +62,6 @@ class UserController(
         return mapper.createView(user)
     }
 
-    // TODO(#141): DTO uses entities and enums, many 500 error possibilities
     @Operation(summary = "Updates existing user")
     @PatchMapping("/{userId}")
     fun updateDetails(
@@ -71,8 +70,8 @@ class UserController(
         principal: Principal
     ): UserView {
         val user = userService.getById(userId)
-        if (!checkAccess(user, principal)) {
-            throw AccessDeniedException("Not enough permissions to edit this user")
+        if (!checkUserAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to edit this user.")
         }
         return mapper.createView(userService.update(UpdateDetailsDTOToInfoAdapter(updateDetailsDTO), user))
     }
@@ -84,8 +83,8 @@ class UserController(
         principal: Principal
     ) {
         val user = userService.getById(userId)
-        if (!checkAccess(user, principal)) {
-            throw AccessDeniedException("Not enough permissions to delete this user")
+        if (!checkAdminAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to delete this user account.")
         }
         userService.deleteById(userId)
     }
@@ -105,14 +104,14 @@ class UserController(
         principal: Principal
     ): UserView {
         val user = userService.getById(userId)
-        if (!checkAccess(user, principal)) {
-            throw AccessDeniedException("Not enough permissions to add this favourite")
+        if (!checkUserAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to add this protocol to favourite.")
         }
         val updatedUser = userService.addFavourite(user, versionId)
         return mapper.createView(updatedUser)
     }
 
-    @Operation(summary = "Deletes version to user's favourites")
+    @Operation(summary = "Deletes version from user's favourites")
     @DeleteMapping("/{userId}/favourites/{versionId}")
     fun removeFavourite(
         @PathVariable userId: Long,
@@ -120,13 +119,18 @@ class UserController(
         principal: Principal
     ) {
         val user = userService.getById(userId)
-        if (!checkAccess(user, principal)) {
-            throw AccessDeniedException("You haven't got enough permissions to delete this favourite")
+        if (!checkUserAccess(user, principal)) {
+            throw AccessDeniedException("You haven't got enough permissions to delete this protocol from favourite.")
         }
         userService.removeFavourite(user, versionId)
     }
 
-    private fun checkAccess(user: User, principal: Principal): Boolean {
+    private fun checkUserAccess(user: User, principal: Principal): Boolean {
+        val credentials = userCredentialsService.getByEmail(principal.email)
+        return user.id == credentials.id
+    }
+
+    private fun checkAdminAccess(user: User, principal: Principal): Boolean {
         val credentials = userCredentialsService.getByEmail(principal.email)
         return user.id == credentials.id || credentials.roles.any {
             it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR"

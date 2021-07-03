@@ -13,11 +13,14 @@ import java.util.Date
 @Component
 class JWTService {
 
-    @Value("\${assm.app.jwtSecret}")
+    @Value("\${jwtSecret}")
     lateinit var jwtSecret: String
 
-    @Value("\${assm.app.jwtExpiration}")
+    @Value("\${jwtExpiration}")
     var jwtExpirationSeconds: Int = 0
+
+    @Value("\${refreshExpiration}")
+    var refreshExpirationSeconds: Int = 0
 
     fun generateAuthTokens(username: String): AuthTokens {
         val jwt = generateJwtToken(username)

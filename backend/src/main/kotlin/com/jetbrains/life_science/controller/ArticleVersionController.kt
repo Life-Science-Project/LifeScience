@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.controller
 
-import com.jetbrains.life_science.article.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.primary.dto.ArticleDTOToInfoAdapter
 import com.jetbrains.life_science.article.primary.service.ArticleService
 import com.jetbrains.life_science.article.primary.view.ArticleFullPageView
@@ -29,7 +28,6 @@ import java.security.Principal
 class ArticleVersionController(
     val articleVersionService: ArticleVersionService,
     val sectionService: SectionService,
-    val contentVersionService: ContentVersionService,
     val viewMapper: ArticleVersionViewMapper,
     val userService: UserService
 ) {

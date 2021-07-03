@@ -1,13 +1,10 @@
 package com.jetbrains.life_science.user.master.dto
 
-import com.jetbrains.life_science.user.degree.AcademicDegree
-import com.jetbrains.life_science.user.degree.DoctorDegree
-
 data class UpdateDetailsDTO(
 
-    val doctorDegree: DoctorDegree,
+    val doctorDegree: String,
 
-    val academicDegree: AcademicDegree,
+    val academicDegree: String,
 
     val organisations: List<String>,
 
