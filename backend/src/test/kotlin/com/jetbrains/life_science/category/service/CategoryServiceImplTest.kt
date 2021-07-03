@@ -69,9 +69,9 @@ internal class CategoryServiceImplTest {
     @Test
     @Transactional
     internal fun `delete a category`() {
-        categoryService.deleteCategory(3)
-        assertFalse(categoryRepository.existsById(3))
-        verify(searchService, times(1)).deleteSearchUnitById(3)
+        categoryService.deleteCategory(4)
+        assertFalse(categoryRepository.existsById(4))
+        verify(searchService, times(1)).deleteSearchUnitById(4)
     }
 
     @Test
