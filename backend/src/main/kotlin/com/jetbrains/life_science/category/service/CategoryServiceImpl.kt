@@ -40,8 +40,8 @@ class CategoryServiceImpl(
         return categoryRepository.findById(id).get()
     }
 
-    override fun getCategories(ids: List<Long>): MutableList<Category> {
-        return ids.map { getCategory(it) } as MutableList<Category>
+    override fun getCategories(ids: List<Long>): List<Category> {
+        return ids.map { getCategory(it) }
     }
 
     @Transactional

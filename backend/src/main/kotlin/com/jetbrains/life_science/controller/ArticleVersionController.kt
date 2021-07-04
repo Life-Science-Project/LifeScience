@@ -115,7 +115,7 @@ class ArticleVersionController(
     ): ArticleVersionView {
         checkUpdatePermission(versionId, principal)
         val user = userService.getByEmail(principal.email)
-        val updatedVersion = articleVersionService.updateById(ArticleVersionDTOToInfoAdapter(dto, user, versionId))
+        val updatedVersion = articleVersionService.update(ArticleVersionDTOToInfoAdapter(dto, user, versionId))
         return viewMapper.toView(updatedVersion)
     }
 

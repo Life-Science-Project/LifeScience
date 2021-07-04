@@ -124,7 +124,7 @@ class ArticleVersionServiceImpl(
     }
 
     @Transactional
-    override fun updateById(info: ArticleVersionInfo): ArticleVersion {
+    override fun update(info: ArticleVersionInfo): ArticleVersion {
         val version = getById(info.id)
         val article = articleService.getById(info.articleId)
         factory.setParams(version, info, article)

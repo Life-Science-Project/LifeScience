@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component
 @Component
 class ArticleFactory {
 
-    fun create(categories: MutableList<Category>): Article {
+    fun create(categories: List<Category>): Article {
         return Article(
             id = 0,
-            categories = categories,
+            categories = categories.toMutableList(),
             versions = mutableListOf()
         )
     }
 
-    fun setParams(article: Article, categories: MutableList<Category>) {
-        article.categories = categories
+    fun setParams(article: Article, categories: List<Category>) {
+        article.categories = categories.toMutableList()
     }
 }

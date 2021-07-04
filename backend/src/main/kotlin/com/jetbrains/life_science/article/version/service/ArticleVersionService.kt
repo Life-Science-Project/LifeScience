@@ -26,7 +26,7 @@ interface ArticleVersionService {
 
     fun getByArticleId(articleId: Long): List<ArticleVersion>
 
-    fun updateById(info: ArticleVersionInfo): ArticleVersion
+    fun update(info: ArticleVersionInfo): ArticleVersion
 
     fun getPublishedByArticle(mainArticle: Article): ArticleVersion
 }

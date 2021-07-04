@@ -8,7 +8,7 @@ interface ArticleService {
 
     fun getById(id: Long): Article
 
-    fun updateById(info: ArticleInfo): Article
+    fun update(info: ArticleInfo): Article
 
     fun deleteById(articleId: Long)
 
