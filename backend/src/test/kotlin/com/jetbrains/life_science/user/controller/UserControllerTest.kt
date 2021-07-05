@@ -2,7 +2,6 @@ package com.jetbrains.life_science.user.controller
 
 import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.content.version.repository.ContentVersionRepository
-import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
@@ -139,86 +138,6 @@ internal class UserControllerTest :
         assertNotFound("User", deleteRequest(100))
     }
 
-    /**
-     * Should get correct favourites
-     */
-    @Test
-    @WithUserDetails("user")
-    internal fun `get favourites`() {
-        val favourites = getFavourites(2)
-        val expectedIds = listOf<Long>(1, 2)
-        val actualIds = favourites.map { it.id }
-        assertEquals(expectedIds.size, favourites.size)
-        for (expectedId in expectedIds) {
-            assertTrue(actualIds.contains(expectedId))
-        }
-    }
-
-    /**
-     * Should correctly add new favourite
-     */
-    @Test
-    internal fun `update favourites`() {
-        val userId = 1L
-        val articleId = 1L
-
-        val oldFavourites = getFavourites(userId)
-        updateFavourites(userId, articleId)
-        val newFavourites = getFavourites(userId)
-        assertEquals(oldFavourites.size + 1, newFavourites.size)
-
-        val newFavouriteIds = newFavourites.map { it.id }
-        assertTrue(newFavouriteIds.contains(articleId))
-    }
-
-    /**
-     * Should not change, if added article is already in favourites
-     */
-    @Test
-    @WithUserDetails("user")
-    internal fun `update same favourites`() {
-        val userId = 2L
-        val articleId = 2L
-
-        val oldFavourites = getFavourites(userId)
-        updateFavourites(userId, articleId)
-        val newFavourites = getFavourites(userId)
-        assertEquals(oldFavourites, newFavourites)
-    }
-
-    /**
-     * Should correctly delete from favourites
-     */
-    @Test
-    @WithUserDetails("user")
-    internal fun `delete from favourites`() {
-        val userId = 2L
-        val articleId = 1L
-
-        val oldFavourites = getFavourites(userId)
-        deleteFavourite(userId, articleId)
-        val newFavourites = getFavourites(userId)
-        assertEquals(oldFavourites.size - 1, newFavourites.size)
-
-        val newFavouriteIds = newFavourites.map { it.id }
-        assertFalse(newFavouriteIds.contains(articleId))
-    }
-
-    /**
-     * Should not change, if deleted article isn't in favourites
-     */
-    @Test
-    @WithUserDetails("user")
-    internal fun `delete non-existent favourite`() {
-        val userId = 2L
-        val articleId = 3L
-
-        val oldFavourites = getFavourites(userId)
-        deleteFavourite(userId, articleId)
-        val newFavourites = getFavourites(userId)
-        assertEquals(oldFavourites, newFavourites)
-    }
-
     @Test
     @WithUserDetails("admin")
     internal fun `admin privileges`() {
@@ -315,11 +234,6 @@ internal class UserControllerTest :
 
     private fun getCurrentUserRequest(): ResultActionsDsl {
         return mockMvc.get("$apiUrl/current")
-    }
-
-    private fun getFavourites(id: Long): List<ArticleVersionView> {
-        val articles = assertOkAndGetJson(getFavouritesRequest(id))
-        return getViewsFromJson(articles, ArticleVersionView::class.java)
     }
 
     private fun getFavouritesRequest(id: Long): ResultActionsDsl {

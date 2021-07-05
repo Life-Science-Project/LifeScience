@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.content.publish.service
 
 import com.jetbrains.life_science.content.publish.entity.Content
-import com.jetbrains.life_science.article.section.entity.Section
+import com.jetbrains.life_science.section.entity.Section
 
 interface ContentService {
 

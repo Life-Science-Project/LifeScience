@@ -8,5 +8,5 @@ data class CategoryDTO(
 
     val parentId: Long?,
 
-    val order: Int
+    val order: Long
 )

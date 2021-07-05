@@ -23,4 +23,4 @@ class PublicApproach(
 
     @OneToMany
     var protocols: MutableList<Protocol>,
-): Approach(id, name, sections, tags)
+) : Approach(id, name, sections, tags)
