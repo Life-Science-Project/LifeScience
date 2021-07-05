@@ -4,9 +4,8 @@ import com.jetbrains.life_science.content.publish.entity.Content
 import com.jetbrains.life_science.content.publish.factory.ContentFactory
 import com.jetbrains.life_science.content.publish.repository.ContentRepository
 import com.jetbrains.life_science.content.version.service.ContentVersionService
-import com.jetbrains.life_science.article.section.entity.Section
-import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
+import com.jetbrains.life_science.section.entity.Section
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 

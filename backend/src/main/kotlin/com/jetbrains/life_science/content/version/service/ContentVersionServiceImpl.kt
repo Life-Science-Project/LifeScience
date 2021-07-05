@@ -5,12 +5,10 @@ import com.jetbrains.life_science.content.publish.factory.ContentFactory
 import com.jetbrains.life_science.content.publish.service.ContentInfo
 import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.content.version.repository.ContentVersionRepository
-import com.jetbrains.life_science.article.section.entity.Section
-import com.jetbrains.life_science.article.section.service.SectionService
-import com.jetbrains.life_science.article.version.entity.State
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
 import com.jetbrains.life_science.exception.request.ContentAlreadyExistsException
 import com.jetbrains.life_science.exception.request.ContentIsNotEditableException
+import com.jetbrains.life_science.section.entity.Section
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -78,6 +76,7 @@ class ContentVersionServiceImpl(
         }
     }
 
+    @Deprecated(message = "MUST BE REFACTORED")
     private fun validateSectionIsEditable(section: Section) {
         if (section.articleVersion.state != State.EDITING) {
             throw ContentIsNotEditableException("Content is not editable")
