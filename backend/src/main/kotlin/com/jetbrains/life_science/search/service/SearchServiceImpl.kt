@@ -10,16 +10,36 @@ import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestHighLevelClient
+import org.elasticsearch.common.unit.Fuzziness
 import org.elasticsearch.index.query.QueryBuilders
+import org.elasticsearch.script.Script
 import org.elasticsearch.search.SearchHit
 import org.elasticsearch.search.builder.SearchSourceBuilder
+import org.elasticsearch.search.sort.ScriptSortBuilder
+import org.elasticsearch.search.sort.SortBuilders
+import org.elasticsearch.search.sort.SortOrder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 
 @Service
 class SearchServiceImpl(
-    val client: RestHighLevelClient
+    val client: RestHighLevelClient,
+    @Value("classpath:search/sortScript.txt")
+    private val sortScriptResource: Resource
 ) : SearchService {
+
+    private val sortScript: Script
+
+    init {
+        val scriptText = sortScriptResource.inputStream.bufferedReader().readText()
+        sortScript = Script(scriptText)
+    }
+
+    private val sortBuilder = SortBuilders
+        .scriptSort(sortScript, ScriptSortBuilder.ScriptSortType.NUMBER)
+        .order(SortOrder.DESC)
 
     val logger = getLogger()
 
@@ -48,13 +68,22 @@ class SearchServiceImpl(
 
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
         val queryBuilder = QueryBuilders.boolQuery()
-            .must(QueryBuilders.matchPhrasePrefixQuery("text", query.text))
-            .should(QueryBuilders.matchQuery("_class", "Article"))
+            .should(
+                QueryBuilders.matchQuery("text", query.text)
+                    .fuzziness(Fuzziness.AUTO)
+                    .prefixLength(0)
+                    .maxExpansions(15)
+                    .fuzzyTranspositions(true)
+            )
+            .should(
+                QueryBuilders.matchPhrasePrefixQuery("text", query.text)
+            )
 
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
             .from(query.from)
             .size(query.size)
+            .sort(sortBuilder)
 
         return SearchRequest()
             .source(searchBuilder)

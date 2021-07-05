@@ -1,0 +1,9 @@
+if(doc['_class.keyword'].value == 'Category') {
+    return 3;
+}
+if(doc['_class.keyword'].value == 'Article') {
+    return 2;
+}
+if(doc['_class.keyword'].value == 'Content') {
+    return 1;
+}
