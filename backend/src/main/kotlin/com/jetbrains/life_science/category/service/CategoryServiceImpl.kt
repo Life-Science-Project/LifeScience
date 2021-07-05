@@ -28,7 +28,7 @@ class CategoryServiceImpl(
 
     override fun deleteCategory(id: Long) {
         val category = getCategory(id)
-        if (category.subCategories.isNotEmpty() || category.articles.isNotEmpty()) {
+        if (category.subCategories.isNotEmpty() || category.approaches.isNotEmpty()) {
             throw CategoryNotEmptyException("Category with id $id is not empty")
         }
         categoryRepository.deleteById(id)

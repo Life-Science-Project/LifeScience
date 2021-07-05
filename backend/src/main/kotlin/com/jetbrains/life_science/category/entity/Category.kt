@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.category.entity
 
-import com.jetbrains.life_science.article.primary.entity.Article
+import com.jetbrains.life_science.approach.entity.Approach
 import javax.persistence.*
 
 @Entity
@@ -20,7 +20,7 @@ class Category(
     val subCategories: MutableList<Category>,
 
     @OneToMany(mappedBy = "category")
-    val articles: MutableList<Article>,
+    val approaches: MutableList<Approach>,
 
-    var orderNumber: Int
+    var order: Long
 )

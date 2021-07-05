@@ -1,12 +1,12 @@
 package com.jetbrains.life_science.category.view
 
-import com.jetbrains.life_science.article.primary.view.ArticleView
+import com.jetbrains.life_science.approach.view.ApproachCategoryView
 
 data class CategoryView(
     val id: Long,
     val parentId: Long?,
     val name: String,
-    val order: Int,
+    val order: Long,
     val subcategories: List<CategorySubcategoryView>,
-    val articles: List<ArticleView>
+    val approaches: List<ApproachCategoryView>
 )
