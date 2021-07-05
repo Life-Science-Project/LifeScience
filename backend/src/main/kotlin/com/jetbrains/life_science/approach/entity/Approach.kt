@@ -1,9 +1,8 @@
 package com.jetbrains.life_science.approach.entity
 
-import com.jetbrains.life_science.article.section.entity.Section
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.protocol.entity.Protocol
-import com.jetbrains.life_science.section.entity.ApproachSection
+import com.jetbrains.life_science.section.entity.Section
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -25,7 +24,7 @@ class Approach(
     var categories: MutableList<Category>,
 
     @OneToMany
-    var sections: MutableList<ApproachSection>,
+    var sections: MutableList<Section>,
 
     @OneToMany
     var protocols: MutableList<Protocol>,

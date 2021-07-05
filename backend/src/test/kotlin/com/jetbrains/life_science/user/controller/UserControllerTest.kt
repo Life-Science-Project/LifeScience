@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.user.controller
 
 import com.jetbrains.life_science.ControllerTest
-import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
+import com.jetbrains.life_science.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.article.version.view.ArticleVersionView
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree

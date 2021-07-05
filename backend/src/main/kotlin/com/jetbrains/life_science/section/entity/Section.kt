@@ -6,7 +6,7 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
-abstract class Section(
+class Section(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -15,5 +15,7 @@ abstract class Section(
 
     var order: Long,
 
-    var visible: Boolean
+    var visible: Boolean,
+
+    var published: Boolean
 )

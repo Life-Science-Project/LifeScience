@@ -1,11 +1,11 @@
 package com.jetbrains.life_science.controller
 
-import com.jetbrains.life_science.article.content.publish.dto.ContentDTO
-import com.jetbrains.life_science.article.content.publish.dto.ContentDTOToInfoAdapter
-import com.jetbrains.life_science.article.content.publish.service.ContentService
-import com.jetbrains.life_science.article.content.publish.view.ContentView
-import com.jetbrains.life_science.article.content.publish.view.ContentViewMapper
-import com.jetbrains.life_science.article.content.version.service.ContentVersionService
+import com.jetbrains.life_science.content.publish.dto.ContentDTO
+import com.jetbrains.life_science.content.publish.dto.ContentDTOToInfoAdapter
+import com.jetbrains.life_science.content.publish.service.ContentService
+import com.jetbrains.life_science.content.publish.view.ContentView
+import com.jetbrains.life_science.content.publish.view.ContentViewMapper
+import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.article.section.service.SectionService
 import com.jetbrains.life_science.exception.request.BadRequestException
 import com.jetbrains.life_science.user.master.service.UserService
