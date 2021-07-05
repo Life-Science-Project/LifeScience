@@ -13,5 +13,7 @@ abstract class Section(
 
     var name: String,
 
-    var order: Long
+    var order: Long,
+
+    var visible: Boolean
 )

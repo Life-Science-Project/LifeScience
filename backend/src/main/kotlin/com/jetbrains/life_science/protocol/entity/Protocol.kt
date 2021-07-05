@@ -2,6 +2,7 @@ package com.jetbrains.life_science.protocol.entity
 
 import com.jetbrains.life_science.approach.entity.Approach
 import com.jetbrains.life_science.article.section.entity.Section
+import com.jetbrains.life_science.section.entity.ProtocolSection
 import com.jetbrains.life_science.user.master.entity.User
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -26,7 +27,7 @@ abstract class Protocol(
     var approach: Approach,
 
     @OneToMany
-    var sections: MutableList<Section>,
+    var sections: MutableList<ProtocolSection>,
 
     @OneToOne
     var owner: User

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class SectionViewMapper(
     val contentService: ContentService,
     val contentVersionService: ContentVersionService,
-    val contentViewMapper: ContentViewMapper,
+    val contentViewMapper: ContentViewMapper
 ) {
     fun createView(section: Section): SectionView {
 

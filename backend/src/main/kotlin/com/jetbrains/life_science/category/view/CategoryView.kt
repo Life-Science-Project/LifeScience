@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.category.view
 
-import com.jetbrains.life_science.approach.view.ApproachCategoryView
+import com.jetbrains.life_science.approach.view.ApproachInCategoryView
 
 data class CategoryView(
     val id: Long,
@@ -8,5 +8,5 @@ data class CategoryView(
     val name: String,
     val order: Long,
     val subcategories: List<CategorySubcategoryView>,
-    val approaches: List<ApproachCategoryView>
+    val approaches: List<ApproachInCategoryView>
 )

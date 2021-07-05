@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class ApproachCategoryViewMapper {
-    fun createView(approach: Approach): ApproachCategoryView {
-        return ApproachCategoryView(
+    fun createView(approach: Approach): ApproachInCategoryView {
+        return ApproachInCategoryView(
             id = approach.id,
             name = approach.name
         )
