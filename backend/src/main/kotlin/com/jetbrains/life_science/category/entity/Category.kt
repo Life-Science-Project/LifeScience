@@ -5,7 +5,6 @@ import javax.persistence.*
 
 @Entity
 class Category(
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long,
@@ -22,5 +21,6 @@ class Category(
     @ManyToMany
     val approaches: MutableList<PublicApproach>,
 
+    @Column(name = "order_num")
     var order: Long
 )

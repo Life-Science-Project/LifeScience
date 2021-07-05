@@ -17,7 +17,7 @@ import javax.persistence.OneToOne
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 abstract class Protocol(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     val id: Long,
 
     var name: String,

@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.section.entity
 
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -13,6 +14,7 @@ class Section(
 
     var name: String,
 
+    @Column(name = "order_num")
     var order: Long,
 
     var visible: Boolean,

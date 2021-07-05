@@ -1,7 +1,5 @@
 package com.jetbrains.life_science.controller
 
-import com.jetbrains.life_science.article.version.view.ArticleVersionView
-import com.jetbrains.life_science.article.version.view.ArticleVersionViewMapper
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
 import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.entity.User
@@ -28,7 +26,6 @@ class UserController(
     val userService: UserService,
     val userCredentialsService: UserCredentialsService,
     val mapper: UserViewMapper,
-    val articleVersionViewMapper: ArticleVersionViewMapper
 ) {
 
     @Operation(summary = "Returns the count of all users on the portal")
@@ -87,42 +84,6 @@ class UserController(
             throw AccessDeniedException("You haven't got enough permissions to delete this user account.")
         }
         userService.deleteById(userId)
-    }
-
-    @Operation(summary = "Returns user's favourite versions")
-    @GetMapping("/{userId}/favourites")
-    fun getFavourites(@PathVariable userId: Long): List<ArticleVersionView> {
-        val user = userService.getById(userId)
-        return user.favouriteArticles.map { articleVersionViewMapper.toView(it) }
-    }
-
-    @Operation(summary = "Adds version to user's favourites")
-    @PatchMapping("/{userId}/favourites/{versionId}")
-    fun addFavourite(
-        @PathVariable userId: Long,
-        @PathVariable versionId: Long,
-        principal: Principal
-    ): UserView {
-        val user = userService.getById(userId)
-        if (!checkUserAccess(user, principal)) {
-            throw AccessDeniedException("You haven't got enough permissions to add this protocol to favourite.")
-        }
-        val updatedUser = userService.addFavourite(user, versionId)
-        return mapper.createView(updatedUser)
-    }
-
-    @Operation(summary = "Deletes version from user's favourites")
-    @DeleteMapping("/{userId}/favourites/{versionId}")
-    fun removeFavourite(
-        @PathVariable userId: Long,
-        @PathVariable versionId: Long,
-        principal: Principal
-    ) {
-        val user = userService.getById(userId)
-        if (!checkUserAccess(user, principal)) {
-            throw AccessDeniedException("You haven't got enough permissions to delete this protocol from favourite.")
-        }
-        userService.removeFavourite(user, versionId)
     }
 
     private fun checkUserAccess(user: User, principal: Principal): Boolean {

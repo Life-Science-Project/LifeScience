@@ -15,7 +15,7 @@ import javax.persistence.OneToMany
 abstract class Approach(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     val id: Long,
 
     var name: String,
