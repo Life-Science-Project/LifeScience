@@ -1,12 +1,12 @@
 package com.jetbrains.life_science.category.view
 
-import com.jetbrains.life_science.approach.view.ApproachCategoryViewMapper
+import com.jetbrains.life_science.approach.view.PublicApproachCategoryViewMapper
 import com.jetbrains.life_science.category.entity.Category
 import org.springframework.stereotype.Component
 
 @Component
 class CategoryViewMapper(
-    val approachCategoryViewMapper: ApproachCategoryViewMapper
+    val approachCategoryViewMapper: PublicApproachCategoryViewMapper
 ) {
     fun createView(category: Category): CategoryView {
         val subcategoriesView = category.subCategories.map { CategorySubcategoryView(it.id, it.name, it.order) }

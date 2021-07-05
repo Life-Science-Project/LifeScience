@@ -8,11 +8,10 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.ManyToMany
 import javax.persistence.OneToMany
 
 @Entity
-class Approach(
+abstract class Approach(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +19,8 @@ class Approach(
 
     var name: String,
 
-    @ManyToMany
-    var categories: MutableList<Category>,
-
     @OneToMany
     var sections: MutableList<Section>,
-
-    @OneToMany
-    var protocols: MutableList<Protocol>,
 
     @ElementCollection
     var tags: List<String>
