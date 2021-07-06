@@ -13,7 +13,5 @@ interface ContentService {
 
     fun findById(contentId: String?): Content
 
-    fun createCopyBySection(origin: Section, newSection: Section)
-
     fun publishBySectionId(sectionId: Long)
 }
