@@ -28,6 +28,7 @@ class AuthController(
     val authResponseFactory: AuthResponseFactory
 ) {
 
+
     @Operation(summary = "Sign in")
     @PostMapping("/signin")
     fun authenticateUser(@Validated @RequestBody authRequest: AuthRequest): AuthResponse {
