@@ -18,6 +18,8 @@ abstract class ReviewRequest(
 
     var date: Date,
 
+    var state: RequestState,
+
     @OneToMany
     var reviews: MutableList<Review>,
 
