@@ -7,5 +7,5 @@ interface CategoryInfo {
 
     val parentId: Long?
 
-    val order: Int
+    val order: Long
 }

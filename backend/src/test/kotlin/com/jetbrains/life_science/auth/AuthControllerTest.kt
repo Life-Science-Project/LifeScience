@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.auth
 
 import com.jetbrains.life_science.ControllerTest
-import com.jetbrains.life_science.article.content.version.repository.ContentVersionRepository
+import com.jetbrains.life_science.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.master.dto.NewUserDTO

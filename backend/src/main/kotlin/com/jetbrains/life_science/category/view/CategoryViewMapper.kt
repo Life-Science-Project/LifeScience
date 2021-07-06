@@ -1,25 +1,24 @@
 package com.jetbrains.life_science.category.view
 
-import com.jetbrains.life_science.article.primary.view.ArticleViewMapper
+import com.jetbrains.life_science.approach.view.PublicApproachCategoryViewMapper
 import com.jetbrains.life_science.category.entity.Category
 import org.springframework.stereotype.Component
 
 @Component
 class CategoryViewMapper(
-    val articleViewMapper: ArticleViewMapper
+    val approachCategoryViewMapper: PublicApproachCategoryViewMapper
 ) {
     fun createView(category: Category): CategoryView {
-        val subcategoriesView = category.subCategories.map { CategorySubcategoryView(it.id, it.name, it.orderNumber) }
-        val articlesView = category.articles
-            .filter { it.hasPublishedVersions }
-            .map { articleViewMapper.createView(it) }
+        val subcategoriesView = category.subCategories.map { CategorySubcategoryView(it.id, it.name, it.order) }
+        val approachesView = category.approaches
+            .map { approachCategoryViewMapper.createView(it) }
         return CategoryView(
             id = category.id,
             parentId = category.parent?.id,
             name = category.name,
-            order = category.orderNumber,
+            order = category.order,
             subcategories = subcategoriesView,
-            articles = articlesView
+            approaches = approachesView
         )
     }
 }

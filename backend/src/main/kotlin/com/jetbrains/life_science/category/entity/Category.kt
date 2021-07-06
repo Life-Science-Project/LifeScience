@@ -1,11 +1,10 @@
 package com.jetbrains.life_science.category.entity
 
-import com.jetbrains.life_science.article.primary.entity.Article
+import com.jetbrains.life_science.approach.entity.PublicApproach
 import javax.persistence.*
 
 @Entity
 class Category(
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long,
@@ -19,8 +18,9 @@ class Category(
     @OneToMany(mappedBy = "parent")
     val subCategories: MutableList<Category>,
 
-    @OneToMany(mappedBy = "category")
-    val articles: MutableList<Article>,
+    @ManyToMany
+    val approaches: MutableList<PublicApproach>,
 
-    var orderNumber: Int
+    @Column(name = "order_num")
+    var order: Long
 )

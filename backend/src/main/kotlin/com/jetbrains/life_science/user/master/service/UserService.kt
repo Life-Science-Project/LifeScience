@@ -14,10 +14,6 @@ interface UserService {
 
     fun deleteById(id: Long)
 
-    fun addFavourite(user: User, articleVersionId: Long): User
-
-    fun removeFavourite(user: User, articleVersionId: Long)
-
     fun createUser(info: NewUserInfo): User
 
     fun updateRefreshToken(token: String, email: String)

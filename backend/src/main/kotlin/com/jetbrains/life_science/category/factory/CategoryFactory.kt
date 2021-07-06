@@ -12,14 +12,14 @@ class CategoryFactory {
             name = info.name,
             parent = parent,
             subCategories = mutableListOf(),
-            articles = mutableListOf(),
-            orderNumber = info.order
+            approaches = mutableListOf(),
+            order = info.order
         )
     }
 
     fun setParams(category: Category, categoryInfo: CategoryInfo, parent: Category?) {
         category.name = categoryInfo.name
         category.parent = parent
-        category.orderNumber = categoryInfo.order
+        category.order = categoryInfo.order
     }
 }

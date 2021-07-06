@@ -38,3 +38,6 @@ out/
 
 ### Special for Mac ###
 .DS_Store
+
+### Local environment ###
+/backend/src/main/resources/application-local.properties

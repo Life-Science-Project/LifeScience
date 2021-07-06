@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.user.master.service
 
-import com.jetbrains.life_science.article.version.service.ArticleVersionService
 import com.jetbrains.life_science.exception.not_found.UserNotFoundException
 import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
 import com.jetbrains.life_science.user.master.entity.User
@@ -16,7 +15,6 @@ class UserServiceImpl(
     val userFactory: UserFactory,
     val userRepository: UserRepository,
     val roleRepository: RoleRepository,
-    val articleVersionService: ArticleVersionService,
     val organisationService: OrganisationService
 ) : UserService {
 
@@ -50,21 +48,6 @@ class UserServiceImpl(
 
     override fun countAll(): Long {
         return userRepository.count()
-    }
-
-    override fun addFavourite(user: User, articleVersionId: Long): User {
-        val version = articleVersionService.getById(articleVersionId)
-        if (!user.favouriteArticles.any { it.id == articleVersionId }) {
-            user.favouriteArticles.add(version)
-        }
-        return user
-    }
-
-    override fun removeFavourite(user: User, articleVersionId: Long) {
-        val version = articleVersionService.getById(articleVersionId)
-        if (user.favouriteArticles.any { it.id == articleVersionId }) {
-            user.favouriteArticles.remove(version)
-        }
     }
 
     override fun update(info: UpdateDetailsInfo, user: User): User {
