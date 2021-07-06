@@ -9,6 +9,8 @@ import com.jetbrains.life_science.exception.not_found.CategoryNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+private const val HEAD_CATEGORY_ID = 0L
+
 @Service
 class CategoryServiceImpl(
     val categoryRepository: CategoryRepository,
@@ -51,7 +53,7 @@ class CategoryServiceImpl(
     }
 
     override fun getRootCategories(): List<Category> {
-        return getCategory(0).subCategories
+        return getCategory(HEAD_CATEGORY_ID).subCategories
     }
 
     private fun existById(id: Long) {

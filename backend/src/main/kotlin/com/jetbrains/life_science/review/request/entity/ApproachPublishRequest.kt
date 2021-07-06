@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.review.request.entity
 
-import com.jetbrains.life_science.approach.entity.Approach
+import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.review.primary.entity.Review
 import com.jetbrains.life_science.user.master.entity.User
 import java.util.Date
@@ -16,6 +16,6 @@ class ApproachPublishRequest(
     editor: User,
 
     @ManyToOne
-    var approach: Approach
+    var approach: DraftApproach
 
 ) : ReviewRequest(id, date, state, reviews, editor)

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.review.request.entity
 
-import com.jetbrains.life_science.protocol.entity.Protocol
+import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.review.primary.entity.Review
 import com.jetbrains.life_science.user.master.entity.User
 import java.util.Date
@@ -16,6 +16,6 @@ class ProtocolPublishRequest(
     editor: User,
 
     @ManyToOne
-    var protocol: Protocol
+    var protocol: DraftProtocol
 
 ) : ReviewRequest(id, date, state, reviews, editor)

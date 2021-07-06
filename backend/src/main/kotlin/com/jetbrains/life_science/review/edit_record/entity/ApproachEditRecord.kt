@@ -17,6 +17,6 @@ class ApproachEditRecord(
     var approach: PublicApproach,
 
     @OneToOne(mappedBy = "editRecord")
-    var request: ApproachReviewRequest
+    var request: ApproachReviewRequest?
 
 ) : EditRecord(id, deletedSections, createdSections)

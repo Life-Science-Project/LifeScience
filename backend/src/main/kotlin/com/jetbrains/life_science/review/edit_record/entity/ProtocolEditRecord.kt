@@ -17,6 +17,6 @@ class ProtocolEditRecord(
     var protocol: PublicProtocol,
 
     @OneToOne(mappedBy = "editRecord")
-    var request: ProtocolReviewRequest
+    var request: ProtocolReviewRequest?
 
 ) : EditRecord(id, deletedSections, createdSections)
