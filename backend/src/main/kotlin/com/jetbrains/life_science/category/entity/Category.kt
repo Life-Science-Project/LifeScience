@@ -12,10 +12,7 @@ class Category(
     @Column(nullable = false)
     var name: String,
 
-    @ManyToOne
-    var parent: Category? = null,
-
-    @OneToMany(mappedBy = "parent")
+    @ManyToMany
     val subCategories: MutableList<Category>,
 
     @ManyToMany
