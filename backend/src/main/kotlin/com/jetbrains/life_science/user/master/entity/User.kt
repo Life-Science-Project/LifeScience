@@ -3,31 +3,21 @@ package com.jetbrains.life_science.user.master.entity
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.organisation.entity.Organisation
-import com.jetbrains.life_science.user.position.entity.Position
 import javax.persistence.*
 
 @Entity
 @Table(name = "users")
 class User(
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
-
     // Credentials
-    val email: String,
+    id: Long,
 
-    val password: String,
+    email: String,
 
-    var refreshToken: String? = null,
+    password: String,
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "users_roles",
-        joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "role_id")]
-    )
-    val roles: MutableCollection<Role>,
+    refreshToken: String? = null,
+
+    roles: MutableCollection<Role>,
 
     // Other data
     val firstName: String,
@@ -43,15 +33,14 @@ class User(
     @ManyToMany
     var organisations: MutableList<Organisation>,
 
-    @ManyToMany
-    val positions: MutableList<Position>,
-
     var orcid: String? = null,
 
     var researchId: String? = null
 
-) {
-    fun isAdminOrModerator(): Boolean {
-        return roles.any { it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR" }
-    }
-}
+) : UserCredentials(
+    id = id,
+    email = email,
+    password = password,
+    refreshToken = refreshToken,
+    roles = roles
+)

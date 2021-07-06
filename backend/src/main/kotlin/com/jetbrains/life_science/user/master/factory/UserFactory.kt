@@ -20,8 +20,7 @@ class UserFactory(val encoder: PasswordEncoder) {
             roles = roles,
             firstName = info.firstName,
             lastName = info.lastName,
-            organisations = mutableListOf(),
-            positions = mutableListOf()
+            organisations = mutableListOf()
         )
     }
 

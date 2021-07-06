@@ -21,9 +21,4 @@ class UserCredentialsService(
         return userCredentialsRepository.findByEmail(email)
             .orElseThrow { UserNotFoundException("User with email $email not found") }
     }
-
-    fun getById(id: Long): UserCredentials {
-        return userCredentialsRepository.findById(id)
-            .orElseThrow { UserNotFoundException("User with id $id not found") }
-    }
 }

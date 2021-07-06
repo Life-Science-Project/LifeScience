@@ -16,7 +16,7 @@ class UserCredentials(
 
     private val password: String,
 
-    val refreshToken: String,
+    var refreshToken: String? = null,
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

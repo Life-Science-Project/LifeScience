@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional
 
 interface UserCredentialsRepository : JpaRepository<UserCredentials, Long> {
-    fun findByEmail(username: String): Optional<UserCredentials>
+    fun findByEmail(email: String): Optional<UserCredentials>
 }
