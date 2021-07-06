@@ -22,5 +22,6 @@ class PublicApproach(
     var coAuthors: MutableList<User>,
 
     @OneToMany
-    var protocols: MutableList<Protocol>,
+    var protocols: MutableList<Protocol>
+
 ) : Approach(id, name, sections, tags)
