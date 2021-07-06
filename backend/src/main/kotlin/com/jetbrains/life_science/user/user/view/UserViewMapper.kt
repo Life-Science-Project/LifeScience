@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.user.master.view
+package com.jetbrains.life_science.user.user.view
 
-import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.user.entity.User
 import com.jetbrains.life_science.user.organisation.view.OrganisationViewMapper
 import org.springframework.stereotype.Component
 

@@ -1,5 +1,6 @@
-package com.jetbrains.life_science.user.master.entity
+package com.jetbrains.life_science.user.credentionals.entity
 
+import com.jetbrains.life_science.user.user.entity.Role
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*

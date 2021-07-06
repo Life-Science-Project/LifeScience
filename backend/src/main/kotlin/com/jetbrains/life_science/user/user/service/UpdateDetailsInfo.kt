@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.user.master.service
+package com.jetbrains.life_science.user.user.service
 
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree

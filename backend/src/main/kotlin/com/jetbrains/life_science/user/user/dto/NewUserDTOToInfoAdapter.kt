@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.user.master.dto
+package com.jetbrains.life_science.user.user.dto
 
-import com.jetbrains.life_science.user.master.service.NewUserInfo
+import com.jetbrains.life_science.user.user.service.NewUserInfo
 
 class NewUserDTOToInfoAdapter(
     dto: NewUserDTO

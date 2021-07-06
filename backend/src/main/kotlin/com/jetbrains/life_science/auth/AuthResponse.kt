@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.auth
 
-import com.jetbrains.life_science.user.master.view.UserView
+import com.jetbrains.life_science.user.user.view.UserView
 
 data class AuthResponse(
     val tokens: AuthTokens,

@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.user.master.dto
+package com.jetbrains.life_science.user.user.dto
 
 data class UpdateDetailsDTO(
 

@@ -5,10 +5,10 @@ import com.jetbrains.life_science.auth.AuthRequest
 import com.jetbrains.life_science.auth.AuthResponse
 import com.jetbrains.life_science.auth.AuthResponseFactory
 import com.jetbrains.life_science.config.jwt.JWTService
-import com.jetbrains.life_science.user.master.dto.NewUserDTO
-import com.jetbrains.life_science.user.master.dto.NewUserDTOToInfoAdapter
-import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.user.master.service.UserService
+import com.jetbrains.life_science.user.user.dto.NewUserDTO
+import com.jetbrains.life_science.user.user.dto.NewUserDTOToInfoAdapter
+import com.jetbrains.life_science.user.user.entity.User
+import com.jetbrains.life_science.user.user.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException

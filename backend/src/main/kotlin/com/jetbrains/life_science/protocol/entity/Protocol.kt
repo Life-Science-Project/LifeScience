@@ -2,7 +2,7 @@ package com.jetbrains.life_science.protocol.entity
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.section.entity.Section
-import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.user.entity.User
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType

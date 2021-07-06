@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.user.master.entity
+package com.jetbrains.life_science.user.user.entity
 
 import org.springframework.security.core.GrantedAuthority
 import javax.persistence.*

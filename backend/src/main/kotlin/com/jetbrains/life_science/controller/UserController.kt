@@ -1,12 +1,12 @@
 package com.jetbrains.life_science.controller
 
-import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTO
-import com.jetbrains.life_science.user.master.dto.UpdateDetailsDTOToInfoAdapter
-import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.user.master.service.UserCredentialsService
-import com.jetbrains.life_science.user.master.service.UserService
-import com.jetbrains.life_science.user.master.view.UserView
-import com.jetbrains.life_science.user.master.view.UserViewMapper
+import com.jetbrains.life_science.user.user.dto.UpdateDetailsDTO
+import com.jetbrains.life_science.user.user.dto.UpdateDetailsDTOToInfoAdapter
+import com.jetbrains.life_science.user.user.entity.User
+import com.jetbrains.life_science.user.credentionals.service.UserCredentialsService
+import com.jetbrains.life_science.user.user.service.UserService
+import com.jetbrains.life_science.user.user.view.UserView
+import com.jetbrains.life_science.user.user.view.UserViewMapper
 import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.access.AccessDeniedException

@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.auth
 
-import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.user.master.view.UserViewMapper
+import com.jetbrains.life_science.user.user.entity.User
+import com.jetbrains.life_science.user.user.view.UserViewMapper
 import org.springframework.stereotype.Component
 
 @Component

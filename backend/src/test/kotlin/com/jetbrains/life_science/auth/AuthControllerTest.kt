@@ -4,8 +4,8 @@ import com.jetbrains.life_science.ControllerTest
 import com.jetbrains.life_science.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
-import com.jetbrains.life_science.user.master.dto.NewUserDTO
-import com.jetbrains.life_science.user.master.view.UserView
+import com.jetbrains.life_science.user.user.dto.NewUserDTO
+import com.jetbrains.life_science.user.user.view.UserView
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.user.master.service
+package com.jetbrains.life_science.user.user.service
 
-import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.user.entity.User
 
 interface UserService {
 

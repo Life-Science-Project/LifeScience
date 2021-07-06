@@ -1,9 +1,9 @@
-package com.jetbrains.life_science.user.master.factory
+package com.jetbrains.life_science.user.user.factory
 
-import com.jetbrains.life_science.user.master.entity.Role
-import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.user.master.service.UpdateDetailsInfo
-import com.jetbrains.life_science.user.master.service.NewUserInfo
+import com.jetbrains.life_science.user.user.entity.Role
+import com.jetbrains.life_science.user.user.entity.User
+import com.jetbrains.life_science.user.user.service.UpdateDetailsInfo
+import com.jetbrains.life_science.user.user.service.NewUserInfo
 import com.jetbrains.life_science.user.organisation.entity.Organisation
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component

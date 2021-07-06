@@ -1,8 +1,8 @@
-package com.jetbrains.life_science.user.master.service
+package com.jetbrains.life_science.user.credentionals.service
 
 import com.jetbrains.life_science.exception.not_found.UserNotFoundException
-import com.jetbrains.life_science.user.master.entity.UserCredentials
-import com.jetbrains.life_science.user.master.repository.UserCredentialsRepository
+import com.jetbrains.life_science.user.credentionals.entity.UserCredentials
+import com.jetbrains.life_science.user.credentionals.repository.UserCredentialsRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException

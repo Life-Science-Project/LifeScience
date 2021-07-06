@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.user.master.repository
+package com.jetbrains.life_science.user.credentionals.repository
 
-import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.user.credentionals.entity.UserCredentials
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional
 

@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.user.master.repository
+package com.jetbrains.life_science.user.user.repository
 
-import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.user.entity.User
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional
 

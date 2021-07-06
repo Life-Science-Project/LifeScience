@@ -1,9 +1,9 @@
-package com.jetbrains.life_science.user.master.dto
+package com.jetbrains.life_science.user.user.dto
 
 import com.jetbrains.life_science.exception.not_found.DegreeNotFoundException
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
-import com.jetbrains.life_science.user.master.service.UpdateDetailsInfo
+import com.jetbrains.life_science.user.user.service.UpdateDetailsInfo
 
 class UpdateDetailsDTOToInfoAdapter(
     dto: UpdateDetailsDTO

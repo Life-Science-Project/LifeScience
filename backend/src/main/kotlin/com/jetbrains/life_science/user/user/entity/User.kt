@@ -1,5 +1,6 @@
-package com.jetbrains.life_science.user.master.entity
+package com.jetbrains.life_science.user.user.entity
 
+import com.jetbrains.life_science.user.credentionals.entity.UserCredentials
 import com.jetbrains.life_science.user.degree.AcademicDegree
 import com.jetbrains.life_science.user.degree.DoctorDegree
 import com.jetbrains.life_science.user.organisation.entity.Organisation

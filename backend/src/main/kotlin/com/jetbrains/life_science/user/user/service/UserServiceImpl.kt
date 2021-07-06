@@ -1,11 +1,11 @@
-package com.jetbrains.life_science.user.master.service
+package com.jetbrains.life_science.user.user.service
 
 import com.jetbrains.life_science.exception.not_found.UserNotFoundException
 import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
-import com.jetbrains.life_science.user.master.entity.User
-import com.jetbrains.life_science.user.master.factory.UserFactory
-import com.jetbrains.life_science.user.master.repository.RoleRepository
-import com.jetbrains.life_science.user.master.repository.UserRepository
+import com.jetbrains.life_science.user.user.entity.User
+import com.jetbrains.life_science.user.user.factory.UserFactory
+import com.jetbrains.life_science.user.user.repository.RoleRepository
+import com.jetbrains.life_science.user.user.repository.UserRepository
 import com.jetbrains.life_science.user.organisation.service.OrganisationService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.user.master.repository
+package com.jetbrains.life_science.user.user.repository
 
-import com.jetbrains.life_science.user.master.entity.Role
+import com.jetbrains.life_science.user.user.entity.Role
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface RoleRepository : JpaRepository<Role, Long> {
