@@ -51,7 +51,7 @@ class CategoryServiceImpl(
     }
 
     override fun getRootCategories(): List<Category> {
-        return categoryRepository.findAllByParentIsNull()
+        return getCategory(0).subCategories
     }
 
     private fun existById(id: Long) {
