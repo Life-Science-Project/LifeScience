@@ -3,7 +3,7 @@ package com.jetbrains.life_science.controller
 import com.jetbrains.life_science.user.user.dto.UpdateDetailsDTO
 import com.jetbrains.life_science.user.user.dto.UpdateDetailsDTOToInfoAdapter
 import com.jetbrains.life_science.user.user.entity.User
-import com.jetbrains.life_science.user.credentionals.service.UserCredentialsService
+import com.jetbrains.life_science.user.credentials.service.UserCredentialsService
 import com.jetbrains.life_science.user.user.service.UserService
 import com.jetbrains.life_science.user.user.view.UserView
 import com.jetbrains.life_science.user.user.view.UserViewMapper

@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.user.credentionals.entity
+package com.jetbrains.life_science.user.credentials.entity
 
 import com.jetbrains.life_science.user.user.entity.Role
 import org.springframework.security.core.GrantedAuthority
