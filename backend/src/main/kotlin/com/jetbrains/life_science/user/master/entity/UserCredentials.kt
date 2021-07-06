@@ -16,8 +16,6 @@ class UserCredentials(
 
     private val password: String,
 
-    val refreshToken: String,
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",
@@ -41,8 +39,4 @@ class UserCredentials(
     override fun isCredentialsNonExpired() = true
 
     override fun isEnabled() = true
-
-    fun isAdminOrModerator(): Boolean {
-        return roles.any { it.name == "ROLE_ADMIN" || it.name == "ROLE_MODERATOR" }
-    }
 }

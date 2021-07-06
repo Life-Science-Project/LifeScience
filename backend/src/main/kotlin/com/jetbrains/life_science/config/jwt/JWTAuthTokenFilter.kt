@@ -37,7 +37,7 @@ class JWTAuthTokenFilter(
                 SecurityContextHolder.getContext().authentication = authentication
             }
         } catch (e: Exception) {
-            logger.error("Can NOT set user authentication -> Message: {}", e)
+            logger.error("Can not set user authentication: {}", e)
         }
 
         filterChain.doFilter(request, response)
