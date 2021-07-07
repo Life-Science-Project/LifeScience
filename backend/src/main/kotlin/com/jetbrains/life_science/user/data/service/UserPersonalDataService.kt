@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.user.data.service
 
-import com.jetbrains.life_science.user.credentials.service.NewUserInfo
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 
 interface UserPersonalDataService {

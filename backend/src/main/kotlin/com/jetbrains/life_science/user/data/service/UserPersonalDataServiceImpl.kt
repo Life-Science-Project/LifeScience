@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.user.data.service
 
 import com.jetbrains.life_science.exception.not_found.UserNotFoundException
-import com.jetbrains.life_science.exception.request.UserAlreadyExistsException
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import com.jetbrains.life_science.user.data.factory.UserPersonalDataFactory
 import com.jetbrains.life_science.user.data.repository.UserPersonalDataRepository
