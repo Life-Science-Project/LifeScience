@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.auth2.service
+package com.jetbrains.life_science.auth.service
 
 interface AuthCredentials {
     val email: String

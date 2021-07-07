@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.config
 
-import com.jetbrains.life_science.auth2.jwt.JWTAuthEntryPoint
+import com.jetbrains.life_science.auth.jwt.JWTAuthEntryPoint
 import com.jetbrains.life_science.config.jwt.JWTAuthTokenFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -66,7 +66,8 @@ class WebSecurityConfig(
                 "/api/articles/versions/*/approve",
                 "/api/articles/versions/*/archive",
                 "/api/articles/*/versions",
-                "/api/review/request/**"
+                "/api/review/request/**",
+                "/api/ping/**"
             ).fullyAuthenticated()
             .antMatchers("/api/users/current").fullyAuthenticated()
             .antMatchers(HttpMethod.GET).permitAll()

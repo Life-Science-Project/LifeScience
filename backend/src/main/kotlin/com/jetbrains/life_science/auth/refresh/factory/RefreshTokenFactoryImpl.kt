@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.auth2.refresh.factory
+package com.jetbrains.life_science.auth.refresh.factory
 
-import com.jetbrains.life_science.auth2.refresh.entity.RefreshToken
+import com.jetbrains.life_science.auth.refresh.entity.RefreshToken
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

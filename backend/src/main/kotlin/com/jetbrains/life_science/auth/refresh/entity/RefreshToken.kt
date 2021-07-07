@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.auth2.refresh.entity
+package com.jetbrains.life_science.auth.refresh.entity
 
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime

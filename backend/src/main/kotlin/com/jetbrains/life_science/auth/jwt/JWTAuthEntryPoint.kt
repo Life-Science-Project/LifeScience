@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.auth2.jwt
+package com.jetbrains.life_science.auth.jwt
 
 import com.jetbrains.life_science.util.getLogger
 import org.springframework.http.MediaType

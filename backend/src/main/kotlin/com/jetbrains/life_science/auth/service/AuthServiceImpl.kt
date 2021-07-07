@@ -1,8 +1,8 @@
-package com.jetbrains.life_science.auth2.service
+package com.jetbrains.life_science.auth.service
 
-import com.jetbrains.life_science.auth2.jwt.JWTService
-import com.jetbrains.life_science.auth2.refresh.entity.RefreshTokenCode
-import com.jetbrains.life_science.auth2.refresh.service.RefreshTokenService
+import com.jetbrains.life_science.auth.jwt.JWTService
+import com.jetbrains.life_science.auth.refresh.entity.RefreshTokenCode
+import com.jetbrains.life_science.auth.refresh.service.RefreshTokenService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.springframework.security.authentication.AuthenticationManager

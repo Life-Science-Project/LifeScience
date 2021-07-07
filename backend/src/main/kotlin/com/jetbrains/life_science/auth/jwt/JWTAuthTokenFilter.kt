@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.config.jwt
 
-import com.jetbrains.life_science.auth2.jwt.JWTService
+import com.jetbrains.life_science.auth.jwt.JWTService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder

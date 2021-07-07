@@ -1,8 +1,8 @@
-package com.jetbrains.life_science.auth2.refresh.service
+package com.jetbrains.life_science.auth.refresh.service
 
-import com.jetbrains.life_science.auth2.refresh.entity.RefreshTokenCode
-import com.jetbrains.life_science.auth2.refresh.factory.RefreshTokenFactory
-import com.jetbrains.life_science.auth2.refresh.repository.RefreshTokenRepository
+import com.jetbrains.life_science.auth.refresh.entity.RefreshTokenCode
+import com.jetbrains.life_science.auth.refresh.factory.RefreshTokenFactory
+import com.jetbrains.life_science.auth.refresh.repository.RefreshTokenRepository
 import com.jetbrains.life_science.exception.auth.ExpiredRefreshTokenException
 import com.jetbrains.life_science.exception.auth.InvalidRefreshTokenException
 import com.jetbrains.life_science.exception.auth.RefreshTokenNotFoundException

@@ -1,9 +1,9 @@
 package com.jetbrains.life_science.controller.auth
 
-import com.jetbrains.life_science.auth.AuthRequest
-import com.jetbrains.life_science.auth2.refresh.entity.RefreshTokenCode
-import com.jetbrains.life_science.auth2.service.AuthRequestToCredentialsAdapter
-import com.jetbrains.life_science.auth2.service.AuthService
+import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
+import com.jetbrains.life_science.auth.refresh.entity.RefreshTokenCode
+import com.jetbrains.life_science.auth.service.AuthRequestToCredentialsAdapter
+import com.jetbrains.life_science.auth.service.AuthService
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
 import com.jetbrains.life_science.controller.auth.view.AccessTokenViewMapper
 import com.jetbrains.life_science.exception.auth.RefreshTokenNotFoundException
@@ -31,10 +31,10 @@ class AuthController(
     @Operation(summary = "Sign in")
     @PostMapping("/signin")
     fun login(
-        @Validated @RequestBody authRequest: AuthRequest,
+        @Validated @RequestBody authRequestDTO: AuthRequestDTO,
         httpServletResponse: HttpServletResponse
     ): AccessTokenView {
-        val credentials = AuthRequestToCredentialsAdapter(authRequest)
+        val credentials = AuthRequestToCredentialsAdapter(authRequestDTO)
         val (accessToken, refreshToken) = authService.login(credentials)
         setRefreshTokenToCookie(httpServletResponse, refreshToken)
         return accessTokenViewMapper.toView(accessToken)
