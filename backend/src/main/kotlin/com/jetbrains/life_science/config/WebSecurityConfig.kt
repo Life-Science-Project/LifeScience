@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.config
 
-import com.jetbrains.life_science.config.jwt.JWTAuthEntryPoint
+import com.jetbrains.life_science.auth2.jwt.JWTAuthEntryPoint
 import com.jetbrains.life_science.config.jwt.JWTAuthTokenFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

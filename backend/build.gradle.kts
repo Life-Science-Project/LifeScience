@@ -104,3 +104,6 @@ tasks.named("bootJar") {
         dependsOn(":backend:copyFrontend")
     }
 }
+compileKotlin.kotlinOptions {
+    freeCompilerArgs = listOf("-Xinline-classes")
+}

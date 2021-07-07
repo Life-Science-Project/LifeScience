@@ -23,9 +23,8 @@ class Credentials(
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "role_id")]
     )
-    val roles: MutableCollection<Role>,
+    val roles: MutableCollection<Role>
 
-    var refreshToken: String? = null
 ) : UserDetails {
 
     @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], fetch = FetchType.LAZY)
