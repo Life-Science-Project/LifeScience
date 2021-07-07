@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.auth2.refresh.entity
 
-import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -13,7 +13,7 @@ class RefreshToken(
         val code: String,
 
         @OneToOne
-        val userCredentials: UserCredentials,
+        val credentials: Credentials,
 
         val expirationDateTime: LocalDateTime
 )

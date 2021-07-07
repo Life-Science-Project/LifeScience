@@ -1,11 +1,10 @@
 package com.jetbrains.life_science.auth2.refresh.factory
 
 import com.jetbrains.life_science.auth2.refresh.entity.RefreshToken
-import com.jetbrains.life_science.user.master.entity.UserCredentials
-import org.springframework.stereotype.Component
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 
 interface RefreshTokenFactory {
 
-    fun generateToken(credentials: UserCredentials): RefreshToken
+    fun generateToken(credentials: Credentials): RefreshToken
 
 }

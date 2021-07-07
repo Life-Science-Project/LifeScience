@@ -8,10 +8,9 @@ import com.jetbrains.life_science.auth2.service.UserToAuthCredentialsAdapter
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
 import com.jetbrains.life_science.controller.auth.view.AccessTokenViewMapper
 import com.jetbrains.life_science.exception.auth.RefreshTokenNotFoundException
-import com.jetbrains.life_science.user.master.dto.NewUserDTO
-import com.jetbrains.life_science.user.master.dto.NewUserDTOToInfoAdapter
-import com.jetbrains.life_science.user.master.service.UserCredentialsService
-import com.jetbrains.life_science.user.master.service.UserService
+import com.jetbrains.life_science.user.credentials.dto.NewUserDTO
+import com.jetbrains.life_science.user.credentials.dto.NewUserDTOToInfoAdapter
+import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.transaction.annotation.Transactional
@@ -27,8 +26,7 @@ import javax.servlet.http.HttpServletResponse
 class AuthController(
     val authService: AuthService,
     val accessTokenViewMapper: AccessTokenViewMapper,
-    val userService: UserService,
-    val userCredentialsService: UserCredentialsService
+    val credentialsService: CredentialsService
 ) {
 
     @Operation(summary = "Sign in")
@@ -50,9 +48,8 @@ class AuthController(
         @Validated @RequestBody userDto: NewUserDTO,
         response: HttpServletResponse
     ): AccessTokenView {
-        val user = userService.createUser(NewUserDTOToInfoAdapter(userDto))
-        val credentials = UserToAuthCredentialsAdapter(user)
-        val (accessToken, refreshToken) = authService.login(credentials)
+        val credentials = credentialsService.createUser(NewUserDTOToInfoAdapter(userDto))
+        val (accessToken, refreshToken) = authService.register(credentials)
         setRefreshTokenToCookie(response, refreshToken)
         return accessTokenViewMapper.toView(accessToken)
     }
@@ -64,7 +61,7 @@ class AuthController(
         response: HttpServletResponse,
         principal: Principal
     ): AccessTokenView {
-        val userCredentials = userCredentialsService.getByEmail(principal.email)
+        val userCredentials = credentialsService.getByEmail(principal.email)
         val refreshTokenCode = getRefreshToken(request.cookies)
         val (accessToken, refreshToken) = authService.refreshTokens(userCredentials, refreshTokenCode)
         setRefreshTokenToCookie(response, refreshToken)

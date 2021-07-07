@@ -6,7 +6,7 @@ import com.jetbrains.life_science.auth2.refresh.repository.RefreshTokenRepositor
 import com.jetbrains.life_science.exception.auth.ExpiredRefreshTokenException
 import com.jetbrains.life_science.exception.auth.InvalidRefreshTokenException
 import com.jetbrains.life_science.exception.auth.RefreshTokenNotFoundException
-import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -19,21 +19,25 @@ class RefreshTokenServiceImpl(
 
 
     @Transactional
-    override fun updateRefreshToken(userCredentials: UserCredentials): RefreshTokenCode {
-        repository.deleteByUserCredentials(userCredentials)
-        val token = factory.generateToken(userCredentials)
-        val savedToken = repository.save(token)
-        return RefreshTokenCode(savedToken.code)
+    override fun updateRefreshToken(userCredentials: Credentials): RefreshTokenCode {
+        repository.deleteByCredentials(userCredentials)
+        return createRefreshToken(userCredentials)
     }
 
-    override fun validateRefreshToken(userCredentials: UserCredentials, refreshTokenCode: RefreshTokenCode) {
+    override fun validateRefreshToken(userCredentials: Credentials, refreshTokenCode: RefreshTokenCode) {
         val refreshToken = repository.findByCode(refreshTokenCode.code) ?: throw RefreshTokenNotFoundException()
         if (refreshToken.expirationDateTime < LocalDateTime.now()) {
             throw ExpiredRefreshTokenException()
         }
-        if (refreshToken.userCredentials.id != userCredentials.id) {
+        if (refreshToken.credentials.id != userCredentials.id) {
             throw InvalidRefreshTokenException()
         }
+    }
+
+    override fun createRefreshToken(userCredentials: Credentials): RefreshTokenCode {
+        val token = factory.generateToken(userCredentials)
+        val savedToken = repository.save(token)
+        return RefreshTokenCode(savedToken.code)
     }
 
 

@@ -3,8 +3,8 @@ package com.jetbrains.life_science.auth2.service
 import com.jetbrains.life_science.auth2.jwt.JWTService
 import com.jetbrains.life_science.auth2.refresh.entity.RefreshTokenCode
 import com.jetbrains.life_science.auth2.refresh.service.RefreshTokenService
-import com.jetbrains.life_science.user.master.entity.UserCredentials
-import com.jetbrains.life_science.user.master.service.UserCredentialsService
+import com.jetbrains.life_science.user.credentials.entity.Credentials
+import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
@@ -14,21 +14,27 @@ class AuthServiceImpl(
     val authenticationManager: AuthenticationManager,
     val jwtService: JWTService,
     val refreshTokenService: RefreshTokenService,
-    val userCredentialsService: UserCredentialsService
+    val userCredentialsService: CredentialsService
 ) : AuthService {
 
-    override fun login(credentials: AuthCredentials): AuthTokens {
-        setAuthentication(credentials)
-        val userCredentials = userCredentialsService.getByEmail(credentials.email)
+    override fun login(authCredentials: AuthCredentials): AuthTokens {
+        setAuthentication(authCredentials)
+        val userCredentials = userCredentialsService.getByEmail(authCredentials.email)
         return generateTokens(userCredentials)
     }
 
-    override fun refreshTokens(userCredentials: UserCredentials, refreshTokenCode: RefreshTokenCode): AuthTokens {
+    override fun register(credentials: Credentials): AuthTokens {
+        val jwt = jwtService.generateJWT(credentials.email)
+        val refreshToken = refreshTokenService.createRefreshToken(credentials)
+        return AuthTokens(jwt, refreshToken)
+    }
+
+    override fun refreshTokens(userCredentials: Credentials, refreshTokenCode: RefreshTokenCode): AuthTokens {
         refreshTokenService.validateRefreshToken(userCredentials, refreshTokenCode)
         return generateTokens(userCredentials)
     }
 
-    private fun generateTokens(userCredentials: UserCredentials): AuthTokens {
+    private fun generateTokens(userCredentials: Credentials): AuthTokens {
         val jwt = jwtService.generateJWT(userCredentials.email)
         val refreshToken = refreshTokenService.updateRefreshToken(userCredentials)
         return AuthTokens(jwt, refreshToken)

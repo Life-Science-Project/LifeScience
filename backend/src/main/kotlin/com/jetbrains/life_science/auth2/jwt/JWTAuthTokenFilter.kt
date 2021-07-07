@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.config.jwt
 
+import com.jetbrains.life_science.auth2.jwt.JWTService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -28,16 +29,18 @@ class JWTAuthTokenFilter(
     ) {
         try {
             val jwt = getJwt(request)
-            if (jwt != null && jwtService.validateJwtToken(jwt)) {
-                val username = jwtService.getUserNameFromJwtToken(jwt)
+            if (jwt != null) {
+                if (jwtService.validateJwtToken(jwt)) {
+                    val username = jwtService.getUserNameFromJwtToken(jwt)
 
-                val userDetails = userDetailsService.loadUserByUsername(username)
-                val authentication = UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.authorities
-                )
-                authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+                    val userDetails = userDetailsService.loadUserByUsername(username)
+                    val authentication = UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.authorities
+                    )
+                    authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
 
-                SecurityContextHolder.getContext().authentication = authentication
+                    SecurityContextHolder.getContext().authentication = authentication
+                }
             }
         } catch (e: Exception) {
             logger.error("Can NOT set user authentication -> Message: {}", e)

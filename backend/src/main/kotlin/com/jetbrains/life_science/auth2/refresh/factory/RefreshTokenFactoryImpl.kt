@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.auth2.refresh.factory
 
 import com.jetbrains.life_science.auth2.refresh.entity.RefreshToken
-import com.jetbrains.life_science.user.master.entity.UserCredentials
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.security.MessageDigest
@@ -18,11 +18,11 @@ class RefreshTokenFactoryImpl : RefreshTokenFactory {
     @Value("\${refreshExpiration}")
     var refreshExpirationSeconds: Int = 0
 
-    override fun generateToken(credentials: UserCredentials): RefreshToken {
+    override fun generateToken(credentials: Credentials): RefreshToken {
         return RefreshToken(
             id = 0,
             code = generateRefreshToken(credentials.email),
-            userCredentials = credentials,
+            credentials = credentials,
             expirationDateTime = generateExpirationTime()
         )
     }
