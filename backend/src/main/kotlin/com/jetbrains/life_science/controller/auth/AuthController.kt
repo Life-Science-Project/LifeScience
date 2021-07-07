@@ -6,7 +6,7 @@ import com.jetbrains.life_science.auth.service.AuthRequestToCredentialsAdapter
 import com.jetbrains.life_science.auth.service.AuthService
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
 import com.jetbrains.life_science.controller.auth.view.AccessTokenViewMapper
-import com.jetbrains.life_science.exception.auth.RefreshTokenNotFoundException
+import com.jetbrains.life_science.exception.auth.InvalidRefreshTokenException
 import com.jetbrains.life_science.user.credentials.dto.NewUserDTO
 import com.jetbrains.life_science.user.credentials.dto.NewUserDTOToInfoAdapter
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
@@ -68,14 +68,16 @@ class AuthController(
     }
 
     private fun getRefreshToken(cookies: Array<Cookie>): RefreshTokenCode {
-        val cookie = cookies.find { it.name == "refresh" } ?: throw RefreshTokenNotFoundException()
+        val cookie = cookies.find { it.name == REFRESH_TOKEN_COOKIE_NAME } ?: throw InvalidRefreshTokenException()
         return RefreshTokenCode(cookie.value)
     }
 
     private fun setRefreshTokenToCookie(httpServletResponse: HttpServletResponse, refreshTokenCode: RefreshTokenCode) {
-        val cookie = Cookie("refresh", refreshTokenCode.code).apply {
+        val cookie = Cookie(REFRESH_TOKEN_COOKIE_NAME, refreshTokenCode.code).apply {
             isHttpOnly = true
         }
         httpServletResponse.addCookie(cookie)
     }
 }
+
+private const val REFRESH_TOKEN_COOKIE_NAME = "refresh"

@@ -15,7 +15,7 @@ import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 @RestControllerAdvice
-class ControllerAdvisor : ResponseEntityExceptionHandler() {
+class UncategorizedRestControllerAdvisor : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(CategoryNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)

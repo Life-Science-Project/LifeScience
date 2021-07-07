@@ -5,7 +5,6 @@ import com.jetbrains.life_science.auth.refresh.factory.RefreshTokenFactory
 import com.jetbrains.life_science.auth.refresh.repository.RefreshTokenRepository
 import com.jetbrains.life_science.exception.auth.ExpiredRefreshTokenException
 import com.jetbrains.life_science.exception.auth.InvalidRefreshTokenException
-import com.jetbrains.life_science.exception.auth.RefreshTokenNotFoundException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,7 +23,7 @@ class RefreshTokenServiceImpl(
     }
 
     override fun validateRefreshToken(userCredentials: Credentials, refreshTokenCode: RefreshTokenCode) {
-        val refreshToken = repository.findByCode(refreshTokenCode.code) ?: throw RefreshTokenNotFoundException()
+        val refreshToken = repository.findByCode(refreshTokenCode.code) ?: throw InvalidRefreshTokenException()
         if (refreshToken.expirationDateTime < LocalDateTime.now()) {
             throw ExpiredRefreshTokenException()
         }
