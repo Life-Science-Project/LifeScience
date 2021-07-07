@@ -5,7 +5,7 @@ import com.jetbrains.life_science.protocol.entity.Protocol
 import javax.persistence.*
 
 @Entity
-class FavoriteGroup (
+class FavoriteGroup(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
