@@ -34,6 +34,7 @@ class UserServiceImpl(
         userRepository.deleteById(id)
     }
 
+    @Transactional
     override fun createUser(info: NewUserInfo): User {
         checkUserNotExists(info.email)
         val roles = mutableListOf(roleRepository.findByName("ROLE_USER"))

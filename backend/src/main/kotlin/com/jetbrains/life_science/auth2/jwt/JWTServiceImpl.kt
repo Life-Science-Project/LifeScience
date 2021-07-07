@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.config.jwt
+package com.jetbrains.life_science.auth2.jwt
 
-import com.jetbrains.life_science.auth.AuthTokens
+import com.jetbrains.life_science.auth2.service.AuthTokens
 import com.jetbrains.life_science.util.getLogger
 import io.jsonwebtoken.*
 import org.springframework.beans.factory.annotation.Value
@@ -11,7 +11,7 @@ import java.util.Base64
 import java.util.Date
 
 @Component
-class JWTService {
+class JWTServiceImpl: JWTService {
 
     @Value("\${jwtSecret}")
     lateinit var jwtSecret: String
@@ -21,6 +21,17 @@ class JWTService {
 
     @Value("\${refreshExpiration}")
     var refreshExpirationSeconds: Int = 0
+
+    override fun generateJWT(username: String): JWTCode {
+        val date = Date()
+        val code = Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(date)
+                .setExpiration(Date(date.time + jwtExpirationSeconds * 1000))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact()
+        return JWTCode(code)
+    }
 
     fun generateAuthTokens(username: String): AuthTokens {
         val jwt = generateJwtToken(username)

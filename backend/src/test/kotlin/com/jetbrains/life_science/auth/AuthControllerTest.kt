@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 @Sql("/scripts/add_test_data.sql")
 @Transactional
 internal class AuthControllerTest :
-    ControllerTest<NewUserDTO, AuthResponse>(AuthResponse::class.java) {
+    ControllerTest<NewUserDTO, AuthResponseView>(AuthResponseView::class.java) {
 
     @MockBean
     lateinit var contentVersionRepository: ContentVersionRepository
@@ -121,7 +121,7 @@ internal class AuthControllerTest :
         assertUnauthenticated("Invalid refresh token", refreshRequest(authRefreshRequest))
     }
 
-    private fun register(dto: NewUserDTO): AuthResponse {
+    private fun register(dto: NewUserDTO): AuthResponseView {
         val registerResponse = registerUser(dto)
         val authTokens = registerResponse.tokens
         assertNotNull(authTokens.jwt)
@@ -148,11 +148,11 @@ internal class AuthControllerTest :
         return registerResponse
     }
 
-    private fun signIn(dto: NewUserDTO): AuthResponse {
+    private fun signIn(dto: NewUserDTO): AuthResponseView {
         return signIn(AuthRequest(dto.email, dto.password))
     }
 
-    private fun signIn(authRequest: AuthRequest): AuthResponse {
+    private fun signIn(authRequest: AuthRequest): AuthResponseView {
         val signinResponse = signInUser(authRequest)
         val authTokens = signinResponse.tokens
         assertNotNull(authTokens.jwt)
@@ -167,7 +167,7 @@ internal class AuthControllerTest :
         return signinResponse
     }
 
-    private fun refresh(oldAuthTokens: AuthRefreshRequest): AuthResponse {
+    private fun refresh(oldAuthTokens: AuthRefreshRequest): AuthResponseView {
         val refreshResponse = refreshUserTokens(oldAuthTokens)
         val newAuthTokens = refreshResponse.tokens
 
@@ -178,19 +178,19 @@ internal class AuthControllerTest :
         return refreshResponse
     }
 
-    private fun registerUser(dto: NewUserDTO): AuthResponse {
+    private fun registerUser(dto: NewUserDTO): AuthResponseView {
         val user = assertOkAndGetJson(registerRequest(dto))
-        return getViewFromJson(user, AuthResponse::class.java)
+        return getViewFromJson(user, AuthResponseView::class.java)
     }
 
-    private fun signInUser(authRequest: AuthRequest): AuthResponse {
+    private fun signInUser(authRequest: AuthRequest): AuthResponseView {
         val user = assertOkAndGetJson(signInRequest(authRequest))
-        return getViewFromJson(user, AuthResponse::class.java)
+        return getViewFromJson(user, AuthResponseView::class.java)
     }
 
-    private fun refreshUserTokens(tokens: AuthRefreshRequest): AuthResponse {
+    private fun refreshUserTokens(tokens: AuthRefreshRequest): AuthResponseView {
         val user = assertOkAndGetJson(refreshRequest(tokens))
-        return getViewFromJson(user, AuthResponse::class.java)
+        return getViewFromJson(user, AuthResponseView::class.java)
     }
 
     private fun registerRequest(dto: NewUserDTO): ResultActionsDsl {

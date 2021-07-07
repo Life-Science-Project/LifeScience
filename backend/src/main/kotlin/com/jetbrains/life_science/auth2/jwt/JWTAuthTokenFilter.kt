@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.config.jwt
+package com.jetbrains.life_science.auth2.jwt
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class JWTAuthTokenFilter(
-    private val jwtService: JWTService,
-    private val userDetailsService: UserDetailsService
+        private val jwtService: JWTServiceImpl,
+        private val userDetailsService: UserDetailsService
 ) : OncePerRequestFilter() {
 
     val bearer = "Bearer"

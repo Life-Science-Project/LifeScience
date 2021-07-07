@@ -1,10 +1,12 @@
-package com.jetbrains.life_science.controller
+package com.jetbrains.life_science.controller.auth
 
 import com.jetbrains.life_science.auth.AuthRefreshRequest
 import com.jetbrains.life_science.auth.AuthRequest
-import com.jetbrains.life_science.auth.AuthResponse
+import com.jetbrains.life_science.auth.AuthResponseView
 import com.jetbrains.life_science.auth.AuthResponseFactory
-import com.jetbrains.life_science.config.jwt.JWTService
+import com.jetbrains.life_science.auth.service.AuthResponseToCredentialsAdapter
+import com.jetbrains.life_science.auth.service.AuthService
+import com.jetbrains.life_science.auth2.jwt.JWTServiceImpl
 import com.jetbrains.life_science.user.master.dto.NewUserDTO
 import com.jetbrains.life_science.user.master.dto.NewUserDTOToInfoAdapter
 import com.jetbrains.life_science.user.master.entity.User
@@ -22,30 +24,32 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
-    val authenticationManager: AuthenticationManager,
-    var jwtService: JWTService,
-    val userService: UserService,
-    val authResponseFactory: AuthResponseFactory
+        val authenticationManager: AuthenticationManager,
+        var jwtService: JWTServiceImpl,
+        val userService: UserService,
+        val authResponseFactory: AuthResponseFactory,
+        val authService: AuthService
 ) {
 
     @Operation(summary = "Sign in")
     @PostMapping("/signin")
-    fun authenticateUser(@Validated @RequestBody authRequest: AuthRequest): AuthResponse {
-        val user = userService.getByEmail(authRequest.email)
-        authenticate(authRequest)
+    fun authenticateUser(@Validated @RequestBody authRequest: AuthRequest): AuthResponseView {
+        setAuthentication(authRequest)
+        val (jwt, refreshToken) = authService.login(AuthResponseToCredentialsAdapter(authRequest))
+
         return authResponse(user)
     }
 
     @Operation(summary = "Sign up")
     @PostMapping("/signup")
-    fun registerUser(@Validated @RequestBody userDto: NewUserDTO): AuthResponse {
+    fun registerUser(@Validated @RequestBody userDto: NewUserDTO): AuthResponseView {
         val user = userService.createUser(NewUserDTOToInfoAdapter(userDto))
         return authResponse(user, true)
     }
 
     @Operation(summary = "Refreshes JWT and Refresh tokens")
     @PostMapping("/refresh")
-    fun refreshToken(@Validated @RequestBody refreshRequest: AuthRefreshRequest): AuthResponse {
+    fun refreshToken(@Validated @RequestBody refreshRequest: AuthRefreshRequest): AuthResponseView {
         val username = try {
             jwtService.getUserNameFromExpiredJwtToken(refreshRequest.jwt)
         } catch (e: Exception) {
@@ -58,7 +62,7 @@ class AuthController(
         return authResponse(user, true)
     }
 
-    private fun authResponse(user: User, updateRefresh: Boolean = false): AuthResponse {
+    private fun authResponse(user: User, updateRefresh: Boolean = false): AuthResponseView {
         val tokens = jwtService.generateAuthTokens(user.email)
 
         val oldRefreshToken = user.refreshToken
@@ -70,8 +74,8 @@ class AuthController(
         return authResponseFactory.create(tokens, user)
     }
 
-    private fun authenticate(authInfo: AuthRequest) {
-        val token = UsernamePasswordAuthenticationToken(authInfo.email, authInfo.password)
-        authenticationManager.authenticate(token)
+    private fun setAuthentication(authInfo: AuthRequest) {
+        val loginPasswordToken = UsernamePasswordAuthenticationToken(authInfo.email, authInfo.password)
+        authenticationManager.authenticate(loginPasswordToken)
     }
 }

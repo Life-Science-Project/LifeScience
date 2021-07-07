@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.user.master.entity
 
+import com.jetbrains.life_science.auth2.refresh.RefreshToken
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
@@ -8,21 +9,24 @@ import javax.persistence.*
 @Table(name = "users")
 class UserCredentials(
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long,
 
-    val email: String,
+        val email: String,
 
-    private val password: String,
+        private val password: String,
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "users_roles",
-        joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "role_id")]
-    )
-    val roles: MutableCollection<Role>,
+        @OneToOne(mappedBy = "userCredentials")
+        val refreshToken: RefreshToken,
+
+        @ManyToMany(fetch = FetchType.EAGER)
+        @JoinTable(
+                name = "users_roles",
+                joinColumns = [JoinColumn(name = "user_id")],
+                inverseJoinColumns = [JoinColumn(name = "role_id")]
+        )
+        val roles: MutableCollection<Role>,
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return roles

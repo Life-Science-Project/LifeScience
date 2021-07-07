@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.config
 
-import com.jetbrains.life_science.config.jwt.JWTAuthEntryPoint
-import com.jetbrains.life_science.config.jwt.JWTAuthTokenFilter
+import com.jetbrains.life_science.auth2.jwt.JWTAuthEntryPoint
+import com.jetbrains.life_science.auth2.jwt.JWTAuthTokenFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -23,9 +23,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 class WebSecurityConfig(
-    var userCredentialsService: UserDetailsService,
-    val unauthorizedHandler: JWTAuthEntryPoint,
-    val jwtAuthTokenFilter: JWTAuthTokenFilter
+        var userCredentialsService: UserDetailsService,
+        val unauthorizedHandler: JWTAuthEntryPoint,
+        val jwtAuthTokenFilter: JWTAuthTokenFilter
 ) : WebSecurityConfigurerAdapter() {
 
     @Bean
