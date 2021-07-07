@@ -49,13 +49,13 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `delete existing content`() {
-        //Prepare
+        // Prepare
         val idToDelete = "789"
 
-        //Action
+        // Action
         service.delete(idToDelete)
 
-        //Assert
+        // Assert
         assertThrows<ContentNotFoundException>("Content not found by id: $idToDelete") {
             service.findById(idToDelete)
         }
@@ -66,10 +66,10 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `delete not existing content`() {
-        //Prepare
+        // Prepare
         val idToDelete = "123123"
 
-        //Action & Assert
+        // Action & Assert
         assertThrows<ContentNotFoundException>("Content not found by id: $idToDelete") {
             service.delete(idToDelete)
         }
@@ -80,13 +80,13 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `delete existing content by section id`() {
-        //Prepare
+        // Prepare
         val sectionIdToDelete = "789"
 
-        //Action
+        // Action
         service.delete(sectionIdToDelete)
 
-        //Assert
+        // Assert
         assertThrows<ContentNotFoundException>("Content not found by id: $sectionIdToDelete") {
             service.findById(sectionIdToDelete)
         }
@@ -97,10 +97,10 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `delete not existing content by section id`() {
-        //Prepare
+        // Prepare
         val idToDelete = "123123"
 
-        //Action & Assert
+        // Action & Assert
         assertThrows<ContentNotFoundException>("Content not found by id: $idToDelete") {
             service.delete(idToDelete)
         }
@@ -111,7 +111,7 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `find existing content`() {
-        //Prepare
+        // Prepare
         val expectedId = "123"
         val expected = Content(
             id = expectedId,
@@ -121,10 +121,10 @@ internal class ContentPublishServiceTest {
             references = mutableListOf()
         )
 
-        //Action
+        // Action
         val content = service.findById(expectedId)
 
-        //Assert
+        // Assert
         assertEquals(expected, content)
     }
 
@@ -133,10 +133,10 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `find not existing content`() {
-        //Prepare
+        // Prepare
         val expectedId = "123123"
 
-        //Action & Assert
+        // Action & Assert
         assertThrows<ContentNotFoundException>("Content not found by id: $expectedId") {
             service.findById(expectedId)
         }
@@ -147,7 +147,7 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `find existing content by section id`() {
-        //Prepare
+        // Prepare
         val expectedSectionId = 1L
         val expected = Content(
             id = "123",
@@ -157,10 +157,10 @@ internal class ContentPublishServiceTest {
             references = mutableListOf()
         )
 
-        //Action
+        // Action
         val content = service.findBySectionId(expectedSectionId)
 
-        //Assert
+        // Assert
         assertEquals(expected, content)
     }
 
@@ -169,14 +169,14 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `find not existing content by section id`() {
-        //Prepare
+        // Prepare
         val expectedSectionId = 666L
         val expected = null
 
-        //Action
+        // Action
         val content = service.findBySectionId(expectedSectionId)
 
-        //Assert
+        // Assert
         assertEquals(expected, content)
     }
 
@@ -185,13 +185,13 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `publish existing content`() {
-        //Prepare
+        // Prepare
         val expectedSectionId = 4L
 
-        //Action
+        // Action
         service.publishBySectionId(expectedSectionId)
 
-        //Prepare
+        // Prepare
         val content = service.findBySectionId(expectedSectionId)
         val oldContent = contentVersionService.findBySectionId(expectedSectionId)
         val expected = Content(
@@ -202,7 +202,7 @@ internal class ContentPublishServiceTest {
             references = mutableListOf()
         )
 
-        //Assert
+        // Assert
         assertEquals(expected, content)
         assertEquals(null, oldContent)
     }
@@ -212,17 +212,17 @@ internal class ContentPublishServiceTest {
      */
     @Test
     fun `publish not existing content`() {
-        //Prepare
+        // Prepare
         val expectedSectionId = 666L
         val expected = null
 
-        //Action
+        // Action
         service.publishBySectionId(expectedSectionId)
 
-        //Prepare
+        // Prepare
         val content = service.findBySectionId(expectedSectionId)
 
-        //Assert
+        // Assert
         assertEquals(expected, content)
     }
 }
