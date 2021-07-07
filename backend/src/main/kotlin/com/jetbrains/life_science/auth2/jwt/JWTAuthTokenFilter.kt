@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class JWTAuthTokenFilter(
-        private val jwtService: JWTServiceImpl,
+        private val jwtService: JWTService,
         private val userDetailsService: UserDetailsService
 ) : OncePerRequestFilter() {
 

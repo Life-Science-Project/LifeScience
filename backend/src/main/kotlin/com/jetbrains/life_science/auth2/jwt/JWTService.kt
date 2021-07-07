@@ -4,4 +4,7 @@ interface JWTService {
 
     fun generateJWT(username: String): JWTCode
 
+    fun validateJwtToken(authToken: String): Boolean
+
+    fun getUserNameFromJwtToken(token: String): String
 }

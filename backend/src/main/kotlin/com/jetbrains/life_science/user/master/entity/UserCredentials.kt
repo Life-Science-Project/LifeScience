@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.user.master.entity
 
-import com.jetbrains.life_science.auth2.refresh.RefreshToken
+import com.jetbrains.life_science.auth2.refresh.entity.RefreshToken
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
@@ -9,18 +9,18 @@ import javax.persistence.*
 @Table(name = "users")
 class UserCredentials(
 
-        @Id
+    @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long,
 
-        val email: String,
+    val email: String,
 
-        private val password: String,
+    private val password: String,
 
-        @OneToOne(mappedBy = "userCredentials")
+    @OneToOne(mappedBy = "userCredentials")
         val refreshToken: RefreshToken,
 
-        @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(
                 name = "users_roles",
                 joinColumns = [JoinColumn(name = "user_id")],

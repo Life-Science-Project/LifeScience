@@ -11,7 +11,7 @@ import java.util.Base64
 import java.util.Date
 
 @Component
-class JWTServiceImpl: JWTService {
+class JWTServiceImpl : JWTService {
 
     @Value("\${jwtSecret}")
     lateinit var jwtSecret: String
@@ -19,41 +19,19 @@ class JWTServiceImpl: JWTService {
     @Value("\${jwtExpiration}")
     var jwtExpirationSeconds: Int = 0
 
-    @Value("\${refreshExpiration}")
-    var refreshExpirationSeconds: Int = 0
-
     override fun generateJWT(username: String): JWTCode {
         val date = Date()
         val code = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(date)
-                .setExpiration(Date(date.time + jwtExpirationSeconds * 1000))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact()
-        return JWTCode(code)
-    }
-
-    fun generateAuthTokens(username: String): AuthTokens {
-        val jwt = generateJwtToken(username)
-        val refreshToken = generateRefreshToken(username)
-        return AuthTokens(jwt = jwt, refreshToken = refreshToken)
-    }
-
-    fun generateJwtToken(username: String): String {
-        val date = Date()
-        return Jwts.builder()
             .setSubject(username)
             .setIssuedAt(date)
             .setExpiration(Date(date.time + jwtExpirationSeconds * 1000))
             .signWith(SignatureAlgorithm.HS512, jwtSecret)
             .compact()
+        return JWTCode(code)
     }
 
-    fun generateRefreshToken(username: String): String {
-        return sha256base64(jwtSecret + username + System.currentTimeMillis())
-    }
 
-    fun validateJwtToken(authToken: String): Boolean {
+    override fun validateJwtToken(authToken: String): Boolean {
         try {
             getClaimsFromToken(authToken)
             return true
@@ -71,29 +49,12 @@ class JWTServiceImpl: JWTService {
         return false
     }
 
-    fun getUserNameFromExpiredJwtToken(token: String): String {
-        val claims = try {
-            getClaimsFromToken(token)
-        } catch (e: ExpiredJwtException) {
-            e.claims
-        }
-        return claims.subject
-    }
-
-    fun getUserNameFromJwtToken(token: String): String {
+    override fun getUserNameFromJwtToken(token: String): String {
         return getClaimsFromToken(token).subject
     }
 
     private fun getClaimsFromToken(authToken: String): Claims {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken).body
-    }
-
-    private fun sha256base64(s: String): String {
-        try {
-            return Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-256").digest(s.toByteArray()))
-        } catch (e: NoSuchAlgorithmException) {
-            throw AssertionError(e)
-        }
     }
 
     companion object {
