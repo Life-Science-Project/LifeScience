@@ -64,7 +64,7 @@ internal class ContentVersionServiceTest {
         // Action
         val content = service.create(info)
 
-        //Prepare
+        // Prepare
         val expected = Content(
             id = content.id,
             sectionId = 15,
@@ -161,10 +161,10 @@ internal class ContentVersionServiceTest {
         // Action
         service.deleteBySectionId(idToDelete)
 
-        //Prepare
+        // Prepare
         val content = service.findBySectionId(idToDelete)
 
-        //Assert
+        // Assert
         assertEquals(expected, content)
     }
 
@@ -320,7 +320,7 @@ internal class ContentVersionServiceTest {
         // Action
         service.archiveBySectionId(expectedSectionId)
 
-        //Wait
+        // Wait
         Thread.sleep(4000)
 
         // Prepare

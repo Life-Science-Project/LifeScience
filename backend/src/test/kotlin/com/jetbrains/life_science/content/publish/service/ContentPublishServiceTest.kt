@@ -104,10 +104,10 @@ internal class ContentPublishServiceTest {
         // Action
         service.deleteBySectionId(idToDelete)
 
-        //Prepare
+        // Prepare
         val content = service.findBySectionId(idToDelete)
 
-        //Assert
+        // Assert
         assertEquals(expected, content)
     }
 
@@ -224,7 +224,7 @@ internal class ContentPublishServiceTest {
         // Action
         service.publishBySectionId(expectedSectionId)
 
-        //Wait
+        // Wait
         Thread.sleep(1000)
 
         // Assert
