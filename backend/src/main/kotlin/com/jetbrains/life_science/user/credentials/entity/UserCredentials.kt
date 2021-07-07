@@ -7,6 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "users")
+@DiscriminatorValue("credentials")
 class UserCredentials(
 
     @Id
