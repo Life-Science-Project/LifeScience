@@ -1,13 +1,9 @@
 package com.jetbrains.life_science.auth2.jwt
 
-import com.jetbrains.life_science.auth2.service.AuthTokens
 import com.jetbrains.life_science.util.getLogger
 import io.jsonwebtoken.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
-import java.util.Base64
 import java.util.Date
 
 @Component
@@ -29,7 +25,6 @@ class JWTServiceImpl : JWTService {
             .compact()
         return JWTCode(code)
     }
-
 
     override fun validateJwtToken(authToken: String): Boolean {
         try {

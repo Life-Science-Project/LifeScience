@@ -42,5 +42,4 @@ class RefreshTokenFactoryImpl : RefreshTokenFactory {
             throw AssertionError(e)
         }
     }
-
 }

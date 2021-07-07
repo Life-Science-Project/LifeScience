@@ -29,5 +29,4 @@ class AuthControllerAdvisor {
     fun handleExpiredRefreshTokenException(exception: ExpiredRefreshTokenException): ApiErrorResponse {
         return ApiErrorResponse("Refresh token expired, please log in")
     }
-
 }

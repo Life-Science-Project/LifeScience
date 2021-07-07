@@ -6,14 +6,14 @@ import javax.persistence.*
 
 @Entity
 class RefreshToken(
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
 
-        val code: String,
+    val code: String,
 
-        @OneToOne
-        val credentials: Credentials,
+    @OneToOne
+    val credentials: Credentials,
 
-        val expirationDateTime: LocalDateTime
+    val expirationDateTime: LocalDateTime
 )

@@ -44,5 +44,4 @@ class AuthServiceImpl(
         val loginPasswordToken = UsernamePasswordAuthenticationToken(authInfo.email, authInfo.password)
         authenticationManager.authenticate(loginPasswordToken)
     }
-
 }

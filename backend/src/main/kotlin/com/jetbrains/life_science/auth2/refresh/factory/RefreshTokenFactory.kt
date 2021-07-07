@@ -6,5 +6,4 @@ import com.jetbrains.life_science.user.credentials.entity.Credentials
 interface RefreshTokenFactory {
 
     fun generateToken(credentials: Credentials): RefreshToken
-
 }

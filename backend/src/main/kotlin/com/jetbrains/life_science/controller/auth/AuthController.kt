@@ -4,7 +4,6 @@ import com.jetbrains.life_science.auth.AuthRequest
 import com.jetbrains.life_science.auth2.refresh.entity.RefreshTokenCode
 import com.jetbrains.life_science.auth2.service.AuthRequestToCredentialsAdapter
 import com.jetbrains.life_science.auth2.service.AuthService
-import com.jetbrains.life_science.auth2.service.UserToAuthCredentialsAdapter
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
 import com.jetbrains.life_science.controller.auth.view.AccessTokenViewMapper
 import com.jetbrains.life_science.exception.auth.RefreshTokenNotFoundException
@@ -79,5 +78,4 @@ class AuthController(
         }
         httpServletResponse.addCookie(cookie)
     }
-
 }

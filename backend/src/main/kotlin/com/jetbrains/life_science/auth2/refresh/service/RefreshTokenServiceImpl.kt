@@ -17,7 +17,6 @@ class RefreshTokenServiceImpl(
     val factory: RefreshTokenFactory
 ) : RefreshTokenService {
 
-
     @Transactional
     override fun updateRefreshToken(userCredentials: Credentials): RefreshTokenCode {
         repository.deleteByCredentials(userCredentials)
@@ -39,6 +38,4 @@ class RefreshTokenServiceImpl(
         val savedToken = repository.save(token)
         return RefreshTokenCode(savedToken.code)
     }
-
-
 }

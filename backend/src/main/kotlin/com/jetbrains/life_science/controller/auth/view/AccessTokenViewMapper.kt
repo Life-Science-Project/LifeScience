@@ -9,5 +9,4 @@ class AccessTokenViewMapper {
     fun toView(jwtCode: JWTCode): AccessTokenView {
         return AccessTokenView(jwtCode.code)
     }
-
 }
