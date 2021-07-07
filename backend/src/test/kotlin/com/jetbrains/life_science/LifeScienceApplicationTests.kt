@@ -8,9 +8,6 @@ import org.springframework.boot.test.mock.mockito.MockBean
 @SpringBootTest
 class LifeScienceApplicationTests {
 
-    @MockBean
-    lateinit var contentVersionRepository: ContentVersionRepository
-
     @Test
     fun contextLoads() {
     }
