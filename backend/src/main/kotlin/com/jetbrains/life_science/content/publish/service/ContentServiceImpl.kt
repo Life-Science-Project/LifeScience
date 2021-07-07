@@ -18,7 +18,7 @@ class ContentServiceImpl(
     lateinit var contentVersionService: ContentVersionService
 
     override fun delete(id: String) {
-        checkArticleExists(id)
+        checkContentExists(id)
         repository.deleteById(id)
     }
 
@@ -34,7 +34,7 @@ class ContentServiceImpl(
         if (contentId == null) {
             throw ContentNotFoundException("Content not found by null id")
         }
-        checkArticleExists(contentId)
+        checkContentExists(contentId)
         return repository.findById(contentId).get()
     }
 
@@ -47,7 +47,7 @@ class ContentServiceImpl(
         }
     }
 
-    private fun checkArticleExists(id: String) {
+    private fun checkContentExists(id: String) {
         if (!repository.existsById(id)) {
             throw ContentNotFoundException("Content not found by id: $id")
         }

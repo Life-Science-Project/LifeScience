@@ -2,7 +2,6 @@
   {
     "id": "123",
     "sectionId": 1,
-    "versionId": 1,
     "text": "general info text",
     "tags": [],
     "references": []
@@ -10,7 +9,6 @@
   {
     "id": "456",
     "sectionId": 2,
-    "versionId": 1,
     "text": "some text",
     "tags": [],
     "references": []
@@ -18,7 +16,6 @@
   {
     "id": "789",
     "sectionId": 3,
-    "versionId": 1,
     "text": "some other text",
     "tags": [],
     "references": []
