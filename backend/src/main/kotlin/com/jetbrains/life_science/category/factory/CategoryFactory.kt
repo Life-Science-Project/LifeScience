@@ -10,7 +10,6 @@ class CategoryFactory {
         return Category(
             id = info.id,
             name = info.name,
-            parent = parent,
             subCategories = mutableListOf(),
             approaches = mutableListOf(),
             order = info.order
@@ -19,7 +18,6 @@ class CategoryFactory {
 
     fun setParams(category: Category, categoryInfo: CategoryInfo, parent: Category?) {
         category.name = categoryInfo.name
-        category.parent = parent
         category.order = categoryInfo.order
     }
 }

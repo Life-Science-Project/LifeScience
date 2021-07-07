@@ -1,5 +1,6 @@
-package com.jetbrains.life_science.auth2.jwt
+package com.jetbrains.life_science.config.jwt
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -12,11 +13,13 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class JWTAuthTokenFilter(
-        private val jwtService: JWTService,
-        private val userDetailsService: UserDetailsService
+    private val jwtService: JWTService,
 ) : OncePerRequestFilter() {
 
     val bearer = "Bearer"
+
+    @Autowired
+    lateinit var userDetailsService: UserDetailsService
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -37,7 +40,7 @@ class JWTAuthTokenFilter(
                 SecurityContextHolder.getContext().authentication = authentication
             }
         } catch (e: Exception) {
-            logger.error("Can not set user authentication: {}", e)
+            logger.error("Can NOT set user authentication -> Message: {}", e)
         }
 
         filterChain.doFilter(request, response)

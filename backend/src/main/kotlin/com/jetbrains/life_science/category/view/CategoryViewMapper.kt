@@ -14,7 +14,6 @@ class CategoryViewMapper(
             .map { approachCategoryViewMapper.createView(it) }
         return CategoryView(
             id = category.id,
-            parentId = category.parent?.id,
             name = category.name,
             order = category.order,
             subcategories = subcategoriesView,

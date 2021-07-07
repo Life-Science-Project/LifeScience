@@ -2,7 +2,7 @@ package com.jetbrains.life_science.approach.entity
 
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.section.entity.Section
-import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import javax.persistence.Entity
 import javax.persistence.ManyToMany
 
@@ -17,6 +17,6 @@ class DraftApproach(
     var categories: MutableList<Category>,
 
     @ManyToMany
-    var participants: MutableList<User>
+    var participants: MutableList<UserPersonalData>
 
 ) : Approach(id, name, sections, tags)
