@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.config.jwt
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -13,10 +14,12 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class JWTAuthTokenFilter(
     private val jwtService: JWTService,
-    private val userDetailsService: UserDetailsService
 ) : OncePerRequestFilter() {
 
     val bearer = "Bearer"
+
+    @Autowired
+    lateinit var userDetailsService: UserDetailsService
 
     override fun doFilterInternal(
         request: HttpServletRequest,

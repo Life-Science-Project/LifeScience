@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.review.request.entity
 
 import com.jetbrains.life_science.review.primary.entity.Review
-import com.jetbrains.life_science.user.master.entity.User
+import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -24,5 +24,5 @@ abstract class ReviewRequest(
     var reviews: MutableList<Review>,
 
     @ManyToOne
-    var editor: User
+    var editor: UserPersonalData
 )
