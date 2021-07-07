@@ -1,11 +1,14 @@
-package com.jetbrains.life_science.content.publish.service
+package com.jetbrains.life_science.content.version.service
 
+import com.jetbrains.life_science.content.maker.makeContentInfo
 import com.jetbrains.life_science.content.publish.entity.Content
-import com.jetbrains.life_science.content.version.service.ContentVersionService
+import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
+import com.jetbrains.life_science.exception.request.ContentAlreadyExistsException
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -18,13 +21,13 @@ import javax.annotation.PostConstruct
 @SpringBootTest
 @Sql("/scripts/add_test_data.sql")
 @Transactional
-internal class ContentPublishServiceTest {
+internal class ContentVersionServiceTest {
 
     @Autowired
-    lateinit var service: ContentService
+    lateinit var service: ContentVersionService
 
     @Autowired
-    lateinit var contentVersionService: ContentVersionService
+    lateinit var contentService: ContentService
 
     @Autowired
     lateinit var highLevelClient: RestHighLevelClient
@@ -42,6 +45,57 @@ internal class ContentPublishServiceTest {
     @BeforeEach
     fun resetElastic() {
         elasticPopulator.prepareData()
+    }
+
+    /**
+     * Should create new content
+     */
+    @Test
+    fun `create content`() {
+        // Prepare
+        val info = makeContentInfo(
+            id = "",
+            sectionId = 15,
+            text = "new content text",
+            tags = mutableListOf(),
+            references = mutableListOf()
+        )
+
+        // Action
+        val content = service.create(info)
+
+        //Prepare
+        val expected = Content(
+            id = content.id,
+            sectionId = 15,
+            text = "new content text",
+            tags = mutableListOf(),
+            references = mutableListOf()
+        )
+
+        // Assert
+        assertNotEquals(String(), content.id)
+        assertEquals(expected, content)
+    }
+
+    /**
+     * Should throw ContentAlreadyExistsException, because content with that section id already exist
+     */
+    @Test
+    fun `create exist content`() {
+        // Prepare
+        val info = makeContentInfo(
+            id = "",
+            sectionId = 4,
+            text = "new content text",
+            tags = mutableListOf(),
+            references = mutableListOf()
+        )
+
+        // Action & Assert
+        assertThrows<ContentAlreadyExistsException>("Content already exists") {
+            service.create(info)
+        }
     }
 
     /**
@@ -69,9 +123,12 @@ internal class ContentPublishServiceTest {
         // Prepare
         val idToDelete = "123123"
 
-        // Action & Assert
+        // Action
+        service.delete(idToDelete)
+
+        // Assert
         assertThrows<ContentNotFoundException>("Content not found by id: $idToDelete") {
-            service.delete(idToDelete)
+            service.findById(idToDelete)
         }
     }
 
@@ -117,11 +174,11 @@ internal class ContentPublishServiceTest {
     @Test
     fun `find existing content`() {
         // Prepare
-        val expectedId = "123"
+        val expectedId = "0ab"
         val expected = Content(
             id = expectedId,
-            sectionId = 1,
-            text = "general info text",
+            sectionId = 4,
+            text = "not yet published text",
             tags = mutableListOf(),
             references = mutableListOf()
         )
@@ -153,11 +210,11 @@ internal class ContentPublishServiceTest {
     @Test
     fun `find existing content by section id`() {
         // Prepare
-        val expectedSectionId = 1L
+        val expectedSectionId = 4L
         val expected = Content(
-            id = "123",
+            id = "0ab",
             sectionId = expectedSectionId,
-            text = "general info text",
+            text = "not yet published text",
             tags = mutableListOf(),
             references = mutableListOf()
         )
@@ -186,23 +243,93 @@ internal class ContentPublishServiceTest {
     }
 
     /**
-     * Should remove existing content using contentVersionService and save using contentService
+     * Should update existing content
      */
     @Test
-    fun `publish existing content`() {
+    fun `update existing content`() {
         // Prepare
-        val expectedSectionId = 4L
+        val contentId = "0ab"
+        val expected = Content(
+            id = contentId,
+            sectionId = 4,
+            text = "updated text",
+            references = mutableListOf(),
+            tags = mutableListOf()
+        )
+        val info = makeContentInfo(expected)
 
         // Action
-        service.publishBySectionId(expectedSectionId)
+        service.update(info)
+
+        // Prepare
+        val content = service.findById(contentId)
+
+        // Assert
+        assertEquals(expected, content)
+    }
+
+    /**
+     * Should throw ContentNotFoundException
+     */
+    @Test
+    fun `update not existing content`() {
+        // Prepare
+        val expectedId = "abracadabra"
+        val info = makeContentInfo(
+            id = expectedId,
+            sectionId = 4,
+            text = "updated text",
+            references = mutableListOf(),
+            tags = mutableListOf()
+        )
+
+        // Action & Assert
+        assertThrows<ContentNotFoundException>("Content not found by id: $expectedId") {
+            service.update(info)
+        }
+    }
+
+    /**
+     * Should throw ContentAlreadyExistsException
+     */
+    @Test
+    fun `update existing content with not existing section id`() {
+        // Prepare
+        val info = makeContentInfo(
+            id = "3cd",
+            sectionId = 4,
+            text = "updated text",
+            references = mutableListOf(),
+            tags = mutableListOf()
+        )
+
+        // Action & Assert
+        assertThrows<ContentAlreadyExistsException>("Content already exists") {
+            service.update(info)
+        }
+    }
+
+    /**
+     * Should remove existing content using contentService and save using contentVersionService
+     */
+    @Test
+    fun `archive existing content`() {
+        // Prepare
+        val expectedSectionId = 1L
+
+        // Action
+        service.archiveBySectionId(expectedSectionId)
+
+        //Wait
+        Thread.sleep(4000)
 
         // Prepare
         val content = service.findBySectionId(expectedSectionId)
-        val oldContent = contentVersionService.findBySectionId(expectedSectionId)
+        val oldContent = contentService.findBySectionId(expectedSectionId)
         val expected = Content(
             id = content?.id,
             sectionId = expectedSectionId,
-            text = "not yet published text",
+            text = "general info text",
             tags = mutableListOf(),
             references = mutableListOf()
         )
@@ -213,19 +340,16 @@ internal class ContentPublishServiceTest {
     }
 
     /**
-     * Should do nothing, if there is no such content found contentVersionService
+     * Should do nothing, if there is no such content found contentService
      */
     @Test
-    fun `publish not existing content`() {
+    fun `archive not existing content`() {
         // Prepare
         val expectedSectionId = 666L
         val expected = null
 
         // Action
-        service.publishBySectionId(expectedSectionId)
-
-        //Wait
-        Thread.sleep(1000)
+        service.archiveBySectionId(expectedSectionId)
 
         // Assert
         val content = service.findBySectionId(expectedSectionId)
