@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/ping")
 class PingController {
 
-
     @GetMapping
     fun getResult(@AuthenticationPrincipal credentials: Credentials) {
-
     }
-
 }

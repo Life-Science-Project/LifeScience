@@ -15,7 +15,6 @@ import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
 @Component
 class JWTAuthTokenFilter(
     private val jwtService: JWTService,
