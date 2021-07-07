@@ -28,6 +28,6 @@ abstract class Protocol(
     @OneToMany
     var sections: MutableList<Section>,
 
-    @OneToOne
+    @ManyToOne
     var owner: User
 )
