@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.review.primary.entity
 
 import com.jetbrains.life_science.review.request.entity.ReviewRequest
-import com.jetbrains.life_science.user.user.entity.User
+import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -22,7 +22,7 @@ class Review(
     var resolution: ReviewResolution,
 
     @ManyToOne
-    var reviewer: User,
+    var reviewer: UserPersonalData,
 
     @ManyToOne
     var request: ReviewRequest

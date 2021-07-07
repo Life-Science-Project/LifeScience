@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.user.group.entity
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
-import com.jetbrains.life_science.protocol.entity.Protocol
+import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import javax.persistence.*
 
 @Entity
@@ -20,7 +20,7 @@ class FavoriteGroup(
     val subGroups: MutableList<FavoriteGroup>,
 
     @ManyToMany
-    val protocols: MutableList<Protocol>,
+    val protocols: MutableList<PublicProtocol>,
 
     @ManyToMany
     val approaches: MutableList<PublicApproach>
