@@ -9,7 +9,7 @@ interface DraftApproachService {
     fun get(id: Long)
 
     // DraftApproachAlreadyExistsException
-    fun create(info: ApproachInfo) : DraftApproach
+    fun create(info: ApproachInfo): DraftApproach
 
     // DraftApproachNotFoundException
     fun update(info: ApproachInfo)
