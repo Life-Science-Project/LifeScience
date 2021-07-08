@@ -6,6 +6,7 @@ import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -82,24 +83,22 @@ internal class ContentPublishServiceTest {
     fun `delete existing content by section id`() {
         // Prepare
         val sectionIdToDelete = 1L
-        val expected = null
 
         // Action
         service.deleteBySectionId(sectionIdToDelete)
 
         // Assert
         val content = service.findBySectionId(sectionIdToDelete)
-        assertEquals(expected, content)
+        assertNull(content)
     }
 
     /**
-     * Should throw "Not found exception" on attempt to delete by not existing section id
+     * Should do nothing on attempt to delete by not existing section id
      */
     @Test
     fun `delete not existing content by section id`() {
         // Prepare
         val idToDelete = 666L
-        val expected = null
 
         // Action
         service.deleteBySectionId(idToDelete)
@@ -108,7 +107,7 @@ internal class ContentPublishServiceTest {
         val content = service.findBySectionId(idToDelete)
 
         // Assert
-        assertEquals(expected, content)
+        assertNull(content)
     }
 
     /**
@@ -176,13 +175,12 @@ internal class ContentPublishServiceTest {
     fun `find not existing content by section id`() {
         // Prepare
         val expectedSectionId = 666L
-        val expected = null
 
         // Action
         val content = service.findBySectionId(expectedSectionId)
 
         // Assert
-        assertEquals(expected, content)
+        assertNull(content)
     }
 
     /**
@@ -209,7 +207,7 @@ internal class ContentPublishServiceTest {
 
         // Assert
         assertEquals(expected, content)
-        assertEquals(null, oldContent)
+        assertNull(oldContent)
     }
 
     /**
@@ -219,7 +217,6 @@ internal class ContentPublishServiceTest {
     fun `publish not existing content`() {
         // Prepare
         val expectedSectionId = 666L
-        val expected = null
 
         // Action
         service.publishBySectionId(expectedSectionId)
@@ -229,6 +226,6 @@ internal class ContentPublishServiceTest {
 
         // Assert
         val content = service.findBySectionId(expectedSectionId)
-        assertEquals(expected, content)
+        assertNull(content)
     }
 }

@@ -4,12 +4,15 @@ import com.jetbrains.life_science.content.maker.makeContentCreationInfo
 import com.jetbrains.life_science.content.publish.entity.Content
 import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
+import com.jetbrains.life_science.exception.section.SectionAlreadyArchivedException
+import com.jetbrains.life_science.exception.section.SectionAlreadyPublishedException
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.service.maker.makeSectionInfo
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -114,7 +117,6 @@ internal class SectionServiceTests {
 
         // Prepare
         val content = contentService.findBySectionId(section.id)
-        val expectedContent = null
         val expected = Section(
             id = section.id,
             name = info.name,
@@ -125,7 +127,7 @@ internal class SectionServiceTests {
 
         // Assert
         assertEquals(expected, section)
-        assertEquals(expectedContent, content)
+        assertNull(content)
     }
 
     /**
@@ -282,7 +284,6 @@ internal class SectionServiceTests {
     fun `publish not published section`() {
         // Prepare
         val notPublishedId = 10L
-        val notExistingContent = null
 
         // Action
         service.publish(notPublishedId)
@@ -295,27 +296,21 @@ internal class SectionServiceTests {
         val content = contentService.findBySectionId(notPublishedId)
 
         assertTrue(section.published)
-        assertEquals(notExistingContent, content)
+        assertNull(content)
     }
 
     /**
-     * Should do nothing
+     * Should throw SectionAlreadyPublishedException
      */
     @Test
     fun `publish published section`() {
         // Prepare
         val publishedId = 2L
-        val notExistingContent = null
 
-        // Action
-        service.publish(publishedId)
-
-        // Assert
-        val section = service.getById(publishedId)
-        val content = contentService.findBySectionId(publishedId)
-
-        assertTrue(section.published)
-        assertEquals(notExistingContent, content)
+        // Action & Assert
+        assertThrows<SectionAlreadyPublishedException> {
+            service.publish(publishedId)
+        }
     }
 
     /**
@@ -333,22 +328,17 @@ internal class SectionServiceTests {
     }
 
     /**
-     * Should do nothing
+     * Should throw SectionAlreadyArchivedException
      */
     @Test
     fun `archive not published section`() {
         // Prepare
         val notPublishedId = 10L
 
-        // Action
-        service.archive(notPublishedId)
-
-        // Assert
-        val section = service.getById(notPublishedId)
-        val content = contentService.findBySectionId(notPublishedId)
-
-        assertFalse(section.published)
-        assertEquals(section.id, content?.sectionId)
+        // Action & Assert
+        assertThrows<SectionAlreadyArchivedException> {
+            service.archive(notPublishedId)
+        }
     }
 
     /**

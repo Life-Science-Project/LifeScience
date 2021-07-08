@@ -4,6 +4,8 @@ import com.jetbrains.life_science.content.publish.dto.ContentCreationToInfoAdapt
 import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
+import com.jetbrains.life_science.exception.section.SectionAlreadyArchivedException
+import com.jetbrains.life_science.exception.section.SectionAlreadyPublishedException
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.factory.SectionFactory
 import com.jetbrains.life_science.section.repository.SectionRepository
@@ -71,6 +73,8 @@ class SectionServiceImpl(
             contentService.publishBySectionId(sectionId)
             section.published = true
             repository.save(section)
+        } else {
+            throw SectionAlreadyPublishedException()
         }
     }
 
@@ -80,6 +84,8 @@ class SectionServiceImpl(
             contentVersionService.archiveBySectionId(sectionId)
             section.published = false
             repository.save(section)
+        } else {
+            throw SectionAlreadyArchivedException()
         }
     }
 }
