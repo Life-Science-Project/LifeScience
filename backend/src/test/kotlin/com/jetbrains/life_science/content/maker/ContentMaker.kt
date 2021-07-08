@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.content.maker
 
 import com.jetbrains.life_science.content.publish.entity.Content
-import com.jetbrains.life_science.content.publish.service.ContentCreationInfo
 import com.jetbrains.life_science.content.publish.service.ContentInfo
 
 fun makeContentInfo(
@@ -12,32 +11,16 @@ fun makeContentInfo(
     tags: List<String>
 ) = object : ContentInfo {
     override val id = id
-    override val sectionId = sectionId
-    override val text = text
-    override val references = references
-    override val tags = tags
+    override var sectionId = sectionId
+    override var text = text
+    override var references = references
+    override var tags = tags
 }
 
 fun makeContentInfo(content: Content) = object : ContentInfo {
     override val id = content.id
-    override val sectionId = content.sectionId
-    override val text = content.text
-    override val references = content.references
-    override val tags = content.tags
-}
-
-fun makeContentCreationInfo(
-    text: String,
-    references: List<String>,
-    tags: List<String>
-) = object : ContentCreationInfo {
-    override val text = text
-    override val references = references
-    override val tags = tags
-}
-
-fun makeContentCreationInfo(content: Content) = object : ContentCreationInfo {
-    override val text = content.text
-    override val references = content.references
-    override val tags = content.tags
+    override var sectionId = content.sectionId
+    override var text = content.text
+    override var references: List<String> = content.references
+    override var tags: List<String> = content.tags
 }

@@ -128,7 +128,7 @@ internal class ContentVersionServiceTest {
         service.deleteBySectionId(sectionIdToDelete)
 
         // Wait
-        Thread.sleep(1000)
+        Thread.sleep(2000)
 
         // Assert
         val content = service.findBySectionId(sectionIdToDelete)
@@ -267,26 +267,6 @@ internal class ContentVersionServiceTest {
 
         // Action & Assert
         assertThrows<ContentNotFoundException>("Content not found by id: $expectedId") {
-            service.update(info)
-        }
-    }
-
-    /**
-     * Should throw ContentAlreadyExistsException
-     */
-    @Test
-    fun `update existing content with already existing section id`() {
-        // Prepare
-        val info = makeContentInfo(
-            id = "3cd",
-            sectionId = 10,
-            text = "updated text",
-            references = mutableListOf(),
-            tags = mutableListOf()
-        )
-
-        // Action & Assert
-        assertThrows<ContentAlreadyExistsException>("Content already exists") {
             service.update(info)
         }
     }
