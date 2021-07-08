@@ -7,11 +7,11 @@ class ContentDTOToInfoAdapter(
     override val id: String? = null
 ) : ContentInfo {
 
-    override val sectionId: Long = dto.sectionId
+    override var sectionId: Long = dto.sectionId
 
-    override val text: String = dto.text
+    override var text: String = dto.text
 
-    override val references: List<String> = dto.references
+    override var references: List<String> = dto.references
 
-    override val tags: List<String> = dto.tags
+    override var tags: List<String> = dto.tags
 }

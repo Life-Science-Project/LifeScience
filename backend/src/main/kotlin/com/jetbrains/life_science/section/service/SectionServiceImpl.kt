@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.section.service
 
-import com.jetbrains.life_science.content.publish.dto.ContentCreationToInfoAdapter
 import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
@@ -29,10 +28,8 @@ class SectionServiceImpl(
     override fun create(info: SectionInfo): Section {
         var section = factory.create(info)
         section = repository.save(section)
-        val innerContent = info.contentInfo
-        if (innerContent != null) {
-            contentVersionService.create(ContentCreationToInfoAdapter(section.id, innerContent))
-        }
+        info.contentInfo.sectionId = section.id
+        contentVersionService.create(info.contentInfo)
         return section
     }
 
@@ -63,8 +60,14 @@ class SectionServiceImpl(
     @Transactional
     override fun update(info: SectionInfo): Section {
         val section = getById(info.id)
-        factory.setParams(section, info)
-        return section
+        if (!section.published) {
+            factory.setParams(section, info)
+            info.contentInfo.sectionId = info.id
+            contentVersionService.update(info.contentInfo)
+            return section
+        } else {
+            throw SectionAlreadyPublishedException()
+        }
     }
 
     override fun publish(sectionId: Long) {

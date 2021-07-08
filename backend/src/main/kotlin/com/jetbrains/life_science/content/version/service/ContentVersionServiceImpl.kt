@@ -37,13 +37,12 @@ class ContentVersionServiceImpl(
     }
 
     override fun update(info: ContentInfo): Content {
-        val content = findById(info.id)
-        val oldSectionId = content.sectionId
-        val sectionId = info.sectionId
-        if (sectionId != oldSectionId) {
-            validateContentNotExists(sectionId)
+        val content = findBySectionId(info.sectionId)
+        if (content != null) {
+            factory.setParams(content, info)
+        } else {
+            throw ContentNotFoundException("Content not found by section id ${info.sectionId}")
         }
-        factory.setParams(content, info)
         return repository.save(content)
     }
 

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.section.service.maker
 
-import com.jetbrains.life_science.content.publish.service.ContentCreationInfo
+import com.jetbrains.life_science.content.publish.service.ContentInfo
 import com.jetbrains.life_science.section.service.SectionInfo
 
 fun makeSectionInfo(
@@ -8,7 +8,7 @@ fun makeSectionInfo(
     name: String,
     order: Long,
     visible: Boolean,
-    contentInfo: ContentCreationInfo?
+    contentInfo: ContentInfo
 ): SectionInfo = object : SectionInfo {
     override val id = id
     override var name = name
