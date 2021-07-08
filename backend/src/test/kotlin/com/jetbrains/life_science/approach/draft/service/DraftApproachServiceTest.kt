@@ -36,13 +36,15 @@ class DraftApproachServiceTest {
     fun `create new draft approach`() {
         // Prepare
         val category = categoryService.getCategory(0)
+        val owner = credentialsService.getByEmail("email")
         val info = makeDraftApproachInfo(
             id = 0L,
             name = "bradford",
             tags = listOf(),
             categories = listOf(
                 category
-            )
+            ),
+            owner = owner
         )
 
         // Action
@@ -67,7 +69,7 @@ class DraftApproachServiceTest {
         val draftApproach = service.get(approachId)
 
         // Assert
-        assertEquals(expectedName, draftApproach)
+        assertEquals(expectedName, draftApproach.name)
     }
 
     /**
@@ -91,13 +93,15 @@ class DraftApproachServiceTest {
     fun `update existing approach`() {
         // Prepare
         val category = categoryService.getCategory(0)
+        val owner = credentialsService.getByEmail("email")
         val info = makeDraftApproachInfo(
             id = 1L,
             name = "updated name",
             tags = listOf(),
             categories = listOf(
                 category
-            )
+            ),
+            owner = owner
         )
 
         // Action
@@ -117,13 +121,15 @@ class DraftApproachServiceTest {
     fun `update not existing approach`() {
         // Prepare
         val category = categoryService.getCategory(0)
+        val owner = credentialsService.getByEmail("email")
         val info = makeDraftApproachInfo(
             id = 666L,
             name = "updated name",
             tags = listOf(),
             categories = listOf(
                 category
-            )
+            ),
+            owner = owner
         )
 
         // Action & Assert
@@ -155,7 +161,7 @@ class DraftApproachServiceTest {
     @Test
     fun `delete not existing approach`() {
         // Prepare
-        val draftApproachId = 1L
+        val draftApproachId = 239L
 
         // Action & Assert
         assertThrows<DraftApproachNotFoundException> {
