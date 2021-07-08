@@ -2,7 +2,6 @@ package com.jetbrains.life_science.controller.auth
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.jetbrains.life_science.auth.jwt.JWTService
 import com.jetbrains.life_science.auth.jwt.JWTServiceImpl
 import com.jetbrains.life_science.auth.refresh.factory.RefreshTokenFactoryImpl
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
@@ -145,7 +144,7 @@ internal class AuthControllerTest {
             jwtServiceImpl.jwtExpirationSeconds = 1
             val loginTokens = login("email", "password")
 
-            //Wait for jwt to expire
+            // Wait for jwt to expire
             Thread.sleep(2_000)
 
             val pingRequest = getApiExceptionView(401, pingSecuredRequest(loginTokens))
@@ -168,7 +167,7 @@ internal class AuthControllerTest {
             refreshTokenFactoryImpl.refreshExpirationSeconds = 1
             val loginTokens = login("email", "password")
 
-            //Wait for jwt to expire
+            // Wait for jwt to expire
             Thread.sleep(2_000)
 
             val refreshRequest = getApiExceptionView(
@@ -259,5 +258,4 @@ internal class AuthControllerTest {
     private fun makeAuthPath(pathPath: String): String {
         return authPath + pathPath
     }
-
 }
