@@ -4,7 +4,7 @@ import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundExcep
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.factory.DraftProtocolFactory
 import com.jetbrains.life_science.protocol.repository.DraftProtocolRepository
-import com.jetbrains.life_science.user.data.entity.UserPersonalData
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.stereotype.Service
 
 @Service
@@ -29,17 +29,17 @@ class DraftProtocolServiceImpl(
         return repository.save(protocol)
     }
 
-    override fun addParticipant(draftProtocolId: Long, userPersonalData: UserPersonalData) {
+    override fun addParticipant(draftProtocolId: Long, credentials: Credentials) {
         val protocol = get(draftProtocolId)
-        if (!protocol.participants.any { it.id == userPersonalData.id }) {
-            protocol.participants.add(userPersonalData)
+        if (!protocol.participants.any { it.id == credentials.id }) {
+            protocol.participants.add(credentials)
             repository.save(protocol)
         }
     }
 
-    override fun removeParticipant(draftProtocolId: Long, userPersonalData: UserPersonalData) {
+    override fun removeParticipant(draftProtocolId: Long, credentials: Credentials) {
         val protocol = get(draftProtocolId)
-        protocol.participants.removeAll { it.id == userPersonalData.id }
+        protocol.participants.removeAll { it.id == credentials.id }
         repository.save(protocol)
     }
 
