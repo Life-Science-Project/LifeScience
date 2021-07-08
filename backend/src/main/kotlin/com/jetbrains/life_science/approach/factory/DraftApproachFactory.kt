@@ -18,7 +18,7 @@ class DraftApproachFactory {
         )
     }
 
-    fun setParams(draftApproach: DraftApproach, info: DraftApproachInfo)  {
+    fun setParams(draftApproach: DraftApproach, info: DraftApproachInfo) {
         draftApproach.name = info.name
         draftApproach.tags = info.tags
         draftApproach.owner = info.owner

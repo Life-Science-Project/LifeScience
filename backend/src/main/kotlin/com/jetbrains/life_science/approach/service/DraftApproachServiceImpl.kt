@@ -12,7 +12,7 @@ class DraftApproachServiceImpl(
     val repository: DraftApproachRepository,
     val factory: DraftApproachFactory
 ) : DraftApproachService {
-    override fun get(id: Long) : DraftApproach {
+    override fun get(id: Long): DraftApproach {
         return repository.findById(id).orElseThrow {
             DraftApproachNotFoundException("Draft approach with id $id is not found")
         }
@@ -23,7 +23,7 @@ class DraftApproachServiceImpl(
         return repository.save(draftApproach)
     }
 
-    override fun update(info: DraftApproachInfo) : DraftApproach {
+    override fun update(info: DraftApproachInfo): DraftApproach {
         val draftApproach = get(info.id)
         factory.setParams(draftApproach, info)
         return draftApproach
