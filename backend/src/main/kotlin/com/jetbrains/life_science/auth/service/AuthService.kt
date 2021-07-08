@@ -9,5 +9,5 @@ interface AuthService {
 
     fun register(credentials: Credentials): AuthTokens
 
-    fun refreshTokens(userCredentials: Credentials, refreshTokenCode: RefreshTokenCode): AuthTokens
+    fun refreshTokens(refreshTokenCode: RefreshTokenCode): AuthTokens
 }

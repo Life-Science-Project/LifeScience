@@ -9,5 +9,5 @@ interface RefreshTokenService {
 
     fun updateRefreshToken(userCredentials: Credentials): RefreshTokenCode
 
-    fun validateRefreshToken(userCredentials: Credentials, refreshTokenCode: RefreshTokenCode)
+    fun getCredentialsByRefreshToken(refreshTokenCode: RefreshTokenCode): Credentials
 }

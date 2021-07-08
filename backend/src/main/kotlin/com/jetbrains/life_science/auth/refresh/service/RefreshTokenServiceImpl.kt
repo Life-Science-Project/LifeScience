@@ -22,14 +22,12 @@ class RefreshTokenServiceImpl(
         return createRefreshToken(userCredentials)
     }
 
-    override fun validateRefreshToken(userCredentials: Credentials, refreshTokenCode: RefreshTokenCode) {
+    override fun getCredentialsByRefreshToken(refreshTokenCode: RefreshTokenCode): Credentials {
         val refreshToken = repository.findByCode(refreshTokenCode.code) ?: throw InvalidRefreshTokenException()
         if (refreshToken.expirationDateTime < LocalDateTime.now()) {
             throw ExpiredRefreshTokenException()
         }
-        if (refreshToken.credentials.id != userCredentials.id) {
-            throw InvalidRefreshTokenException()
-        }
+        return refreshToken.credentials
     }
 
     override fun createRefreshToken(userCredentials: Credentials): RefreshTokenCode {

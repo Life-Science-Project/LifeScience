@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.auth
 
 import com.jetbrains.life_science.auth.jwt.JWTService
-import com.jetbrains.life_science.exception.auth.ExpiredAccessTokenException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -46,11 +45,8 @@ class JWTAuthTokenFilter(
     ) {
         val jwt = getJwt(request)
         if (jwt != null) {
-            if (jwtService.validateJwtToken(jwt)) {
-                auth(jwt, request)
-            } else {
-                throw ExpiredAccessTokenException()
-            }
+            jwtService.validateJwtToken(jwt)
+            auth(jwt, request)
         }
         filterChain.doFilter(request, response)
     }

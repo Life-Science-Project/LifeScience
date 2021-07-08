@@ -10,12 +10,10 @@ import com.jetbrains.life_science.exception.auth.InvalidRefreshTokenException
 import com.jetbrains.life_science.user.credentials.dto.NewUserDTO
 import com.jetbrains.life_science.user.credentials.dto.NewUserDTOToInfoAdapter
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
-import com.jetbrains.life_science.util.email
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import java.security.Principal
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -57,12 +55,10 @@ class AuthController(
     @PostMapping("/refresh")
     fun refreshToken(
         request: HttpServletRequest,
-        response: HttpServletResponse,
-        principal: Principal
+        response: HttpServletResponse
     ): AccessTokenView {
-        val userCredentials = credentialsService.getByEmail(principal.email)
         val refreshTokenCode = getRefreshToken(request.cookies)
-        val (accessToken, refreshToken) = authService.refreshTokens(userCredentials, refreshTokenCode)
+        val (accessToken, refreshToken) = authService.refreshTokens(refreshTokenCode)
         setRefreshTokenToCookie(response, refreshToken)
         return accessTokenViewMapper.toView(accessToken)
     }

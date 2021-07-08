@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.auth.jwt
 
+import com.jetbrains.life_science.exception.auth.ExpiredAccessTokenException
+import com.jetbrains.life_science.exception.auth.InvalidAccessTokenException
 import com.jetbrains.life_science.util.getLogger
 import io.jsonwebtoken.*
 import org.springframework.beans.factory.annotation.Value
@@ -26,22 +28,14 @@ class JWTServiceImpl : JWTService {
         return JWTCode(code)
     }
 
-    override fun validateJwtToken(authToken: String): Boolean {
+    override fun validateJwtToken(authToken: String) {
         try {
             getClaimsFromToken(authToken)
-            return true
-        } catch (e: SignatureException) {
-            logger.error("Invalid JWT signature -> Message: {} ", e)
-        } catch (e: MalformedJwtException) {
-            logger.error("Invalid JWT token -> Message: {}", e)
         } catch (e: ExpiredJwtException) {
-            logger.error("Expired JWT token -> Message: {}", e)
-        } catch (e: UnsupportedJwtException) {
-            logger.error("Unsupported JWT token -> Message: {}", e)
-        } catch (e: IllegalArgumentException) {
-            logger.error("JWT claims string is empty -> Message: {}", e)
+            throw ExpiredAccessTokenException()
+        } catch (e: Exception) {
+            throw InvalidAccessTokenException()
         }
-        return false
     }
 
     override fun getUserNameFromJwtToken(token: String): String {

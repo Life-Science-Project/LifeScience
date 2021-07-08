@@ -3,9 +3,11 @@ package com.jetbrains.life_science.auth.service
 import com.jetbrains.life_science.auth.jwt.JWTService
 import com.jetbrains.life_science.auth.refresh.entity.RefreshTokenCode
 import com.jetbrains.life_science.auth.refresh.service.RefreshTokenService
+import com.jetbrains.life_science.exception.auth.InvalidCredentialsException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
 
@@ -29,8 +31,8 @@ class AuthServiceImpl(
         return AuthTokens(jwt, refreshToken)
     }
 
-    override fun refreshTokens(userCredentials: Credentials, refreshTokenCode: RefreshTokenCode): AuthTokens {
-        refreshTokenService.validateRefreshToken(userCredentials, refreshTokenCode)
+    override fun refreshTokens(refreshTokenCode: RefreshTokenCode): AuthTokens {
+        val userCredentials = refreshTokenService.getCredentialsByRefreshToken(refreshTokenCode)
         return generateTokens(userCredentials)
     }
 
@@ -41,7 +43,11 @@ class AuthServiceImpl(
     }
 
     private fun setAuthentication(authInfo: AuthCredentials) {
-        val loginPasswordToken = UsernamePasswordAuthenticationToken(authInfo.email, authInfo.password)
-        authenticationManager.authenticate(loginPasswordToken)
+        try {
+            val loginPasswordToken = UsernamePasswordAuthenticationToken(authInfo.email, authInfo.password)
+            authenticationManager.authenticate(loginPasswordToken)
+        } catch (exception: BadCredentialsException) {
+            throw InvalidCredentialsException()
+        }
     }
 }
