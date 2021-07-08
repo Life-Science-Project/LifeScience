@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.approach.service
 
 import com.jetbrains.life_science.category.entity.Category
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 
 interface ApproachInfo {
     val id: Long
@@ -10,4 +11,6 @@ interface ApproachInfo {
     val categories: List<Category>
 
     val tags: List<String>
+
+    val owner: Credentials
 }
