@@ -191,7 +191,7 @@ internal class ContentPublishServiceTest {
     @Test
     fun `publish existing content`() {
         // Prepare
-        val expectedSectionId = 4L
+        val expectedSectionId = 10L
 
         // Action
         service.publishBySectionId(expectedSectionId)
@@ -202,7 +202,7 @@ internal class ContentPublishServiceTest {
         val expected = Content(
             id = content?.id,
             sectionId = expectedSectionId,
-            text = "not yet published text",
+            text = "user text 12",
             tags = mutableListOf(),
             references = mutableListOf()
         )

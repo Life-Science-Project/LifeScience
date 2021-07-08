@@ -82,11 +82,11 @@ internal class ContentVersionServiceTest {
      * Should throw ContentAlreadyExistsException, because content with that section id already exist
      */
     @Test
-    fun `create exist content`() {
+    fun `create content with existing sectionId`() {
         // Prepare
         val info = makeContentInfo(
             id = "",
-            sectionId = 4,
+            sectionId = 10,
             text = "new content text",
             tags = mutableListOf(),
             references = mutableListOf()
@@ -104,24 +104,7 @@ internal class ContentVersionServiceTest {
     @Test
     fun `delete existing content`() {
         // Prepare
-        val idToDelete = "789"
-
-        // Action
-        service.delete(idToDelete)
-
-        // Assert
-        assertThrows<ContentNotFoundException>("Content not found by id: $idToDelete") {
-            service.findById(idToDelete)
-        }
-    }
-
-    /**
-     * Should throw "Not found exception" on attempt to delete by not existing id
-     */
-    @Test
-    fun `delete not existing content`() {
-        // Prepare
-        val idToDelete = "123123"
+        val idToDelete = "13rt"
 
         // Action
         service.delete(idToDelete)
@@ -138,11 +121,14 @@ internal class ContentVersionServiceTest {
     @Test
     fun `delete existing content by section id`() {
         // Prepare
-        val sectionIdToDelete = 1L
+        val sectionIdToDelete = 10L
         val expected = null
 
         // Action
         service.deleteBySectionId(sectionIdToDelete)
+
+        // Wait
+        Thread.sleep(1000)
 
         // Assert
         val content = service.findBySectionId(sectionIdToDelete)
@@ -161,10 +147,8 @@ internal class ContentVersionServiceTest {
         // Action
         service.deleteBySectionId(idToDelete)
 
-        // Prepare
-        val content = service.findBySectionId(idToDelete)
-
         // Assert
+        val content = service.findBySectionId(idToDelete)
         assertEquals(expected, content)
     }
 
@@ -174,11 +158,11 @@ internal class ContentVersionServiceTest {
     @Test
     fun `find existing content`() {
         // Prepare
-        val expectedId = "0ab"
+        val expectedId = "13rt"
         val expected = Content(
             id = expectedId,
-            sectionId = 4,
-            text = "not yet published text",
+            sectionId = 10,
+            text = "user text 12",
             tags = mutableListOf(),
             references = mutableListOf()
         )
@@ -210,11 +194,11 @@ internal class ContentVersionServiceTest {
     @Test
     fun `find existing content by section id`() {
         // Prepare
-        val expectedSectionId = 4L
+        val expectedSectionId = 10L
         val expected = Content(
-            id = "0ab",
+            id = "13rt",
             sectionId = expectedSectionId,
-            text = "not yet published text",
+            text = "user text 12",
             tags = mutableListOf(),
             references = mutableListOf()
         )
@@ -248,11 +232,11 @@ internal class ContentVersionServiceTest {
     @Test
     fun `update existing content`() {
         // Prepare
-        val contentId = "0ab"
+        val contentId = "13rt"
         val expected = Content(
             id = contentId,
-            sectionId = 4,
-            text = "updated text",
+            sectionId = 10,
+            text = "user text 12",
             references = mutableListOf(),
             tags = mutableListOf()
         )
@@ -293,11 +277,11 @@ internal class ContentVersionServiceTest {
      * Should throw ContentAlreadyExistsException
      */
     @Test
-    fun `update existing content with not existing section id`() {
+    fun `update existing content with already existing section id`() {
         // Prepare
         val info = makeContentInfo(
             id = "3cd",
-            sectionId = 4,
+            sectionId = 10,
             text = "updated text",
             references = mutableListOf(),
             tags = mutableListOf()
