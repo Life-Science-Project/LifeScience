@@ -5,8 +5,6 @@ import com.jetbrains.life_science.content.publish.service.ContentInfo
 
 interface ContentVersionService {
 
-    fun saveCopy(copy: Content)
-
     fun create(info: ContentInfo): Content
 
     fun findById(contentId: String?): Content
