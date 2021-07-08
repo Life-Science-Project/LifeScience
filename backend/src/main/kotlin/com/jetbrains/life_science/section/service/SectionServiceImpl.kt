@@ -36,7 +36,7 @@ class SectionServiceImpl(
 
     @Transactional
     override fun deleteById(id: Long) {
-        checkExistsById(id)
+        throwNotExist(id)
         val section = repository.findById(id).orElseThrow()
         contentService.deleteBySectionId(id)
         // Deleting row in database
@@ -44,12 +44,16 @@ class SectionServiceImpl(
     }
 
     override fun getById(id: Long): Section {
-        checkExistsById(id)
+        throwNotExist(id)
         return repository.findById(id).get()
     }
 
-    override fun checkExistsById(id: Long) {
-        if (!repository.existsById(id)) {
+    override fun existsById(id: Long): Boolean {
+        return repository.existsById(id)
+    }
+
+    private fun throwNotExist(id: Long) {
+        if (!existsById(id)) {
             throw SectionNotFoundException("Section not found by id: $id")
         }
     }
@@ -61,15 +65,21 @@ class SectionServiceImpl(
         return section
     }
 
-    override fun publish(newSections: List<Section>) {
-        newSections.forEach { section ->
-            contentService.publishBySectionId(section.id)
+    override fun publish(sectionId: Long) {
+        val section = getById(sectionId)
+        if (!section.published) {
+            contentService.publishBySectionId(sectionId)
+            section.published = true
+            repository.save(section)
         }
     }
 
-    override fun archive(sections: List<Section>) {
-        sections.forEach { section ->
-            contentVersionService.archiveBySectionId(section.id)
+    override fun archive(sectionId: Long) {
+        val section = getById(sectionId)
+        if (section.published) {
+            contentVersionService.archiveBySectionId(sectionId)
+            section.published = false
+            repository.save(section)
         }
     }
 }

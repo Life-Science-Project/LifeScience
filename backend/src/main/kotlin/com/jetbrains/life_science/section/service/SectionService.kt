@@ -10,11 +10,11 @@ interface SectionService {
 
     fun getById(id: Long): Section
 
-    fun checkExistsById(id: Long)
+    fun existsById(id: Long): Boolean
 
     fun update(info: SectionInfo): Section
 
-    fun publish(newSections: List<Section>)
+    fun publish(sectionId: Long)
 
-    fun archive(sections: List<Section>)
+    fun archive(sectionId: Long)
 }
