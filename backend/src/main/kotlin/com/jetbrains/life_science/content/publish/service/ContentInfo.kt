@@ -1,8 +1,14 @@
 package com.jetbrains.life_science.content.publish.service
 
-interface ContentInfo : ContentCreationInfo {
+interface ContentInfo {
 
     val id: String?
 
-    val sectionId: Long
+    var sectionId: Long
+
+    var text: String
+
+    var references: List<String>
+
+    var tags: List<String>
 }

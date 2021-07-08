@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.section.service
 
-import com.jetbrains.life_science.content.maker.makeContentCreationInfo
+import com.jetbrains.life_science.content.maker.makeContentInfo
 import com.jetbrains.life_science.content.publish.entity.Content
 import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
@@ -57,7 +57,9 @@ internal class SectionServiceTests {
     @Test
     fun `create new section with content`() {
         // Prepare
-        val contentInfo = makeContentCreationInfo(
+        val contentInfo = makeContentInfo(
+            id = "",
+            sectionId = 0,
             text = "new text",
             references = mutableListOf(),
             tags = mutableListOf()
@@ -96,38 +98,6 @@ internal class SectionServiceTests {
         // Assert
         assertEquals(expected, section)
         assertEquals(expectedContent, content)
-    }
-
-    /**
-     * Should create new section without content correctly
-     */
-    @Test
-    fun `create new section without content`() {
-        // Prepare
-        val info = makeSectionInfo(
-            id = 0,
-            name = "new name",
-            order = 1,
-            visible = true,
-            contentInfo = null
-        )
-
-        // Action
-        val section = service.create(info)
-
-        // Prepare
-        val content = contentService.findBySectionId(section.id)
-        val expected = Section(
-            id = section.id,
-            name = info.name,
-            order = info.order,
-            visible = info.visible,
-            published = false
-        )
-
-        // Assert
-        assertEquals(expected, section)
-        assertNull(content)
     }
 
     /**
@@ -228,23 +198,34 @@ internal class SectionServiceTests {
     }
 
     /**
-     * Should update existing section correctly
+     * Should update not published section correctly
      */
     @Test
-    fun `update existing section`() {
+    fun `update not published section`() {
         // Prepare
+        val contentInfo = makeContentInfo(
+            id = "",
+            sectionId = 0,
+            text = "new text",
+            references = mutableListOf(),
+            tags = mutableListOf()
+        )
         val info = makeSectionInfo(
-            id = 2,
+            id = 10,
             name = "updated name",
             order = 12,
             visible = false,
-            contentInfo = null
+            contentInfo = contentInfo
         )
 
         // Action
         val section = service.update(info)
 
+        // Wait
+        Thread.sleep(1000)
+
         // Prepare
+        val content = contentService.findBySectionId(info.id)
         val expected = Section(
             id = info.id,
             name = info.name,
@@ -252,9 +233,44 @@ internal class SectionServiceTests {
             visible = info.visible,
             published = section.published
         )
+        val expectedContent = Content(
+            id = content?.id,
+            sectionId = contentInfo.sectionId,
+            text = contentInfo.text,
+            tags = contentInfo.tags.toMutableList(),
+            references = contentInfo.references.toMutableList()
+        )
 
         // Assert
         assertEquals(expected, section)
+        assertEquals(expectedContent, content)
+    }
+
+    /**
+     * Should throw SectionAlreadyPublishedException
+     */
+    @Test
+    fun `update published section`() {
+        // Prepare
+        val contentInfo = makeContentInfo(
+            id = "",
+            sectionId = 0,
+            text = "new text",
+            references = mutableListOf(),
+            tags = mutableListOf()
+        )
+        val info = makeSectionInfo(
+            id = 2,
+            name = "updated name",
+            order = 12,
+            visible = false,
+            contentInfo = contentInfo
+        )
+
+        // Action & Assert
+        assertThrows<SectionAlreadyPublishedException> {
+            service.update(info)
+        }
     }
 
     /**
@@ -263,12 +279,19 @@ internal class SectionServiceTests {
     @Test
     fun `update not existing section`() {
         // Prepare
+        val contentInfo = makeContentInfo(
+            id = "",
+            sectionId = 0,
+            text = "new text",
+            references = mutableListOf(),
+            tags = mutableListOf()
+        )
         val info = makeSectionInfo(
             id = 12321,
             name = "updated name",
             order = 12,
             visible = false,
-            contentInfo = null
+            contentInfo = contentInfo
         )
 
         // Action & Assert

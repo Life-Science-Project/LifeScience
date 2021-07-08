@@ -30,7 +30,6 @@ class ContentFactory {
     fun setParams(origin: Content, info: ContentInfo) {
         origin.text = info.text
         origin.tags = info.tags.toMutableList()
-        origin.sectionId = info.sectionId
         origin.references = info.references.toMutableList()
     }
 }
