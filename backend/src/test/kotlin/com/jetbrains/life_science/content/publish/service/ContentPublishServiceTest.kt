@@ -194,6 +194,9 @@ internal class ContentPublishServiceTest {
         // Action
         service.publishBySectionId(expectedSectionId)
 
+        // Wait
+        Thread.sleep(1000)
+
         // Prepare
         val content = service.findBySectionId(expectedSectionId)
         val oldContent = contentVersionService.findBySectionId(expectedSectionId)
