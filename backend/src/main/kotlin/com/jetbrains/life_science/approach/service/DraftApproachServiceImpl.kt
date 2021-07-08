@@ -34,19 +34,21 @@ class DraftApproachServiceImpl(
         repository.deleteById(id)
     }
 
-    override fun addParticipant(draftApproachId: Long, user: Credentials) {
+    override fun addParticipant(draftApproachId: Long, user: Credentials): DraftApproach {
         val draftApproach = get(draftApproachId)
         if (!draftApproach.participants.contains(user)) {
             draftApproach.participants.add(user)
             repository.save(draftApproach)
         }
+        return draftApproach
     }
 
-    override fun removeParticipant(draftApproachId: Long, user: Credentials) {
+    override fun removeParticipant(draftApproachId: Long, user: Credentials): DraftApproach {
         val draftApproach = get(draftApproachId)
         if (draftApproach.participants.contains(user)) {
             draftApproach.participants.remove(user)
             repository.save(draftApproach)
         }
+        return draftApproach
     }
 }

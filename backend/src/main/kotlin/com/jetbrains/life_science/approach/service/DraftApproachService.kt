@@ -20,8 +20,8 @@ interface DraftApproachService {
     // DraftApproachNotFoundException, UserAlreadyExistsException -- в случае если он уже добавлен
     // Над вторым названием над подумать, как вариант -- UserAlreadyParticipantException
     // или UserAlreadyInGroupException
-    fun addParticipant(draftApproachId: Long, user: Credentials)
+    fun addParticipant(draftApproachId: Long, user: Credentials): DraftApproach
 
     // DraftApproachNotFoundException, UserNotFoundException -- в случе если такого пользователя нет
-    fun removeParticipant(draftApproachId: Long, user: Credentials)
+    fun removeParticipant(draftApproachId: Long, user: Credentials): DraftApproach
 }

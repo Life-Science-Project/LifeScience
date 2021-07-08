@@ -2,7 +2,7 @@ package com.jetbrains.life_science.protocol.entity
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.section.entity.Section
-import com.jetbrains.life_science.user.data.entity.UserPersonalData
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -28,5 +28,5 @@ abstract class Protocol(
     var sections: MutableList<Section>,
 
     @ManyToOne
-    var owner: UserPersonalData
+    var owner: Credentials
 )
