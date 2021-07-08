@@ -1,3 +1,6 @@
 package com.jetbrains.life_science.approach.service
 
-class ApproachServiceImpl
+import org.springframework.stereotype.Service
+
+@Service
+class ApproachServiceImpl : ApproachService
