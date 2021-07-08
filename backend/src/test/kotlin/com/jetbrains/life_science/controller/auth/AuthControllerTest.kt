@@ -2,6 +2,9 @@ package com.jetbrains.life_science.controller.auth
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.jetbrains.life_science.auth.jwt.JWTService
+import com.jetbrains.life_science.auth.jwt.JWTServiceImpl
+import com.jetbrains.life_science.auth.refresh.factory.RefreshTokenFactoryImpl
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
 import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
@@ -25,6 +28,12 @@ internal class AuthControllerTest {
 
     @Autowired
     lateinit var mockMvc: MockMvc
+
+    @Autowired
+    lateinit var jwtServiceImpl: JWTServiceImpl
+
+    @Autowired
+    lateinit var refreshTokenFactoryImpl: RefreshTokenFactoryImpl
 
     val jsonMapper = jacksonObjectMapper()
 
@@ -82,7 +91,7 @@ internal class AuthControllerTest {
     /**
      * Invalid credentials test.
      *
-     * Expected 401 http code and 401_020 system code result.
+     * Expected 401 http code and 401_005 system code result.
      */
     @Test
     fun `invalid credentials test`() {
@@ -90,14 +99,14 @@ internal class AuthControllerTest {
             401,
             loginRequest("wrong", "login")
         )
-        assertEquals(401_020, apiExceptionView.code)
+        assertEquals(401_005, apiExceptionView.code)
         assertTrue(apiExceptionView.arguments.isEmpty())
     }
 
     /**
      * Invalid access token test.
      *
-     * Expected 401 http code and 401_011 system code result.
+     * Expected 401 http code and 401_003 system code result.
      */
     @Test
     fun `invalid access token test`() {
@@ -105,7 +114,7 @@ internal class AuthControllerTest {
             401,
             pingSecuredRequest(TokenPair("wrong token", "error"))
         )
-        assertEquals(401_011, apiExceptionView.code)
+        assertEquals(401_003, apiExceptionView.code)
         assertTrue(apiExceptionView.arguments.isEmpty())
     }
 
@@ -122,6 +131,55 @@ internal class AuthControllerTest {
         )
         assertEquals(401_001, apiExceptionView.code)
         assertTrue(apiExceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * Expired access token test.
+     *
+     * Expected 401 http code and 401_004 system code result.
+     */
+    @Test
+    fun `expired access token test`() {
+        val oldExpirationTime = jwtServiceImpl.jwtExpirationSeconds
+        try {
+            jwtServiceImpl.jwtExpirationSeconds = 1
+            val loginTokens = login("email", "password")
+
+            //Wait for jwt to expire
+            Thread.sleep(2_000)
+
+            val pingRequest = getApiExceptionView(401, pingSecuredRequest(loginTokens))
+            assertEquals(401_004, pingRequest.code)
+            assertTrue(pingRequest.arguments.isEmpty())
+        } finally {
+            jwtServiceImpl.jwtExpirationSeconds = oldExpirationTime
+        }
+    }
+
+    /**
+     * Expired refresh token test.
+     *
+     * Expected 401 http code and 401_002 system code result.
+     */
+    @Test
+    fun `expired refresh token test`() {
+        val oldExpirationTime = refreshTokenFactoryImpl.refreshExpirationSeconds
+        try {
+            refreshTokenFactoryImpl.refreshExpirationSeconds = 1
+            val loginTokens = login("email", "password")
+
+            //Wait for jwt to expire
+            Thread.sleep(2_000)
+
+            val refreshRequest = getApiExceptionView(
+                401,
+                refreshRequest(loginTokens.refreshToken)
+            )
+            assertEquals(401_002, refreshRequest.code)
+            assertTrue(refreshRequest.arguments.isEmpty())
+        } finally {
+            refreshTokenFactoryImpl.refreshExpirationSeconds = oldExpirationTime
+        }
     }
 
     private fun pingSecured(tokens: TokenPair) {
@@ -201,4 +259,5 @@ internal class AuthControllerTest {
     private fun makeAuthPath(pathPath: String): String {
         return authPath + pathPath
     }
+
 }

@@ -4,5 +4,5 @@ import com.jetbrains.life_science.exception.ApiException
 
 class ExpiredAccessTokenException : ApiException(
     httpCode = 401,
-    code = 401_012
+    code = 401_004
 )
