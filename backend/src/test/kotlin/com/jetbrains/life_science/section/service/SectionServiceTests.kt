@@ -48,6 +48,9 @@ internal class SectionServiceTests {
         elasticPopulator.prepareData()
     }
 
+    /**
+     * Should create new section with content correctly
+     */
     @Test
     fun `create new section with content`() {
         // Prepare
@@ -92,6 +95,9 @@ internal class SectionServiceTests {
         assertEquals(expectedContent, content)
     }
 
+    /**
+     * Should create new section without content correctly
+     */
     @Test
     fun `create new section without content`() {
         // Prepare
@@ -122,6 +128,9 @@ internal class SectionServiceTests {
         assertEquals(expectedContent, content)
     }
 
+    /**
+     * Should throw SectionNotFoundException after deleting existing section
+     */
     @Test
     fun `delete existing section`() {
         // Prepare
@@ -136,6 +145,9 @@ internal class SectionServiceTests {
         }
     }
 
+    /**
+     * Should throw SectionNotFoundException after deleting not existing section
+     */
     @Test
     fun `delete not existing section`() {
         // Prepare
@@ -147,6 +159,9 @@ internal class SectionServiceTests {
         }
     }
 
+    /**
+     * Should return existing section correctly
+     */
     @Test
     fun `get existing section`() {
         // Prepare
@@ -166,6 +181,9 @@ internal class SectionServiceTests {
         assertEquals(expected, section)
     }
 
+    /**
+     * Should throw SectionNotFoundException on attempt to get not existing section
+     */
     @Test
     fun `get not existing section`() {
         // Prepare
@@ -177,6 +195,9 @@ internal class SectionServiceTests {
         }
     }
 
+    /**
+     * Should return true on existing section
+     */
     @Test
     fun `exist existing section`() {
         // Prepare
@@ -189,6 +210,9 @@ internal class SectionServiceTests {
         assertTrue(exist)
     }
 
+    /**
+     * Should return false on not existing section
+     */
     @Test
     fun `exist not existing section`() {
         // Prepare
@@ -201,6 +225,9 @@ internal class SectionServiceTests {
         assertFalse(exist)
     }
 
+    /**
+     * Should update existing section correctly
+     */
     @Test
     fun `update existing section`() {
         // Prepare
@@ -228,6 +255,9 @@ internal class SectionServiceTests {
         assertEquals(expected, section)
     }
 
+    /**
+     * Should throw SectionNotFoundException on attempt to update not existing section
+     */
     @Test
     fun `update not existing section`() {
         // Prepare
@@ -245,6 +275,9 @@ internal class SectionServiceTests {
         }
     }
 
+    /**
+     * Should publish existing not published section correctly
+     */
     @Test
     fun `publish not published section`() {
         // Prepare
@@ -265,6 +298,9 @@ internal class SectionServiceTests {
         assertEquals(notExistingContent, content)
     }
 
+    /**
+     * Should do nothing
+     */
     @Test
     fun `publish published section`() {
         // Prepare
@@ -282,6 +318,9 @@ internal class SectionServiceTests {
         assertEquals(notExistingContent, content)
     }
 
+    /**
+     * Should throw SectionNotFoundException on attempt to publish not existing section
+     */
     @Test
     fun `publish not existing section`() {
         // Prepare
@@ -293,6 +332,9 @@ internal class SectionServiceTests {
         }
     }
 
+    /**
+     * Should do nothing
+     */
     @Test
     fun `archive not published section`() {
         // Prepare
@@ -309,6 +351,9 @@ internal class SectionServiceTests {
         assertEquals(section.id, content?.sectionId)
     }
 
+    /**
+     * Should archive published section correctly
+     */
     @Test
     fun `archive published section`() {
         // Prepare
@@ -328,6 +373,9 @@ internal class SectionServiceTests {
         assertEquals(section.id, content?.sectionId)
     }
 
+    /**
+     * Should throw SectionNotFoundException on attempt to archive not existing section
+     */
     @Test
     fun `archive not existing section`() {
         // Prepare
