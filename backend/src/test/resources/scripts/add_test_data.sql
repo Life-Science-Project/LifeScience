@@ -42,12 +42,17 @@ values (2, 0);
 
 insert into draft_approach_participants (draft_approach_id, participants_id)
 values (2, 1);
+insert into draft_approach_participants (draft_approach_id, participants_id)
+values (2, 2);
+insert into draft_approach_participants (draft_approach_id, participants_id)
+values (1, 1);
+insert into draft_approach_participants (draft_approach_id, participants_id)
+values (1, 2);
 
 insert into draft_protocol (id, name, owner_id)
 values (1, 'draft_protocol_test', 1);
 
 insert into draft_protocol_participants (draft_protocol_id, participants_id)
 values (1, 1);
-
 insert into draft_protocol_participants (draft_protocol_id, participants_id)
 values (1, 2);

@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.protocol.service
 
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
+import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.factory.DraftProtocolFactory
 import com.jetbrains.life_science.protocol.repository.DraftProtocolRepository
@@ -41,6 +42,9 @@ class DraftProtocolServiceImpl(
 
     override fun removeParticipant(draftProtocolId: Long, credentials: Credentials): DraftProtocol {
         val protocol = get(draftProtocolId)
+        if (protocol.owner.id == credentials.id) {
+            throw RemoveOwnerFromParticipantsException("Can't remove owner from protocol participants")
+        }
         protocol.participants.removeAll { it.id == credentials.id }
         return repository.save(protocol)
     }

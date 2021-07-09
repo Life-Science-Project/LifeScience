@@ -4,6 +4,7 @@ import com.jetbrains.life_science.approach.draft.service.maker.makeDraftApproach
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
+import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -34,9 +35,9 @@ class DraftApproachServiceTest {
      */
     @Test
     fun `create new draft approach`() {
-        // Prepare
+        // Prepare data
         val category = categoryService.getCategory(0)
-        val owner = credentialsService.getByEmail("email")
+        val owner = credentialsService.getById(1L)
         val info = makeDraftApproachInfo(
             id = 0L,
             name = "bradford",
@@ -53,6 +54,7 @@ class DraftApproachServiceTest {
         // Assert
         assertEquals(info.name, draftApproach.name)
         assertEquals(info.tags, draftApproach.tags)
+        assertTrue(draftApproach.participants.any { it.id == owner.id })
         assertTrue(draftApproach.categories.any { it.id == category.id })
     }
 
@@ -61,8 +63,9 @@ class DraftApproachServiceTest {
      */
     @Test
     fun `get existing approach`() {
-        // Prepare
+        // Prepare data
         val approachId = 1L
+        val expectedOwnerId = 1L
         val expectedName = "first approach"
 
         // Action
@@ -70,14 +73,17 @@ class DraftApproachServiceTest {
 
         // Assert
         assertEquals(expectedName, draftApproach.name)
+        assertEquals(expectedOwnerId, draftApproach.owner.id)
+        assertTrue(draftApproach.participants.any { it.id == expectedOwnerId })
+        assertTrue(draftApproach.participants.any { it.id == 2L })
     }
 
     /**
      * Should throw DraftApproachNotFound exception
      */
     @Test
-    fun `get not existing approach`() {
-        // Prepare
+    fun `get non-existing approach`() {
+        // Prepare data
         val approachId = 666L
 
         // Action & Assert
@@ -91,9 +97,9 @@ class DraftApproachServiceTest {
      */
     @Test
     fun `update existing approach`() {
-        // Prepare
+        // Prepare data
         val category = categoryService.getCategory(0)
-        val owner = credentialsService.getByEmail("email")
+        val owner = credentialsService.getById(1L)
         val info = makeDraftApproachInfo(
             id = 1L,
             name = "updated name",
@@ -111,17 +117,19 @@ class DraftApproachServiceTest {
         assertEquals(info.id, draftApproach.id)
         assertEquals(info.name, draftApproach.name)
         assertEquals(info.tags, draftApproach.tags)
+        assertEquals(owner.id, draftApproach.owner.id)
         assertTrue(draftApproach.categories.any { it.id == category.id })
+        assertTrue(draftApproach.participants.any { it.id == owner.id })
     }
 
     /**
      * Should throw DraftApproachNotFound exception
      */
     @Test
-    fun `update not existing approach`() {
-        // Prepare
+    fun `update non-existing approach`() {
+        // Prepare data
         val category = categoryService.getCategory(0)
-        val owner = credentialsService.getByEmail("email")
+        val owner = credentialsService.getById(1L)
         val info = makeDraftApproachInfo(
             id = 666L,
             name = "updated name",
@@ -143,7 +151,7 @@ class DraftApproachServiceTest {
      */
     @Test
     fun `delete existing approach`() {
-        // Prepare
+        // Prepare data
         val draftApproachId = 1L
 
         // Action
@@ -160,7 +168,7 @@ class DraftApproachServiceTest {
      */
     @Test
     fun `delete not existing approach`() {
-        // Prepare
+        // Prepare data
         val draftApproachId = 239L
 
         // Action & Assert
@@ -174,9 +182,9 @@ class DraftApproachServiceTest {
      */
     @Test
     fun `add user to participants`() {
-        // Prepare
+        // Prepare data
         val approachId = 1L
-        val user = credentialsService.getByEmail("email")
+        val user = credentialsService.getById(3L)
 
         // Action
         val draftApproach = service.addParticipant(approachId, user)
@@ -190,9 +198,9 @@ class DraftApproachServiceTest {
      */
     @Test
     fun `add user to participants of not existing draft approach`() {
-        // Prepare
+        // Prepare data
         val approachId = 666L
-        val user = credentialsService.getByEmail("email")
+        val user = credentialsService.getById(3L)
 
         // Action & Assert
         assertThrows<DraftApproachNotFoundException> {
@@ -205,9 +213,9 @@ class DraftApproachServiceTest {
      */
     @Test
     fun `remove user from participants`() {
-        // Prepare
+        // Prepare data
         val approachId = 2L
-        val user = credentialsService.getByEmail("email")
+        val user = credentialsService.getById(2L)
 
         // Action
         val draftApproach = service.removeParticipant(approachId, user)
@@ -217,13 +225,28 @@ class DraftApproachServiceTest {
     }
 
     /**
+     * Should throw RemoveOwnerFromParticipantsException
+     */
+    @Test
+    fun `remove owner from participants`() {
+        // Prepare data
+        val draftApproachId = 1L
+        val user = credentialsService.getById(1L)
+
+        // Action & Assert
+        assertThrows<RemoveOwnerFromParticipantsException> {
+            service.removeParticipant(draftApproachId, user)
+        }
+    }
+
+    /**
      * Should throw DraftApproachNotFoundException
      */
     @Test
-    fun `remove user to participants of not existing draft approach`() {
-        // Prepare
+    fun `remove user from participants of non-existing draft approach`() {
+        // Prepare data
         val approachId = 666L
-        val user = credentialsService.getByEmail("email")
+        val user = credentialsService.getById(1L)
 
         // Action & Assert
         assertThrows<DraftApproachNotFoundException> {

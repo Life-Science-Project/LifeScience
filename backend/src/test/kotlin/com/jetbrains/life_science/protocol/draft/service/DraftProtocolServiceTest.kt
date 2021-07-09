@@ -2,6 +2,7 @@ package com.jetbrains.life_science.protocol.draft.service
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
+import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.protocol.draft.service.marker.makeDraftProtocolInfo
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
@@ -94,22 +95,6 @@ class DraftProtocolServiceTest {
     }
 
     /**
-     * Should throw PublicApproachNotFoundException
-     */
-    @Test
-    // TODO::Not yet implemented
-    fun `create new draft protocol to non-existing public approach`() {
-    }
-
-    /**
-     * Should throw UserNotFoundException
-     */
-    // TODO::Not yet implemented
-    @Test
-    fun `create new draft protocol with non-existing owner`() {
-    }
-
-    /**
      * Should update existing protocol
      */
     @Test
@@ -172,15 +157,6 @@ class DraftProtocolServiceTest {
         assertThrows<DraftProtocolNotFoundException> {
             draftProtocolservice.update(info)
         }
-    }
-
-    /**
-     * Should throw PublicApproachNotFound exception
-     * Should throw UserNotFound exception
-     */
-    // TODO::Not yet implemented
-    @Test
-    fun `update existing protocol with wring data`() {
     }
 
     /**
@@ -262,11 +238,18 @@ class DraftProtocolServiceTest {
     }
 
     /**
-     * Should throw exception
+     * Should throw RemoveOwnerFromParticipantsException
      */
-    // TODO::Not yet implemented
     @Test
     fun `remove owner from participants`() {
+        // Prepare data
+        val draftProtocolId = 1L
+        val user = credentialsService.getById(1L)
+
+        // Action & Assert
+        assertThrows<RemoveOwnerFromParticipantsException> {
+            draftProtocolservice.removeParticipant(draftProtocolId, user)
+        }
     }
 
     /**
