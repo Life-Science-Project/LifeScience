@@ -31,16 +31,22 @@ class CredentialsService(
             .orElseThrow { UserNotFoundException("User with email $email not found") }
     }
 
-    fun checkUserNotExistsByEmail(email: String) {
-        if (credentialsRepository.existsByEmail(email)) {
-            throw UserAlreadyExistsException("user with email $email already exists")
-        }
-    }
-
     fun createUser(info: NewUserInfo): Credentials {
         checkUserNotExistsByEmail(info.email)
         val roles = mutableListOf(roleRepository.findByName("ROLE_USER"))
         val credentials = factory.createUser(info, roles)
         return credentialsRepository.save(credentials)
+    }
+
+    fun checkUserNotExistsByEmail(email: String) {
+        if (credentialsRepository.existsByEmail(email)) {
+            throw UserAlreadyExistsException("User with email $email already exists")
+        }
+    }
+
+    fun getById(id: Long): Credentials {
+        return credentialsRepository.findById(id).orElseThrow {
+            throw UserNotFoundException("User with id $id not found")
+        }
     }
 }

@@ -10,5 +10,5 @@ interface ProtocolInfo {
 
     val approach: PublicApproach
 
-    val credentials: Credentials
+    val owner: Credentials
 }

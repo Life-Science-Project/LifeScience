@@ -19,6 +19,11 @@ values (10, 'last', 2, false, false);
 insert into category (id, name, order_num)
 values (0, 'HEAD', 1);
 
+insert into public_approach(id, name, owner_id)
+values (1, 'public_approach', 1);
+insert into public_approach(id, name, owner_id)
+values (2, 'second_public_approach', 1);
+
 insert into draft_approach (id, name, owner_id)
 values (1, 'first approach', 1);
 insert into draft_approach (id, name, owner_id)
@@ -31,3 +36,6 @@ values (2, 0);
 
 insert into draft_approach_participants (draft_approach_id, participants_id)
 values (2, 1);
+
+insert into draft_protocol (id, name, owner_id)
+values (1, 'draft_protocol_test', 1);

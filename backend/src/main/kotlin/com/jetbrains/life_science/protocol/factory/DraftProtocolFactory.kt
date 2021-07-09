@@ -11,7 +11,7 @@ class DraftProtocolFactory {
             id = 0,
             name = info.name,
             approach = info.approach,
-            owner = info.credentials,
+            owner = info.owner,
             sections = mutableListOf(),
             participants = mutableListOf()
         )
@@ -19,7 +19,7 @@ class DraftProtocolFactory {
 
     fun setParams(draftProtocol: DraftProtocol, info: DraftProtocolInfo) {
         draftProtocol.name = info.name
-        draftProtocol.owner = info.credentials
+        draftProtocol.owner = info.owner
         draftProtocol.approach = info.approach
     }
 }
