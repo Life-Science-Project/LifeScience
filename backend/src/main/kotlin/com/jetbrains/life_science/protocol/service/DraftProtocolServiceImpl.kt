@@ -18,6 +18,7 @@ class DraftProtocolServiceImpl(
         }
     }
 
+    // TODO:: проверка что approach существует
     override fun create(protocolInfo: DraftProtocolInfo): DraftProtocol {
         val draftProtocol = factory.create(protocolInfo)
         return repository.save(draftProtocol)

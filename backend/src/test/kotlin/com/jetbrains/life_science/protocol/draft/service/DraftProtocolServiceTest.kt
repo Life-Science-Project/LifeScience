@@ -49,7 +49,7 @@ class DraftProtocolServiceTest {
      * Should throw DraftProtocolNotFound exception
      */
     @Test
-    fun `get not existing protocol`() {
+    fun `get non-existing protocol`() {
         // Prepare data
         val draftProtocolId = 239L
 
@@ -64,7 +64,7 @@ class DraftProtocolServiceTest {
      */
     @Test
     fun `create new draft protocol`() {
-        // Prepare
+        // Prepare data
         val owner = credentialsService.getById(1L)
         val approach = PublicApproach(
             id = 1L,
@@ -91,6 +91,22 @@ class DraftProtocolServiceTest {
         assertEquals(owner.id, draftProtocol.owner.id)
         assertEquals(approach.id, draftProtocol.approach.id)
         assertTrue(draftProtocol.participants.any { it.id == owner.id })
+    }
+
+    /**
+     * Should throw PublicApproachNotFoundException
+     */
+    @Test
+    // TODO::Not yet implemented
+    fun `create new draft protocol to non-existing public approach`() {
+    }
+
+    /**
+     * Should throw UserNotFoundException
+     */
+    // TODO::Not yet implemented
+    @Test
+    fun `create new draft protocol with non-existing owner`() {
     }
 
     /**
@@ -156,6 +172,15 @@ class DraftProtocolServiceTest {
         assertThrows<DraftProtocolNotFoundException> {
             draftProtocolservice.update(info)
         }
+    }
+
+    /**
+     * Should throw PublicApproachNotFound exception
+     * Should throw UserNotFound exception
+     */
+    // TODO::Not yet implemented
+    @Test
+    fun `update existing protocol with wring data`() {
     }
 
     /**
@@ -234,6 +259,14 @@ class DraftProtocolServiceTest {
 
         // Assert
         assertTrue(draftProtocol.participants.all { it.id != user.id })
+    }
+
+    /**
+     * Should throw exception
+     */
+    // TODO::Not yet implemented
+    @Test
+    fun `remove owner from participants`() {
     }
 
     /**
