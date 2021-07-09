@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.category.entity
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -18,6 +19,8 @@ class Category(
     @ManyToMany
     val approaches: MutableList<PublicApproach>,
 
-    @Column(name = "order_num")
-    var order: Long
+    @ManyToMany
+    val parents: MutableList<Category>,
+
+    var creationDate: LocalDateTime
 )
