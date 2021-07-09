@@ -13,7 +13,7 @@ class DraftProtocolFactory {
             approach = info.approach,
             owner = info.owner,
             sections = mutableListOf(),
-            participants = mutableListOf()
+            participants = mutableListOf(info.owner)
         )
     }
 
@@ -21,5 +21,6 @@ class DraftProtocolFactory {
         draftProtocol.name = info.name
         draftProtocol.owner = info.owner
         draftProtocol.approach = info.approach
+        draftProtocol.participants = mutableListOf(info.owner)
     }
 }

@@ -5,8 +5,8 @@ import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundExcep
 import com.jetbrains.life_science.protocol.draft.service.marker.makeDraftProtocolInfo
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,19 +41,21 @@ class DraftProtocolServiceTest {
         // Assert
         assertEquals(expectedName, draftProtocol.name)
         assertEquals(expectedOwnerId, draftProtocol.owner.id)
+        assertTrue(draftProtocol.participants.any { it.id == expectedOwnerId })
+        assertTrue(draftProtocol.participants.any { it.id == 2L })
     }
 
     /**
-     * Should throw DraftApproachNotFound exception
+     * Should throw DraftProtocolNotFound exception
      */
     @Test
-    fun `get not existing approach`() {
+    fun `get not existing protocol`() {
         // Prepare data
-        val approachId = 239L
+        val draftProtocolId = 239L
 
         // Action & Assert
         assertThrows<DraftProtocolNotFoundException> {
-            draftProtocolservice.get(approachId)
+            draftProtocolservice.get(draftProtocolId)
         }
     }
 
@@ -88,13 +90,14 @@ class DraftProtocolServiceTest {
         assertEquals(info.name, draftProtocol.name)
         assertEquals(owner.id, draftProtocol.owner.id)
         assertEquals(approach.id, draftProtocol.approach.id)
+        assertTrue(draftProtocol.participants.any { it.id == owner.id })
     }
 
     /**
      * Should update existing protocol
      */
     @Test
-    fun `update existing approach`() {
+    fun `update existing draft protocol`() {
         // Prepare
         val owner = credentialsService.getById(1L)
         val approach = PublicApproach(
@@ -122,13 +125,14 @@ class DraftProtocolServiceTest {
         assertEquals(info.name, draftProtocol.name)
         assertEquals(owner.id, draftProtocol.owner.id)
         assertEquals(approach.id, draftProtocol.approach.id)
+        assertTrue(draftProtocol.participants.any { it.id == owner.id })
     }
 
     /**
      * Should throw DraftProtocolNotFound exception
      */
     @Test
-    fun `update not existing protocol`() {
+    fun `update non-existing protocol`() {
         // Prepare data
         val owner = credentialsService.getById(1L)
         val approach = PublicApproach(
@@ -158,7 +162,7 @@ class DraftProtocolServiceTest {
      * Should delete existing draft protocol
      */
     @Test
-    fun `delete existing approach`() {
+    fun `delete existing draft protocol`() {
         // Prepare data
         val draftProtocolId = 1L
 
@@ -175,7 +179,7 @@ class DraftProtocolServiceTest {
      * Should throw DraftProtocolNotFound exception
      */
     @Test
-    fun `delete not existing approach`() {
+    fun `delete not existing draft protocol`() {
         // Prepare data
         val draftProtocolId = 239L
 
@@ -192,14 +196,13 @@ class DraftProtocolServiceTest {
     fun `add user to participants`() {
         // Prepare data
         val draftProtocolId = 1L
-        val user = credentialsService.getById(1L)
+        val user = credentialsService.getById(2L)
 
         // Action
-        draftProtocolservice.addParticipant(draftProtocolId, user)
-        val draftApproach = draftProtocolservice.get(draftProtocolId)
+        val draftProtocol = draftProtocolservice.addParticipant(draftProtocolId, user)
 
         // Assert
-        Assertions.assertTrue(draftApproach.participants.any { it.id == user.id })
+        assertTrue(draftProtocol.participants.any { it.id == user.id })
     }
 
     /**
@@ -209,7 +212,7 @@ class DraftProtocolServiceTest {
     fun `add user to participants of not existing draft protocol`() {
         // Prepare data
         val draftProtocolId = 239L
-        val user = credentialsService.getById(1L)
+        val user = credentialsService.getById(3L)
 
         // Action & Assert
         assertThrows<DraftProtocolNotFoundException> {
@@ -224,14 +227,13 @@ class DraftProtocolServiceTest {
     fun `remove user from participants`() {
         // Prepare data
         val draftProtocolId = 1L
-        val user = credentialsService.getById(1)
+        val user = credentialsService.getById(2L)
 
         // Action
-        draftProtocolservice.removeParticipant(draftProtocolId, user)
-        val draftProtocol = draftProtocolservice.get(draftProtocolId)
+        val draftProtocol = draftProtocolservice.removeParticipant(draftProtocolId, user)
 
         // Assert
-        draftProtocol.participants.any { it.id == user.id }
+        assertTrue(draftProtocol.participants.all { it.id != user.id })
     }
 
     /**

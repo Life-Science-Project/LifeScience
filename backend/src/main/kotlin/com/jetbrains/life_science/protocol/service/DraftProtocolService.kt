@@ -15,10 +15,10 @@ interface DraftProtocolService {
     fun update(protocolInfo: DraftProtocolInfo): DraftProtocol
 
     // DraftProtocolNotFoundException
-    fun addParticipant(draftProtocolId: Long, credentials: Credentials)
+    fun addParticipant(draftProtocolId: Long, credentials: Credentials): DraftProtocol
 
     // DraftProtocolNotFoundException
-    fun removeParticipant(draftProtocolId: Long, credentials: Credentials)
+    fun removeParticipant(draftProtocolId: Long, credentials: Credentials): DraftProtocol
 
     // DraftProtocolNotFoundException
     fun delete(draftProtocolId: Long)

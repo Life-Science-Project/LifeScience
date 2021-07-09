@@ -29,18 +29,19 @@ class DraftProtocolServiceImpl(
         return repository.save(protocol)
     }
 
-    override fun addParticipant(draftProtocolId: Long, credentials: Credentials) {
+    override fun addParticipant(draftProtocolId: Long, credentials: Credentials): DraftProtocol {
         val protocol = get(draftProtocolId)
         if (!protocol.participants.any { it.id == credentials.id }) {
             protocol.participants.add(credentials)
             repository.save(protocol)
         }
+        return protocol
     }
 
-    override fun removeParticipant(draftProtocolId: Long, credentials: Credentials) {
+    override fun removeParticipant(draftProtocolId: Long, credentials: Credentials): DraftProtocol {
         val protocol = get(draftProtocolId)
         protocol.participants.removeAll { it.id == credentials.id }
-        repository.save(protocol)
+        return repository.save(protocol)
     }
 
     override fun delete(draftProtocolId: Long) {
