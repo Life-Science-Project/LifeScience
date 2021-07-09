@@ -148,5 +148,4 @@ abstract class ApiTest {
         val result = request.andExpect { status { isEqualTo(expectedHttpCode) } }.andReturn()
         return objectMapper.readValue(result.response.contentAsString)
     }
-
 }

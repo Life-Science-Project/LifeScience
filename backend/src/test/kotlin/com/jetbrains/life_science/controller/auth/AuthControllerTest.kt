@@ -1,10 +1,8 @@
 package com.jetbrains.life_science.controller.auth
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.auth.jwt.JWTServiceImpl
 import com.jetbrains.life_science.auth.refresh.factory.RefreshTokenFactoryImpl
-import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import com.jetbrains.life_science.user.credentials.dto.NewUserDTO
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -15,8 +13,7 @@ import org.springframework.test.web.servlet.*
 import javax.servlet.http.Cookie
 
 @Sql("/scripts/initial_data.sql")
-internal class AuthControllerTest: ApiTest()  {
-
+internal class AuthControllerTest : ApiTest() {
 
     @Autowired
     lateinit var jwtServiceImpl: JWTServiceImpl
@@ -203,6 +200,4 @@ internal class AuthControllerTest: ApiTest()  {
         content = objectMapper.writeValueAsString(NewUserDTO("", "", login, password))
         accept = MediaType.APPLICATION_JSON
     }
-
-
 }

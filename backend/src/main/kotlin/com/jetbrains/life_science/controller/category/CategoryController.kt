@@ -17,9 +17,5 @@ class CategoryController(
      */
     @Test
     fun `get root categories test`() {
-
     }
-
-
-
 }

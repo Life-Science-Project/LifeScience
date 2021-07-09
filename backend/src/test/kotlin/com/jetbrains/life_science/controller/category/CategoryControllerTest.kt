@@ -15,7 +15,6 @@ import java.time.LocalDateTime
 @Sql("/scripts/initial_data.sql")
 internal class CategoryControllerTest : ApiTest() {
 
-
     val pathPrefix = "/api/categories"
 
     /**
@@ -220,6 +219,4 @@ internal class CategoryControllerTest : ApiTest() {
     fun makePath(suffix: String): String {
         return pathPrefix + suffix
     }
-
-
 }
