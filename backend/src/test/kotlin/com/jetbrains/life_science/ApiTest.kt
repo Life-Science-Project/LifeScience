@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
 import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
+import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -108,6 +109,10 @@ abstract class ApiTest {
         val refreshToken: String
     )
 
+    fun loginAccessToken(loginValue: String, password: String): String {
+        return login(loginValue, password).accessToken
+    }
+
     fun login(login: String, password: String): TokenPair {
         val loginRequest = loginRequest(login, password)
         val loginResponse = assertOkAndReturn(loginRequest)
@@ -138,5 +143,10 @@ abstract class ApiTest {
 
     fun assertStatusAndReturn(status: Int, result: ResultActionsDsl) =
         result.andExpect { status { isEqualTo(status) } }.andReturn()
+
+    fun getApiExceptionView(expectedHttpCode: Int, request: ResultActionsDsl): ApiExceptionView {
+        val result = request.andExpect { status { isEqualTo(expectedHttpCode) } }.andReturn()
+        return objectMapper.readValue(result.response.contentAsString)
+    }
 
 }

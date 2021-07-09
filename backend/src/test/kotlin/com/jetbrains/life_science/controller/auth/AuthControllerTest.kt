@@ -172,11 +172,6 @@ internal class AuthControllerTest: ApiTest()  {
         assertOkAndReturn(pingRequest)
     }
 
-    private fun getApiExceptionView(expectedHttpCode: Int, request: ResultActionsDsl): ApiExceptionView {
-        val result = request.andExpect { status { isEqualTo(expectedHttpCode) } }.andReturn()
-        return objectMapper.readValue(result.response.contentAsString)
-    }
-
     fun refresh(tokenPair: TokenPair): TokenPair {
         val refreshRequest = refreshRequest(tokenPair.refreshToken)
         val refreshResponse = assertOkAndReturn(refreshRequest)

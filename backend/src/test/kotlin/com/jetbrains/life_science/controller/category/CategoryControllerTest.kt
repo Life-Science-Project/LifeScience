@@ -97,13 +97,110 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `delete category test`() {
-        val loginTokens = login("email", "password")
+        val accessToken = loginAccessToken("email", "password")
 
-        deleteAuthorized(makePath("/5"), loginTokens.accessToken)
+        deleteAuthorized(makePath("/5"), accessToken)
 
         assertStatusAndReturn(HttpStatus.NOT_FOUND.value(), getRequest(makePath("/5")))
         assertCategoryNotAvailableFromParent(2, 5)
         assertCategoryNotAvailableFromParent(4, 5)
+    }
+
+    /**
+     * Category not found test.
+     *
+     * Expected 404 http code and 404_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `category not found test`() {
+        val request = getRequest(makePath("/999"))
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_001, exceptionView)
+        assertEquals(listOf(listOf(999)), exceptionView.arguments)
+    }
+
+    /**
+     * Test checks api exception on post with wrong parent category id.
+     *
+     * Expected 404 http code and 404_002 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `category parent not found test`() {
+        val accessToken = loginAccessToken("email", "password")
+        val dto = CategoryCreationDTO("error", 999)
+
+        val request = postRequestAuthorized(pathPrefix, dto, accessToken)
+
+        val exceptionView = getApiExceptionView(404, request)
+        assertEquals(404_002, exceptionView.code)
+        assertEquals(listOf(listOf(999)), exceptionView.arguments)
+    }
+
+    /**
+     * The test checks for an exception in case of an attempt to remove all parents from a category.
+     *
+     * Expected 400 http code and 400_002 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `all parents deleted test`() {
+        val accessToken = loginAccessToken("email", "password")
+
+        val categoryUpdateDTO = CategoryUpdateDTO(
+            name = "changed name",
+            parentsToAdd = listOf(), parentsToDelete = listOf(2, 4)
+        )
+
+        val request = patchRequestAuthorized(makePath("/5"), categoryUpdateDTO, accessToken)
+        val exceptionView = getApiExceptionView(400, request)
+
+        assertEquals(400_002, exceptionView.code)
+    }
+
+    /**
+     * The test checks for an exception in case of an attempt to add non-existent parent.
+     *
+     * Expected 404 http code and 404_002 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `parent to add not found test`() {
+        val accessToken = loginAccessToken("email", "password")
+
+        val categoryUpdateDTO = CategoryUpdateDTO(
+            name = "changed name",
+            parentsToAdd = listOf(999), parentsToDelete = listOf(2)
+        )
+
+        val request = patchRequestAuthorized(makePath("/5"), categoryUpdateDTO, accessToken)
+        val exceptionView = getApiExceptionView(400, request)
+
+        assertEquals(400_002, exceptionView.code)
+    }
+
+    /**
+     * The test checks for an exception in case of an attempt to delete non-existent parent.
+     *
+     * Expected 404 http code and 404_002 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `parent to delete not found test`() {
+        val accessToken = loginAccessToken("email", "password")
+
+        val categoryUpdateDTO = CategoryUpdateDTO(
+            name = "changed name",
+            parentsToAdd = listOf(3), parentsToDelete = listOf(2, 999)
+        )
+
+        val request = patchRequestAuthorized(makePath("/5"), categoryUpdateDTO, accessToken)
+        val exceptionView = getApiExceptionView(400, request)
+
+        assertEquals(400_002, exceptionView.code)
     }
 
     private fun assertCategoryAvailableFromParent(parentId: Long, childId: Long) {
