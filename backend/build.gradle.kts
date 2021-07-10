@@ -52,6 +52,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation(group = "org.springframework.data", name = "spring-data-elasticsearch", version = "4.1.7")
 
+    implementation(group = "org.springframework.boot", name = "spring-boot-starter-validation")
     implementation(group = "org.postgresql", name = "postgresql")
 }
 
