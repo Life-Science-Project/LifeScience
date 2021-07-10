@@ -19,7 +19,7 @@ class Category(
     @ManyToMany
     val approaches: MutableList<PublicApproach>,
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "subCategories")
     val parents: MutableList<Category>,
 
     var creationDate: LocalDateTime

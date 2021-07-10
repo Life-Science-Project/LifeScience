@@ -24,7 +24,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `root categories get test`() {
-        val categories = getView<List<CategoryShortView>>(pathPrefix)
+        val categories = getView<List<CategoryShortView>>(makePath("/root"))
 
         val expectedViews = listOf(
             CategoryShortView(1, "catalog 1", timeOf(2020, 9, 17)),
