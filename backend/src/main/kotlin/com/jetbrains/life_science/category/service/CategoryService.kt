@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.category.service
 
 import com.jetbrains.life_science.category.entity.Category
+import com.jetbrains.life_science.controller.category.dto.CategoryUpdateDTOToInfoAdapter
 
 interface CategoryService {
 
@@ -10,7 +11,7 @@ interface CategoryService {
 
     fun getCategory(id: Long): Category
 
-    fun updateCategory(categoryInfo: CategoryInfo): Category
+    fun updateCategory(categoryInfo: CategoryUpdateInfo): Category
 
     fun getRootCategories(): List<Category>
 }

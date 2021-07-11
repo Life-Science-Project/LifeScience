@@ -197,7 +197,7 @@ internal class AuthControllerTest : ApiTest() {
         password: String
     ) = mockMvc.post(makeAuthPath("/register")) {
         contentType = MediaType.APPLICATION_JSON
-        content = objectMapper.writeValueAsString(NewUserDTO("", "", login, password))
+        content = objectMapper.writeValueAsString(NewUserDTO("firstName", "lastName", login, password))
         accept = MediaType.APPLICATION_JSON
     }
 }

@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.user.credentials.dto
 
-import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 
 data class NewUserDTO(
@@ -11,7 +10,6 @@ data class NewUserDTO(
     @field:NotBlank
     val lastName: String,
 
-    @field:Email
     val email: String,
 
     @field:NotBlank

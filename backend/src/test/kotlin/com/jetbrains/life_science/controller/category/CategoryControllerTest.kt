@@ -43,12 +43,12 @@ internal class CategoryControllerTest : ApiTest() {
 
         val expectedView = CategoryView(
             name = "catalog 1",
-            creationDate = timeOf(2020, 11, 17),
+            creationDate = timeOf(2020, 9, 17),
             approaches = listOf(
                 ApproachShortView(1, "approach 1", timeOf(2020, 12, 17), emptyList())
             ),
             subCategories = listOf(
-                CategoryShortView(3, "child 1-2", timeOf(2020, 12, 17))
+                CategoryShortView(3, "child 1-2", timeOf(2020, 11, 17))
             )
         )
 
@@ -64,6 +64,8 @@ internal class CategoryControllerTest : ApiTest() {
 
         val categoryDTO = CategoryCreationDTO("my category", 3)
         val createdCategory = postAuthorized<CategoryShortView>(pathPrefix, categoryDTO, loginTokens.accessToken)
+
+        flushChanges()
         val category = getView<CategoryView>(makePath("/${createdCategory.id}"))
 
         assertEquals("my category", category.name)
@@ -83,9 +85,9 @@ internal class CategoryControllerTest : ApiTest() {
         )
 
         val updatedCategory = patchAuthorized<CategoryView>(makePath("/5"), categoryDTO, loginTokens.accessToken)
-        val category = getView<CategoryView>(pathPrefix)
+        val category = getView<CategoryView>(makePath("/5"))
 
-        assertCategoryAvailableFromParent(2, 5)
+        assertCategoryNotAvailableFromParent(2, 5)
         assertCategoryAvailableFromParent(3, 5)
         assertEquals("changed name", updatedCategory.name)
         assertEquals("changed name", category.name)
@@ -117,8 +119,25 @@ internal class CategoryControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(404_001, exceptionView)
-        assertEquals(listOf(listOf(999)), exceptionView.arguments)
+        assertEquals(404_001, exceptionView.code)
+        assertEquals(listOf(listOf("999")), exceptionView.arguments)
+    }
+
+    /**
+     * Category to delete not found test.
+     *
+     * Expected 404 http code and 404_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `category to delete not found test`() {
+        val accessToken = loginAccessToken("email", "password")
+
+        val request = deleteRequestAuthorized(makePath("/999"), accessToken)
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_001, exceptionView.code)
+        assertEquals(listOf(listOf("999")), exceptionView.arguments)
     }
 
     /**
@@ -136,7 +155,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(404, request)
         assertEquals(404_002, exceptionView.code)
-        assertEquals(listOf(listOf(999)), exceptionView.arguments)
+        assertEquals(listOf(listOf("999")), exceptionView.arguments)
     }
 
     /**
@@ -176,9 +195,10 @@ internal class CategoryControllerTest : ApiTest() {
         )
 
         val request = patchRequestAuthorized(makePath("/5"), categoryUpdateDTO, accessToken)
-        val exceptionView = getApiExceptionView(400, request)
+        val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(400_002, exceptionView.code)
+        assertEquals(404_002, exceptionView.code)
+        assertEquals(listOf(listOf("999")), exceptionView.arguments)
     }
 
     /**
@@ -197,9 +217,9 @@ internal class CategoryControllerTest : ApiTest() {
         )
 
         val request = patchRequestAuthorized(makePath("/5"), categoryUpdateDTO, accessToken)
-        val exceptionView = getApiExceptionView(400, request)
+        val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(400_002, exceptionView.code)
+        assertEquals(404_002, exceptionView.code)
     }
 
     private fun assertCategoryAvailableFromParent(parentId: Long, childId: Long) {

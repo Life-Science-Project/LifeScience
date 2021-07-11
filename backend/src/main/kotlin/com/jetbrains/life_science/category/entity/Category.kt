@@ -14,13 +14,27 @@ class Category(
     var name: String,
 
     @ManyToMany
+    @JoinTable(
+        name = "category_sub_categories",
+        joinColumns = [JoinColumn(name = "parents_id")],
+        inverseJoinColumns = [JoinColumn(name = "sub_categories_id")]
+    )
     val subCategories: MutableList<Category>,
 
     @ManyToMany
     val approaches: MutableList<PublicApproach>,
 
-    @ManyToMany(mappedBy = "subCategories")
+    @ManyToMany
+    @JoinTable(
+        name = "category_sub_categories",
+        joinColumns = [JoinColumn(name = "sub_categories_id")],
+        inverseJoinColumns = [JoinColumn(name = "parents_id")]
+    )
     val parents: MutableList<Category>,
 
     var creationDate: LocalDateTime
-)
+) {
+
+    val isEmpty: Boolean get() = subCategories.isEmpty() && approaches.isEmpty()
+
+}

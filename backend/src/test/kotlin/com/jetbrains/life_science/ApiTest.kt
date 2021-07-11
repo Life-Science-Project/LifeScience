@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.*
 import org.springframework.transaction.annotation.Transactional
+import javax.persistence.EntityManager
 
 @SpringBootTest
 @Transactional
@@ -20,9 +21,16 @@ abstract class ApiTest {
     @Autowired
     lateinit var mockMvc: MockMvc
 
+    @Autowired
+    private lateinit var entityManager: EntityManager
+
     val authPath = "/api/auth"
 
     val objectMapper = jacksonObjectMapper()
+
+    final fun flushChanges() {
+        entityManager.flush()
+    }
 
     final inline fun <reified T> toView(mvcResult: MvcResult): T {
         val content = mvcResult.response.contentAsString

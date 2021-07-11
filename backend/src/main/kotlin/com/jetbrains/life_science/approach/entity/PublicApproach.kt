@@ -17,7 +17,7 @@ class PublicApproach(
     tags: List<String>,
     creationDate: LocalDateTime,
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "approaches")
     var categories: MutableList<Category>,
 
     @ManyToMany
