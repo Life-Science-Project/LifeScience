@@ -5,6 +5,7 @@ import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
+import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -29,6 +30,9 @@ class DraftApproachServiceTest {
 
     @Autowired
     lateinit var credentialsService: CredentialsService
+
+    @Autowired
+    lateinit var sectionService: SectionService
 
     /**
      * Should create new approach
@@ -209,7 +213,7 @@ class DraftApproachServiceTest {
     }
 
     /**
-     * Should remove user to participants
+     * Should remove user from participants
      */
     @Test
     fun `remove user from participants`() {
@@ -251,6 +255,68 @@ class DraftApproachServiceTest {
         // Action & Assert
         assertThrows<DraftApproachNotFoundException> {
             service.removeParticipant(approachId, user)
+        }
+    }
+
+    /**
+     * Should add section to approach sections
+     */
+    @Test
+    fun `add section to sections`() {
+        // Prepare data
+        val approachId = 1L
+        val section = sectionService.getById(2L)
+
+        // Action
+        val draftApproach = service.addSection(approachId, section)
+
+        // Assert
+        assertTrue(draftApproach.sections.any { it.id == section.id })
+    }
+
+    /**
+     * Should throw DraftApproachNotFoundException
+     */
+    @Test
+    fun `add section to sections of not existing draft approach`() {
+        // Prepare data
+        val approachId = 666L
+        val section = sectionService.getById(1L)
+
+        // Action & Assert
+        assertThrows<DraftApproachNotFoundException> {
+            service.addSection(approachId, section)
+        }
+    }
+
+    /**
+     * Should remove section from sections
+     */
+    @Test
+    fun `remove section from sections`() {
+        // Prepare data
+        val approachId = 3L
+        val section = sectionService.getById(1L)
+
+        // Action
+        val draftApproach = service.removeSection(approachId, section)
+
+        // Assert
+        assertFalse(draftApproach.sections.any { it.id == section.id })
+    }
+
+    /**
+     * Should throw DraftApproachNotFoundException
+     */
+    @Test
+    fun `remove section from sections of non-existing draft approach`() {
+        // Prepare data
+        val approachId = 666L
+        val section = sectionService.getById(1L)
+
+        // Action & Assert
+        assertThrows<DraftApproachNotFoundException> {
+            service.removeSection(approachId, section)
         }
     }
 }

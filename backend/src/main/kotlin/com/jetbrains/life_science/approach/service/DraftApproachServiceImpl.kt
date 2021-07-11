@@ -5,6 +5,7 @@ import com.jetbrains.life_science.approach.factory.DraftApproachFactory
 import com.jetbrains.life_science.approach.repository.DraftApproachRepository
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
+import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.stereotype.Service
 
@@ -53,6 +54,22 @@ class DraftApproachServiceImpl(
             draftApproach.participants.remove(user)
             repository.save(draftApproach)
         }
+        return draftApproach
+    }
+
+    override fun addSection(draftApproachId: Long, section: Section): DraftApproach {
+        val draftApproach = get(draftApproachId)
+        if (!draftApproach.sections.any { it.id == section.id }) {
+            draftApproach.sections.add(section)
+            repository.save(draftApproach)
+        }
+        return draftApproach
+    }
+
+    override fun removeSection(draftApproachId: Long, section: Section): DraftApproach {
+        val draftApproach = get(draftApproachId)
+        draftApproach.sections.removeAll { it.id == section.id }
+        repository.save(draftApproach)
         return draftApproach
     }
 }

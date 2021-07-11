@@ -5,6 +5,7 @@ import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsE
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.factory.DraftProtocolFactory
 import com.jetbrains.life_science.protocol.repository.DraftProtocolRepository
+import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.stereotype.Service
 
@@ -19,7 +20,6 @@ class DraftProtocolServiceImpl(
         }
     }
 
-    // TODO:: проверка что approach существует
     override fun create(protocolInfo: DraftProtocolInfo): DraftProtocol {
         val draftProtocol = factory.create(protocolInfo)
         return repository.save(draftProtocol)
@@ -52,5 +52,21 @@ class DraftProtocolServiceImpl(
     override fun delete(draftProtocolId: Long) {
         get(draftProtocolId)
         repository.deleteById(draftProtocolId)
+    }
+
+    override fun addSection(draftProtocolId: Long, section: Section): DraftProtocol {
+        val draftProtocol = get(draftProtocolId)
+        if (!draftProtocol.sections.any { it.id == section.id }) {
+            draftProtocol.sections.add(section)
+            repository.save(draftProtocol)
+        }
+        return draftProtocol
+    }
+
+    override fun removeSection(draftProtocolId: Long, section: Section): DraftProtocol {
+        val draftProtocol = get(draftProtocolId)
+        draftProtocol.sections.removeAll { it.id == section.id }
+        repository.save(draftProtocol)
+        return draftProtocol
     }
 }

@@ -29,16 +29,22 @@ insert into public_approach(id, name, owner_id)
 values (1, 'public_approach', 1);
 insert into public_approach(id, name, owner_id)
 values (2, 'second_public_approach', 1);
+insert into public_approach(id, name, owner_id)
+values (3, 'third_public_approach', 1);
 
 insert into draft_approach (id, name, owner_id)
 values (1, 'first approach', 1);
 insert into draft_approach (id, name, owner_id)
 values (2, 'bradford', 1);
+insert into draft_approach (id, name, owner_id)
+values (3, 'third', 1);
 
 insert into draft_approach_categories (draft_approach_id, categories_id)
 values (1, 0);
 insert into draft_approach_categories (draft_approach_id, categories_id)
 values (2, 0);
+insert into draft_approach_categories (draft_approach_id, categories_id)
+values (3, 0);
 
 insert into draft_approach_participants (draft_approach_id, participants_id)
 values (2, 1);
@@ -48,11 +54,23 @@ insert into draft_approach_participants (draft_approach_id, participants_id)
 values (1, 1);
 insert into draft_approach_participants (draft_approach_id, participants_id)
 values (1, 2);
+insert into draft_approach_participants (draft_approach_id, participants_id)
+values (3, 1);
 
 insert into draft_protocol (id, name, owner_id)
 values (1, 'draft_protocol_test', 1);
+insert into draft_protocol (id, name, owner_id)
+values (2, 'draft_protocol_second_test', 1);
 
 insert into draft_protocol_participants (draft_protocol_id, participants_id)
 values (1, 1);
 insert into draft_protocol_participants (draft_protocol_id, participants_id)
 values (1, 2);
+insert into draft_protocol_participants (draft_protocol_id, participants_id)
+values (2, 1);
+
+insert into approach_sections (approach_id, sections_id)
+values (3, 1);
+
+insert into protocol_sections (protocol_id, sections_id)
+values (2, 10)

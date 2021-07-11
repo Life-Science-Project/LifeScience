@@ -5,7 +5,9 @@ import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundExcep
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.protocol.draft.service.marker.makeDraftProtocolInfo
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
+import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -21,10 +23,13 @@ import org.springframework.transaction.annotation.Transactional
 class DraftProtocolServiceTest {
 
     @Autowired
-    lateinit var draftProtocolservice: DraftProtocolService
+    lateinit var service: DraftProtocolService
 
     @Autowired
     lateinit var credentialsService: CredentialsService
+
+    @Autowired
+    lateinit var sectionService: SectionService
 
     /**
      * Should get existing draft protocol
@@ -37,7 +42,7 @@ class DraftProtocolServiceTest {
         val expectedOwnerId = 1L
 
         // Action
-        val draftProtocol = draftProtocolservice.get(id)
+        val draftProtocol = service.get(id)
 
         // Assert
         assertEquals(expectedName, draftProtocol.name)
@@ -56,7 +61,7 @@ class DraftProtocolServiceTest {
 
         // Action & Assert
         assertThrows<DraftProtocolNotFoundException> {
-            draftProtocolservice.get(draftProtocolId)
+            service.get(draftProtocolId)
         }
     }
 
@@ -85,7 +90,7 @@ class DraftProtocolServiceTest {
         )
 
         // Action
-        val draftProtocol = draftProtocolservice.create(info)
+        val draftProtocol = service.create(info)
 
         // Assert
         assertEquals(info.name, draftProtocol.name)
@@ -119,7 +124,7 @@ class DraftProtocolServiceTest {
         )
 
         // Action
-        val draftProtocol = draftProtocolservice.update(info)
+        val draftProtocol = service.update(info)
 
         // Assert
         assertEquals(info.id, draftProtocol.id)
@@ -155,7 +160,7 @@ class DraftProtocolServiceTest {
 
         // Action & Assert
         assertThrows<DraftProtocolNotFoundException> {
-            draftProtocolservice.update(info)
+            service.update(info)
         }
     }
 
@@ -168,11 +173,11 @@ class DraftProtocolServiceTest {
         val draftProtocolId = 1L
 
         // Action
-        draftProtocolservice.delete(draftProtocolId)
+        service.delete(draftProtocolId)
 
         // Assert
         assertThrows<DraftProtocolNotFoundException> {
-            draftProtocolservice.get(draftProtocolId)
+            service.get(draftProtocolId)
         }
     }
 
@@ -186,7 +191,7 @@ class DraftProtocolServiceTest {
 
         // Action & Assert
         assertThrows<DraftProtocolNotFoundException> {
-            draftProtocolservice.delete(draftProtocolId)
+            service.delete(draftProtocolId)
         }
     }
 
@@ -200,7 +205,7 @@ class DraftProtocolServiceTest {
         val user = credentialsService.getById(2L)
 
         // Action
-        val draftProtocol = draftProtocolservice.addParticipant(draftProtocolId, user)
+        val draftProtocol = service.addParticipant(draftProtocolId, user)
 
         // Assert
         assertTrue(draftProtocol.participants.any { it.id == user.id })
@@ -217,7 +222,7 @@ class DraftProtocolServiceTest {
 
         // Action & Assert
         assertThrows<DraftProtocolNotFoundException> {
-            draftProtocolservice.addParticipant(draftProtocolId, user)
+            service.addParticipant(draftProtocolId, user)
         }
     }
 
@@ -231,7 +236,7 @@ class DraftProtocolServiceTest {
         val user = credentialsService.getById(2L)
 
         // Action
-        val draftProtocol = draftProtocolservice.removeParticipant(draftProtocolId, user)
+        val draftProtocol = service.removeParticipant(draftProtocolId, user)
 
         // Assert
         assertTrue(draftProtocol.participants.all { it.id != user.id })
@@ -248,7 +253,7 @@ class DraftProtocolServiceTest {
 
         // Action & Assert
         assertThrows<RemoveOwnerFromParticipantsException> {
-            draftProtocolservice.removeParticipant(draftProtocolId, user)
+            service.removeParticipant(draftProtocolId, user)
         }
     }
 
@@ -263,7 +268,69 @@ class DraftProtocolServiceTest {
 
         // Action & Assert
         assertThrows<DraftProtocolNotFoundException> {
-            draftProtocolservice.removeParticipant(draftProtocolId, user)
+            service.removeParticipant(draftProtocolId, user)
+        }
+    }
+
+    /**
+     * Should add section to protocol sections
+     */
+    @Test
+    fun `add section to sections`() {
+        // Prepare data
+        val protocolId = 1L
+        val section = sectionService.getById(2L)
+
+        // Action
+        val draftProtocol = service.addSection(protocolId, section)
+
+        // Assert
+        assertTrue(draftProtocol.sections.any { it.id == section.id })
+    }
+
+    /**
+     * Should throw DraftProtocolNotFoundException
+     */
+    @Test
+    fun `add section to sections of not existing draft protocol`() {
+        // Prepare data
+        val protocolId = 666L
+        val section = sectionService.getById(1L)
+
+        // Action & Assert
+        assertThrows<DraftProtocolNotFoundException> {
+            service.addSection(protocolId, section)
+        }
+    }
+
+    /**
+     * Should remove section from sections
+     */
+    @Test
+    fun `remove section from sections`() {
+        // Prepare data
+        val protocolId = 2L
+        val section = sectionService.getById(10L)
+
+        // Action
+        val draftProtocol = service.removeSection(protocolId, section)
+
+        // Assert
+        Assertions.assertFalse(draftProtocol.sections.any { it.id == section.id })
+    }
+
+    /**
+     * Should throw DraftApproachNotFoundException
+     */
+    @Test
+    fun `remove section from sections of non-existing draft approach`() {
+        // Prepare data
+        val protocolId = 666L
+        val section = sectionService.getById(1L)
+
+        // Action & Assert
+        assertThrows<DraftProtocolNotFoundException> {
+            service.removeSection(protocolId, section)
         }
     }
 }
