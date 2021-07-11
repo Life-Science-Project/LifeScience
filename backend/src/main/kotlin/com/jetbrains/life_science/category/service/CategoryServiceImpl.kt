@@ -7,7 +7,6 @@ import com.jetbrains.life_science.category.search.service.CategorySearchUnitServ
 import com.jetbrains.life_science.exception.category.CategoryNoParentsException
 import com.jetbrains.life_science.exception.category.CategoryNotFoundException
 import com.jetbrains.life_science.exception.category.CategoryParentNotFoundException
-import com.jetbrains.life_science.exception.not_empty.CategoryNotEmptyException
 import org.springframework.stereotype.Service
 
 private const val HEAD_CATEGORY_ID = 0L
@@ -18,7 +17,6 @@ class CategoryServiceImpl(
     val categoryFactory: CategoryFactory,
     val searchService: CategorySearchUnitService
 ) : CategoryService {
-
 
     override fun createCategory(categoryInfo: CategoryInfo): Category {
         val parent = getCategoryParent(categoryInfo.parentId)
@@ -77,7 +75,6 @@ class CategoryServiceImpl(
     override fun getCategory(id: Long): Category {
         return getCategorySafe(id) ?: throw CategoryNotFoundException(id)
     }
-
 
     override fun getRootCategories(): List<Category> {
         return getCategory(HEAD_CATEGORY_ID).subCategories

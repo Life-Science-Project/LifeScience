@@ -50,5 +50,4 @@ class CategoryController(
     fun delete(@PathVariable id: Long) {
         categoryService.deleteCategory(id)
     }
-
 }

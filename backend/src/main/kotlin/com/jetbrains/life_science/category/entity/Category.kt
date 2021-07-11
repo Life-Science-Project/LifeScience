@@ -36,5 +36,4 @@ class Category(
 ) {
 
     val isEmpty: Boolean get() = subCategories.isEmpty() && approaches.isEmpty()
-
 }

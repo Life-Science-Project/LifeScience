@@ -9,5 +9,4 @@ interface CategoryUpdateInfo {
     val parentsToAddIds: List<Long>
 
     val parentsToDeleteIds: List<Long>
-
 }

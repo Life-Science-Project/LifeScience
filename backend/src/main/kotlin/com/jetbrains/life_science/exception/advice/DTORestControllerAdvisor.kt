@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
-
 @RestControllerAdvice
 class DTORestControllerAdvisor {
 
@@ -36,7 +35,6 @@ class DTORestControllerAdvisor {
         val fieldName = exception.path.joinToString(",") { it.fieldName }
         return ResponseEntity(makeExceptionView(400_992, fieldName), HttpStatus.BAD_REQUEST)
     }
-
 
     /**
      * Handling validation exceptions

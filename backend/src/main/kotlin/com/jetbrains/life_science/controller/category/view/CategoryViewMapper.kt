@@ -29,5 +29,4 @@ class CategoryViewMapper(
             approaches = category.approaches.map { approachViewMapper.toViewShort(it) }
         )
     }
-
 }

@@ -14,5 +14,4 @@ class ApproachViewMapper {
             tags = approach.tags
         )
     }
-
 }
