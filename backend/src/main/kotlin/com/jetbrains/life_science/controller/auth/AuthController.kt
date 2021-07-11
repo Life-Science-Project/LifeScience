@@ -52,7 +52,7 @@ class AuthController(
     }
 
     @Operation(summary = "Refreshes JWT and Refresh tokens")
-    @PostMapping("/refresh")
+    @PatchMapping("/refresh")
     fun refreshToken(
         request: HttpServletRequest,
         response: HttpServletResponse

@@ -176,7 +176,7 @@ internal class AuthControllerTest : ApiTest() {
     }
 
     private fun refreshRequest(refreshToken: String) =
-        mockMvc.post(makeAuthPath("/refresh")) {
+        mockMvc.patch(makeAuthPath("/refresh")) {
             cookie(Cookie("refresh", refreshToken))
         }
 
