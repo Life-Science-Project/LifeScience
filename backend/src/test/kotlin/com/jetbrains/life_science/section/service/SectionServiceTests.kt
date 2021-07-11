@@ -106,14 +106,14 @@ internal class SectionServiceTests {
     @Test
     fun `delete existing section`() {
         // Prepare
-        val idToDelete = 1L
+        val idToDelete = 2L
 
         // Action
         service.deleteById(idToDelete)
 
         // Assert
         assertThrows<SectionNotFoundException>("Section not found by id: $idToDelete") {
-            service.getById(1)
+            service.getById(2)
         }
     }
 
