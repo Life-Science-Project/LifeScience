@@ -60,7 +60,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `create category test`() {
-        val loginTokens = login("email", "password")
+        val loginTokens = login("admin@gmail.ru", "password")
 
         val categoryDTO = CategoryCreationDTO("my category", 3)
         val createdCategory = postAuthorized<CategoryShortView>(pathPrefix, categoryDTO, loginTokens.accessToken)
@@ -78,7 +78,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `update category test`() {
-        val loginTokens = login("email", "password")
+        val loginTokens = login("admin@gmail.ru", "password")
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
             parentsToAdd = listOf(3), parentsToDelete = listOf(2)
@@ -98,7 +98,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `delete category test`() {
-        val accessToken = loginAccessToken("email", "password")
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
 
         deleteAuthorized(makePath("/5"), accessToken)
 
@@ -131,7 +131,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `category to delete not found test`() {
-        val accessToken = loginAccessToken("email", "password")
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
 
         val request = deleteRequestAuthorized(makePath("/999"), accessToken)
         val exceptionView = getApiExceptionView(404, request)
@@ -148,7 +148,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `category parent not found test`() {
-        val accessToken = loginAccessToken("email", "password")
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
         val dto = CategoryCreationDTO("error", 999)
 
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
@@ -166,7 +166,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `all parents deleted test`() {
-        val accessToken = loginAccessToken("email", "password")
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
@@ -188,7 +188,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `parent to add not found test`() {
-        val accessToken = loginAccessToken("email", "password")
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
@@ -210,7 +210,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `parent to delete not found test`() {
-        val accessToken = loginAccessToken("email", "password")
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
@@ -232,7 +232,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `incorrect dto test`() {
-        val accessToken = loginAccessToken("email", "password")
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
         val dto = mapOf(
             "name" to "name1",
             "initialParentId" to "stringValue"
@@ -252,7 +252,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `broken dto test`() {
-        val accessToken = loginAccessToken("email", "password")
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
         val dto = mapOf(
             "initialParentId" to 1
         )
@@ -324,7 +324,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `regular user category creation test`() {
-        val accessToken = loginAccessToken("simple", "user")
+        val accessToken = loginAccessToken("simple@gmail.ru", "user")
         val dto = CategoryCreationDTO("error", 3)
 
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
@@ -342,7 +342,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `regular user category update test`() {
-        val accessToken = loginAccessToken("simple", "user")
+        val accessToken = loginAccessToken("simple@gmail.ru", "user")
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
             parentsToAdd = listOf(3), parentsToDelete = listOf(2)
@@ -363,7 +363,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `regular user category delete test`() {
-        val accessToken = loginAccessToken("simple", "user")
+        val accessToken = loginAccessToken("simple@gmail.ru", "user")
         val request = deleteRequestAuthorized(makePath("/3"), accessToken)
 
         val exceptionView = getApiExceptionView(403, request)

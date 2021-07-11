@@ -50,7 +50,7 @@ internal class AuthControllerTest : ApiTest() {
      */
     @Test
     fun `login test`() {
-        val tokens = login("email", "password")
+        val tokens = login("admin@gmail.ru", "password")
         pingSecured(tokens)
     }
 
@@ -61,7 +61,7 @@ internal class AuthControllerTest : ApiTest() {
      */
     @Test
     fun `refresh token test`() {
-        val loginTokens = login("email", "password")
+        val loginTokens = login("admin@gmail.ru", "password")
         pingSecured(loginTokens)
 
         val refreshedTokens = refresh(loginTokens)
@@ -125,7 +125,7 @@ internal class AuthControllerTest : ApiTest() {
         val oldExpirationTime = jwtServiceImpl.jwtExpirationSeconds
         try {
             jwtServiceImpl.jwtExpirationSeconds = 1
-            val loginTokens = login("email", "password")
+            val loginTokens = login("admin@gmail.ru", "password")
 
             // Wait for jwt to expire
             Thread.sleep(2_000)
@@ -148,7 +148,7 @@ internal class AuthControllerTest : ApiTest() {
         val oldExpirationTime = refreshTokenFactoryImpl.refreshExpirationSeconds
         try {
             refreshTokenFactoryImpl.refreshExpirationSeconds = 1
-            val loginTokens = login("email", "password")
+            val loginTokens = login("admin@gmail.ru", "password")
 
             // Wait for jwt to expire
             Thread.sleep(2_000)
