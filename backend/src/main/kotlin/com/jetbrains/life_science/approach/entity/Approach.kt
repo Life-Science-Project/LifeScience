@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.approach.entity
 
 import com.jetbrains.life_science.section.entity.Section
+import java.time.LocalDateTime
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -24,5 +25,7 @@ abstract class Approach(
     var sections: MutableList<Section>,
 
     @ElementCollection
-    var tags: List<String>
+    var tags: List<String>,
+
+    var creationDate: LocalDateTime
 )

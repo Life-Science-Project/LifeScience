@@ -33,6 +33,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt:0.9.0")
     implementation("io.jsonwebtoken:jjwt-api:0.10.6")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
@@ -52,6 +53,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation(group = "org.springframework.data", name = "spring-data-elasticsearch", version = "4.1.7")
 
+    implementation(group = "org.springframework.boot", name = "spring-boot-starter-validation")
     implementation(group = "org.postgresql", name = "postgresql")
 }
 

@@ -17,12 +17,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 class UncategorizedRestControllerAdvisor : ResponseEntityExceptionHandler() {
 
-    @ExceptionHandler(CategoryNotFoundException::class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleCategoryNotFound(ex: CategoryNotFoundException, request: WebRequest): ApiErrorResponse {
-        return notFoundResponse("Category")
-    }
-
     @ExceptionHandler(CategoryNotEmptyException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleCategoryNotEmpty(ex: CategoryNotEmptyException, request: WebRequest): ApiErrorResponse {
