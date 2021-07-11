@@ -8,6 +8,9 @@ import com.jetbrains.life_science.controller.category.dto.CategoryUpdateDTOToInf
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.category.view.CategoryView
 import com.jetbrains.life_science.controller.category.view.CategoryViewMapper
+import com.jetbrains.life_science.user.credentials.entity.Credentials
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -30,6 +33,7 @@ class CategoryController(
     }
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     fun create(@RequestBody categoryCreationDTO: CategoryCreationDTO): CategoryShortView {
         val categoryInfo = CategoryCreationDTOToInfoAdapter(categoryCreationDTO)
         val category = categoryService.createCategory(categoryInfo)
@@ -37,6 +41,7 @@ class CategoryController(
     }
 
     @PatchMapping("/{categoryId}")
+    @Secured("ROLE_ADMIN")
     fun update(
         @RequestBody categoryUpdateDTO: CategoryUpdateDTO,
         @PathVariable categoryId: Long
@@ -47,7 +52,8 @@ class CategoryController(
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long) {
+    @Secured("ROLE_ADMIN")
+    fun delete(@PathVariable id: Long, @AuthenticationPrincipal credentials: Credentials) {
         categoryService.deleteCategory(id)
     }
 }

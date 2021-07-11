@@ -8,6 +8,13 @@ values (3, 'ROLE_MODERATOR');
 -- login=email, password=password
 INSERT INTO credentials (id, email, password)
 VALUES (1, 'email', '$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86');
+insert into users_roles (user_id, role_id) values (1, 2);
+
+-- login=simple, password=user
+INSERT INTO credentials (id, email, password)
+VALUES (2, 'simple', '$2a$10$V3whLjrDzManNJ4x5QG.Wuo.2M5oa01nMp/8EoeeqptYlkKJDHPl.');
+insert into users_roles (user_id, role_id) values (2, 1);
+
 
 insert into category (id, creation_date, name) values (0, parsedatetime('17-08-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 'root');
 

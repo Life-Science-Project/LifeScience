@@ -21,7 +21,14 @@ class DTORestControllerAdvisor {
         exception: InvalidFormatException
     ): ResponseEntity<ApiExceptionView> {
         val fieldName = exception.path.joinToString(",") { it.fieldName }
-        return ResponseEntity(makeExceptionView(400_991, fieldName), HttpStatus.BAD_REQUEST)
+        val errorValue = exception.value.toString()
+        return ResponseEntity(
+            ApiExceptionView(
+                code = 400_003,
+                arguments = listOf(listOf(fieldName), listOf(errorValue))
+            ),
+            HttpStatus.BAD_REQUEST
+        )
     }
 
     /**
@@ -33,7 +40,7 @@ class DTORestControllerAdvisor {
         exception: MissingKotlinParameterException
     ): ResponseEntity<ApiExceptionView> {
         val fieldName = exception.path.joinToString(",") { it.fieldName }
-        return ResponseEntity(makeExceptionView(400_992, fieldName), HttpStatus.BAD_REQUEST)
+        return ResponseEntity(makeExceptionView(400_001, fieldName), HttpStatus.BAD_REQUEST)
     }
 
     /**

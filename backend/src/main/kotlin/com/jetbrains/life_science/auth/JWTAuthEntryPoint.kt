@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.auth
 
-import com.jetbrains.life_science.exception.auth.InvalidAccessTokenException
+import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.util.getLogger
 import org.springframework.beans.factory.annotation.Qualifier
 import javax.servlet.http.HttpServletRequest
@@ -23,7 +23,7 @@ class JWTAuthEntryPoint(
         exception: AuthenticationException
     ) {
         logger.trace("AuthenticationException: {}", exception.message)
-        resolver.resolveException(request, response, null, InvalidAccessTokenException())
+        resolver.resolveException(request, response, null, ForbiddenOperationException())
     }
 
     companion object {

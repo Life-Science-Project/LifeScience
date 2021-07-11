@@ -177,6 +177,7 @@ internal class CategoryControllerTest : ApiTest() {
         val exceptionView = getApiExceptionView(400, request)
 
         assertEquals(400_002, exceptionView.code)
+        assertTrue(exceptionView.arguments.isEmpty())
     }
 
     /**
@@ -220,6 +221,155 @@ internal class CategoryControllerTest : ApiTest() {
         val exceptionView = getApiExceptionView(404, request)
 
         assertEquals(404_002, exceptionView.code)
+        assertEquals(listOf(listOf("999")), exceptionView.arguments)
+    }
+
+    /**
+     * The test checks for an exception in case of an attempt to create section with incorrect dto.
+     *
+     * Expected 400 http code and 400_003 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `incorrect dto test`() {
+        val accessToken = loginAccessToken("email", "password")
+        val dto = mapOf(
+            "name" to "name1",
+            "initialParentId" to "stringValue"
+        )
+        val request = postRequestAuthorized(pathPrefix, dto, accessToken)
+
+        val exceptionView = getApiExceptionView(400, request)
+        assertEquals(400_003, exceptionView.code)
+        assertEquals(listOf(listOf("initialParentId"), listOf("stringValue")), exceptionView.arguments)
+    }
+
+    /**
+     * The test checks for an exception in the case of an DTO transmission with a missing required field
+     *
+     * Expected 400 http code and 400_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `broken dto test`() {
+        val accessToken = loginAccessToken("email", "password")
+        val dto = mapOf(
+            "initialParentId" to 1
+        )
+        val request = postRequestAuthorized(pathPrefix, dto, accessToken)
+
+        val exceptionView = getApiExceptionView(400, request)
+        assertEquals(400_001, exceptionView.code)
+        assertEquals(listOf(listOf("name")), exceptionView.arguments)
+    }
+
+    /**
+     * The test checks for an exception in the case of anonymous user creating category.
+     *
+     * Expected 403 http code and 403_000 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `anonymous user category creation test`() {
+        val dto = CategoryCreationDTO("error", 3)
+
+        val request = postRequest(pathPrefix, dto)
+
+        val exceptionView = getApiExceptionView(403, request)
+        assertEquals(403_000, exceptionView.code)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * The test checks for an exception in the case of anonymous user updating category.
+     *
+     * Expected 403 http code and 403_000 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `anonymous user category update test`() {
+        val categoryDTO = CategoryUpdateDTO(
+            name = "changed name",
+            parentsToAdd = listOf(3), parentsToDelete = listOf(2)
+        )
+
+        val request = patchRequest(pathPrefix, categoryDTO)
+
+        val exceptionView = getApiExceptionView(403, request)
+        assertEquals(403_000, exceptionView.code)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * The test checks for an exception in the case of anonymous user deleting category.
+     *
+     * Expected 403 http code and 403_000 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `anonymous user category delete test`() {
+        val request = deleteRequest(makePath("/3"))
+
+        val exceptionView = getApiExceptionView(403, request)
+
+        assertEquals(403_000, exceptionView.code)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * The test checks for an exception in the case of regular user creating category.
+     *
+     * Expected 400 http code and 400_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `regular user category creation test`() {
+        val accessToken = loginAccessToken("simple", "user")
+        val dto = CategoryCreationDTO("error", 3)
+
+        val request = postRequestAuthorized(pathPrefix, dto, accessToken)
+
+        val exceptionView = getApiExceptionView(403, request)
+        assertEquals(403_000, exceptionView.code)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * The test checks for an exception in the case of regular user updating category.
+     *
+     * Expected 400 http code and 400_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `regular user category update test`() {
+        val accessToken = loginAccessToken("simple", "user")
+        val categoryDTO = CategoryUpdateDTO(
+            name = "changed name",
+            parentsToAdd = listOf(3), parentsToDelete = listOf(2)
+        )
+
+        val request = patchRequestAuthorized(makePath("/3"), categoryDTO, accessToken)
+
+        val exceptionView = getApiExceptionView(403, request)
+        assertEquals(403_000, exceptionView.code)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * The test checks for an exception in the case of regular user deleting category.
+     *
+     * Expected 400 http code and 400_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `regular user category delete test`() {
+        val accessToken = loginAccessToken("simple", "user")
+        val request = deleteRequestAuthorized(makePath("/3"), accessToken)
+
+        val exceptionView = getApiExceptionView(403, request)
+
+        assertEquals(403_000, exceptionView.code)
+        assertTrue(exceptionView.arguments.isEmpty())
     }
 
     private fun assertCategoryAvailableFromParent(parentId: Long, childId: Long) {

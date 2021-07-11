@@ -68,6 +68,10 @@ abstract class ApiTest {
         }
     }
 
+    fun deleteRequest(path: String): ResultActionsDsl {
+        return mockMvc.delete(path)
+    }
+
     final inline fun <reified T> patchAuthorized(path: String, requestBody: Any, accessToken: String): T {
         return toViewSuccess(patchRequestAuthorized(path, requestBody, accessToken))
     }
@@ -77,6 +81,14 @@ abstract class ApiTest {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(requestBody)
             headers { add("Authorization", "Bearer $accessToken") }
+            accept = MediaType.APPLICATION_JSON
+        }
+    }
+
+    fun patchRequest(path: String, requestBody: Any): ResultActionsDsl {
+        return mockMvc.patch(path) {
+            contentType = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(requestBody)
             accept = MediaType.APPLICATION_JSON
         }
     }
