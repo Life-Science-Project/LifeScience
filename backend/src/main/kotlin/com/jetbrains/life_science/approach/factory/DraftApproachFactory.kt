@@ -11,7 +11,7 @@ class DraftApproachFactory {
             id = 0,
             name = info.name,
             categories = info.categories.toMutableList(),
-            tags = info.tags,
+            tags = info.tags.toMutableList(),
             owner = info.owner,
             participants = mutableListOf(info.owner),
             sections = mutableListOf()
@@ -20,7 +20,7 @@ class DraftApproachFactory {
 
     fun setParams(draftApproach: DraftApproach, info: DraftApproachInfo) {
         draftApproach.name = info.name
-        draftApproach.tags = info.tags
+        draftApproach.tags = info.tags.toMutableList()
         draftApproach.categories = info.categories.toMutableList()
     }
 }

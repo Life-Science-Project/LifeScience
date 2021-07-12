@@ -44,7 +44,7 @@ class DraftApproachServiceTest {
         val category = categoryService.getCategory(0)
         val owner = credentialsService.getById(1L)
         val info = makeDraftApproachInfo(
-            id = 4L,
+            id = 0L,
             name = "bradford",
             tags = listOf(),
             categories = listOf(

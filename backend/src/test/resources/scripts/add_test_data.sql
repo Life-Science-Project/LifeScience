@@ -69,8 +69,8 @@ values (1, 2);
 insert into draft_protocol_participants (draft_protocol_id, participants_id)
 values (2, 1);
 
-insert into approach_sections (approach_id, sections_id)
+insert into draft_approach_sections (draft_approach_id, sections_id)
 values (3, 1);
 
-insert into protocol_sections (protocol_id, sections_id)
+insert into draft_protocol_sections (draft_protocol_id, sections_id)
 values (2, 10)
