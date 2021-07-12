@@ -3,6 +3,7 @@ package com.jetbrains.life_science.approach.factory
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.approach.service.DraftApproachInfo
 import org.springframework.stereotype.Component
+import java.time.LocalDateTime
 
 @Component
 class DraftApproachFactory {
@@ -14,7 +15,8 @@ class DraftApproachFactory {
             tags = info.tags.toMutableList(),
             owner = info.owner,
             participants = mutableListOf(info.owner),
-            sections = mutableListOf()
+            sections = mutableListOf(),
+            creationDate = LocalDateTime.now()
         )
     }
 

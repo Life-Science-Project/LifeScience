@@ -54,8 +54,8 @@ class DraftApproachServiceTest {
         )
 
         // Action
-        service.create(info)
-        val draftApproach = service.get(info.id)
+        val createdApproach = service.create(info)
+        val draftApproach = service.get(createdApproach.id)
 
         // Assert
         assertEquals(info.name, draftApproach.name)

@@ -5,6 +5,7 @@ import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -17,9 +18,8 @@ class PublicApproach(
     sections: MutableList<Section>,
     tags: MutableList<String>,
     owner: Credentials,
-
-    @ManyToMany
-    var categories: MutableList<Category>,
+    categories: MutableList<Category>,
+    creationDate: LocalDateTime,
 
     @ManyToMany
     var coAuthors: MutableList<UserPersonalData>,
@@ -27,4 +27,4 @@ class PublicApproach(
     @OneToMany
     var protocols: MutableList<PublicProtocol>
 
-) : Approach(id, name, sections, tags, owner)
+) : Approach(name, sections, categories, tags, owner, creationDate)

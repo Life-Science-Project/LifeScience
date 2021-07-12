@@ -22,8 +22,8 @@ values (2, 'general 2', 2, true, false);
 insert into section (id, name, order_num, published, visible)
 values (10, 'last', 2, false, false);
 
-insert into category (id, name, order_num)
-values (0, 'HEAD', 1);
+insert into category (id, name, creation_date)
+values (0, 'HEAD', parsedatetime('17-08-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'));
 
 insert into public_approach(id, name, owner_id)
 values (1, 'public_approach', 1);
