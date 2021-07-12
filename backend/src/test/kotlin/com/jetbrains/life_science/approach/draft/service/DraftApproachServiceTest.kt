@@ -6,7 +6,6 @@ import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
-import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.junit.jupiter.api.Assertions.assertEquals
