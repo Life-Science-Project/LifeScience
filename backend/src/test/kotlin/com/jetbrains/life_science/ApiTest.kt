@@ -3,7 +3,7 @@ package com.jetbrains.life_science
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
-import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
+import com.jetbrains.life_science.controller.auth.dto.AuthRequestDTO
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc

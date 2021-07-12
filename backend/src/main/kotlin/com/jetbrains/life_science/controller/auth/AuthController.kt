@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.controller.auth
 
-import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
+import com.jetbrains.life_science.controller.auth.dto.AuthRequestDTO
 import com.jetbrains.life_science.auth.refresh.entity.RefreshTokenCode
 import com.jetbrains.life_science.auth.service.AuthRequestToCredentialsAdapter
 import com.jetbrains.life_science.auth.service.AuthService
