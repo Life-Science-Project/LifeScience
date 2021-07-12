@@ -3,7 +3,7 @@ package com.jetbrains.life_science.controller.auth
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.auth.jwt.JWTServiceImpl
 import com.jetbrains.life_science.auth.refresh.factory.RefreshTokenFactoryImpl
-import com.jetbrains.life_science.user.credentials.dto.NewUserDTO
+import com.jetbrains.life_science.controller.auth.dto.NewUserDTO
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,14 +32,60 @@ internal class AuthControllerTest : ApiTest() {
      */
     @Test
     fun `register test`() {
-        val password = "sample password"
-        val login = "sample login"
+        val password = "sample_password123=+"
+        val login = "sobaka@mail.ru"
 
         val registerTokens = register(login, password)
         pingSecured(registerTokens)
 
         val loginTokens = login(login, password)
         pingSecured(loginTokens)
+    }
+
+    /**
+     * Already used email test.
+     *
+     * Expected 400 http code and 400_004 system code result.
+     */
+    @Test
+    fun `already used email test`() {
+        val expectedEmail = "admin@gmail.ru"
+        val apiExceptionView = getApiExceptionView(
+            400,
+            registerRequest(expectedEmail, "pass123")
+        )
+        assertEquals(400_004, apiExceptionView.code)
+        assertEquals(expectedEmail, apiExceptionView.arguments[0][0])
+    }
+
+    /**
+     * Invalid email format register test.
+     *
+     * Expected 400 http code and 400_005 system code result.
+     */
+    @Test
+    fun `invalid email format register test`() {
+        val apiExceptionView = getApiExceptionView(
+            400,
+            registerRequest("wrongwrong.com", "pass123456")
+        )
+        assertEquals(400_005, apiExceptionView.code)
+        assertEquals("Email must be valid", apiExceptionView.arguments[0][0])
+    }
+
+    /**
+     * Invalid password format register test.
+     *
+     * Expected 400 http code and 400_005 system code result.
+     */
+    @Test
+    fun `invalid password format register test`() {
+        val apiExceptionView = getApiExceptionView(
+            400,
+            registerRequest("abc@mail.ru", "                ")
+        )
+        assertEquals(400_005, apiExceptionView.code)
+        assertEquals("Password must contain only allowed characters", apiExceptionView.arguments[0][0])
     }
 
     /**
@@ -52,6 +98,36 @@ internal class AuthControllerTest : ApiTest() {
     fun `login test`() {
         val tokens = login("admin@gmail.ru", "password")
         pingSecured(tokens)
+    }
+
+    /**
+     * Invalid email format login test.
+     *
+     * Expected 400 http code and 400_005 system code result.
+     */
+    @Test
+    fun `invalid email format login test`() {
+        val apiExceptionView = getApiExceptionView(
+            400,
+            loginRequest("wrongwrong.com", "pass123456")
+        )
+        assertEquals(400_005, apiExceptionView.code)
+        assertEquals("Email must be valid", apiExceptionView.arguments[0][0])
+    }
+
+    /**
+     * Invalid password format login test.
+     *
+     * Expected 400 http code and 400_005 system code result.
+     */
+    @Test
+    fun `invalid password format login test`() {
+        val apiExceptionView = getApiExceptionView(
+            400,
+            loginRequest("abc@mail.ru", "                ")
+        )
+        assertEquals(400_005, apiExceptionView.code)
+        assertEquals("Password must contain only allowed characters", apiExceptionView.arguments[0][0])
     }
 
     /**
@@ -79,7 +155,7 @@ internal class AuthControllerTest : ApiTest() {
     fun `invalid credentials test`() {
         val apiExceptionView = getApiExceptionView(
             401,
-            loginRequest("wrong", "login")
+            loginRequest("wrong@wrong.com", "wrond_pass999")
         )
         assertEquals(401_005, apiExceptionView.code)
         assertTrue(apiExceptionView.arguments.isEmpty())
@@ -186,18 +262,18 @@ internal class AuthControllerTest : ApiTest() {
             headers { add("Authorization", "Bearer ${tokenPair.accessToken}") }
         }
 
-    fun register(login: String, password: String): TokenPair {
-        val registerRequest = registerRequest(login, password)
+    fun register(email: String, password: String): TokenPair {
+        val registerRequest = registerRequest(email, password)
         val registerResponse = assertOkAndReturn(registerRequest)
         return getTokens(registerResponse)
     }
 
     private fun registerRequest(
-        login: String,
+        email: String,
         password: String
     ) = mockMvc.post(makeAuthPath("/register")) {
         contentType = MediaType.APPLICATION_JSON
-        content = objectMapper.writeValueAsString(NewUserDTO("firstName", "lastName", login, password))
+        content = objectMapper.writeValueAsString(NewUserDTO("firstName", "lastName", email, password))
         accept = MediaType.APPLICATION_JSON
     }
 }

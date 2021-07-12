@@ -2,14 +2,20 @@ package com.jetbrains.life_science
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.jetbrains.life_science.controller.auth.dto.AuthRequestDTO
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
-import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.*
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.MvcResult
+import org.springframework.test.web.servlet.ResultActionsDsl
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.patch
+import org.springframework.test.web.servlet.post
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
 
@@ -147,11 +153,11 @@ abstract class ApiTest {
     }
 
     fun loginRequest(
-        login: String,
+        email: String,
         password: String
     ) = mockMvc.post(makeAuthPath("/signin")) {
         contentType = MediaType.APPLICATION_JSON
-        content = objectMapper.writeValueAsString(AuthRequestDTO(login, password))
+        content = objectMapper.writeValueAsString(AuthRequestDTO(email, password))
         accept = MediaType.APPLICATION_JSON
     }
 

@@ -75,9 +75,9 @@ class GeneralControllerAdvisor {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMethodArgumentNotValidException(exception: MethodArgumentNotValidException): ResponseEntity<ApiExceptionView> {
-        val fieldName = exception.bindingResult.fieldErrors.joinToString(",") { it.field }
+        exception.bindingResult.fieldErrors.joinToString(",") { it.field }
         return ResponseEntity(
-            makeExceptionView(400_993, fieldName),
+            makeExceptionView(400_005, exception.fieldError?.defaultMessage.toString()),
             HttpStatus.BAD_REQUEST
         )
     }

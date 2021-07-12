@@ -1,14 +1,14 @@
 package com.jetbrains.life_science.controller.auth
 
-import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
+import com.jetbrains.life_science.controller.auth.dto.AuthRequestDTO
 import com.jetbrains.life_science.auth.refresh.entity.RefreshTokenCode
 import com.jetbrains.life_science.auth.service.AuthRequestToCredentialsAdapter
 import com.jetbrains.life_science.auth.service.AuthService
 import com.jetbrains.life_science.controller.auth.view.AccessTokenView
 import com.jetbrains.life_science.controller.auth.view.AccessTokenViewMapper
 import com.jetbrains.life_science.exception.auth.InvalidRefreshTokenException
-import com.jetbrains.life_science.user.credentials.dto.NewUserDTO
-import com.jetbrains.life_science.user.credentials.dto.NewUserDTOToInfoAdapter
+import com.jetbrains.life_science.controller.auth.dto.NewUserDTO
+import com.jetbrains.life_science.controller.auth.dto.NewUserDTOToInfoAdapter
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.transaction.annotation.Transactional

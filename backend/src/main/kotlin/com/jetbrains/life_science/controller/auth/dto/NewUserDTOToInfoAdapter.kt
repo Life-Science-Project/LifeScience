@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.user.credentials.dto
+package com.jetbrains.life_science.controller.auth.dto
 
 import com.jetbrains.life_science.user.credentials.service.NewUserInfo
 
