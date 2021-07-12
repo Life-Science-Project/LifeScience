@@ -1,8 +1,8 @@
 package com.jetbrains.life_science.controller.category
 
-import com.jetbrains.life_science.category.dto.CategoryCreationDTOToInfoAdapter
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTO
+import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTOToInfoAdapter
 import com.jetbrains.life_science.controller.category.dto.CategoryUpdateDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryUpdateDTOToInfoAdapter
 import com.jetbrains.life_science.controller.category.view.CategoryShortView

@@ -33,7 +33,7 @@ class CredentialsService(
 
     fun checkUserNotExistsByEmail(email: String) {
         if (credentialsRepository.existsByEmail(email)) {
-            throw UserAlreadyExistsException("user with email $email already exists")
+            throw UserAlreadyExistsException(email)
         }
     }
 
