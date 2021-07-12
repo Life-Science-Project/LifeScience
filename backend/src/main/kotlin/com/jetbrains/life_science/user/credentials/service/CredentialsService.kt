@@ -31,7 +31,6 @@ class CredentialsService(
             .orElseThrow { UserNotFoundException("User with email $email not found") }
     }
 
-
     fun createUser(info: NewUserInfo): Credentials {
         checkUserNotExistsByEmail(info.email)
         val roles = mutableListOf(roleRepository.findByName("ROLE_USER"))
