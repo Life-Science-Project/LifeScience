@@ -6,7 +6,6 @@ import com.jetbrains.life_science.exception.not_empty.ArticleNotEmptyException
 import com.jetbrains.life_science.exception.not_empty.CategoryNotEmptyException
 import com.jetbrains.life_science.exception.not_found.*
 import com.jetbrains.life_science.exception.request.*
-import com.jetbrains.life_science.exception.validator.ValidationFailedException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -123,12 +122,6 @@ class UncategorizedRestControllerAdvisor : ResponseEntityExceptionHandler() {
         request: WebRequest
     ): ApiErrorResponse {
         return ApiErrorResponse("Search unit with type ${ex.unsupportedType} not supported, [ARTICLE, CONTENT] only available.")
-    }
-
-    @ExceptionHandler(ValidationFailedException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun validationFailed(ex: ValidationFailedException, request: WebRequest): ApiErrorResponse {
-        return ApiErrorResponse(ex.message)
     }
 
     @ExceptionHandler(ReviewResponseAlreadyExistsException::class)

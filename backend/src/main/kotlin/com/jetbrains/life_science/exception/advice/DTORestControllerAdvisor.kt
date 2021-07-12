@@ -22,9 +22,6 @@ class DTORestControllerAdvisor {
     ): ResponseEntity<ApiExceptionView> {
         val fieldName = exception.path.joinToString(",") { it.fieldName }
         val errorValue = exception.value.toString()
-        println("_____________")
-        println(exception.printStackTrace())
-        println("_____________")
         return ResponseEntity(
             ApiExceptionView(
                 code = 400_003,
@@ -43,9 +40,6 @@ class DTORestControllerAdvisor {
         exception: MissingKotlinParameterException
     ): ResponseEntity<ApiExceptionView> {
         val fieldName = exception.path.joinToString(",") { it.fieldName }
-        println("_____________")
-        println(exception.printStackTrace())
-        println("_____________")
         return ResponseEntity(makeExceptionView(400_001, fieldName), HttpStatus.BAD_REQUEST)
     }
 
@@ -56,9 +50,6 @@ class DTORestControllerAdvisor {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMethodArgumentNotValidException(exception: MethodArgumentNotValidException): ResponseEntity<ApiExceptionView> {
         val fieldName = exception.bindingResult.fieldErrors.joinToString(",") { it.field }
-        println("_____________")
-        println(exception.printStackTrace())
-        println("_____________")
         return ResponseEntity(makeExceptionView(400_993, fieldName), HttpStatus.BAD_REQUEST)
     }
 
