@@ -2,23 +2,24 @@ package com.jetbrains.life_science.approach.entity
 
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.section.entity.Section
-import com.jetbrains.life_science.user.data.entity.UserPersonalData
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
-import javax.persistence.Entity
-import javax.persistence.ManyToMany
+import javax.persistence.*
 
 @Entity
 class DraftApproach(
-    id: Long,
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    override val id: Long,
+
     name: String,
     sections: MutableList<Section>,
-    tags: List<String>,
+    tags: MutableList<String>,
+    owner: Credentials,
+    categories: MutableList<Category>,
     creationDate: LocalDateTime,
 
     @ManyToMany
-    var categories: MutableList<Category>,
+    var participants: MutableList<Credentials>
 
-    @ManyToMany
-    var participants: MutableList<UserPersonalData>
-
-) : Approach(id, name, sections, tags, creationDate)
+) : Approach(name, sections, categories, tags, owner, creationDate)
