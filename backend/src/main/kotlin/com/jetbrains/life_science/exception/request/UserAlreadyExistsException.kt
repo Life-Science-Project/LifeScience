@@ -1,3 +1,3 @@
 package com.jetbrains.life_science.exception.request
 
-class UserAlreadyExistsException(message: String) : RuntimeException(message)
+class UserAlreadyExistsException(val email: String) : RuntimeException()

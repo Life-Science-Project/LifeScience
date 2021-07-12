@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.auth.service
 
-import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
+import com.jetbrains.life_science.controller.auth.dto.AuthRequestDTO
 
 class AuthRequestToCredentialsAdapter(
     authRequestDTO: AuthRequestDTO
