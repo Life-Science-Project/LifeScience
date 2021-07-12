@@ -10,7 +10,7 @@ interface CategoryService {
 
     fun getCategory(id: Long): Category
 
-    fun updateCategory(categoryInfo: CategoryInfo): Category
+    fun updateCategory(categoryInfo: CategoryUpdateInfo): Category
 
     fun getRootCategories(): List<Category>
 }

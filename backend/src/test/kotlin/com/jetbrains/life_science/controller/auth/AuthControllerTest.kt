@@ -1,42 +1,25 @@
 package com.jetbrains.life_science.controller.auth
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.auth.jwt.JWTServiceImpl
 import com.jetbrains.life_science.auth.refresh.factory.RefreshTokenFactoryImpl
-import com.jetbrains.life_science.controller.auth.view.AccessTokenView
-import com.jetbrains.life_science.controller.auth.view.AuthRequestDTO
-import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import com.jetbrains.life_science.user.credentials.dto.NewUserDTO
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.*
-import org.springframework.transaction.annotation.Transactional
 import javax.servlet.http.Cookie
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
 @Sql("/scripts/initial_data.sql")
-internal class AuthControllerTest {
-
-    @Autowired
-    lateinit var mockMvc: MockMvc
+internal class AuthControllerTest : ApiTest() {
 
     @Autowired
     lateinit var jwtServiceImpl: JWTServiceImpl
 
     @Autowired
     lateinit var refreshTokenFactoryImpl: RefreshTokenFactoryImpl
-
-    val jsonMapper = jacksonObjectMapper()
-
-    val authPath = "/api/auth"
 
     val pingPath = "/api/ping/secured"
 
@@ -67,7 +50,7 @@ internal class AuthControllerTest {
      */
     @Test
     fun `login test`() {
-        val tokens = login("email", "password")
+        val tokens = login("admin@gmail.ru", "password")
         pingSecured(tokens)
     }
 
@@ -78,7 +61,7 @@ internal class AuthControllerTest {
      */
     @Test
     fun `refresh token test`() {
-        val loginTokens = login("email", "password")
+        val loginTokens = login("admin@gmail.ru", "password")
         pingSecured(loginTokens)
 
         val refreshedTokens = refresh(loginTokens)
@@ -142,7 +125,7 @@ internal class AuthControllerTest {
         val oldExpirationTime = jwtServiceImpl.jwtExpirationSeconds
         try {
             jwtServiceImpl.jwtExpirationSeconds = 1
-            val loginTokens = login("email", "password")
+            val loginTokens = login("admin@gmail.ru", "password")
 
             // Wait for jwt to expire
             Thread.sleep(2_000)
@@ -165,7 +148,7 @@ internal class AuthControllerTest {
         val oldExpirationTime = refreshTokenFactoryImpl.refreshExpirationSeconds
         try {
             refreshTokenFactoryImpl.refreshExpirationSeconds = 1
-            val loginTokens = login("email", "password")
+            val loginTokens = login("admin@gmail.ru", "password")
 
             // Wait for jwt to expire
             Thread.sleep(2_000)
@@ -183,22 +166,17 @@ internal class AuthControllerTest {
 
     private fun pingSecured(tokens: TokenPair) {
         val pingRequest = pingSecuredRequest(tokens)
-        expectOkAndReturn(pingRequest)
-    }
-
-    private fun getApiExceptionView(expectedHttpCode: Int, request: ResultActionsDsl): ApiExceptionView {
-        val result = request.andExpect { status { isEqualTo(expectedHttpCode) } }.andReturn()
-        return jsonMapper.readValue(result.response.contentAsString)
+        assertOkAndReturn(pingRequest)
     }
 
     fun refresh(tokenPair: TokenPair): TokenPair {
         val refreshRequest = refreshRequest(tokenPair.refreshToken)
-        val refreshResponse = expectOkAndReturn(refreshRequest)
+        val refreshResponse = assertOkAndReturn(refreshRequest)
         return getTokens(refreshResponse)
     }
 
     private fun refreshRequest(refreshToken: String) =
-        mockMvc.post(makeAuthPath("/refresh")) {
+        mockMvc.patch(makeAuthPath("/refresh")) {
             cookie(Cookie("refresh", refreshToken))
         }
 
@@ -210,52 +188,16 @@ internal class AuthControllerTest {
 
     fun register(login: String, password: String): TokenPair {
         val registerRequest = registerRequest(login, password)
-        val registerResponse = expectOkAndReturn(registerRequest)
+        val registerResponse = assertOkAndReturn(registerRequest)
         return getTokens(registerResponse)
     }
-
-    fun expectOkAndReturn(result: ResultActionsDsl) = expectStatusAndReturn(200, result)
-
-    fun expectStatusAndReturn(status: Int, result: ResultActionsDsl) =
-        result.andExpect { status { isEqualTo(status) } }.andReturn()
 
     private fun registerRequest(
         login: String,
         password: String
     ) = mockMvc.post(makeAuthPath("/register")) {
         contentType = MediaType.APPLICATION_JSON
-        content = jsonMapper.writeValueAsString(NewUserDTO("", "", login, password))
+        content = objectMapper.writeValueAsString(NewUserDTO("firstName", "lastName", login, password))
         accept = MediaType.APPLICATION_JSON
-    }
-
-    data class TokenPair(
-        val accessToken: String,
-        val refreshToken: String
-    )
-
-    private fun login(login: String, password: String): TokenPair {
-        val loginRequest = loginRequest(login, password)
-        val loginResponse = expectOkAndReturn(loginRequest)
-        return getTokens(loginResponse)
-    }
-
-    private fun getTokens(registerRequest: MvcResult): TokenPair {
-        val cookie = registerRequest.response.cookies.find { it.name == "refresh" }!!
-        val refreshToken = cookie.value
-        val accessTokenView: AccessTokenView = jsonMapper.readValue(registerRequest.response.contentAsString)
-        return TokenPair(accessTokenView.accessToken, refreshToken)
-    }
-
-    private fun loginRequest(
-        login: String,
-        password: String
-    ) = mockMvc.post(makeAuthPath("/signin")) {
-        contentType = MediaType.APPLICATION_JSON
-        content = jsonMapper.writeValueAsString(AuthRequestDTO(login, password))
-        accept = MediaType.APPLICATION_JSON
-    }
-
-    private fun makeAuthPath(pathPath: String): String {
-        return authPath + pathPath
     }
 }
