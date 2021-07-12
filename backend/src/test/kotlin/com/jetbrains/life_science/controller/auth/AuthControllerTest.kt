@@ -55,7 +55,7 @@ internal class AuthControllerTest : ApiTest() {
             registerRequest(expectedEmail, "pass123")
         )
         assertEquals(400_004, apiExceptionView.code)
-        assertEquals(expectedEmail, apiExceptionView.arguments[0][0])
+        assertEquals("User with email admin@gmail.ru already exists", apiExceptionView.arguments[0][0])
     }
 
     /**
