@@ -4,18 +4,21 @@ import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.protocol.draft.service.marker.makeDraftProtocolInfo
+import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.section.service.SectionService
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
+import javax.persistence.EntityManager
 
 @SpringBootTest
 @Sql("/scripts/add_test_data.sql")
@@ -31,6 +34,9 @@ class DraftProtocolServiceTest {
     @Autowired
     lateinit var sectionService: SectionService
 
+    @Autowired
+    lateinit var entityManager: EntityManager
+
     /**
      * Should get existing draft protocol
      */
@@ -45,10 +51,11 @@ class DraftProtocolServiceTest {
         val draftProtocol = service.get(id)
 
         // Assert
+        assertEquals(id, draftProtocol.id)
         assertEquals(expectedName, draftProtocol.name)
         assertEquals(expectedOwnerId, draftProtocol.owner.id)
-        assertTrue(draftProtocol.participants.any { it.id == expectedOwnerId })
-        assertTrue(draftProtocol.participants.any { it.id == 2L })
+        assertContainsParticipant(draftProtocol, expectedOwnerId)
+        assertContainsParticipant(draftProtocol, 2L)
     }
 
     /**
@@ -72,31 +79,24 @@ class DraftProtocolServiceTest {
     fun `create new draft protocol`() {
         // Prepare data
         val owner = credentialsService.getById(1L)
-        val approach = PublicApproach(
-            id = 1L,
-            name = "public_approach",
-            owner = owner,
-            tags = listOf(),
-            sections = mutableListOf(),
-            coAuthors = mutableListOf(),
-            categories = mutableListOf(),
-            protocols = mutableListOf()
-        )
+        val approach = createPublicApproach(1L, "public_approach", owner)
         val info = makeDraftProtocolInfo(
-            id = 0L,
+            id = 3L,
             name = "test",
             owner = owner,
             approach = approach
         )
 
         // Action
-        val draftProtocol = service.create(info)
+        service.create(info)
+        val draftProtocol = service.get(info.id)
 
         // Assert
+        assertEquals(info.id, draftProtocol.id)
         assertEquals(info.name, draftProtocol.name)
         assertEquals(owner.id, draftProtocol.owner.id)
         assertEquals(approach.id, draftProtocol.approach.id)
-        assertTrue(draftProtocol.participants.any { it.id == owner.id })
+        assertContainsParticipant(draftProtocol, owner.id)
     }
 
     /**
@@ -106,16 +106,7 @@ class DraftProtocolServiceTest {
     fun `update existing draft protocol`() {
         // Prepare
         val owner = credentialsService.getById(1L)
-        val approach = PublicApproach(
-            id = 2L,
-            name = "second_public_approach",
-            owner = owner,
-            tags = listOf(),
-            sections = mutableListOf(),
-            coAuthors = mutableListOf(),
-            categories = mutableListOf(),
-            protocols = mutableListOf()
-        )
+        val approach = createPublicApproach(2L, "second_public_approach", owner)
         val info = makeDraftProtocolInfo(
             id = 1L,
             name = "new_name",
@@ -124,14 +115,15 @@ class DraftProtocolServiceTest {
         )
 
         // Action
-        val draftProtocol = service.update(info)
+        service.update(info)
+        val draftProtocol = service.get(info.id)
 
         // Assert
         assertEquals(info.id, draftProtocol.id)
         assertEquals(info.name, draftProtocol.name)
         assertEquals(owner.id, draftProtocol.owner.id)
         assertEquals(approach.id, draftProtocol.approach.id)
-        assertTrue(draftProtocol.participants.any { it.id == owner.id })
+        assertContainsParticipant(draftProtocol, owner.id)
     }
 
     /**
@@ -141,16 +133,7 @@ class DraftProtocolServiceTest {
     fun `update non-existing protocol`() {
         // Prepare data
         val owner = credentialsService.getById(1L)
-        val approach = PublicApproach(
-            id = 1L,
-            name = "public_approach",
-            owner = owner,
-            tags = listOf(),
-            sections = mutableListOf(),
-            coAuthors = mutableListOf(),
-            categories = mutableListOf(),
-            protocols = mutableListOf()
-        )
+        val approach = createPublicApproach(1L, "public_approach", owner)
         val info = makeDraftProtocolInfo(
             id = 239L,
             name = "update_protocol",
@@ -205,10 +188,11 @@ class DraftProtocolServiceTest {
         val user = credentialsService.getById(2L)
 
         // Action
-        val draftProtocol = service.addParticipant(draftProtocolId, user)
+        service.addParticipant(draftProtocolId, user)
+        val draftProtocol = service.get(draftProtocolId)
 
         // Assert
-        assertTrue(draftProtocol.participants.any { it.id == user.id })
+        assertContainsParticipant(draftProtocol, user.id)
     }
 
     /**
@@ -236,10 +220,11 @@ class DraftProtocolServiceTest {
         val user = credentialsService.getById(2L)
 
         // Action
-        val draftProtocol = service.removeParticipant(draftProtocolId, user)
+        service.removeParticipant(draftProtocolId, user)
+        val draftProtocol = service.get(draftProtocolId)
 
         // Assert
-        assertTrue(draftProtocol.participants.all { it.id != user.id })
+        assertNotContainsParticipant(draftProtocol, user.id)
     }
 
     /**
@@ -282,10 +267,11 @@ class DraftProtocolServiceTest {
         val section = sectionService.getById(2L)
 
         // Action
-        val draftProtocol = service.addSection(protocolId, section)
+        service.addSection(protocolId, section)
+        val draftProtocol = service.get(protocolId)
 
         // Assert
-        assertTrue(draftProtocol.sections.any { it.id == section.id })
+        assertContainsSection(draftProtocol, section.id)
     }
 
     /**
@@ -313,10 +299,11 @@ class DraftProtocolServiceTest {
         val section = sectionService.getById(10L)
 
         // Action
-        val draftProtocol = service.removeSection(protocolId, section)
+        service.removeSection(protocolId, section)
+        val draftProtocol = service.get(protocolId)
 
         // Assert
-        Assertions.assertFalse(draftProtocol.sections.any { it.id == section.id })
+        assertNotContainsSection(draftProtocol, section.id)
     }
 
     /**
@@ -333,4 +320,32 @@ class DraftProtocolServiceTest {
             service.removeSection(protocolId, section)
         }
     }
+
+    private fun assertContainsParticipant(draftProtocol: DraftProtocol, userId: Long) {
+        assertTrue(draftProtocol.participants.any { it.id == userId })
+    }
+
+    private fun assertNotContainsParticipant(draftProtocol: DraftProtocol, userId: Long) {
+        assertFalse(draftProtocol.participants.any { it.id == userId })
+    }
+
+    private fun assertContainsSection(draftProtocol: DraftProtocol, sectionId: Long) {
+        assertTrue(draftProtocol.sections.any { it.id == sectionId })
+    }
+
+    private fun assertNotContainsSection(draftProtocol: DraftProtocol, sectionId: Long) {
+        assertFalse(draftProtocol.sections.any { it.id == sectionId })
+    }
+
+    private fun createPublicApproach(id: Long, name: String, owner: Credentials) =
+        PublicApproach(
+            id = id,
+            name = name,
+            owner = owner,
+            tags = listOf(),
+            sections = mutableListOf(),
+            coAuthors = mutableListOf(),
+            categories = mutableListOf(),
+            protocols = mutableListOf()
+        )
 }

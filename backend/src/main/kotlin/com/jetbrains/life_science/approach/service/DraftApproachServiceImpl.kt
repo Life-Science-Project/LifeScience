@@ -28,12 +28,14 @@ class DraftApproachServiceImpl(
     override fun update(info: DraftApproachInfo): DraftApproach {
         val draftApproach = get(info.id)
         factory.setParams(draftApproach, info)
-        return draftApproach
+        return repository.save(draftApproach)
     }
 
-    override fun delete(id: Long) {
-        get(id)
-        repository.deleteById(id)
+    override fun delete(draftApproachId: Long) {
+        if (!repository.existsById(draftApproachId)) {
+            throw DraftApproachNotFoundException("Draft approach with id $draftApproachId is not found")
+        }
+        repository.deleteById(draftApproachId)
     }
 
     override fun addParticipant(draftApproachId: Long, user: Credentials): DraftApproach {

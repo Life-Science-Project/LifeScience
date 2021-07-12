@@ -12,7 +12,7 @@ interface DraftApproachService {
 
     fun update(info: DraftApproachInfo): DraftApproach
 
-    fun delete(id: Long)
+    fun delete(draftApproachId: Long)
 
     fun addParticipant(draftApproachId: Long, user: Credentials): DraftApproach
 

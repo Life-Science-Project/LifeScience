@@ -1,10 +1,12 @@
 package com.jetbrains.life_science.approach.draft.service
 
 import com.jetbrains.life_science.approach.draft.service.maker.makeDraftApproachInfo
+import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
+import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -43,7 +45,7 @@ class DraftApproachServiceTest {
         val category = categoryService.getCategory(0)
         val owner = credentialsService.getById(1L)
         val info = makeDraftApproachInfo(
-            id = 0L,
+            id = 4L,
             name = "bradford",
             tags = listOf(),
             categories = listOf(
@@ -53,13 +55,14 @@ class DraftApproachServiceTest {
         )
 
         // Action
-        val draftApproach = service.create(info)
+        service.create(info)
+        val draftApproach = service.get(info.id)
 
         // Assert
         assertEquals(info.name, draftApproach.name)
         assertEquals(info.tags, draftApproach.tags)
-        assertTrue(draftApproach.participants.any { it.id == owner.id })
-        assertTrue(draftApproach.categories.any { it.id == category.id })
+        assertContainsParticipant(draftApproach, owner.id)
+        assertContainsCategory(draftApproach, category.id)
     }
 
     /**
@@ -70,6 +73,7 @@ class DraftApproachServiceTest {
         // Prepare data
         val approachId = 1L
         val expectedOwnerId = 1L
+        val secondParticipantId = 2L
         val expectedName = "first approach"
 
         // Action
@@ -78,8 +82,8 @@ class DraftApproachServiceTest {
         // Assert
         assertEquals(expectedName, draftApproach.name)
         assertEquals(expectedOwnerId, draftApproach.owner.id)
-        assertTrue(draftApproach.participants.any { it.id == expectedOwnerId })
-        assertTrue(draftApproach.participants.any { it.id == 2L })
+        assertContainsParticipant(draftApproach, expectedOwnerId)
+        assertContainsParticipant(draftApproach, secondParticipantId)
     }
 
     /**
@@ -115,15 +119,16 @@ class DraftApproachServiceTest {
         )
 
         // Action
-        val draftApproach = service.update(info)
+        service.update(info)
+        val draftApproach = service.get(info.id)
 
         // Assert
         assertEquals(info.id, draftApproach.id)
         assertEquals(info.name, draftApproach.name)
         assertEquals(info.tags, draftApproach.tags)
         assertEquals(owner.id, draftApproach.owner.id)
-        assertTrue(draftApproach.categories.any { it.id == category.id })
-        assertTrue(draftApproach.participants.any { it.id == owner.id })
+        assertContainsCategory(draftApproach, category.id)
+        assertContainsParticipant(draftApproach, owner.id)
     }
 
     /**
@@ -191,10 +196,11 @@ class DraftApproachServiceTest {
         val user = credentialsService.getById(3L)
 
         // Action
-        val draftApproach = service.addParticipant(approachId, user)
+        service.addParticipant(approachId, user)
+        val draftApproach = service.get(approachId)
 
         // Assert
-        assertTrue(draftApproach.participants.any { it.id == user.id })
+        assertContainsParticipant(draftApproach, user.id)
     }
 
     /**
@@ -222,10 +228,11 @@ class DraftApproachServiceTest {
         val user = credentialsService.getById(2L)
 
         // Action
-        val draftApproach = service.removeParticipant(approachId, user)
+        service.removeParticipant(approachId, user)
+        val draftApproach = service.get(approachId)
 
         // Assert
-        assertFalse(draftApproach.participants.any { it.id == user.id })
+        assertNotContainsParticipant(draftApproach, user.id)
     }
 
     /**
@@ -268,10 +275,11 @@ class DraftApproachServiceTest {
         val section = sectionService.getById(2L)
 
         // Action
-        val draftApproach = service.addSection(approachId, section)
+        service.addSection(approachId, section)
+        val draftApproach = service.get(approachId)
 
         // Assert
-        assertTrue(draftApproach.sections.any { it.id == section.id })
+        assertContainsSection(draftApproach, section.id)
     }
 
     /**
@@ -302,7 +310,7 @@ class DraftApproachServiceTest {
         val draftApproach = service.removeSection(approachId, section)
 
         // Assert
-        assertFalse(draftApproach.sections.any { it.id == section.id })
+        assertNotContainsSection(draftApproach, section.id)
     }
 
     /**
@@ -318,5 +326,25 @@ class DraftApproachServiceTest {
         assertThrows<DraftApproachNotFoundException> {
             service.removeSection(approachId, section)
         }
+    }
+
+    private fun assertContainsSection(draftApproach: DraftApproach, sectionId: Long) {
+        assertTrue(draftApproach.sections.any { it.id == sectionId })
+    }
+
+    private fun assertNotContainsSection(draftApproach: DraftApproach, sectionId: Long) {
+        assertFalse(draftApproach.sections.any { it.id == sectionId })
+    }
+
+    private fun assertContainsParticipant(draftApproach: DraftApproach, userId: Long) {
+        assertTrue(draftApproach.participants.any { it.id == userId })
+    }
+
+    private fun assertNotContainsParticipant(draftApproach: DraftApproach, userId: Long) {
+        assertFalse(draftApproach.participants.any { it.id == userId })
+    }
+
+    private fun assertContainsCategory(draftApproach: DraftApproach, categoryId: Long) {
+        assertTrue(draftApproach.categories.any { it.id == categoryId })
     }
 }

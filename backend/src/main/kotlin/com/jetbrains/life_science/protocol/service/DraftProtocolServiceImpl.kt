@@ -50,7 +50,9 @@ class DraftProtocolServiceImpl(
     }
 
     override fun delete(draftProtocolId: Long) {
-        get(draftProtocolId)
+        if (!repository.existsById(draftProtocolId)) {
+            throw DraftProtocolNotFoundException("Draft protocol with id $draftProtocolId is not found")
+        }
         repository.deleteById(draftProtocolId)
     }
 
