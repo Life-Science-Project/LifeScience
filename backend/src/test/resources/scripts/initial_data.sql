@@ -10,9 +10,9 @@ INSERT INTO credentials (id, email, password)
 VALUES (1, 'admin@gmail.ru', '$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86');
 insert into users_roles (user_id, role_id) values (1, 2);
 
--- login=simple, password=user
+-- login=simple, password=user123
 INSERT INTO credentials (id, email, password)
-VALUES (2, 'simple@gmail.ru', '$2a$10$V3whLjrDzManNJ4x5QG.Wuo.2M5oa01nMp/8EoeeqptYlkKJDHPl.');
+VALUES (2, 'simple@gmail.ru', '$2a$10$deGk.zxpc23BWE7Upb89IOG1eELe3cK0RIA0h91aB/wjLFOkE/a8.');
 insert into users_roles (user_id, role_id) values (2, 1);
 
 

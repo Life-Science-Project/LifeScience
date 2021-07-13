@@ -1,15 +1,12 @@
 package com.jetbrains.life_science.controller.category.dto
 
-import javax.validation.constraints.NotEmpty
+import com.jetbrains.life_science.util.categoryNameRegex
 import javax.validation.constraints.Pattern
 
 data class CategoryCreationDTO(
     @field:Pattern(
-        regexp = "^[a-zA-Z, ]+$",
+        regexp = categoryNameRegex,
         message = "Category name must contain only allowed characters"
-    )
-    @field:NotEmpty(
-        message = "Category name must not be empty"
     )
     val name: String,
     val initialParentId: Long? = null

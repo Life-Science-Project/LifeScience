@@ -324,7 +324,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `regular user category creation test`() {
-        val accessToken = loginAccessToken("simple@gmail.ru", "user")
+        val accessToken = loginAccessToken("simple@gmail.ru", "user123")
         val dto = CategoryCreationDTO("error", 3)
 
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
@@ -342,7 +342,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `regular user category update test`() {
-        val accessToken = loginAccessToken("simple@gmail.ru", "user")
+        val accessToken = loginAccessToken("simple@gmail.ru", "user123")
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
             parentsToAdd = listOf(3), parentsToDelete = listOf(2)
@@ -363,7 +363,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `regular user category delete test`() {
-        val accessToken = loginAccessToken("simple@gmail.ru", "user")
+        val accessToken = loginAccessToken("simple@gmail.ru", "user123")
         val request = deleteRequestAuthorized(makePath("/3"), accessToken)
 
         val exceptionView = getApiExceptionView(403, request)
