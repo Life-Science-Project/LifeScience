@@ -8,7 +8,6 @@ import com.jetbrains.life_science.review.request.service.maker.makePublishApproa
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -144,7 +143,6 @@ class PublishApproachRequestServiceTest {
             service.approve(approvedPublishApproachId)
         }
     }
-
 
     /**
      * Should cancel existing publish approach request

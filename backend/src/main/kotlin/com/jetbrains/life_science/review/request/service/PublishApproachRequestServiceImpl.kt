@@ -36,8 +36,10 @@ class PublishApproachRequestServiceImpl(
     private fun changeState(id: Long, state: RequestState): PublishApproachRequest {
         val publishApproachRequest = get(id)
         if (publishApproachRequest.state != RequestState.PENDING) {
-            throw RequestImmutableStateException("Can't change state of ${publishApproachRequest.state} " +
-                    "PublishApproachRequest to $state")
+            throw RequestImmutableStateException(
+                "Can't change state of ${publishApproachRequest.state} " +
+                    "PublishApproachRequest to $state"
+            )
         }
         factory.changeState(publishApproachRequest, state)
         return repository.save(publishApproachRequest)
