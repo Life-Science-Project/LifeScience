@@ -32,7 +32,7 @@ class PublishApproachRequestServiceImpl(
         return changeState(id, RequestState.CANCELED)
     }
 
-    private fun changeState(id: Long, state: RequestState) : PublishApproachRequest {
+    private fun changeState(id: Long, state: RequestState): PublishApproachRequest {
         val publishApproachRequest = get(id)
         factory.changeState(publishApproachRequest, state)
         return repository.save(publishApproachRequest)
