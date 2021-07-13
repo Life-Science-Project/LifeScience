@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.review.primary.entity
+package com.jetbrains.life_science.review.response.entity
 
 import com.jetbrains.life_science.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.user.credentials.entity.Credentials
