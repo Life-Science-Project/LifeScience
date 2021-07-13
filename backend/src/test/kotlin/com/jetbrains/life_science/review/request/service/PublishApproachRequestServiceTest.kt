@@ -2,6 +2,7 @@ package com.jetbrains.life_science.review.request.service
 
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
+import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.service.maker.makePublishApproachRequest
 import com.jetbrains.life_science.user.credentials.entity.Credentials
@@ -71,7 +72,7 @@ class PublishApproachRequestServiceTest {
         val approachOwner = credentialsService.getById(1L)
         val editor = credentialsService.getById(3L)
         val approach = createDraftApproach(1L, "first approach", approachOwner)
-        val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47, 31)
+        val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val info = makePublishApproachRequest(
             id = 0L,
             date = creationLocalDateTime,
@@ -89,6 +90,113 @@ class PublishApproachRequestServiceTest {
         assertEquals(editor.id, publishApproachRequest.editor.id)
         assertEquals(approach.id, publishApproachRequest.approach.id)
         assertEquals(expectedState, publishApproachRequest.state)
+    }
+
+    /**
+     * Should approve existing publish approach request
+     */
+    @Test
+    fun `approve existing pending publish approach request`() {
+        // Prepare data
+        val publishApproachId = 1L
+
+        // Action
+        val prevPublishApproachRequest = service.get(publishApproachId)
+        service.approve(publishApproachId)
+        val publishApproachRequest = service.get(publishApproachId)
+
+        // Assert
+        assertEquals(prevPublishApproachRequest.id, publishApproachRequest.id)
+        assertEquals(prevPublishApproachRequest.editor.id, publishApproachRequest.editor.id)
+        assertEquals(prevPublishApproachRequest.approach.id, publishApproachRequest.approach.id)
+        assertEquals(prevPublishApproachRequest.date, publishApproachRequest.date)
+        assertEquals(RequestState.APPROVED, publishApproachRequest.state)
+    }
+
+    /**
+     * Should throw PublishApproachRequestNotFoundException
+     */
+    @Test
+    fun `approve non-existing publish approach request`() {
+        // Prepare data
+        val publishApproachId = 239L
+
+        // Action & Assert
+        assertThrows<PublishApproachRequestNotFoundException> {
+            service.approve(publishApproachId)
+        }
+    }
+
+    /**
+     * Should throw RequestImmutableStateException
+     */
+    @Test
+    fun `approve existing publish approach request with approved or canceled state`() {
+        // Prepare data
+        val canceledPublishApproachId = 2L
+        val approvedPublishApproachId = 3L
+
+        // Action & Assert
+        assertThrows<RequestImmutableStateException> {
+            service.approve(canceledPublishApproachId)
+        }
+        assertThrows<RequestImmutableStateException> {
+            service.approve(approvedPublishApproachId)
+        }
+    }
+
+
+    /**
+     * Should cancel existing publish approach request
+     */
+    @Test
+    fun `cancel existing pending publish approach request`() {
+        // Prepare data
+        val publishApproachId = 1L
+
+        // Action
+        val prevPublishApproachRequest = service.get(publishApproachId)
+        service.cancel(publishApproachId)
+        val publishApproachRequest = service.get(publishApproachId)
+
+        // Assert
+        assertEquals(prevPublishApproachRequest.id, publishApproachRequest.id)
+        assertEquals(prevPublishApproachRequest.editor.id, publishApproachRequest.editor.id)
+        assertEquals(prevPublishApproachRequest.approach.id, publishApproachRequest.approach.id)
+        assertEquals(prevPublishApproachRequest.date, publishApproachRequest.date)
+        assertEquals(RequestState.CANCELED, publishApproachRequest.state)
+    }
+
+    /**
+     * Should throw PublishApproachRequestNotFoundException
+     */
+    @Test
+    fun `cancel non-existing publish approach request`() {
+        // Prepare data
+        val publishApproachId = 239L
+
+        // Action & Assert
+        assertThrows<PublishApproachRequestNotFoundException> {
+            service.cancel(publishApproachId)
+        }
+    }
+
+    /**
+     * Should throw RequestImmutableStateException
+     */
+    @Test
+    fun `cancel existing publish approach request with approved or canceled state`() {
+        // Prepare data
+        val canceledPublishApproachId = 2L
+        val approvedPublishApproachId = 3L
+
+        // Action & Assert
+        assertThrows<RequestImmutableStateException> {
+            service.cancel(canceledPublishApproachId)
+        }
+        assertThrows<RequestImmutableStateException> {
+            service.cancel(approvedPublishApproachId)
+        }
     }
 
     private fun createDraftApproach(id: Long, name: String, owner: Credentials) =

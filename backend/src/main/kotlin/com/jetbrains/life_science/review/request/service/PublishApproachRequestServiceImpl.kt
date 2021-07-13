@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.review.request.service
 
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
+import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.factory.PublishApproachRequestFactory
@@ -34,6 +35,10 @@ class PublishApproachRequestServiceImpl(
 
     private fun changeState(id: Long, state: RequestState): PublishApproachRequest {
         val publishApproachRequest = get(id)
+        if (publishApproachRequest.state != RequestState.PENDING) {
+            throw RequestImmutableStateException("Can't change state of ${publishApproachRequest.state} " +
+                    "PublishApproachRequest to $state")
+        }
         factory.changeState(publishApproachRequest, state)
         return repository.save(publishApproachRequest)
     }
