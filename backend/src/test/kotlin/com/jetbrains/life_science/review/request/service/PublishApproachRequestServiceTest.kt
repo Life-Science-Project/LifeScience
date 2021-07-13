@@ -3,11 +3,15 @@ package com.jetbrains.life_science.review.request.service
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
+import com.jetbrains.life_science.review.primary.entity.Review
+import com.jetbrains.life_science.review.primary.entity.ReviewResolution
+import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.service.maker.makePublishApproachRequest
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -73,7 +77,7 @@ class PublishApproachRequestServiceTest {
         val approach = createDraftApproach(1L, "first approach", approachOwner)
         val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val info = makePublishApproachRequest(
-            id = 0L,
+            id = 4L,
             date = creationLocalDateTime,
             editor = editor,
             approach = approach
@@ -197,6 +201,45 @@ class PublishApproachRequestServiceTest {
         }
     }
 
+    /**
+     * Should add review to publish approach request
+     */
+    @Test
+    fun `add review to existing publish approach request`() {
+        // Prepare data
+        val publishApproachId = 1L
+        val reviewer = credentialsService.getById(3L)
+        val review = createReview(3, LocalDateTime.now(), "third review", ReviewResolution.APPROVE, reviewer)
+
+        // Action
+        service.addReview(publishApproachId, review)
+        val publishApproachRequest = service.get(publishApproachId)
+
+        // Assert
+        assertEquals(publishApproachId, publishApproachRequest.id)
+        assertContainsReview(publishApproachRequest, review.id)
+    }
+
+    /**
+     * Should throw PublishApproachRequestNotFoundException
+     */
+    @Test
+    fun `add review to non-existing publish approach request`() {
+        // Prepare data
+        val publishApproachId = 239L
+        val reviewer = credentialsService.getById(3L)
+        val review = createReview(3, LocalDateTime.now(), "third review", ReviewResolution.APPROVE, reviewer)
+
+        // Action & Assert
+        assertThrows<PublishApproachRequestNotFoundException> {
+            service.addReview(publishApproachId, review)
+        }
+    }
+
+    private fun assertContainsReview(publishApproachRequest: PublishApproachRequest, reviewId: Long) {
+        assertTrue(publishApproachRequest.reviews.any { it.id == reviewId })
+    }
+
     private fun createDraftApproach(id: Long, name: String, owner: Credentials) =
         DraftApproach(
             id = id,
@@ -208,4 +251,15 @@ class PublishApproachRequestServiceTest {
             creationDate = LocalDateTime.now(),
             participants = mutableListOf(owner)
         )
+
+    private fun createReview(
+        id: Long, date: LocalDateTime, comment: String, resolution: ReviewResolution,
+        reviewer: Credentials
+    ) = Review(
+        id = id,
+        date = date,
+        comment = comment,
+        resolution = resolution,
+        reviewer = reviewer
+    )
 }

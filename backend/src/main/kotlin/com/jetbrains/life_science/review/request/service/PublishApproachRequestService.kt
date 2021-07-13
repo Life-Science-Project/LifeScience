@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.review.request.service
 
+import com.jetbrains.life_science.review.primary.entity.Review
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 
 interface PublishApproachRequestService {
@@ -11,4 +12,6 @@ interface PublishApproachRequestService {
     fun approve(id: Long): PublishApproachRequest
 
     fun cancel(id: Long): PublishApproachRequest
+
+    fun addReview(id: Long, review: Review): PublishApproachRequest
 }

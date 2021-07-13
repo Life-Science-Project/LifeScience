@@ -9,7 +9,7 @@ import javax.persistence.*
 @Entity
 class PublishProtocolRequest(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val id: Long,
 
     date: LocalDateTime,

@@ -9,7 +9,7 @@ import javax.persistence.*
 @Entity
 class ProtocolReviewRequest(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val id: Long,
 
     date: LocalDateTime,

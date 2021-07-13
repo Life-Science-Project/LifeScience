@@ -2,6 +2,7 @@ package com.jetbrains.life_science.review.request.service
 
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
+import com.jetbrains.life_science.review.primary.entity.Review
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.factory.PublishApproachRequestFactory
@@ -31,6 +32,15 @@ class PublishApproachRequestServiceImpl(
 
     override fun cancel(id: Long): PublishApproachRequest {
         return changeState(id, RequestState.CANCELED)
+    }
+
+    override fun addReview(id: Long, review: Review): PublishApproachRequest {
+        val publishApproachRequest = get(id)
+        if (!publishApproachRequest.reviews.contains(review)) {
+            publishApproachRequest.reviews.add(review)
+            repository.save(publishApproachRequest)
+        }
+        return publishApproachRequest
     }
 
     private fun changeState(id: Long, state: RequestState): PublishApproachRequest {

@@ -9,7 +9,7 @@ import javax.persistence.*
 @Entity
 class DraftApproach(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val id: Long,
 
     name: String,

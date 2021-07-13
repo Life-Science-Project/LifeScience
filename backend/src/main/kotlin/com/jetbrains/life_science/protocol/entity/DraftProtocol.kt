@@ -8,7 +8,7 @@ import javax.persistence.*
 @Entity
 class DraftProtocol(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val id: Long,
 
     name: String,
@@ -19,4 +19,4 @@ class DraftProtocol(
     @ManyToMany
     var participants: MutableList<Credentials>
 
-) : Protocol(id, name, approach, sections, owner)
+) : Protocol(name, approach, sections, owner)

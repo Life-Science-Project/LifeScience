@@ -11,7 +11,7 @@ import javax.persistence.*
 @Entity
 class PublicApproach(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val id: Long,
 
     name: String,
