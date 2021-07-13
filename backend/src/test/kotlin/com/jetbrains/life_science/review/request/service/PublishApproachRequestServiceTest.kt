@@ -253,7 +253,10 @@ class PublishApproachRequestServiceTest {
         )
 
     private fun createReview(
-        id: Long, date: LocalDateTime, comment: String, resolution: ReviewResolution,
+        id: Long,
+        date: LocalDateTime,
+        comment: String,
+        resolution: ReviewResolution,
         reviewer: Credentials
     ) = Review(
         id = id,
