@@ -2,7 +2,7 @@ package com.jetbrains.life_science.review.request.entity
 
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.review.primary.entity.Review
-import com.jetbrains.life_science.user.data.entity.UserPersonalData
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.ManyToOne
@@ -13,7 +13,7 @@ class ProtocolPublishRequest(
     date: Date,
     state: RequestState,
     reviews: MutableList<Review>,
-    editor: UserPersonalData,
+    editor: Credentials,
 
     @ManyToOne
     var protocol: DraftProtocol
