@@ -3,7 +3,7 @@ package com.jetbrains.life_science.protocol.draft.service
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
-import com.jetbrains.life_science.protocol.draft.service.marker.makeDraftProtocolInfo
+import com.jetbrains.life_science.protocol.draft.service.maker.makeDraftProtocolInfo
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.section.service.SectionService

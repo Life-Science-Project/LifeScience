@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.protocol.draft.service.marker
+package com.jetbrains.life_science.protocol.draft.service.maker
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.protocol.service.DraftProtocolInfo
