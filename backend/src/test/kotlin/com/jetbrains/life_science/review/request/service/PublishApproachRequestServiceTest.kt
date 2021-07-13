@@ -1,3 +1,105 @@
 package com.jetbrains.life_science.review.request.service
 
-class PublishApproachRequestServiceTest
+import com.jetbrains.life_science.approach.entity.DraftApproach
+import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
+import com.jetbrains.life_science.review.request.entity.RequestState
+import com.jetbrains.life_science.review.request.service.maker.makePublishApproachRequest
+import com.jetbrains.life_science.user.credentials.entity.Credentials
+import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.jdbc.Sql
+import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
+
+@SpringBootTest
+@Sql("/scripts/users_data.sql", "/scripts/publish_approach_request_data.sql")
+@Transactional
+class PublishApproachRequestServiceTest {
+
+    @Autowired
+    lateinit var service: PublishApproachRequestService
+
+    @Autowired
+    lateinit var credentialsService: CredentialsService
+
+    /**
+     * Should return existing publish approach request
+     */
+    @Test
+    fun `get existing publish approach request`() {
+        // Prepare data
+        val expectedId = 1L
+        val expectedApproachId = 1L
+        val expectedState = RequestState.PENDING
+        val expectedEditorId = 1L
+
+        // Action
+        val publishApproachRequest = service.get(expectedId)
+
+        // Assert
+        assertEquals(publishApproachRequest.id, expectedId)
+        assertEquals(publishApproachRequest.approach.id, expectedApproachId)
+        assertEquals(publishApproachRequest.state, expectedState)
+        assertEquals(publishApproachRequest.editor.id, expectedEditorId)
+    }
+
+    /**
+     * Should throw PublishApproachRequestNotFoundException
+     */
+    @Test
+    fun `get non-existing publish approach request`() {
+        // Prepare data
+        val expectedId = 239L
+
+        // Action & Assert
+        assertThrows<PublishApproachRequestNotFoundException> {
+            service.get(expectedId)
+        }
+    }
+
+    /**
+     * Should create new publish approach request
+     */
+    @Test
+    fun `create new publish approach request`() {
+        // Prepare data
+        val approachOwner = credentialsService.getById(1L)
+        val editor = credentialsService.getById(3L)
+        val approach = createDraftApproach(1L, "first approach", approachOwner)
+        val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47, 31)
+        val info = makePublishApproachRequest(
+            id = 0L,
+            date = creationLocalDateTime,
+            editor = editor,
+            approach = approach
+        )
+        val expectedState = RequestState.PENDING
+
+        // Action
+        service.create(info)
+        val publishApproachRequest = service.get(info.id)
+
+        // Assert
+        assertEquals(info.id, publishApproachRequest.id)
+        assertEquals(editor.id, publishApproachRequest.editor.id)
+        assertEquals(approach.id, publishApproachRequest.approach.id)
+        assertEquals(expectedState, publishApproachRequest.state)
+    }
+
+    private fun createDraftApproach(id: Long, name: String, owner: Credentials) =
+        DraftApproach(
+            id = id,
+            name = name,
+            owner = owner,
+            tags = mutableListOf(),
+            sections = mutableListOf(),
+            categories = mutableListOf(),
+            creationDate = LocalDateTime.now(),
+            participants = mutableListOf(owner)
+        )
+}

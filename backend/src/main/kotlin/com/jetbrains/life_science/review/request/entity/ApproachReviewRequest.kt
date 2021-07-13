@@ -3,14 +3,16 @@ package com.jetbrains.life_science.review.request.entity
 import com.jetbrains.life_science.review.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.review.primary.entity.Review
 import com.jetbrains.life_science.user.credentials.entity.Credentials
-import java.util.Date
-import javax.persistence.Entity
-import javax.persistence.OneToOne
+import java.time.LocalDateTime
+import javax.persistence.*
 
 @Entity
 class ApproachReviewRequest(
-    id: Long,
-    date: Date,
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    override val id: Long,
+
+    date: LocalDateTime,
     state: RequestState,
     reviews: MutableList<Review>,
     editor: Credentials,
@@ -18,4 +20,4 @@ class ApproachReviewRequest(
     @OneToOne
     var editRecord: ApproachEditRecord
 
-) : ReviewRequest(id, date, state, reviews, editor)
+) : ReviewRequest(date, state, reviews, editor)

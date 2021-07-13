@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import javax.persistence.EntityManager
 
 @SpringBootTest
 @Sql("/scripts/add_test_data.sql")
@@ -34,9 +33,6 @@ class DraftProtocolServiceTest {
 
     @Autowired
     lateinit var sectionService: SectionService
-
-    @Autowired
-    lateinit var entityManager: EntityManager
 
     /**
      * Should get existing draft protocol

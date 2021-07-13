@@ -12,7 +12,7 @@ class PublishApproachRequestFactory {
         return PublishApproachRequest(
             id = 0,
             date = info.date,
-            state = info.state,
+            state = RequestState.PENDING,
             reviews = mutableListOf(),
             editor = info.editor,
             approach = info.approach
