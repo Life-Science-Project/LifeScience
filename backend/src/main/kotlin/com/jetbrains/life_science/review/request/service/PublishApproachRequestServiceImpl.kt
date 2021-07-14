@@ -48,7 +48,7 @@ class PublishApproachRequestServiceImpl(
         if (publishApproachRequest.state != RequestState.PENDING) {
             throw RequestImmutableStateException(
                 "Can't change state of ${publishApproachRequest.state} " +
-                        "PublishApproachRequest to $state"
+                    "PublishApproachRequest to $state"
             )
         }
         factory.changeState(publishApproachRequest, state)
