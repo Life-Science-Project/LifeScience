@@ -5,7 +5,7 @@ import com.jetbrains.life_science.util.regex.assertMatches
 import com.jetbrains.life_science.util.regex.assertNotMatches
 import org.junit.jupiter.api.Test
 
-internal class CategoryCreationDTOTest {
+internal class CategoryDTOTest {
 
     @Test
     fun `category name regex validation`() {
@@ -13,14 +13,15 @@ internal class CategoryCreationDTOTest {
         regex.assertMatches(
             "my category",
             "category",
-            "three words name"
+            "three words name",
+            "six words name, no more allowed"
         )
         regex.assertNotMatches(
-            "123 qwack",
-            "12 _",
-            "2123231",
-            "_data",
-            "+-=sample"
+            "too many words to match this name",
+            "   starts with spaces",
+            "ends with spaces   ",
+            "     ",
+            "veeeeeeeeeeeeery long word"
         )
     }
 }
