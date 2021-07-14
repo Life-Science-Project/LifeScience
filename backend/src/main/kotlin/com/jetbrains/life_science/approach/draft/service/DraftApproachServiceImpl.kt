@@ -14,7 +14,6 @@ class DraftApproachServiceImpl(
     val factory: DraftApproachFactory
 ) : DraftApproachService {
 
-
     override fun create(info: DraftCategoryCreationDTOToInfoAdapter): DraftApproach {
         val approach = factory.create(info)
         return repository.save(approach)
@@ -33,9 +32,7 @@ class DraftApproachServiceImpl(
         return safeGet(id) ?: throw DraftApproachNotFoundException(id)
     }
 
-
     private fun safeGet(id: Long): DraftApproach? {
         return repository.findDraftApproachById(id)
     }
-
 }

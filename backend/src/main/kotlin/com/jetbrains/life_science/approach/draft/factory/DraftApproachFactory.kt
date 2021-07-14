@@ -18,5 +18,4 @@ class DraftApproachFactory {
             participants = mutableListOf(draftApproachInfo.creator)
         )
     }
-
 }

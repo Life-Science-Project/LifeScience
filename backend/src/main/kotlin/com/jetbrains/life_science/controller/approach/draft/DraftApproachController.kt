@@ -12,7 +12,6 @@ import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachVi
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -42,7 +41,6 @@ class DraftApproachController(
         val approach = draftApproachService.create(info)
         return viewMapper.toView(approach)
     }
-
 
     @PatchMapping("/{approachId}/send")
     fun sendToReview(
@@ -88,11 +86,4 @@ class DraftApproachController(
             throw ForbiddenOperationException()
         }
     }
-
-
 }
-
-
-
-
-

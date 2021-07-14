@@ -10,5 +10,4 @@ interface DraftApproachCreationInfo {
     val parentCategory: Category
 
     val creator: Credentials
-
 }

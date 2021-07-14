@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.approach.published.service
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
-import com.jetbrains.life_science.approach.published.service.maker.makePublicApproachInfo
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.approach.service.PublicApproachService
 import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException

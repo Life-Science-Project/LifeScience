@@ -16,6 +16,4 @@ class SectionViewMapper {
             name = section.name
         )
     }
-
-
 }

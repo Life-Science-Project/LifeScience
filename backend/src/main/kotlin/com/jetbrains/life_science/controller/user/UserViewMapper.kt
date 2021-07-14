@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.controller.user
 
-import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import org.springframework.stereotype.Component
 
@@ -17,5 +16,4 @@ class UserViewMapper {
             fullName = credentials.firstName
         )
     }
-
 }

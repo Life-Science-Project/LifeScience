@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface DraftApproachRepository : JpaRepository<DraftApproach, Long> {
 
     fun findDraftApproachById(id: Long): DraftApproach?
-
 }

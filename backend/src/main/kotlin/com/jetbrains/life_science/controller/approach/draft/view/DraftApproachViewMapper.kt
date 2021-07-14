@@ -4,7 +4,6 @@ import com.jetbrains.life_science.approach.draft.entity.DraftApproach
 import com.jetbrains.life_science.controller.category.view.CategoryViewMapper
 import com.jetbrains.life_science.controller.section.view.SectionViewMapper
 import com.jetbrains.life_science.controller.user.UserViewMapper
-import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import org.springframework.stereotype.Component
 
@@ -30,5 +29,4 @@ class DraftApproachViewMapper(
     fun extractUsers(draftApproach: DraftApproach): List<UserPersonalData> {
         return draftApproach.participants.mapNotNull { it.userPersonalData }
     }
-
 }
