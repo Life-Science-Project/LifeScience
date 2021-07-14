@@ -7,4 +7,4 @@ data class ArticleSearchResult(
     val versionId: Long,
     val name: String,
     val articleId: Long
-) : SearchResult(SearchUnitType.ARTICLE.presentationName)
+) : SearchResult(SearchUnitType.APPROACH.presentationName)
