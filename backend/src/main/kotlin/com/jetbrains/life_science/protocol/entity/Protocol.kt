@@ -7,8 +7,6 @@ import javax.persistence.*
 
 @MappedSuperclass
 abstract class Protocol(
-    @Id
-    val id: Long,
 
     var name: String,
 
@@ -20,4 +18,6 @@ abstract class Protocol(
 
     @ManyToOne
     var owner: Credentials
-)
+) {
+    abstract val id: Long
+}

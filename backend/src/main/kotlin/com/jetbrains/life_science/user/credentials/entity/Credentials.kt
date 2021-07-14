@@ -10,7 +10,14 @@ import javax.persistence.*
 class Credentials(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "credentials_seq"
+    )
+    @SequenceGenerator(
+        name = "credentials_seq",
+        allocationSize = 1
+    )
     val id: Long,
 
     val email: String,

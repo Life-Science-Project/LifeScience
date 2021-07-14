@@ -2,21 +2,13 @@ package com.jetbrains.life_science.review.request.entity
 
 import com.jetbrains.life_science.review.response.entity.Review
 import com.jetbrains.life_science.user.credentials.entity.Credentials
-import java.util.Date
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
+import java.time.LocalDateTime
+import javax.persistence.*
 
-@Entity
+@MappedSuperclass
 abstract class ReviewRequest(
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    val id: Long,
 
-    var date: Date,
+    var date: LocalDateTime,
 
     var state: RequestState,
 
@@ -25,4 +17,6 @@ abstract class ReviewRequest(
 
     @ManyToOne
     var editor: Credentials
-)
+) {
+    abstract val id: Long
+}

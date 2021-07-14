@@ -1,3 +1,8 @@
 package com.jetbrains.life_science.review.response.service
 
-interface ReviewService
+import com.jetbrains.life_science.review.response.entity.Review
+
+interface ReviewService {
+    fun getReview(reviewId: Long): Review
+    fun createReview(info: ReviewInfo): Review
+}

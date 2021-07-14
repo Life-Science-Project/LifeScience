@@ -2,9 +2,9 @@ package com.jetbrains.life_science.search.query
 
 enum class SearchUnitType {
 
-    ARTICLE {
-        override val presentationName = "Article"
-        override val indexName: String = "article"
+    APPROACH {
+        override val presentationName = "Approach"
+        override val indexName: String = "approach"
     },
 
     SECTION {

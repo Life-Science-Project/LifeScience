@@ -1,29 +1,25 @@
 package com.jetbrains.life_science.review.response.entity
 
-import com.jetbrains.life_science.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.user.credentials.entity.Credentials
-import java.util.Date
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.ManyToOne
+import java.time.LocalDateTime
+import javax.persistence.*
 
 @Entity
 class Review(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "review_seq"
+    )
+    @SequenceGenerator(name = "review_seq")
     val id: Long,
 
-    var date: Date,
+    var date: LocalDateTime,
 
     var comment: String,
 
     var resolution: ReviewResolution,
 
     @ManyToOne
-    var reviewer: Credentials,
-
-    @ManyToOne
-    var request: ReviewRequest
+    var reviewer: Credentials
 )

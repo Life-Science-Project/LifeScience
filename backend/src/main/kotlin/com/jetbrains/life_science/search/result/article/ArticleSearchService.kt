@@ -14,5 +14,5 @@ class ArticleSearchService : UnitSearchService {
         return ArticleSearchResult(id.toLong(), name, articleId.toLong())
     }
 
-    override val key = SearchUnitType.ARTICLE
+    override val key = SearchUnitType.APPROACH
 }

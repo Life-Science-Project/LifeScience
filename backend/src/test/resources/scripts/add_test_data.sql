@@ -61,6 +61,8 @@ insert into draft_protocol (id, name, owner_id)
 values (1, 'draft_protocol_test', 1);
 insert into draft_protocol (id, name, owner_id)
 values (2, 'draft_protocol_second_test', 1);
+-- nextId = 3
+ALTER SEQUENCE draft_protocol_seq RESTART WITH 3;
 
 insert into draft_protocol_participants (draft_protocol_id, participants_id)
 values (1, 1);

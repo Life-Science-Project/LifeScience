@@ -13,7 +13,8 @@ internal class NewUserDTOTest {
         nameRegex.assertNotMatches(
             "a",
             "_Abc",
-            "A+BC"
+            "A+BC",
+            "Alex".repeat(30)
         )
         nameRegex.assertMatches(
             "Alex",

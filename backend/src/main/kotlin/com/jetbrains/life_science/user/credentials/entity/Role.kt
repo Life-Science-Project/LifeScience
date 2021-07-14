@@ -8,7 +8,11 @@ import javax.persistence.*
 class Role(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "role_seq"
+    )
+    @SequenceGenerator(name = "role_seq")
     val id: Long,
 
     val name: String
