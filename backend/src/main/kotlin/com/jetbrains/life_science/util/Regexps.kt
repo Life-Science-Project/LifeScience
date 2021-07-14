@@ -4,4 +4,4 @@ const val passwordRegex = "^[a-zA-Z0-9.\\-\\/+=@_]{5,}$"
 
 const val emailRegexLite = "^[\\w!#\$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#\$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}\$"
 
-const val categoryNameRegex = "^[^\\s]{1,10}(\\s+[^\\s]{1,10}){0,5}\$"
+const val categoryNameRegex = "^\\S.{1,58}\\S\$"

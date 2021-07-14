@@ -14,14 +14,13 @@ internal class CategoryDTOTest {
             "my category",
             "category",
             "three words name",
-            "six words name, no more allowed"
+            "three words name and three more"
         )
         regex.assertNotMatches(
-            "too many words to match this name",
+            "too many letters to match this name".repeat(10),
             "   starts with spaces",
             "ends with spaces   ",
-            "     ",
-            "veeeeeeeeeeeeery long word"
+            "     "
         )
     }
 }
