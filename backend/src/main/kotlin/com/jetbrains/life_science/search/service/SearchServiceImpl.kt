@@ -50,7 +50,7 @@ class SearchServiceImpl(
     override val supportedTypes: List<SearchUnitType> = listOf(
         SearchUnitType.CATEGORY,
         SearchUnitType.CONTENT,
-        SearchUnitType.ARTICLE
+        SearchUnitType.APPROACH
     )
 
     @Autowired
@@ -61,7 +61,9 @@ class SearchServiceImpl(
     override fun search(query: SearchQueryInfo): List<SearchResult> {
         val request = makeRequest(query)
         val response = getResponse(request)
-        return response.hits.mapNotNull { processHit(it) }
+        val hits = response.hits
+        println("here")
+        return hits.mapNotNull { processHit(it) }
     }
 
     private fun getResponse(request: SearchRequest): SearchResponse {
