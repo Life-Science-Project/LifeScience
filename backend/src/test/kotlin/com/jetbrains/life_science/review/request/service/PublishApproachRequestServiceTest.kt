@@ -3,11 +3,11 @@ package com.jetbrains.life_science.review.request.service
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
-import com.jetbrains.life_science.review.primary.entity.Review
-import com.jetbrains.life_science.review.primary.entity.ReviewResolution
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.service.maker.makePublishApproachRequest
+import com.jetbrains.life_science.review.response.entity.Review
+import com.jetbrains.life_science.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.junit.jupiter.api.Assertions.assertEquals

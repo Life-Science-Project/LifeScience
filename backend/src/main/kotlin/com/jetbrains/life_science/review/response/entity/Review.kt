@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.review.primary.entity
+package com.jetbrains.life_science.review.response.entity
 
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
@@ -21,5 +21,5 @@ class Review(
     var resolution: ReviewResolution,
 
     @ManyToOne
-    var reviewer: Credentials,
+    var reviewer: Credentials
 )

@@ -2,11 +2,11 @@ package com.jetbrains.life_science.review.request.service
 
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
-import com.jetbrains.life_science.review.primary.entity.Review
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.factory.PublishApproachRequestFactory
 import com.jetbrains.life_science.review.request.repository.PublishApproachRequestRepository
+import com.jetbrains.life_science.review.response.entity.Review
 import org.springframework.stereotype.Service
 
 @Service
@@ -43,16 +43,12 @@ class PublishApproachRequestServiceImpl(
         return publishApproachRequest
     }
 
-    override fun findAll(): List<PublishApproachRequest> {
-        return repository.findAll()
-    }
-
     private fun changeState(id: Long, state: RequestState): PublishApproachRequest {
         val publishApproachRequest = get(id)
         if (publishApproachRequest.state != RequestState.PENDING) {
             throw RequestImmutableStateException(
                 "Can't change state of ${publishApproachRequest.state} " +
-                    "PublishApproachRequest to $state"
+                        "PublishApproachRequest to $state"
             )
         }
         factory.changeState(publishApproachRequest, state)
