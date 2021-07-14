@@ -36,11 +36,8 @@ class PublishApproachRequestServiceImpl(
 
     override fun addReview(id: Long, review: Review): PublishApproachRequest {
         val publishApproachRequest = get(id)
-        if (!publishApproachRequest.reviews.contains(review)) {
-            publishApproachRequest.reviews.add(review)
-            repository.save(publishApproachRequest)
-        }
-        return publishApproachRequest
+        publishApproachRequest.reviews.add(review)
+        return repository.save(publishApproachRequest)
     }
 
     private fun changeState(id: Long, state: RequestState): PublishApproachRequest {
@@ -48,7 +45,7 @@ class PublishApproachRequestServiceImpl(
         if (publishApproachRequest.state != RequestState.PENDING) {
             throw RequestImmutableStateException(
                 "Can't change state of ${publishApproachRequest.state} " +
-                    "PublishApproachRequest to $state"
+                        "PublishApproachRequest to $state"
             )
         }
         factory.changeState(publishApproachRequest, state)
