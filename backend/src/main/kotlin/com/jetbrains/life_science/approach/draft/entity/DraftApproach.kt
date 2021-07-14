@@ -1,5 +1,6 @@
-package com.jetbrains.life_science.approach.entity
+package com.jetbrains.life_science.approach.draft.entity
 
+import com.jetbrains.life_science.approach.entity.Approach
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials

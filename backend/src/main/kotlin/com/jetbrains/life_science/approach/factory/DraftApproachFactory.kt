@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.approach.factory
 
-import com.jetbrains.life_science.approach.entity.DraftApproach
+import com.jetbrains.life_science.approach.draft.entity.DraftApproach
 import com.jetbrains.life_science.approach.service.DraftApproachInfo
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
