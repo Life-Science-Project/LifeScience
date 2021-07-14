@@ -61,9 +61,7 @@ class SearchServiceImpl(
     override fun search(query: SearchQueryInfo): List<SearchResult> {
         val request = makeRequest(query)
         val response = getResponse(request)
-        val hits = response.hits
-        println("here")
-        return hits.mapNotNull { processHit(it) }
+        return response.hits.mapNotNull { processHit(it) }
     }
 
     private fun getResponse(request: SearchRequest): SearchResponse {
