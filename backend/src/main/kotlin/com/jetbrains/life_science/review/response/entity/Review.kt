@@ -1,8 +1,7 @@
 package com.jetbrains.life_science.review.response.entity
 
-import com.jetbrains.life_science.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.user.credentials.entity.Credentials
-import java.util.Date
+import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -15,15 +14,12 @@ class Review(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    var date: Date,
+    var date: LocalDateTime,
 
     var comment: String,
 
     var resolution: ReviewResolution,
 
     @ManyToOne
-    var reviewer: Credentials,
-
-    @ManyToOne
-    var request: ReviewRequest
+    var reviewer: Credentials
 )
