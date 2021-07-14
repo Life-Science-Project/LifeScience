@@ -15,6 +15,9 @@ INSERT INTO credentials (id, email, password)
 VALUES (2, 'simple@gmail.ru', '$2a$10$deGk.zxpc23BWE7Upb89IOG1eELe3cK0RIA0h91aB/wjLFOkE/a8.');
 insert into users_roles (user_id, role_id) values (2, 1);
 
+-- nextId = 3
+alter sequence credentials_seq restart with 3;
+
 
 insert into category (id, creation_date, name) values (0, parsedatetime('17-08-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 'root');
 
