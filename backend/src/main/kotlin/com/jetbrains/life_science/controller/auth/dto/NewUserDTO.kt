@@ -30,4 +30,4 @@ data class NewUserDTO(
     val password: String
 )
 
-const val nameRegexp = "^[a-zA-Z]{2,}$"
+const val nameRegexp = "^[a-zA-Z]{2,30}$"
