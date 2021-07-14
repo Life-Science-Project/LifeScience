@@ -7,7 +7,14 @@ import javax.persistence.*
 @Entity
 class Category(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "category_seq"
+    )
+    @SequenceGenerator(
+        name = "category_seq",
+        initialValue = 1
+    )
     var id: Long,
 
     @Column(nullable = false)
