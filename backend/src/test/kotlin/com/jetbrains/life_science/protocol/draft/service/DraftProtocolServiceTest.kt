@@ -78,7 +78,7 @@ class DraftProtocolServiceTest {
         val owner = credentialsService.getById(1L)
         val approach = createPublicApproach(1L, "public_approach", owner)
         val info = makeDraftProtocolInfo(
-            id = 0L,
+            id = 3L,
             name = "test",
             owner = owner,
             approach = approach

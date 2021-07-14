@@ -43,6 +43,10 @@ class PublishApproachRequestServiceImpl(
         return publishApproachRequest
     }
 
+    override fun findAll(): List<PublishApproachRequest> {
+        return repository.findAll()
+    }
+
     private fun changeState(id: Long, state: RequestState): PublishApproachRequest {
         val publishApproachRequest = get(id)
         if (publishApproachRequest.state != RequestState.PENDING) {

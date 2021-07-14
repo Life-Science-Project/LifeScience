@@ -14,4 +14,6 @@ interface PublishApproachRequestService {
     fun cancel(id: Long): PublishApproachRequest
 
     fun addReview(id: Long, review: Review): PublishApproachRequest
+
+    fun findAll(): List<PublishApproachRequest>
 }

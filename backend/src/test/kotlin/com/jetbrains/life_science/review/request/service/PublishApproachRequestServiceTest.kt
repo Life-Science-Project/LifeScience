@@ -209,7 +209,7 @@ class PublishApproachRequestServiceTest {
         // Prepare data
         val publishApproachId = 1L
         val reviewer = credentialsService.getById(3L)
-        val review = createReview(3, LocalDateTime.now(), "third review", ReviewResolution.APPROVE, reviewer)
+        val review = createReview(2, LocalDateTime.now(), "third review", ReviewResolution.APPROVE, reviewer)
 
         // Action
         service.addReview(publishApproachId, review)
