@@ -14,9 +14,10 @@ class ApproachControllerAdvisor {
     @ExceptionHandler(DraftApproachNotFoundException::class)
     fun handleDraftApproachNotFound(): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
-            HttpStatus.NOT_FOUND, ApiExceptionView(
-                code =
-            )
+            ApiExceptionView(
+                code = 404003
+            ),
+            HttpStatus.NOT_FOUND
         )
     }
 

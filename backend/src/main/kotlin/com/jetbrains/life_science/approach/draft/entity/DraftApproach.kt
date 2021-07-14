@@ -14,10 +14,10 @@ class DraftApproach(
     override val id: Long,
 
     name: String,
-    sections: MutableList<Section>,
-    tags: MutableList<String>,
+    sections: MutableList<Section> = mutableListOf(),
+    tags: MutableList<String> = mutableListOf(),
     owner: Credentials,
-    categories: MutableList<Category>,
+    categories: MutableList<Category> = mutableListOf(),
     creationDate: LocalDateTime,
 
     @ManyToMany

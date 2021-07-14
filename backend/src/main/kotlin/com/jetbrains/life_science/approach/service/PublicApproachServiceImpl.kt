@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.approach.service
 
+import com.jetbrains.life_science.approach.draft.entity.DraftApproach
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.approach.factory.PublicApproachFactory
 import com.jetbrains.life_science.approach.repository.PublicApproachRepository
@@ -17,8 +18,8 @@ class PublicApproachServiceImpl(
         }
     }
 
-    override fun create(info: PublicApproachInfo): PublicApproach {
-        val publicApproach = factory.create(info)
+    override fun create(approach: DraftApproach): PublicApproach {
+        val publicApproach = factory.create(approach)
         return repository.save(publicApproach)
     }
 }
