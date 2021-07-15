@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 import javax.annotation.PostConstruct
 
 @SpringBootTest
-@Sql("/scripts/add_test_data.sql")
+@Sql("/scripts/initial_data.sql")
 @Transactional
 internal class ContentPublishServiceTest {
 
@@ -189,7 +189,7 @@ internal class ContentPublishServiceTest {
     @Test
     fun `publish existing content`() {
         // Prepare
-        val expectedSectionId = 10L
+        val expectedSectionId = 4L
 
         // Action
         service.publishBySectionId(expectedSectionId)

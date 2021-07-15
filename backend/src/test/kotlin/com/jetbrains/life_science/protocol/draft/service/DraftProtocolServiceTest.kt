@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @SpringBootTest
-@Sql("/scripts/add_test_data.sql")
+@Sql("/scripts/initial_data.sql", "/scripts/protocol/draft_protocol_data.sql")
 @Transactional
 class DraftProtocolServiceTest {
 
@@ -293,7 +293,7 @@ class DraftProtocolServiceTest {
     fun `remove section from sections`() {
         // Prepare data
         val protocolId = 2L
-        val section = sectionService.getById(10L)
+        val section = sectionService.getById(1L)
 
         // Action
         service.removeSection(protocolId, section)

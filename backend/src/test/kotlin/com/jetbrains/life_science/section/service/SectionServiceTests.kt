@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 import javax.annotation.PostConstruct
 
 @SpringBootTest
-@Sql("/scripts/add_test_data.sql")
+@Sql("/scripts/initial_data.sql", "/scripts/section/section_data.sql")
 @Transactional
 internal class SectionServiceTests {
 
@@ -211,7 +211,7 @@ internal class SectionServiceTests {
             tags = mutableListOf()
         )
         val info = makeSectionInfo(
-            id = 10,
+            id = 4,
             name = "updated name",
             order = 12,
             visible = false,
@@ -306,7 +306,7 @@ internal class SectionServiceTests {
     @Test
     fun `publish not published section`() {
         // Prepare
-        val notPublishedId = 10L
+        val notPublishedId = 3L
 
         // Action
         service.publish(notPublishedId)
@@ -356,7 +356,7 @@ internal class SectionServiceTests {
     @Test
     fun `archive not published section`() {
         // Prepare
-        val notPublishedId = 10L
+        val notPublishedId = 4L
 
         // Action & Assert
         assertThrows<SectionAlreadyArchivedException> {
