@@ -12,7 +12,8 @@ class CategorySearchUnitServiceImpl(
     val factory: CategorySearchUnitFactory
 ) : CategorySearchUnitService {
     override fun createSearchUnit(category: Category) {
-        val searchUnit = factory.create(category)
+        val context = createContext(category)
+        val searchUnit = factory.create(category, context)
         repository.save(searchUnit)
     }
 
@@ -23,13 +24,29 @@ class CategorySearchUnitServiceImpl(
 
     override fun update(category: Category) {
         checkExistsById(category.id)
-        val searchUnit = factory.create(category)
+        val context = createContext(category)
+        val searchUnit = factory.create(category, context)
         repository.save(searchUnit)
+    }
+
+    override fun getContext(category: Category): List<String> {
+        return repository.findById(category.id).get().context
     }
 
     private fun checkExistsById(id: Long) {
         if (!repository.existsById(id)) {
             throw CategorySearchUnitNotFoundException("Category search unit not found with id: $id")
         }
+    }
+
+    private fun createContext(category: Category): MutableList<String> {
+        val context = category.aliases.toMutableList()
+        context.add(category.name)
+        category.parents.forEach {
+            if (it.id != 0L) {
+                context.addAll(repository.findById(it.id).get().context)
+            }
+        }
+        return context
     }
 }

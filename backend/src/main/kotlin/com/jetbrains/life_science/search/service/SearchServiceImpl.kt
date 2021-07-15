@@ -10,39 +10,16 @@ import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.action.search.SearchResponse
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestHighLevelClient
-import org.elasticsearch.common.unit.Fuzziness
 import org.elasticsearch.index.query.QueryBuilders
-import org.elasticsearch.script.Script
 import org.elasticsearch.search.SearchHit
 import org.elasticsearch.search.builder.SearchSourceBuilder
-import org.elasticsearch.search.sort.ScriptSortBuilder
-import org.elasticsearch.search.sort.SortBuilders
-import org.elasticsearch.search.sort.SortOrder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 
 @Service
 class SearchServiceImpl(
-    val client: RestHighLevelClient,
-    @Value("classpath:search/sortScript.txt")
-    private val sortScriptResource: Resource
+    val client: RestHighLevelClient
 ) : SearchService {
-
-    private val sortScript: Script
-
-    init {
-        val scriptText = sortScriptResource.inputStream.bufferedReader().use {
-            it.readText()
-        }
-        sortScript = Script(scriptText)
-    }
-
-    private val sortBuilder = SortBuilders
-        .scriptSort(sortScript, ScriptSortBuilder.ScriptSortType.NUMBER)
-        .order(SortOrder.DESC)
-
     val logger = getLogger()
 
     lateinit var searchUnitServices: Map<String, UnitSearchService>
@@ -61,9 +38,7 @@ class SearchServiceImpl(
     override fun search(query: SearchQueryInfo): List<SearchResult> {
         val request = makeRequest(query)
         val response = getResponse(request)
-        val hits = response.hits
-        println("here")
-        return hits.mapNotNull { processHit(it) }
+        return response.hits.mapNotNull { processHit(it) }
     }
 
     private fun getResponse(request: SearchRequest): SearchResponse {
@@ -71,30 +46,51 @@ class SearchServiceImpl(
     }
 
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
+        val tokens = query.text.trim().split("\\s+".toRegex())
+
+        var shouldContainSetPartQuery = QueryBuilders.boolQuery().minimumShouldMatch((tokens.size * 0.7).toInt())
+        var shouldContainNamePartInQuery = QueryBuilders.boolQuery().minimumShouldMatch(1)
+
+        for (token in tokens) {
+            shouldContainSetPartQuery =
+                shouldContainSetPartQuery.should(
+                    QueryBuilders.constantScoreQuery(
+                        QueryBuilders.fuzzyQuery("context", token)
+                    ).boost(1.0F)
+                )
+
+            shouldContainNamePartInQuery =
+                shouldContainNamePartInQuery.should(
+                    QueryBuilders.fuzzyQuery("names", token)
+                )
+        }
+
         val queryBuilder = QueryBuilders.boolQuery()
             .should(
-                QueryBuilders.matchQuery("text", query.text)
-                    .fuzziness(Fuzziness.AUTO)
-                    .prefixLength(0)
-                    .maxExpansions(15)
-                    .fuzzyTranspositions(true)
+                QueryBuilders.boolQuery()
+                    .must(
+                        shouldContainSetPartQuery
+                    )
+                    .must(
+                        shouldContainNamePartInQuery
+                    )
             )
             .should(
-                QueryBuilders.matchPhrasePrefixQuery("text", query.text)
+                QueryBuilders.matchQuery("text", query.text)
             )
 
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
             .from(query.from)
             .size(query.size)
-            .sort(sortBuilder)
 
         return SearchRequest()
             .source(searchBuilder)
             .indices(*getRequestIndices(query))
     }
 
-    private fun getRequestIndices(query: SearchQueryInfo) = query.includeTypes.map { it.indexName }.toTypedArray()
+    private fun getRequestIndices(query: SearchQueryInfo) =
+        query.includeTypes.map { it.indexName }.toTypedArray()
 
     private fun processHit(hit: SearchHit): SearchResult? {
         try {

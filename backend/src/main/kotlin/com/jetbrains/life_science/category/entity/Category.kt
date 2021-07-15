@@ -13,6 +13,9 @@ class Category(
     @Column(nullable = false)
     var name: String,
 
+    @ElementCollection
+    var aliases: List<String>,
+
     @ManyToMany
     @JoinTable(
         name = "category_sub_categories",

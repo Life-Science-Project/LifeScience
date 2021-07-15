@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class ApproachSearchUnitFactory {
 
-    fun create(approach: Approach): ApproachSearchUnit {
-        return ApproachSearchUnit(approach.id, approach.name)
+    fun create(approach: Approach, context: List<String>): ApproachSearchUnit {
+        return ApproachSearchUnit(approach.id, listOf(approach.name), context)
     }
 }

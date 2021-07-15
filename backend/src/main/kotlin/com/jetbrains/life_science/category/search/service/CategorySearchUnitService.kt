@@ -9,4 +9,6 @@ interface CategorySearchUnitService {
     fun deleteSearchUnitById(id: Long)
 
     fun update(category: Category)
+
+    fun getContext(category: Category): List<String>
 }
