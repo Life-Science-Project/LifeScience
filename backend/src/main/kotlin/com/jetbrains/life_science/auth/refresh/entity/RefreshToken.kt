@@ -7,7 +7,14 @@ import javax.persistence.*
 @Entity
 class RefreshToken(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "refresh_token_seq"
+    )
+    @SequenceGenerator(
+        name = "refresh_token_seq",
+        allocationSize = 1
+    )
     val id: Long,
 
     val code: String,

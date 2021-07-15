@@ -10,7 +10,14 @@ import javax.persistence.*
 @Table(name = "users")
 class UserPersonalData(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "user_personal_data_seq"
+    )
+    @SequenceGenerator(
+        name = "user_personal_data_seq",
+        allocationSize = 1
+    )
     val id: Long,
 
     val firstName: String,

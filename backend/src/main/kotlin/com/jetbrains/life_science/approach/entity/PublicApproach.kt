@@ -11,7 +11,7 @@ import javax.persistence.*
 class PublicApproach(
     @Id
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY,
+        strategy = GenerationType.SEQUENCE,
         generator = "public_approach_seq"
     )
     @SequenceGenerator(

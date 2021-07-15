@@ -6,7 +6,7 @@ import javax.persistence.*
 class Section(
     @Id
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY,
+        strategy = GenerationType.SEQUENCE,
         generator = "section_seq"
     )
     @SequenceGenerator(

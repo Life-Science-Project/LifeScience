@@ -9,7 +9,14 @@ import javax.persistence.*
 @Entity
 class ApproachReviewRequest(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "approach_review_request_seq"
+    )
+    @SequenceGenerator(
+        name = "approach_review_request_seq",
+        allocationSize = 1
+    )
     override val id: Long,
 
     date: LocalDateTime,
