@@ -8,7 +8,7 @@ import javax.persistence.*
 @Entity
 class PublicProtocol(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val id: Long,
 
     name: String,
@@ -21,4 +21,4 @@ class PublicProtocol(
     @ManyToMany
     var coAuthors: MutableList<Credentials>
 
-) : Protocol(id, name, approach, sections, owner)
+) : Protocol(name, approach, sections, owner)

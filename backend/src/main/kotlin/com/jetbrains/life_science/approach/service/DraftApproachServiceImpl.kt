@@ -40,7 +40,7 @@ class DraftApproachServiceImpl(
 
     override fun addParticipant(draftApproachId: Long, user: Credentials): DraftApproach {
         val draftApproach = get(draftApproachId)
-        if (!draftApproach.participants.contains(user)) {
+        if (user !in draftApproach.participants) {
             draftApproach.participants.add(user)
             repository.save(draftApproach)
         }
@@ -52,7 +52,7 @@ class DraftApproachServiceImpl(
         if (draftApproach.owner.id == user.id) {
             throw RemoveOwnerFromParticipantsException("Can't remove owner from approach participants")
         }
-        if (draftApproach.participants.contains(user)) {
+        if (user in draftApproach.participants) {
             draftApproach.participants.remove(user)
             repository.save(draftApproach)
         }
