@@ -2,16 +2,19 @@
   {
     "_class": "Category",
     "id": 1,
-    "text": "root"
+    "names": ["root"],
+    "context": []
   },
   {
     "_class": "Category",
     "id": 2,
-    "text": "child category 1"
+    "names": ["catalog 1"],
+    "context": ["catalog 1"]
   },
   {
     "_class": "Category",
     "id": 3,
-    "text": "child category 2"
+    "names": ["catalog 2"],
+    "context": ["catalog 2"]
   }
 ]

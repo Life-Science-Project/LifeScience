@@ -40,7 +40,9 @@ class ApproachSearchUnitServiceImpl(
     private fun createContext(approach: Approach): List<String> {
         val context = mutableListOf(approach.name)
         approach.categories.forEach {
-            context.addAll(categorySearchUnitService.getContext(it))
+            if (it.id != 0L) {
+                context.addAll(categorySearchUnitService.getContext(it))
+            }
         }
         return context
     }

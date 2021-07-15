@@ -9,6 +9,11 @@ data class CategoryCreationDTO(
         message = "Category name must contain only allowed characters"
     )
     val name: String,
-    val aliases: List<String>,
+    val aliases: List<
+        @Pattern(
+            regexp = categoryNameRegex,
+            message = "Category alias must contain only allowed characters"
+        )
+        String>,
     val initialParentId: Long? = null
 )

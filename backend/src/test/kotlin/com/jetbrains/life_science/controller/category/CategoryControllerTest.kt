@@ -6,16 +6,39 @@ import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryUpdateDTO
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.category.view.CategoryView
-import org.junit.jupiter.api.Assertions.*
+import com.jetbrains.life_science.util.populator.ElasticPopulator
+import org.elasticsearch.client.RestHighLevelClient
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.time.LocalDateTime
+import javax.annotation.PostConstruct
 
 @Sql("/scripts/initial_data.sql")
 internal class CategoryControllerTest : ApiTest() {
 
     val pathPrefix = "/api/categories"
+
+    lateinit var elasticPopulator: ElasticPopulator
+
+    @Autowired
+    lateinit var highLevelClient: RestHighLevelClient
+
+    @PostConstruct
+    fun setup() {
+        elasticPopulator = ElasticPopulator(highLevelClient).apply {
+            addPopulator("category", "elastic/category.json")
+        }
+    }
+
+    @BeforeEach
+    fun resetElastic() {
+        elasticPopulator.prepareData()
+    }
 
     /**
      * Get root categories test.
@@ -62,7 +85,7 @@ internal class CategoryControllerTest : ApiTest() {
     fun `create category test`() {
         val loginTokens = login("admin@gmail.ru", "password")
 
-        val categoryDTO = CategoryCreationDTO("my category", 3)
+        val categoryDTO = CategoryCreationDTO("my category", listOf(), 3)
         val createdCategory = postAuthorized<CategoryShortView>(pathPrefix, categoryDTO, loginTokens.accessToken)
 
         flushChanges()
@@ -149,7 +172,7 @@ internal class CategoryControllerTest : ApiTest() {
     @Test
     fun `category parent not found test`() {
         val accessToken = loginAccessToken("admin@gmail.ru", "password")
-        val dto = CategoryCreationDTO("error", 999)
+        val dto = CategoryCreationDTO("error", listOf(), 999)
 
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
 
@@ -271,7 +294,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `anonymous user category creation test`() {
-        val dto = CategoryCreationDTO("error", 3)
+        val dto = CategoryCreationDTO("error", listOf(), 3)
 
         val request = postRequest(pathPrefix, dto)
 
@@ -325,7 +348,7 @@ internal class CategoryControllerTest : ApiTest() {
     @Test
     fun `regular user category creation test`() {
         val accessToken = loginAccessToken("simple@gmail.ru", "user123")
-        val dto = CategoryCreationDTO("error", 3)
+        val dto = CategoryCreationDTO("error", listOf(), 3)
 
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
 
