@@ -55,7 +55,7 @@ internal class AuthControllerTest : ApiTest() {
             registerRequest(expectedEmail, "pass123")
         )
         assertEquals(400_004, apiExceptionView.systemCode)
-        assertEquals("User with email admin@gmail.ru already exists", apiExceptionView.arguments[0][0])
+        assertEquals("admin@gmail.ru", apiExceptionView.arguments[0][0])
     }
 
     /**
@@ -98,36 +98,6 @@ internal class AuthControllerTest : ApiTest() {
     fun `login test`() {
         val tokens = login("admin@gmail.ru", "password")
         pingSecured(tokens)
-    }
-
-    /**
-     * Invalid email format login test.
-     *
-     * Expected 400 http code and 400_005 system code result.
-     */
-    @Test
-    fun `invalid email format login test`() {
-        val apiExceptionView = getApiExceptionView(
-            400,
-            loginRequest("wrongwrong.com", "pass123456")
-        )
-        assertEquals(400_005, apiExceptionView.systemCode)
-        assertEquals("Email must be valid", apiExceptionView.arguments[0][0])
-    }
-
-    /**
-     * Invalid password format login test.
-     *
-     * Expected 400 http code and 400_005 system code result.
-     */
-    @Test
-    fun `invalid password format login test`() {
-        val apiExceptionView = getApiExceptionView(
-            400,
-            loginRequest("abc@mail.ru", "                ")
-        )
-        assertEquals(400_005, apiExceptionView.systemCode)
-        assertEquals("Password must contain only allowed characters", apiExceptionView.arguments[0][0])
     }
 
     /**
