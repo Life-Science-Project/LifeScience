@@ -6,9 +6,6 @@ import javax.validation.constraints.Pattern
 
 data class AuthRequestDTO(
 
-    @field:Email(
-        message = "Email must be valid"
-    )
     val email: String,
 
     @field:Pattern(
