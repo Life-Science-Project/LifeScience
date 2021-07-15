@@ -119,7 +119,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(404_001, exceptionView.code)
+        assertEquals(404_001, exceptionView.systemCode)
         assertEquals(listOf(listOf("999")), exceptionView.arguments)
     }
 
@@ -136,7 +136,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = deleteRequestAuthorized(makePath("/999"), accessToken)
         val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(404_001, exceptionView.code)
+        assertEquals(404_001, exceptionView.systemCode)
         assertEquals(listOf(listOf("999")), exceptionView.arguments)
     }
 
@@ -154,7 +154,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
 
         val exceptionView = getApiExceptionView(404, request)
-        assertEquals(404_002, exceptionView.code)
+        assertEquals(404_002, exceptionView.systemCode)
         assertEquals(listOf(listOf("999")), exceptionView.arguments)
     }
 
@@ -176,7 +176,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = patchRequestAuthorized(makePath("/5"), categoryUpdateDTO, accessToken)
         val exceptionView = getApiExceptionView(400, request)
 
-        assertEquals(400_002, exceptionView.code)
+        assertEquals(400_002, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
     }
 
@@ -198,7 +198,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = patchRequestAuthorized(makePath("/5"), categoryUpdateDTO, accessToken)
         val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(404_002, exceptionView.code)
+        assertEquals(404_002, exceptionView.systemCode)
         assertEquals(listOf(listOf("999")), exceptionView.arguments)
     }
 
@@ -220,7 +220,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = patchRequestAuthorized(makePath("/5"), categoryUpdateDTO, accessToken)
         val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(404_002, exceptionView.code)
+        assertEquals(404_002, exceptionView.systemCode)
         assertEquals(listOf(listOf("999")), exceptionView.arguments)
     }
 
@@ -240,7 +240,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
 
         val exceptionView = getApiExceptionView(400, request)
-        assertEquals(400_003, exceptionView.code)
+        assertEquals(400_003, exceptionView.systemCode)
         assertEquals(listOf(listOf("initialParentId"), listOf("stringValue")), exceptionView.arguments)
     }
 
@@ -259,7 +259,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
 
         val exceptionView = getApiExceptionView(400, request)
-        assertEquals(400_001, exceptionView.code)
+        assertEquals(400_001, exceptionView.systemCode)
         assertEquals(listOf(listOf("name")), exceptionView.arguments)
     }
 
@@ -276,7 +276,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = postRequest(pathPrefix, dto)
 
         val exceptionView = getApiExceptionView(403, request)
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
     }
 
@@ -296,7 +296,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = patchRequest(pathPrefix, categoryDTO)
 
         val exceptionView = getApiExceptionView(403, request)
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
     }
 
@@ -312,7 +312,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(403, request)
 
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
     }
 
@@ -330,7 +330,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
 
         val exceptionView = getApiExceptionView(403, request)
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
     }
 
@@ -351,7 +351,7 @@ internal class CategoryControllerTest : ApiTest() {
         val request = patchRequestAuthorized(makePath("/3"), categoryDTO, accessToken)
 
         val exceptionView = getApiExceptionView(403, request)
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
     }
 
@@ -368,7 +368,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(403, request)
 
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
     }
 
