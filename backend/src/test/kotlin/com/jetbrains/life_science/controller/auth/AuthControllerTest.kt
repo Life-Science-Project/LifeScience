@@ -100,8 +100,6 @@ internal class AuthControllerTest : ApiTest() {
         pingSecured(tokens)
     }
 
-
-
     /**
      * Success refresh token rest
      *
