@@ -36,7 +36,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Lint
-        run: ./gradlew :backend:ktlintCheck
+        run: ./gradlew :ktlintCheck
 
       - name: Configure sysctl limits
         run: |
