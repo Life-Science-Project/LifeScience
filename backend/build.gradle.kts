@@ -24,7 +24,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":frontend"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -94,18 +93,6 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-tasks.register<Copy>("copyFrontend") {
-    dependsOn(":frontend:bundle")
-
-    from("$rootDir/frontend/build")
-    into("$rootDir/backend/build/resources/main/static/.")
-}
-
-tasks.named("bootJar") {
-    if (!ext.has("no_front") || !(ext.get("no_front") as Boolean)) {
-        dependsOn(":backend:copyFrontend")
-    }
-}
 compileKotlin.kotlinOptions {
     freeCompilerArgs = listOf("-Xinline-classes")
 }
