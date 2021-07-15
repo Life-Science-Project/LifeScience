@@ -54,7 +54,7 @@ internal class AuthControllerTest : ApiTest() {
             400,
             registerRequest(expectedEmail, "pass123")
         )
-        assertEquals(400_004, apiExceptionView.code)
+        assertEquals(400_004, apiExceptionView.systemCode)
         assertEquals("User with email admin@gmail.ru already exists", apiExceptionView.arguments[0][0])
     }
 
@@ -69,7 +69,7 @@ internal class AuthControllerTest : ApiTest() {
             400,
             registerRequest("wrongwrong.com", "pass123456")
         )
-        assertEquals(400_005, apiExceptionView.code)
+        assertEquals(400_005, apiExceptionView.systemCode)
         assertEquals("Email must be valid", apiExceptionView.arguments[0][0])
     }
 
@@ -84,7 +84,7 @@ internal class AuthControllerTest : ApiTest() {
             400,
             registerRequest("abc@mail.ru", "                ")
         )
-        assertEquals(400_005, apiExceptionView.code)
+        assertEquals(400_005, apiExceptionView.systemCode)
         assertEquals("Password must contain only allowed characters", apiExceptionView.arguments[0][0])
     }
 
@@ -111,7 +111,7 @@ internal class AuthControllerTest : ApiTest() {
             400,
             loginRequest("wrongwrong.com", "pass123456")
         )
-        assertEquals(400_005, apiExceptionView.code)
+        assertEquals(400_005, apiExceptionView.systemCode)
         assertEquals("Email must be valid", apiExceptionView.arguments[0][0])
     }
 
@@ -126,7 +126,7 @@ internal class AuthControllerTest : ApiTest() {
             400,
             loginRequest("abc@mail.ru", "                ")
         )
-        assertEquals(400_005, apiExceptionView.code)
+        assertEquals(400_005, apiExceptionView.systemCode)
         assertEquals("Password must contain only allowed characters", apiExceptionView.arguments[0][0])
     }
 
@@ -157,7 +157,7 @@ internal class AuthControllerTest : ApiTest() {
             401,
             loginRequest("wrong@wrong.com", "wrond_pass999")
         )
-        assertEquals(401_005, apiExceptionView.code)
+        assertEquals(401_005, apiExceptionView.systemCode)
         assertTrue(apiExceptionView.arguments.isEmpty())
     }
 
@@ -172,7 +172,7 @@ internal class AuthControllerTest : ApiTest() {
             401,
             pingSecuredRequest(TokenPair("wrong token", "error"))
         )
-        assertEquals(401_003, apiExceptionView.code)
+        assertEquals(401_003, apiExceptionView.systemCode)
         assertTrue(apiExceptionView.arguments.isEmpty())
     }
 
@@ -187,7 +187,7 @@ internal class AuthControllerTest : ApiTest() {
             401,
             refreshRequest("error")
         )
-        assertEquals(401_001, apiExceptionView.code)
+        assertEquals(401_001, apiExceptionView.systemCode)
         assertTrue(apiExceptionView.arguments.isEmpty())
     }
 
@@ -207,7 +207,7 @@ internal class AuthControllerTest : ApiTest() {
             Thread.sleep(2_000)
 
             val pingRequest = getApiExceptionView(401, pingSecuredRequest(loginTokens))
-            assertEquals(401_004, pingRequest.code)
+            assertEquals(401_004, pingRequest.systemCode)
             assertTrue(pingRequest.arguments.isEmpty())
         } finally {
             jwtServiceImpl.jwtExpirationSeconds = oldExpirationTime
@@ -233,7 +233,7 @@ internal class AuthControllerTest : ApiTest() {
                 401,
                 refreshRequest(loginTokens.refreshToken)
             )
-            assertEquals(401_002, refreshRequest.code)
+            assertEquals(401_002, refreshRequest.systemCode)
             assertTrue(refreshRequest.arguments.isEmpty())
         } finally {
             refreshTokenFactoryImpl.refreshExpirationSeconds = oldExpirationTime
