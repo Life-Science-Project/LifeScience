@@ -2,13 +2,9 @@ name: Backend CI
 
 on:
   push:
-    paths-ignore:
-      - 'frontend/**'
     branches-ignore:
       - master
   pull_request:
-    paths-ignore:
-      - 'frontend/**'
     branches-ignore:
       - master
 
@@ -51,7 +47,7 @@ jobs:
           stack-version: 7.12.0
 
       - name: Build with Gradle
-        run: ./gradlew buildBack --info
+        run: ./gradlew build --info
 
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
