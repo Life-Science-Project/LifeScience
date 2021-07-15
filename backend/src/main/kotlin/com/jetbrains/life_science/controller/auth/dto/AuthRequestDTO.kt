@@ -7,9 +7,5 @@ data class AuthRequestDTO(
 
     val email: String,
 
-    @field:Pattern(
-        regexp = passwordRegex,
-        message = "Password must contain only allowed characters"
-    )
     val password: String
 )
