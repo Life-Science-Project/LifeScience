@@ -11,6 +11,7 @@ import com.jetbrains.life_science.controller.category.view.CategoryViewMapper
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -34,7 +35,7 @@ class CategoryController(
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    fun create(@RequestBody categoryCreationDTO: CategoryCreationDTO): CategoryShortView {
+    fun create(@Validated @RequestBody categoryCreationDTO: CategoryCreationDTO): CategoryShortView {
         val categoryInfo = CategoryCreationDTOToInfoAdapter(categoryCreationDTO)
         val category = categoryService.createCategory(categoryInfo)
         return viewMapper.toViewShort(category)
@@ -43,7 +44,7 @@ class CategoryController(
     @PatchMapping("/{categoryId}")
     @Secured("ROLE_ADMIN")
     fun update(
-        @RequestBody categoryUpdateDTO: CategoryUpdateDTO,
+        @Validated @RequestBody categoryUpdateDTO: CategoryUpdateDTO,
         @PathVariable categoryId: Long
     ): CategoryView {
         val categoryUpdateInfo = CategoryUpdateDTOToInfoAdapter(categoryUpdateDTO, categoryId)

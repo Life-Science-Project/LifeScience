@@ -9,6 +9,8 @@ class CategoryUpdateDTOToInfoAdapter(
 
     override val name: String = dto.name
 
+    override val aliases = dto.aliases.map { it.alias }
+
     override val parentsToAddIds: List<Long> = dto.parentsToAdd
 
     override val parentsToDeleteIds: List<Long> = dto.parentsToDelete

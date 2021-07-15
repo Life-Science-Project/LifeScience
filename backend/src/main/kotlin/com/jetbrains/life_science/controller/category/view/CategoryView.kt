@@ -9,6 +9,7 @@ import java.time.LocalDateTime
 
 data class CategoryView(
     val name: String,
+    val aliases: List<String>,
     @JsonDeserialize(using = LocalDateTimeDeserializer::class)
     @JsonSerialize(using = LocalDateTimeSerializer::class)
     val creationDate: LocalDateTime,

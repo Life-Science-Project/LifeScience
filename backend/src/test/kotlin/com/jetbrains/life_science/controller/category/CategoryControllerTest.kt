@@ -2,6 +2,7 @@ package com.jetbrains.life_science.controller.category
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.approach.view.ApproachShortView
+import com.jetbrains.life_science.controller.category.dto.CategoryAliasDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryUpdateDTO
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
@@ -66,6 +67,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val expectedView = CategoryView(
             name = "catalog 1",
+            aliases = emptyList(),
             creationDate = timeOf(2020, 9, 17),
             approaches = listOf(
                 ApproachShortView(1, "approach 1", timeOf(2020, 12, 17), emptyList())
@@ -84,8 +86,15 @@ internal class CategoryControllerTest : ApiTest() {
     @Test
     fun `create category test`() {
         val loginTokens = login("admin@gmail.ru", "password")
-
-        val categoryDTO = CategoryCreationDTO("my category", listOf(), 3)
+        val aliases = listOf(
+            CategoryAliasDTO("second name"),
+            CategoryAliasDTO("third name")
+        )
+        val categoryDTO = CategoryCreationDTO(
+            name = "my category",
+            aliases = aliases,
+            initialParentId = 3
+        )
         val createdCategory = postAuthorized<CategoryShortView>(pathPrefix, categoryDTO, loginTokens.accessToken)
 
         flushChanges()
@@ -93,6 +102,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         assertEquals("my category", category.name)
         assertEquals("my category", createdCategory.name)
+        assertEquals(aliases, category.aliases)
         assertCategoryAvailableFromParent(3, createdCategory.id)
     }
 
@@ -104,7 +114,8 @@ internal class CategoryControllerTest : ApiTest() {
         val loginTokens = login("admin@gmail.ru", "password")
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
-            parentsToAdd = listOf(3), parentsToDelete = listOf(2)
+            parentsToAdd = listOf(3), parentsToDelete = listOf(2),
+            aliases = listOf(CategoryAliasDTO("le name"))
         )
 
         val updatedCategory = patchAuthorized<CategoryView>(makePath("/5"), categoryDTO, loginTokens.accessToken)
@@ -114,6 +125,7 @@ internal class CategoryControllerTest : ApiTest() {
         assertCategoryAvailableFromParent(3, 5)
         assertEquals("changed name", updatedCategory.name)
         assertEquals("changed name", category.name)
+        assertEquals("le name", category.aliases[0])
     }
 
     /**
@@ -193,6 +205,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(), parentsToDelete = listOf(2, 4)
         )
 
@@ -215,6 +228,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(999), parentsToDelete = listOf(2)
         )
 
@@ -237,6 +251,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(3), parentsToDelete = listOf(2, 999)
         )
 
@@ -313,6 +328,7 @@ internal class CategoryControllerTest : ApiTest() {
     fun `anonymous user category update test`() {
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(3), parentsToDelete = listOf(2)
         )
 
@@ -368,6 +384,7 @@ internal class CategoryControllerTest : ApiTest() {
         val accessToken = loginAccessToken("simple@gmail.ru", "user123")
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(3), parentsToDelete = listOf(2)
         )
 
