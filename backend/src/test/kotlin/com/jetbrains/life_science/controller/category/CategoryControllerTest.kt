@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.time.LocalDateTime
 
-@Sql("/scripts/initial_data.sql")
+@Sql("/scripts/categories_initial_data.sql")
 internal class CategoryControllerTest : ApiTest() {
 
     val pathPrefix = "/api/categories"

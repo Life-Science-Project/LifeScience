@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.approach.published.service
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
-import com.jetbrains.life_science.approach.service.DraftApproachService
+import com.jetbrains.life_science.approach.draft.service.DraftApproachService
 import com.jetbrains.life_science.approach.service.PublicApproachService
 import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
 import org.junit.jupiter.api.Assertions
@@ -14,7 +14,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@Sql(value = ["/scripts/initial_data.sql", "/scripts/public_approach_data.sql"])
+@Sql(value = ["/scripts/categories_initial_data.sql", "/scripts/public_approach_data.sql"])
 @Transactional
 class PublicApproachServiceTest {
 

@@ -26,8 +26,7 @@ class DraftApproachController(
 ) {
 
     @GetMapping("/{approachId}")
-    fun getApproach(@PathVariable approachId: Long): DraftApproachView {
-        val approach = draftApproachService.getApproach(approachId)
+    fun getApproach(@PathVariable approachId: Long): DraftApproachView { val approach = draftApproachService.get(approachId)
         return viewMapper.toView(approach)
     }
 
@@ -47,7 +46,7 @@ class DraftApproachController(
         @PathVariable approachId: Long,
         @AuthenticationPrincipal author: Credentials
     ) {
-        val approach = draftApproachService.getApproach(approachId)
+        val approach = draftApproachService.get(approachId)
         checkOwnerAccess(approach, author)
         publicationRequestService.create(approach)
     }
@@ -59,9 +58,9 @@ class DraftApproachController(
         @AuthenticationPrincipal author: Credentials
     ) {
         val userCredentials = credentialsService.getByEmail(dto.email)
-        val approach = draftApproachService.getApproach(approachId)
+        val approach = draftApproachService.get(approachId)
         checkOwnerAccess(approach, author)
-        draftApproachService.addParticipant(approach, userCredentials)
+        draftApproachService.addParticipant(approach.id, userCredentials)
     }
 
     @DeleteMapping("/{approachId}/participants/{participantId}")
@@ -70,9 +69,9 @@ class DraftApproachController(
         @PathVariable participantId: Long,
         @AuthenticationPrincipal author: Credentials
     ) {
-        val approach = draftApproachService.getApproach(approachId)
+        val approach = draftApproachService.get(approachId)
         checkOwnerOrAdminAccess(approach, author)
-        draftApproachService.delete(approach)
+        draftApproachService.delete(approach.id)
     }
 
     fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {

@@ -12,7 +12,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.*
 import javax.servlet.http.Cookie
 
-@Sql("/scripts/initial_data.sql")
+@Sql("/scripts/categories_initial_data.sql")
 internal class AuthControllerTest : ApiTest() {
 
     @Autowired

@@ -1,21 +1,28 @@
 package com.jetbrains.life_science.approach.draft.factory
 
 import com.jetbrains.life_science.approach.draft.entity.DraftApproach
-import com.jetbrains.life_science.approach.draft.service.DraftApproachCreationInfo
+import com.jetbrains.life_science.approach.draft.service.DraftApproachInfo
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
 @Component
 class DraftApproachFactory {
-
-    fun create(draftApproachInfo: DraftApproachCreationInfo): DraftApproach {
+    fun create(info: DraftApproachInfo): DraftApproach {
         return DraftApproach(
             id = 0,
-            name = draftApproachInfo.name,
-            categories = mutableListOf(draftApproachInfo.parentCategory),
-            creationDate = LocalDateTime.now(),
-            owner = draftApproachInfo.creator,
-            participants = mutableListOf(draftApproachInfo.creator)
+            name = info.name,
+            categories = info.categories.toMutableList(),
+            tags = info.tags.toMutableList(),
+            owner = info.owner,
+            participants = mutableListOf(info.owner),
+            sections = mutableListOf(),
+            creationDate = LocalDateTime.now()
         )
+    }
+
+    fun setParams(draftApproach: DraftApproach, info: DraftApproachInfo) {
+        draftApproach.name = info.name
+        draftApproach.tags = info.tags.toMutableList()
+        draftApproach.categories = info.categories.toMutableList()
     }
 }

@@ -18,3 +18,6 @@ INSERT INTO credentials (id, email, password)
 VALUES (3, 'email3', '$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86');
 -- nextId = 4
 ALTER SEQUENCE credentials_seq RESTART WITH 4;
+
+insert into users (id, first_name, credentials_id) values (1, 'Alex', 1);
+update credentials set user_personal_data_id = 1 where id = 1;

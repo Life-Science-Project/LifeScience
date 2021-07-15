@@ -2,8 +2,8 @@ package com.jetbrains.life_science.approach.draft.service
 
 import com.jetbrains.life_science.approach.draft.service.maker.makeDraftApproachInfo
 import com.jetbrains.life_science.approach.draft.entity.DraftApproach
-import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.category.service.CategoryService
+import com.jetbrains.life_science.exception.approach.draft.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
