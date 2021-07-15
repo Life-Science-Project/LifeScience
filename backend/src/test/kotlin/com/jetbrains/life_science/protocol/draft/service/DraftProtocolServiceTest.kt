@@ -3,7 +3,7 @@ package com.jetbrains.life_science.protocol.draft.service
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
-import com.jetbrains.life_science.protocol.draft.service.marker.makeDraftProtocolInfo
+import com.jetbrains.life_science.protocol.draft.service.maker.makeDraftProtocolInfo
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.section.service.SectionService
@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import javax.persistence.EntityManager
 
 @SpringBootTest
 @Sql("/scripts/add_test_data.sql")
@@ -34,9 +33,6 @@ class DraftProtocolServiceTest {
 
     @Autowired
     lateinit var sectionService: SectionService
-
-    @Autowired
-    lateinit var entityManager: EntityManager
 
     /**
      * Should get existing draft protocol
@@ -82,7 +78,7 @@ class DraftProtocolServiceTest {
         val owner = credentialsService.getById(1L)
         val approach = createPublicApproach(1L, "public_approach", owner)
         val info = makeDraftProtocolInfo(
-            id = 0L,
+            id = 3L,
             name = "test",
             owner = owner,
             approach = approach

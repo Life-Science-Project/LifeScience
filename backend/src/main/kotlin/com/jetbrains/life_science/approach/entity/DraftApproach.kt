@@ -9,7 +9,11 @@ import javax.persistence.*
 @Entity
 class DraftApproach(
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "draft_approach_seq"
+    )
+    @SequenceGenerator(name = "draft_approach_seq")
     override val id: Long,
 
     name: String,

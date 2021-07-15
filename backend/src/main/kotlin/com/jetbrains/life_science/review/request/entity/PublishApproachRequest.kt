@@ -1,15 +1,22 @@
 package com.jetbrains.life_science.review.request.entity
 
-import com.jetbrains.life_science.review.edit_record.entity.ProtocolEditRecord
+import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.review.response.entity.Review
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-class ProtocolReviewRequest(
+class PublishApproachRequest(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "publish_approach_request_seq"
+    )
+    @SequenceGenerator(
+        name = "publish_approach_request_seq",
+        allocationSize = 1
+    )
     override val id: Long,
 
     date: LocalDateTime,
@@ -17,7 +24,7 @@ class ProtocolReviewRequest(
     reviews: MutableList<Review>,
     editor: Credentials,
 
-    @OneToOne
-    var editRecord: ProtocolEditRecord
+    @ManyToOne
+    var approach: DraftApproach
 
 ) : ReviewRequest(date, state, reviews, editor)

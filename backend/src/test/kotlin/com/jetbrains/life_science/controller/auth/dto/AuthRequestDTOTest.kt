@@ -24,7 +24,8 @@ internal class AuthRequestDTOTest {
             "123",
             "1234",
             " 12345",
-            "12345 "
+            "12345 ",
+            "ab".repeat(30)
         )
     }
 
