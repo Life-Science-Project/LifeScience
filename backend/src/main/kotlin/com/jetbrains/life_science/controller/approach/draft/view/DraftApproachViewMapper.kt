@@ -19,6 +19,7 @@ class DraftApproachViewMapper(
         val sections = sectionViewMapper.toViewAll(draftApproach.sections)
         val categories = categoryViewMapper.toViewsShort(draftApproach.categories)
         return DraftApproachView(
+            id = draftApproach.id,
             name = draftApproach.name,
             sections = sections,
             participants = users,

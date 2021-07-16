@@ -5,6 +5,7 @@ import com.jetbrains.life_science.controller.section.view.SectionShortView
 import com.jetbrains.life_science.controller.user.UserShortView
 
 data class DraftApproachView(
+    val id: Long,
     val name: String,
     val categories: List<CategoryShortView>,
     val sections: List<SectionShortView>,
