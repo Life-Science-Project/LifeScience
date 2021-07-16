@@ -10,7 +10,14 @@ import javax.persistence.*
 @Entity
 class PublicApproach(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "public_approach_seq"
+    )
+    @SequenceGenerator(
+        name = "public_approach_seq",
+        allocationSize = 1
+    )
     override val id: Long,
 
     name: String,

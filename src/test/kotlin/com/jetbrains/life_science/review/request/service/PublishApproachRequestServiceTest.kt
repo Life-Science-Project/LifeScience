@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @SpringBootTest
-@Sql("/scripts/users_data.sql", "/scripts/publish_approach_request_data.sql")
+@Sql("/scripts/initial_data.sql", "/scripts/review/request/publish_approach_request_data.sql")
 @Transactional
 class PublishApproachRequestServiceTest {
 
@@ -209,7 +209,8 @@ class PublishApproachRequestServiceTest {
         // Prepare data
         val publishApproachId = 1L
         val reviewer = credentialsService.getById(3L)
-        val review = createReview(2, LocalDateTime.now(), "third review", ReviewResolution.APPROVE, reviewer)
+        val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 55, 47)
+        val review = createReview(2, creationLocalDateTime, "second review", ReviewResolution.APPROVE, reviewer)
 
         // Action
         service.addReview(publishApproachId, review)
