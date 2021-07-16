@@ -38,7 +38,13 @@ class SearchServiceImpl(
     override fun search(query: SearchQueryInfo): List<SearchResult> {
         val request = makeRequest(query)
         val response = getResponse(request)
-        return response.hits.mapNotNull { processHit(it) }
+        return response.hits
+            .mapNotNull {
+                processHit(it)
+            }
+            .sortedBy {
+                SearchUnitType.valueOf(it.typeName.toUpperCase()).order
+            }
     }
 
     private fun getResponse(request: SearchRequest): SearchResponse {

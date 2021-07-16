@@ -16,5 +16,17 @@
     "id": 3,
     "names": ["catalog 2"],
     "context": ["catalog 2"]
+  },
+  {
+    "_class": "Category",
+    "id": 4,
+    "names": ["catalog 2"],
+    "context": ["catalog 2"]
+  },
+  {
+    "_class": "Category",
+    "id": 5,
+    "names": ["catalog 2"],
+    "context": ["catalog 2"]
   }
 ]

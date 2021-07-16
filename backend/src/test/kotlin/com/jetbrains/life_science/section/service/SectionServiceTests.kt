@@ -42,6 +42,7 @@ internal class SectionServiceTests {
     @PostConstruct
     fun setup() {
         elasticPopulator = ElasticPopulator(highLevelClient).apply {
+            addPopulator("content", "elastic/content.json")
             addPopulator("content_version", "elastic/content_version.json")
         }
     }

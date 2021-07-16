@@ -102,7 +102,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         assertEquals("my category", category.name)
         assertEquals("my category", createdCategory.name)
-        assertEquals(aliases, category.aliases)
+        assertEquals(aliases.map { it.alias }, category.aliases)
         assertCategoryAvailableFromParent(3, createdCategory.id)
     }
 
