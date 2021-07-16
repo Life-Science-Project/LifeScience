@@ -3,13 +3,21 @@ package com.jetbrains.life_science.review.edit_record.entity
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.review.request.entity.ProtocolReviewRequest
 import com.jetbrains.life_science.section.entity.Section
-import javax.persistence.Entity
-import javax.persistence.ManyToOne
-import javax.persistence.OneToOne
+import javax.persistence.*
 
 @Entity
 class ProtocolEditRecord(
-    id: Long,
+    @Id
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "protocol_edit_record_seq"
+    )
+    @SequenceGenerator(
+        name = "protocol_edit_record_seq",
+        allocationSize = 1
+    )
+    override val id: Long,
+
     createdSections: MutableList<Section>,
     deletedSections: MutableList<Section>,
 
@@ -19,4 +27,4 @@ class ProtocolEditRecord(
     @OneToOne(mappedBy = "editRecord")
     var request: ProtocolReviewRequest?
 
-) : EditRecord(id, deletedSections, createdSections)
+) : EditRecord(deletedSections, createdSections)
