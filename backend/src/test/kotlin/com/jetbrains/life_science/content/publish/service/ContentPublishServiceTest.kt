@@ -120,7 +120,7 @@ internal class ContentPublishServiceTest {
         val expected = Content(
             id = expectedId,
             sectionId = 1,
-            text = "general info text",
+            text = "general info text one",
             tags = mutableListOf(),
             references = mutableListOf()
         )
@@ -156,7 +156,7 @@ internal class ContentPublishServiceTest {
         val expected = Content(
             id = "123",
             sectionId = expectedSectionId,
-            text = "general info text",
+            text = "general info text one",
             tags = mutableListOf(),
             references = mutableListOf()
         )

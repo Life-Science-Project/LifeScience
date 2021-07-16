@@ -291,7 +291,7 @@ internal class ContentVersionServiceTest {
         val expected = Content(
             id = content?.id,
             sectionId = expectedSectionId,
-            text = "general info text",
+            text = "general info text one",
             tags = mutableListOf(),
             references = mutableListOf()
         )
