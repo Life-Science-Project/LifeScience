@@ -40,4 +40,4 @@ out/
 .DS_Store
 
 ### Local environment ###
-/backend/src/main/resources/application-local.properties
+/src/main/resources/application-local.properties
