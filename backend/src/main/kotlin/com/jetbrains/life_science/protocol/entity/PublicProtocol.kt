@@ -8,7 +8,14 @@ import javax.persistence.*
 @Entity
 class PublicProtocol(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "public_protocol_seq"
+    )
+    @SequenceGenerator(
+        name = "public_protocol_seq",
+        allocationSize = 1
+    )
     override val id: Long,
 
     name: String,

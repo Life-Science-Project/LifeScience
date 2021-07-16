@@ -13,7 +13,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@Sql(value = ["/scripts/initial_data.sql", "/scripts/review_data.sql"])
+@Sql(value = ["/scripts/initial_data.sql", "/scripts/review/response/review_data.sql"])
 @Transactional
 class ReviewServiceTest {
 

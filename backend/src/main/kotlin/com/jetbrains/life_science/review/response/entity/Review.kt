@@ -11,7 +11,10 @@ class Review(
         strategy = GenerationType.SEQUENCE,
         generator = "review_seq"
     )
-    @SequenceGenerator(name = "review_seq")
+    @SequenceGenerator(
+        name = "review_seq",
+        allocationSize = 1
+    )
     val id: Long,
 
     var date: LocalDateTime,

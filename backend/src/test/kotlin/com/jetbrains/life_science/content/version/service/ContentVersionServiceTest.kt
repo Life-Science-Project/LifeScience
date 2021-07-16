@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional
 import javax.annotation.PostConstruct
 
 @SpringBootTest
-@Sql("/scripts/add_test_data.sql")
+@Sql("/scripts/initial_data.sql")
 @Transactional
 internal class ContentVersionServiceTest {
 
@@ -87,7 +87,7 @@ internal class ContentVersionServiceTest {
         // Prepare
         val info = makeContentInfo(
             id = "",
-            sectionId = 10,
+            sectionId = 4,
             text = "new content text",
             tags = mutableListOf(),
             references = mutableListOf()
@@ -160,7 +160,7 @@ internal class ContentVersionServiceTest {
         val expectedId = "13rt"
         val expected = Content(
             id = expectedId,
-            sectionId = 10,
+            sectionId = 4,
             text = "user text 12",
             tags = mutableListOf(),
             references = mutableListOf()
@@ -193,7 +193,7 @@ internal class ContentVersionServiceTest {
     @Test
     fun `find existing content by section id`() {
         // Prepare
-        val expectedSectionId = 10L
+        val expectedSectionId = 4L
         val expected = Content(
             id = "13rt",
             sectionId = expectedSectionId,
@@ -233,7 +233,7 @@ internal class ContentVersionServiceTest {
         val contentId = "13rt"
         val expected = Content(
             id = contentId,
-            sectionId = 10,
+            sectionId = 4,
             text = "user text 12",
             references = mutableListOf(),
             tags = mutableListOf()
@@ -259,7 +259,7 @@ internal class ContentVersionServiceTest {
         val expectedId = "abracadabra"
         val info = makeContentInfo(
             id = expectedId,
-            sectionId = 4,
+            sectionId = 5,
             text = "updated text",
             references = mutableListOf(),
             tags = mutableListOf()

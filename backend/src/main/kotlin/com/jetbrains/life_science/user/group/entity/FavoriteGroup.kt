@@ -8,7 +8,14 @@ import javax.persistence.*
 class FavoriteGroup(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "favorite_group_seq"
+    )
+    @SequenceGenerator(
+        name = "favorite_group_seq",
+        allocationSize = 1
+    )
     var id: Long,
 
     var name: String,

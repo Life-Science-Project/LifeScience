@@ -13,7 +13,10 @@ class DraftApproach(
         strategy = GenerationType.SEQUENCE,
         generator = "draft_approach_seq"
     )
-    @SequenceGenerator(name = "draft_approach_seq")
+    @SequenceGenerator(
+        name = "draft_approach_seq",
+        allocationSize = 1
+    )
     override val id: Long,
 
     name: String,

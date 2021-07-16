@@ -1,15 +1,18 @@
 package com.jetbrains.life_science.section.entity
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class Section(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+        strategy = GenerationType.SEQUENCE,
+        generator = "section_seq"
+    )
+    @SequenceGenerator(
+        name = "section_seq",
+        allocationSize = 1
+    )
     val id: Long,
 
     var name: String,
