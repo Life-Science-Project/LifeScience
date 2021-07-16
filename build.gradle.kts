@@ -89,10 +89,6 @@ ktlint {
     }
 }
 
-tasks.register("buildBack") {
-    dependsOn(":build")
-}
-
 tasks.withType<Test> {
     useJUnitPlatform()
 }
