@@ -102,6 +102,7 @@ class PublishApproachRequestServiceTest {
     fun `approve existing pending publish approach request`() {
         // Prepare data
         val publishApproachId = 1L
+        val expectedState = RequestState.APPROVED
 
         // Action
         val prevPublishApproachRequest = service.get(publishApproachId)
@@ -113,7 +114,7 @@ class PublishApproachRequestServiceTest {
         assertEquals(prevPublishApproachRequest.editor.id, publishApproachRequest.editor.id)
         assertEquals(prevPublishApproachRequest.approach.id, publishApproachRequest.approach.id)
         assertEquals(prevPublishApproachRequest.date, publishApproachRequest.date)
-        assertEquals(RequestState.APPROVED, publishApproachRequest.state)
+        assertEquals(expectedState, publishApproachRequest.state)
     }
 
     /**
@@ -155,6 +156,7 @@ class PublishApproachRequestServiceTest {
     fun `cancel existing pending publish approach request`() {
         // Prepare data
         val publishApproachId = 1L
+        val expectedState = RequestState.CANCELED
 
         // Action
         val prevPublishApproachRequest = service.get(publishApproachId)
@@ -166,7 +168,7 @@ class PublishApproachRequestServiceTest {
         assertEquals(prevPublishApproachRequest.editor.id, publishApproachRequest.editor.id)
         assertEquals(prevPublishApproachRequest.approach.id, publishApproachRequest.approach.id)
         assertEquals(prevPublishApproachRequest.date, publishApproachRequest.date)
-        assertEquals(RequestState.CANCELED, publishApproachRequest.state)
+        assertEquals(expectedState, publishApproachRequest.state)
     }
 
     /**
