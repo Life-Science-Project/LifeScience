@@ -5,7 +5,7 @@ import com.jetbrains.life_science.review.request.service.PublishApproachRequestI
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
 
-fun makePublishApproachRequest(
+fun makePublishApproachRequestInfo(
     id: Long,
     date: LocalDateTime,
     editor: Credentials,

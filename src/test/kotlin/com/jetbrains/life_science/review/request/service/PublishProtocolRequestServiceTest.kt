@@ -6,7 +6,7 @@ import com.jetbrains.life_science.exception.request.RequestImmutableStateExcepti
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
-import com.jetbrains.life_science.review.request.service.maker.makePublishProtocolRequest
+import com.jetbrains.life_science.review.request.service.maker.makePublishProtocolRequestInfo
 import com.jetbrains.life_science.review.response.entity.Review
 import com.jetbrains.life_science.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.user.credentials.entity.Credentials
@@ -81,7 +81,7 @@ class PublishProtocolRequestServiceTest {
         val approachCreationLocalDateTime = LocalDateTime.of(2020, 12, 17, 0, 0)
         val publicApproach = createPublicApproach(1L, "approach 1", owner, approachCreationLocalDateTime)
         val protocol = createDraftProtocol(1L, "first protocol", publicApproach, owner)
-        val info = makePublishProtocolRequest(
+        val info = makePublishProtocolRequestInfo(
             id = 4L,
             date = protocolCreationLocalDateTime,
             editor = editor,

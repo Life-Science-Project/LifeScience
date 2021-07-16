@@ -5,7 +5,7 @@ import com.jetbrains.life_science.review.request.service.PublishProtocolRequestI
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
 
-fun makePublishProtocolRequest(
+fun makePublishProtocolRequestInfo(
     id: Long,
     date: LocalDateTime,
     editor: Credentials,
