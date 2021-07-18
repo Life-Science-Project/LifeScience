@@ -4,7 +4,6 @@ import com.jetbrains.life_science.ApiTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-
 class GeneralControllerAdvisorTest : ApiTest() {
 
     /**
@@ -21,5 +20,4 @@ class GeneralControllerAdvisorTest : ApiTest() {
         assertEquals(400_999, response.systemCode)
         assertTrue(response.arguments.isEmpty())
     }
-
 }
