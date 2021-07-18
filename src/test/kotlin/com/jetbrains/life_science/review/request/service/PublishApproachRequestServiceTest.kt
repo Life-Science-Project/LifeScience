@@ -5,7 +5,7 @@ import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotF
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
-import com.jetbrains.life_science.review.request.service.maker.makePublishApproachRequest
+import com.jetbrains.life_science.review.request.service.maker.makePublishApproachRequestInfo
 import com.jetbrains.life_science.review.response.entity.Review
 import com.jetbrains.life_science.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.user.credentials.entity.Credentials
@@ -76,7 +76,7 @@ class PublishApproachRequestServiceTest {
         val editor = credentialsService.getById(3L)
         val approach = createDraftApproach(1L, "first approach", approachOwner)
         val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
-        val info = makePublishApproachRequest(
+        val info = makePublishApproachRequestInfo(
             id = 4L,
             date = creationLocalDateTime,
             editor = editor,
@@ -102,6 +102,7 @@ class PublishApproachRequestServiceTest {
     fun `approve existing pending publish approach request`() {
         // Prepare data
         val publishApproachId = 1L
+        val expectedState = RequestState.APPROVED
 
         // Action
         val prevPublishApproachRequest = service.get(publishApproachId)
@@ -113,7 +114,7 @@ class PublishApproachRequestServiceTest {
         assertEquals(prevPublishApproachRequest.editor.id, publishApproachRequest.editor.id)
         assertEquals(prevPublishApproachRequest.approach.id, publishApproachRequest.approach.id)
         assertEquals(prevPublishApproachRequest.date, publishApproachRequest.date)
-        assertEquals(RequestState.APPROVED, publishApproachRequest.state)
+        assertEquals(expectedState, publishApproachRequest.state)
     }
 
     /**
@@ -155,6 +156,7 @@ class PublishApproachRequestServiceTest {
     fun `cancel existing pending publish approach request`() {
         // Prepare data
         val publishApproachId = 1L
+        val expectedState = RequestState.CANCELED
 
         // Action
         val prevPublishApproachRequest = service.get(publishApproachId)
@@ -166,7 +168,7 @@ class PublishApproachRequestServiceTest {
         assertEquals(prevPublishApproachRequest.editor.id, publishApproachRequest.editor.id)
         assertEquals(prevPublishApproachRequest.approach.id, publishApproachRequest.approach.id)
         assertEquals(prevPublishApproachRequest.date, publishApproachRequest.date)
-        assertEquals(RequestState.CANCELED, publishApproachRequest.state)
+        assertEquals(expectedState, publishApproachRequest.state)
     }
 
     /**
