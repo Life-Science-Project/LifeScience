@@ -14,7 +14,8 @@ class CategoryFactory {
             subCategories = mutableListOf(),
             approaches = mutableListOf(),
             parents = mutableListOf(parent),
-            creationDate = LocalDateTime.now()
+            creationDate = LocalDateTime.now(),
+            aliases = info.aliases
         )
     }
 

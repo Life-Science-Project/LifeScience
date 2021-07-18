@@ -24,6 +24,7 @@ class CategoryViewMapper(
     fun toView(category: Category): CategoryView {
         return CategoryView(
             name = category.name,
+            aliases = category.aliases,
             creationDate = category.creationDate,
             subCategories = category.subCategories.map { toViewShort(it) },
             approaches = category.approaches.map { approachViewMapper.toViewShort(it) }

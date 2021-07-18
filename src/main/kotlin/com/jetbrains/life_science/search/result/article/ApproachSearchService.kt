@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.search.result.category
+package com.jetbrains.life_science.search.result.article
 
 import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.UnitSearchService
@@ -6,12 +6,12 @@ import com.jetbrains.life_science.util.getOrThrow
 import org.springframework.stereotype.Service
 
 @Service
-class CategorySearchService : UnitSearchService {
+class ApproachSearchService : UnitSearchService {
 
-    override fun process(id: String, response: Map<String, Any>): CategorySearchResult {
+    override fun process(id: String, response: Map<String, Any>): ApproachSearchResult {
         val names = response.getOrThrow("names") { "Name not found" } as List<*>
-        return CategorySearchResult(id.toLong(), names[0].toString())
+        return ApproachSearchResult(id.toLong(), names[0].toString())
     }
 
-    override val key = SearchUnitType.CATEGORY
+    override val key = SearchUnitType.APPROACH
 }

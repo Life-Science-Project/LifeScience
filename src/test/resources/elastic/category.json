@@ -2,16 +2,31 @@
   {
     "_class": "Category",
     "id": 1,
-    "text": "root"
+    "names": ["root"],
+    "context": []
   },
   {
     "_class": "Category",
     "id": 2,
-    "text": "child category 1"
+    "names": ["catalog 1", "catalog one"],
+    "context": ["catalog 1", "catalog one"]
   },
   {
     "_class": "Category",
     "id": 3,
-    "text": "child category 2"
+    "names": ["catalog"],
+    "context": ["catalog 2", "alpha", "beta"]
+  },
+  {
+    "_class": "Category",
+    "id": 4,
+    "names": ["catalog"],
+    "context": ["catalog 1", "catalog 2", "beta", "alpha"]
+  },
+  {
+    "_class": "Category",
+    "id": 5,
+    "names": ["catalog 1","catalog 2"],
+    "context": ["catalog 2"]
   }
 ]

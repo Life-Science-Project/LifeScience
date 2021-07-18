@@ -4,4 +4,6 @@ interface CategoryInfo {
     val name: String
 
     val parentId: Long
+
+    val aliases: List<String>
 }

@@ -30,6 +30,8 @@ class CategoryServiceImpl(
         val category = getCategory(categoryInfo.id)
         updateParents(categoryInfo, category)
         category.name = categoryInfo.name
+        category.aliases = categoryInfo.aliases
+        searchService.update(category)
         return categoryRepository.save(category)
     }
 

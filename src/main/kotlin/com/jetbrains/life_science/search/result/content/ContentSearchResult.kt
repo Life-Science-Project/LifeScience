@@ -6,6 +6,5 @@ import com.jetbrains.life_science.search.result.SearchResult
 data class ContentSearchResult(
     val id: String,
     val text: String,
-    val sectionId: Long,
-    val versionId: Long
+    val sectionId: Long
 ) : SearchResult(SearchUnitType.CONTENT.presentationName)

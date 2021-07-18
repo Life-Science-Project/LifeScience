@@ -2,20 +2,44 @@ package com.jetbrains.life_science.controller.category
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.approach.view.ApproachShortView
+import com.jetbrains.life_science.controller.category.dto.CategoryAliasDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryUpdateDTO
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.category.view.CategoryView
-import org.junit.jupiter.api.Assertions.*
+import com.jetbrains.life_science.util.populator.ElasticPopulator
+import org.elasticsearch.client.RestHighLevelClient
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
 import java.time.LocalDateTime
+import javax.annotation.PostConstruct
 
 @Sql("/scripts/initial_data.sql")
 internal class CategoryControllerTest : ApiTest() {
 
     val pathPrefix = "/api/categories"
+
+    lateinit var elasticPopulator: ElasticPopulator
+
+    @Autowired
+    lateinit var highLevelClient: RestHighLevelClient
+
+    @PostConstruct
+    fun setup() {
+        elasticPopulator = ElasticPopulator(highLevelClient).apply {
+            addPopulator("category", "elastic/category.json")
+        }
+    }
+
+    @BeforeEach
+    fun resetElastic() {
+        elasticPopulator.prepareData()
+    }
 
     /**
      * Get root categories test.
@@ -43,6 +67,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val expectedView = CategoryView(
             name = "catalog 1",
+            aliases = emptyList(),
             creationDate = timeOf(2020, 9, 17),
             approaches = listOf(
                 ApproachShortView(1, "approach 1", timeOf(2020, 12, 17), emptyList())
@@ -61,8 +86,15 @@ internal class CategoryControllerTest : ApiTest() {
     @Test
     fun `create category test`() {
         val loginTokens = login("admin@gmail.ru", "password")
-
-        val categoryDTO = CategoryCreationDTO("my category", 3)
+        val aliases = listOf(
+            CategoryAliasDTO("second name"),
+            CategoryAliasDTO("third name")
+        )
+        val categoryDTO = CategoryCreationDTO(
+            name = "my category",
+            aliases = aliases,
+            initialParentId = 3
+        )
         val createdCategory = postAuthorized<CategoryShortView>(pathPrefix, categoryDTO, loginTokens.accessToken)
 
         flushChanges()
@@ -70,6 +102,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         assertEquals("my category", category.name)
         assertEquals("my category", createdCategory.name)
+        assertEquals(aliases.map { it.alias }, category.aliases)
         assertCategoryAvailableFromParent(3, createdCategory.id)
     }
 
@@ -81,7 +114,8 @@ internal class CategoryControllerTest : ApiTest() {
         val loginTokens = login("admin@gmail.ru", "password")
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
-            parentsToAdd = listOf(3), parentsToDelete = listOf(2)
+            parentsToAdd = listOf(3), parentsToDelete = listOf(2),
+            aliases = listOf(CategoryAliasDTO("le name"))
         )
 
         val updatedCategory = patchAuthorized<CategoryView>(makePath("/5"), categoryDTO, loginTokens.accessToken)
@@ -91,6 +125,7 @@ internal class CategoryControllerTest : ApiTest() {
         assertCategoryAvailableFromParent(3, 5)
         assertEquals("changed name", updatedCategory.name)
         assertEquals("changed name", category.name)
+        assertEquals("le name", category.aliases[0])
     }
 
     /**
@@ -149,7 +184,7 @@ internal class CategoryControllerTest : ApiTest() {
     @Test
     fun `category parent not found test`() {
         val accessToken = loginAccessToken("admin@gmail.ru", "password")
-        val dto = CategoryCreationDTO("error", 999)
+        val dto = CategoryCreationDTO("error", listOf(), 999)
 
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
 
@@ -170,6 +205,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(), parentsToDelete = listOf(2, 4)
         )
 
@@ -192,6 +228,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(999), parentsToDelete = listOf(2)
         )
 
@@ -214,6 +251,7 @@ internal class CategoryControllerTest : ApiTest() {
 
         val categoryUpdateDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(3), parentsToDelete = listOf(2, 999)
         )
 
@@ -271,7 +309,7 @@ internal class CategoryControllerTest : ApiTest() {
      */
     @Test
     fun `anonymous user category creation test`() {
-        val dto = CategoryCreationDTO("error", 3)
+        val dto = CategoryCreationDTO("error", listOf(), 3)
 
         val request = postRequest(pathPrefix, dto)
 
@@ -290,6 +328,7 @@ internal class CategoryControllerTest : ApiTest() {
     fun `anonymous user category update test`() {
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(3), parentsToDelete = listOf(2)
         )
 
@@ -325,7 +364,7 @@ internal class CategoryControllerTest : ApiTest() {
     @Test
     fun `regular user category creation test`() {
         val accessToken = loginAccessToken("simple@gmail.ru", "user123")
-        val dto = CategoryCreationDTO("error", 3)
+        val dto = CategoryCreationDTO("error", listOf(), 3)
 
         val request = postRequestAuthorized(pathPrefix, dto, accessToken)
 
@@ -345,6 +384,7 @@ internal class CategoryControllerTest : ApiTest() {
         val accessToken = loginAccessToken("simple@gmail.ru", "user123")
         val categoryDTO = CategoryUpdateDTO(
             name = "changed name",
+            aliases = emptyList(),
             parentsToAdd = listOf(3), parentsToDelete = listOf(2)
         )
 

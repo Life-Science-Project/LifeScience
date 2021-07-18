@@ -42,6 +42,7 @@ internal class SectionServiceTests {
     @PostConstruct
     fun setup() {
         elasticPopulator = ElasticPopulator(highLevelClient).apply {
+            addPopulator("content", "elastic/content.json")
             addPopulator("content_version", "elastic/content_version.json")
         }
     }
@@ -76,7 +77,8 @@ internal class SectionServiceTests {
         val section = service.create(info)
 
         // Wait
-        Thread.sleep(2000)
+        elasticPopulator.flush()
+        Thread.sleep(1000)
 
         // Prepare
         val content = contentService.findBySectionId(section.id)
@@ -222,6 +224,7 @@ internal class SectionServiceTests {
         val section = service.update(info)
 
         // Wait
+        elasticPopulator.flush()
         Thread.sleep(1000)
 
         // Prepare

@@ -128,7 +128,8 @@ internal class ContentVersionServiceTest {
         service.deleteBySectionId(sectionIdToDelete)
 
         // Wait
-        Thread.sleep(2000)
+        elasticPopulator.flush()
+        Thread.sleep(1000)
 
         // Assert
         val content = service.findBySectionId(sectionIdToDelete)
@@ -283,7 +284,8 @@ internal class ContentVersionServiceTest {
         service.archiveBySectionId(expectedSectionId)
 
         // Wait
-        Thread.sleep(4000)
+        elasticPopulator.flush()
+        Thread.sleep(1000)
 
         // Prepare
         val content = service.findBySectionId(expectedSectionId)
@@ -291,7 +293,7 @@ internal class ContentVersionServiceTest {
         val expected = Content(
             id = content?.id,
             sectionId = expectedSectionId,
-            text = "general info text",
+            text = "general info text one",
             tags = mutableListOf(),
             references = mutableListOf()
         )
