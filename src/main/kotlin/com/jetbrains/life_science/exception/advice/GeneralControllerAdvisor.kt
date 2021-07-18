@@ -7,11 +7,13 @@ import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import com.jetbrains.life_science.exception.maker.makeExceptionView
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
+
 
 @RestControllerAdvice
 class GeneralControllerAdvisor {
@@ -20,7 +22,6 @@ class GeneralControllerAdvisor {
      * Handling non-existent dto fields
      */
     @ExceptionHandler(MissingKotlinParameterException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMissingKotlinParameterException(
         exception: MissingKotlinParameterException
     ): ResponseEntity<ApiExceptionView> {
@@ -73,11 +74,18 @@ class GeneralControllerAdvisor {
      * Handling validation exceptions
      */
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMethodArgumentNotValidException(exception: MethodArgumentNotValidException): ResponseEntity<ApiExceptionView> {
         exception.bindingResult.fieldErrors.joinToString(",") { it.field }
         return ResponseEntity(
             makeExceptionView(400_005, exception.fieldError?.defaultMessage.toString()),
+            HttpStatus.BAD_REQUEST
+        )
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException::class)
+    fun handleInvalidJSON(): ResponseEntity<ApiExceptionView> {
+        return ResponseEntity(
+            makeExceptionView(400_999),
             HttpStatus.BAD_REQUEST
         )
     }
