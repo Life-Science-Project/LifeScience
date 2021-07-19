@@ -27,6 +27,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `get draft approach test`() {
         val expectedView = DraftApproachView(
+            id = 1,
             name = "approach 1",
             categories = listOf(
                 CategoryShortView(1, "catalog 1", timeOf(2020, 9, 17)),
@@ -62,13 +63,68 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `create method with base sections test`() {
+        val loginAccessToken = loginAccessToken("email", "password")
         val dto = DraftApproachCreationDTO(
             name = "approach Z",
             initialCategoryId = 1
         )
 
-        val created = post<DraftApproachView>(path, dto)
-        val approach = getView<DraftApproachView>(makePath(created.))
+        val created = postAuthorized<DraftApproachView>(path, dto, loginAccessToken)
+        val approach = getView<DraftApproachView>(makePath(created.id))
+
+        val expectedView = DraftApproachView(
+            id = approach.id,
+            name = "approach Z",
+            categories = listOf(
+                CategoryShortView(id = 1, name = "catalog 1", creationDate = timeOf(2020, 9, 17))
+            ),
+            sections = listOf(),
+            participants = listOf(UserShortView(id = 1, fullName = "Alex"))
+        )
+
+        assertEquals(expectedView, approach)
+    }
+
+    /**
+     * Test checks exception on attempt to create approach with wrong category id
+     *
+     * Expected 404 http code and 404_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `create method with wrong initial parent category id`() {
+        val loginAccessToken = loginAccessToken("email", "password")
+        val dto = DraftApproachCreationDTO(
+            name = "approach Z",
+            initialCategoryId = 199
+        )
+        val request = postRequestAuthorized(path, dto, loginAccessToken)
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_001, exceptionView.code)
+        assertEquals(listOf(listOf("199")), exceptionView.arguments)
+    }
+
+    /**
+     * Тест checks failure when creating section by regular user
+     *
+     * Expected 403 http code and 403_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `create method by regular user failure test`() {
+        val loginAccessToken = loginAccessToken("email", "password")
+        val dto = DraftApproachCreationDTO(
+            name = "approach Z",
+            initialCategoryId = 199
+        )
+        val request = postRequestAuthorized(path, dto, loginAccessToken)
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_001, exceptionView.code)
+        assertEquals(listOf(listOf("199")), exceptionView.arguments)
     }
 
 
