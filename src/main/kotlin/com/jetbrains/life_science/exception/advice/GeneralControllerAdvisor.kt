@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.exception.advice
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
@@ -80,8 +81,8 @@ class GeneralControllerAdvisor {
         )
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException::class)
-    fun handleInvalidJSON(): ResponseEntity<ApiExceptionView> {
+    @ExceptionHandler(MismatchedInputException::class)
+    fun handleInvalidJSON(exception: MismatchedInputException): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
             makeExceptionView(400_999),
             HttpStatus.BAD_REQUEST
