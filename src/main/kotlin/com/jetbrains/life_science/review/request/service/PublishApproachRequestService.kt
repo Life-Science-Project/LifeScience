@@ -9,9 +9,9 @@ interface PublishApproachRequestService {
 
     fun create(info: PublishApproachRequestInfo): PublishApproachRequest
 
-    fun approve(id: Long): PublishApproachRequest
-
     fun cancel(id: Long): PublishApproachRequest
 
     fun addReview(id: Long, review: Review): PublishApproachRequest
+
+    fun delete(id: Long)
 }

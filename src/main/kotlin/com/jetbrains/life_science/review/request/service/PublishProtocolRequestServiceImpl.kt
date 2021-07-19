@@ -7,10 +7,13 @@ import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.factory.PublishProtocolRequestFactory
 import com.jetbrains.life_science.review.request.repository.PublishProtocolRequestRepository
 import com.jetbrains.life_science.review.response.entity.Review
+import com.jetbrains.life_science.review.response.service.ReviewService
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 @Service
 class PublishProtocolRequestServiceImpl(
+    val reviewService: ReviewService,
     val repository: PublishProtocolRequestRepository,
     val factory: PublishProtocolRequestFactory
 ) : PublishProtocolRequestService {
@@ -26,10 +29,6 @@ class PublishProtocolRequestServiceImpl(
         return repository.save(publishProtocolRequest)
     }
 
-    override fun approve(id: Long): PublishProtocolRequest {
-        return changeState(id, RequestState.APPROVED)
-    }
-
     override fun cancel(id: Long): PublishProtocolRequest {
         return changeState(id, RequestState.CANCELED)
     }
@@ -38,6 +37,15 @@ class PublishProtocolRequestServiceImpl(
         val publishProtocolRequest = get(id)
         publishProtocolRequest.reviews.add(review)
         return repository.save(publishProtocolRequest)
+    }
+
+    @Transactional
+    override fun delete(id: Long) {
+        val request = get(id)
+        request.reviews.forEach {
+            reviewService.deleteReview(it.id)
+        }
+        repository.deleteById(request.id)
     }
 
     private fun changeState(id: Long, state: RequestState): PublishProtocolRequest {

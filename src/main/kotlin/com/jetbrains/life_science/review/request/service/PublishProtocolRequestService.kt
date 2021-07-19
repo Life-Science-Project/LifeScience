@@ -9,9 +9,9 @@ interface PublishProtocolRequestService {
 
     fun create(info: PublishProtocolRequestInfo): PublishProtocolRequest
 
-    fun approve(id: Long): PublishProtocolRequest
-
     fun cancel(id: Long): PublishProtocolRequest
 
     fun addReview(id: Long, review: Review): PublishProtocolRequest
+
+    fun delete(id: Long)
 }

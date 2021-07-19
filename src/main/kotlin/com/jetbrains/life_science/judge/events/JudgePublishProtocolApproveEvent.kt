@@ -4,5 +4,5 @@ import org.springframework.context.ApplicationEvent
 
 class JudgePublishProtocolApproveEvent(
     source: Any,
-    val requestId: Long
+    val publishedProtocolId: Long
 ) : ApplicationEvent(source)
