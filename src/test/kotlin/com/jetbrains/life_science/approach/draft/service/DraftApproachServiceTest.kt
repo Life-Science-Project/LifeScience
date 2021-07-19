@@ -19,7 +19,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@Sql("/scripts/initial_data.sql", "/scripts/approach/draft_approach_data.sql")
+@Sql("/scripts/initial_data.sql", "/scripts/section/section_data.sql" ,"/scripts/approach/draft_approach_data.sql")
 @Transactional
 class DraftApproachServiceTest {
 
@@ -72,8 +72,8 @@ class DraftApproachServiceTest {
         // Prepare data
         val approachId = 1L
         val expectedOwnerId = 1L
-        val secondParticipantId = 2L
-        val expectedName = "first approach"
+        val secondParticipantId = 4L
+        val expectedName = "approach 1"
 
         // Action
         val draftApproach = service.get(approachId)

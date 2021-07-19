@@ -26,7 +26,8 @@ class DraftApproachController(
 ) {
 
     @GetMapping("/{approachId}")
-    fun getApproach(@PathVariable approachId: Long): DraftApproachView { val approach = draftApproachService.get(approachId)
+    fun getApproach(@PathVariable approachId: Long): DraftApproachView {
+        val approach = draftApproachService.get(approachId)
         return viewMapper.toView(approach)
     }
 

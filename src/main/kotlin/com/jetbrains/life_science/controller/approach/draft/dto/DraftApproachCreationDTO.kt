@@ -1,4 +1,6 @@
 package com.jetbrains.life_science.controller.approach.draft.dto
 
-class DraftApproachCreationDTO {
-}
+data class DraftApproachCreationDTO(
+    val name: String,
+    val initialCategoryId: Long
+)

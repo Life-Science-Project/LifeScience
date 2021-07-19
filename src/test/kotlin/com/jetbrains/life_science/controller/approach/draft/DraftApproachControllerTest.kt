@@ -10,19 +10,17 @@ import com.jetbrains.life_science.controller.user.UserShortView
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentCaptor
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.jdbc.Sql
 import java.time.LocalDateTime
 
 @Sql(
-    "/scripts/users_data.sql",
-    "/scripts/categories_initial_data.sql",
-    "/scripts/draft_approach_data.sql"
+    "/scripts/initial_data.sql",
+    "/scripts/section/section_data.sql",
+    "/scripts/approach/draft_approach_data.sql"
 )
 internal class DraftApproachControllerTest : ApiTest() {
 
@@ -44,7 +42,10 @@ internal class DraftApproachControllerTest : ApiTest() {
                 CategoryShortView(2, "catalog 2", timeOf(2020, 10, 17))
             ),
             sections = emptyList(),
-            participants = listOf(UserShortView(id = 1, fullName = "Alex"))
+            participants = listOf(
+                UserShortView(id = 1, fullName = "Alex"),
+                UserShortView(id = 4, fullName = "Regular")
+            )
         )
 
         val approach = getView<DraftApproachView>(makePath(1))
@@ -64,7 +65,7 @@ internal class DraftApproachControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(404_003, exceptionView.code)
+        assertEquals(404_003, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
     }
 
@@ -73,7 +74,7 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `create method with base sections test`() {
-        val loginAccessToken = loginAccessToken("email", "password")
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
         val dto = DraftApproachCreationDTO(
             name = "approach Z",
             initialCategoryId = 1
@@ -103,7 +104,7 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `create method with wrong initial parent category id`() {
-        val loginAccessToken = loginAccessToken("email", "password")
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
         val dto = DraftApproachCreationDTO(
             name = "approach Z",
             initialCategoryId = 199
@@ -112,7 +113,7 @@ internal class DraftApproachControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(404_001, exceptionView.code)
+        assertEquals(404_001, exceptionView.systemCode)
         assertEquals(listOf(listOf("199")), exceptionView.arguments)
     }
 
@@ -124,7 +125,7 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `create method by regular user failure test`() {
-        val loginAccessToken = loginAccessToken("email", "password")
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
         val dto = DraftApproachCreationDTO(
             name = "approach Z",
             initialCategoryId = 199
@@ -133,7 +134,7 @@ internal class DraftApproachControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(404, request)
 
-        assertEquals(404_001, exceptionView.code)
+        assertEquals(404_001, exceptionView.systemCode)
         assertEquals(listOf(listOf("199")), exceptionView.arguments)
     }
 
@@ -142,7 +143,7 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `send to publication test`() {
-        val loginAccessToken = loginAccessToken("email", "password")
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
         patchAuthorized(makePath("1/send"), loginAccessToken)
 
         verify(publicationRequestService, times(1)).create(argThat { approach ->
@@ -158,12 +159,12 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `send to publication by regular user`() {
-        val loginAccessToken = loginAccessToken("email3", "password")
+        val loginAccessToken = loginAccessToken("simple@gmail.ru", "user123")
         val request = patchRequestAuthorized(makePath("1/send"), loginAccessToken)
 
         val exceptionView = getApiExceptionView(403, request)
 
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
     }
 
     /**
@@ -178,7 +179,7 @@ internal class DraftApproachControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(403, request)
 
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
     }
 
     /**
@@ -186,8 +187,8 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `add participant test`() {
-        val loginAccessToken = loginAccessToken("email", "password")
-        val dto = DraftApproachAddParticipantDTO("email2")
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+        val dto = DraftApproachAddParticipantDTO("admin@gmail.ru")
 
         postRequestAuthorized(makePath("1/participants"), dto, loginAccessToken)
         val approach = getView<DraftApproachView>(makePath(1))
@@ -202,6 +203,7 @@ internal class DraftApproachControllerTest : ApiTest() {
             sections = emptyList(),
             participants = listOf(
                 UserShortView(id = 1, fullName = "Alex"),
+                UserShortView(id = 4, fullName = "Regular"),
                 UserShortView(id = 2, fullName = "Ben")
             )
         )
@@ -216,14 +218,14 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `add to participants by regular user`() {
-        val loginAccessToken = loginAccessToken("email3", "password")
-        val dto = DraftApproachAddParticipantDTO("email2")
+        val loginAccessToken = loginAccessToken("simple@gmail.ru", "user123")
+        val dto = DraftApproachAddParticipantDTO("admin@gmail.ru")
 
         val request = postRequestAuthorized(makePath("1/participants"), dto, loginAccessToken)
 
         val exceptionView = getApiExceptionView(403, request)
 
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
     }
 
     /**
@@ -234,13 +236,13 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `add to participants by anonymous user`() {
-        val dto = DraftApproachAddParticipantDTO("email2")
+        val dto = DraftApproachAddParticipantDTO("email3@email.ru")
 
         val request = postRequest(makePath("1/participants"), dto)
 
         val exceptionView = getApiExceptionView(403, request)
 
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
     }
 
     /**
@@ -250,8 +252,8 @@ internal class DraftApproachControllerTest : ApiTest() {
     fun `delete participant test`() {
         `add participant test`()
 
-        val loginAccessToken = loginAccessToken("email", "password")
-        val dto = DraftApproachAddParticipantDTO("email2")
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+        val dto = DraftApproachAddParticipantDTO("admin@gmail.ru")
 
         deleteAuthorized(makePath("1/participants/2"), loginAccessToken)
         val approach = getView<DraftApproachView>(makePath(1))
@@ -266,6 +268,7 @@ internal class DraftApproachControllerTest : ApiTest() {
             sections = emptyList(),
             participants = listOf(
                 UserShortView(id = 1, fullName = "Alex"),
+                UserShortView(id = 4, fullName = "Regular")
             )
         )
         assertEquals(expectedView, approach)
@@ -279,13 +282,13 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `delete participant by regular user test`() {
-        val loginAccessToken = loginAccessToken("email3", "password")
+        val loginAccessToken = loginAccessToken("simple@gmail.ru", "user123")
 
         val request = deleteRequestAuthorized(makePath("1/participants/2"), loginAccessToken)
 
         val exceptionView = getApiExceptionView(403, request)
 
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
     }
 
     /**
@@ -300,7 +303,7 @@ internal class DraftApproachControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(403, request)
 
-        assertEquals(403_000, exceptionView.code)
+        assertEquals(403_000, exceptionView.systemCode)
     }
 
 

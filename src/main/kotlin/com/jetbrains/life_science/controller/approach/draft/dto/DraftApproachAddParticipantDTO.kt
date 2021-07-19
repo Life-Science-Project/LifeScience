@@ -1,4 +1,5 @@
 package com.jetbrains.life_science.controller.approach.draft.dto
 
-class DraftApproachAddParticipantDTO {
-}
+data class DraftApproachAddParticipantDTO(
+    val email: String
+)
