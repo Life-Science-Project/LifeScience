@@ -93,7 +93,6 @@ class ApproachEditRecordServiceTest {
         assertEquals(expectedDate, approachEditRecord.lastEditDate)
     }
 
-
     /**
      * Should add section to approach edit record
      */
