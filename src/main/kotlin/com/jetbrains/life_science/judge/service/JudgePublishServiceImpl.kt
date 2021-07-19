@@ -40,7 +40,7 @@ class JudgePublishServiceImpl(
     override val verdictLimit = 10
 
     @Value("\${approveLimit}")
-    override val approveLimit = 10
+    override val approveLimit = 7
 
     override fun judgeApproachPublish(request: PublishApproachRequest) {
         if (!canBeJudged(request)) {
