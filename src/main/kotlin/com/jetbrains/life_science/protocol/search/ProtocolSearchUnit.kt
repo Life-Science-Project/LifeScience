@@ -3,17 +3,18 @@ package com.jetbrains.life_science.protocol.search
 import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.elasticsearch.annotations.Document
 import org.springframework.data.elasticsearch.annotations.Field
-import org.springframework.data.elasticsearch.annotations.FieldType
 import javax.persistence.Id
 
-@Document(indexName = "approach", createIndex = true)
-@TypeAlias("Approach")
+@Document(indexName = "protocol", createIndex = true)
+@TypeAlias("Protocol")
 data class ProtocolSearchUnit(
 
     @Id
     val id: Long,
 
-    @Field(name = "text", type = FieldType.Text)
-    val name: String
+    @Field
+    val names: List<String>,
 
+    @Field
+    val context: List<String>
 )

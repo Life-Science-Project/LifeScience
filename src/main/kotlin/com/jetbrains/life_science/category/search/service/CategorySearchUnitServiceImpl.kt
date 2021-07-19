@@ -30,7 +30,9 @@ class CategorySearchUnitServiceImpl(
     }
 
     override fun getContext(category: Category): List<String> {
-        return repository.findById(category.id).get().context
+        return repository.findById(category.id)
+            .orElseThrow { CategorySearchUnitNotFoundException("Category Search Unit with id ${category.id} not found") }
+            .context
     }
 
     private fun checkExistsById(id: Long) {
