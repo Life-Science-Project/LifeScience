@@ -1,8 +1,8 @@
-package com.jetbrains.life_science.review.edit_record.entity
+package com.jetbrains.life_science.edit_record.entity
 
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
-import com.jetbrains.life_science.review.request.entity.ProtocolReviewRequest
 import com.jetbrains.life_science.section.entity.Section
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -18,13 +18,11 @@ class ProtocolEditRecord(
     )
     override val id: Long,
 
-    createdSections: MutableList<Section>,
+    lastEditDate: LocalDateTime,
     deletedSections: MutableList<Section>,
+    createdSections: MutableList<Section>,
 
-    @ManyToOne
-    var protocol: PublicProtocol,
+    @OneToOne
+    val protocol: PublicProtocol
 
-    @OneToOne(mappedBy = "editRecord")
-    var request: ProtocolReviewRequest?
-
-) : EditRecord(deletedSections, createdSections)
+) : EditRecord(lastEditDate, deletedSections, createdSections)
