@@ -11,13 +11,19 @@ enum class SearchUnitType {
     CONTENT {
         override val presentationName = "Content"
         override val indexName = "content"
-        override val order = Order(30L)
+        override val order = Order(40L)
     },
 
     CATEGORY {
         override val presentationName = "Category"
         override val indexName = "category"
         override val order = Order(10L)
+    },
+
+    PROTOCOL {
+        override val presentationName = "Protocol"
+        override val indexName = "protocol"
+        override val order = Order(30L)
     };
 
     abstract val presentationName: String

@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.search.result.article
+package com.jetbrains.life_science.search.result.approach
 
 import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.SearchResult
