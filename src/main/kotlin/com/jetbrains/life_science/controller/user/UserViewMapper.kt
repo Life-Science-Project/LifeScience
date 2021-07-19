@@ -16,5 +16,4 @@ class UserViewMapper {
             fullName = credentials.firstName
         )
     }
-
 }

@@ -135,7 +135,6 @@ abstract class ApiTest {
         }
     }
 
-
     fun postAuthorized(path: String, accessToken: String) {
         postRequestAuthorized(path, accessToken).andExpect { status { isOk() } }.andReturn()
     }

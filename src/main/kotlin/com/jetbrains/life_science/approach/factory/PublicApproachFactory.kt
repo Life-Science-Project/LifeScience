@@ -2,7 +2,6 @@ package com.jetbrains.life_science.approach.factory
 
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.approach.entity.PublicApproach
-import com.jetbrains.life_science.approach.service.PublicApproachInfo
 import org.springframework.stereotype.Component
 
 @Component

@@ -19,7 +19,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@Sql("/scripts/initial_data.sql", "/scripts/section/section_data.sql" ,"/scripts/approach/draft_approach_data.sql")
+@Sql("/scripts/initial_data.sql", "/scripts/section/section_data.sql", "/scripts/approach/draft_approach_data.sql")
 @Transactional
 class DraftApproachServiceTest {
 

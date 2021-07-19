@@ -146,9 +146,11 @@ internal class DraftApproachControllerTest : ApiTest() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
         patchAuthorized(makePath("1/send"), loginAccessToken)
 
-        verify(publicationRequestService, times(1)).create(argThat { approach ->
-            approach.id == 1L
-        })
+        verify(publicationRequestService, times(1)).create(
+            argThat { approach ->
+                approach.id == 1L
+            }
+        )
     }
 
     /**
@@ -306,7 +308,6 @@ internal class DraftApproachControllerTest : ApiTest() {
         assertEquals(403_000, exceptionView.systemCode)
     }
 
-
     private fun makePath(addition: Any): String {
         return "$path/$addition"
     }
@@ -314,5 +315,4 @@ internal class DraftApproachControllerTest : ApiTest() {
     fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
         return LocalDateTime.of(year, month, day, 0, 0, 0)
     }
-
 }

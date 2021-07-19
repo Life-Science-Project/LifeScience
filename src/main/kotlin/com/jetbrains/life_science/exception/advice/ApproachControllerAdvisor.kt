@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 @RestControllerAdvice
 class ApproachControllerAdvisor {
 
-
     @ExceptionHandler(DraftApproachNotFoundException::class)
     fun handleDraftApproachNotFound(): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
@@ -20,5 +19,4 @@ class ApproachControllerAdvisor {
             HttpStatus.NOT_FOUND
         )
     }
-
 }
