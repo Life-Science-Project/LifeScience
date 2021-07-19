@@ -6,6 +6,8 @@ import com.jetbrains.life_science.edit_record.repository.ApproachEditRecordRepos
 import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 @Service
 class ApproachEditRecordServiceImpl(
@@ -34,5 +36,13 @@ class ApproachEditRecordServiceImpl(
         val approachEditRecord = get(id)
         factory.deleteSection(approachEditRecord, section)
         return repository.save(approachEditRecord)
+    }
+
+    override fun clear(id: Long) {
+        val approachEditRecord = get(id)
+        approachEditRecord.createdSections.clear()
+        approachEditRecord.deletedSections.clear()
+        approachEditRecord.lastEditDate = LocalDateTime.now(ZoneId.of("UTC"))
+        repository.save(approachEditRecord)
     }
 }

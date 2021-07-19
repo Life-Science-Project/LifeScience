@@ -20,25 +20,26 @@ class ApproachEditRecordFactory {
     }
 
     fun addSection(approachEditRecord: ApproachEditRecord, section: Section) {
-        updateSections(approachEditRecord, section, true)
-    }
-
-    fun deleteSection(approachEditRecord: ApproachEditRecord, section: Section) {
-        updateSections(approachEditRecord, section, false)
-    }
-
-    private fun updateSections(approachEditRecord: ApproachEditRecord, section: Section, add: Boolean) {
-        val listToAdd = if (add) approachEditRecord.createdSections else approachEditRecord.deletedSections
-        val listToDelete = if (add) approachEditRecord.deletedSections else approachEditRecord.createdSections
-
-        if (section !in listToAdd) {
+        if (section in approachEditRecord.createdSections) {
             return
         }
         approachEditRecord.lastEditDate = LocalDateTime.now(ZoneId.of("UTC"))
-        if (section in listToDelete) {
-            listToDelete.remove(section)
+        if (section in approachEditRecord.deletedSections) {
+            approachEditRecord.deletedSections.remove(section)
             return
         }
-        listToAdd.add(section)
+        approachEditRecord.createdSections.add(section)
+    }
+
+    fun deleteSection(approachEditRecord: ApproachEditRecord, section: Section) {
+        if (section in approachEditRecord.deletedSections) {
+            return
+        }
+        approachEditRecord.lastEditDate = LocalDateTime.now(ZoneId.of("UTC"))
+        if (section in approachEditRecord.createdSections) {
+            approachEditRecord.createdSections.remove(section)
+            return
+        }
+        approachEditRecord.deletedSections.add(section)
     }
 }

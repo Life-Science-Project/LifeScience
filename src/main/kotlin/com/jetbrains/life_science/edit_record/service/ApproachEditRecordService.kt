@@ -12,4 +12,6 @@ interface ApproachEditRecordService {
     fun addSection(id: Long, section: Section): ApproachEditRecord
 
     fun deleteSection(id: Long, section: Section): ApproachEditRecord
+
+    fun clear(id: Long)
 }
