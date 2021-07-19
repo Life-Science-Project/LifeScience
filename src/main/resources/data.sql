@@ -5,4 +5,4 @@ insert into roles(id, name) values (3, 'ROLE_MODERATOR') on conflict do nothing;
 alter sequence role_seq restart with 4;
 
 insert into category (id, creation_date, name)
-values (0, parsedatetime('01-01-1970 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 'root');
+values (0, TO_TIMESTAMP('2017-03-31 9:30:20', 'YYYY-MM-DD HH:MI:SS'), 'root') on conflict do nothing;

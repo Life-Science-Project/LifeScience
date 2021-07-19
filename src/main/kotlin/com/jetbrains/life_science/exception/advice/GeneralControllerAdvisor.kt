@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.exception.advice
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
@@ -20,7 +20,6 @@ class GeneralControllerAdvisor {
      * Handling non-existent dto fields
      */
     @ExceptionHandler(MissingKotlinParameterException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMissingKotlinParameterException(
         exception: MissingKotlinParameterException
     ): ResponseEntity<ApiExceptionView> {
@@ -73,11 +72,18 @@ class GeneralControllerAdvisor {
      * Handling validation exceptions
      */
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMethodArgumentNotValidException(exception: MethodArgumentNotValidException): ResponseEntity<ApiExceptionView> {
         exception.bindingResult.fieldErrors.joinToString(",") { it.field }
         return ResponseEntity(
             makeExceptionView(400_005, exception.fieldError?.defaultMessage.toString()),
+            HttpStatus.BAD_REQUEST
+        )
+    }
+
+    @ExceptionHandler(MismatchedInputException::class)
+    fun handleInvalidJSON(exception: MismatchedInputException): ResponseEntity<ApiExceptionView> {
+        return ResponseEntity(
+            makeExceptionView(400_999),
             HttpStatus.BAD_REQUEST
         )
     }
