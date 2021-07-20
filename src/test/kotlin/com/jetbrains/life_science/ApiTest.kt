@@ -99,6 +99,13 @@ abstract class ApiTest {
         }
     }
 
+    fun patchRequest(path: String): ResultActionsDsl {
+        return mockMvc.patch(path) {
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+        }
+    }
+
     fun postRequest(path: String, requestBody: Any): ResultActionsDsl {
         return mockMvc.post(path) {
             contentType = MediaType.APPLICATION_JSON
@@ -111,6 +118,30 @@ abstract class ApiTest {
         return mockMvc.post(path) {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(requestBody)
+            headers { add("Authorization", "Bearer $accessToken") }
+            accept = MediaType.APPLICATION_JSON
+        }
+    }
+
+    fun patchAuthorized(path: String, accessToken: String) {
+        patchRequestAuthorized(path, accessToken).andExpect { status { isOk() } }.andReturn()
+    }
+
+    fun patchRequestAuthorized(path: String, accessToken: String): ResultActionsDsl {
+        return mockMvc.patch(path) {
+            contentType = MediaType.APPLICATION_JSON
+            headers { add("Authorization", "Bearer $accessToken") }
+            accept = MediaType.APPLICATION_JSON
+        }
+    }
+
+    fun postAuthorized(path: String, accessToken: String) {
+        postRequestAuthorized(path, accessToken).andExpect { status { isOk() } }.andReturn()
+    }
+
+    fun postRequestAuthorized(path: String, accessToken: String): ResultActionsDsl {
+        return mockMvc.post(path) {
+            contentType = MediaType.APPLICATION_JSON
             headers { add("Authorization", "Bearer $accessToken") }
             accept = MediaType.APPLICATION_JSON
         }

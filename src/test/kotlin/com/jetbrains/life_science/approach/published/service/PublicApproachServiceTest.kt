@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.approach.published.service
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
-import com.jetbrains.life_science.approach.published.service.maker.makePublicApproachInfo
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.approach.service.PublicApproachService
 import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
@@ -15,7 +14,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@Sql("/scripts/initial_data.sql", "/scripts/approach/public_approach_data.sql")
+@Sql(value = ["/scripts/initial_data.sql", "/scripts/approach/public_approach_data.sql"])
 @Transactional
 class PublicApproachServiceTest {
 
@@ -32,17 +31,14 @@ class PublicApproachServiceTest {
     fun `create new draft approach`() {
         // Prepare data
         val draftApproach = draftApproachService.get(1L)
-        val info = makePublicApproachInfo(
-            draftApproach
-        )
 
         // Action
-        val createdApproach = service.create(info)
+        val createdApproach = service.create(draftApproach)
         val publicApproach = service.get(createdApproach.id)
 
         // Assert
-        assertEquals(info.approach.name, publicApproach.name)
-        assertEquals(info.approach.tags, publicApproach.tags)
+        assertEquals(draftApproach.name, publicApproach.name)
+        assertEquals(draftApproach.tags, publicApproach.tags)
         assertContainsCoAuthor(publicApproach, draftApproach.owner.id)
         draftApproach.participants.forEach {
             assertContainsCoAuthor(publicApproach, it.id)
