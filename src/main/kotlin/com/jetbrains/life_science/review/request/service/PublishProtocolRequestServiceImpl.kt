@@ -1,0 +1,54 @@
+package com.jetbrains.life_science.review.request.service
+
+import com.jetbrains.life_science.exception.not_found.PublishProtocolRequestNotFoundException
+import com.jetbrains.life_science.exception.request.RequestImmutableStateException
+import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
+import com.jetbrains.life_science.review.request.entity.RequestState
+import com.jetbrains.life_science.review.request.factory.PublishProtocolRequestFactory
+import com.jetbrains.life_science.review.request.repository.PublishProtocolRequestRepository
+import com.jetbrains.life_science.review.response.entity.Review
+import org.springframework.stereotype.Service
+
+@Service
+class PublishProtocolRequestServiceImpl(
+    val repository: PublishProtocolRequestRepository,
+    val factory: PublishProtocolRequestFactory
+) : PublishProtocolRequestService {
+
+    override fun get(id: Long): PublishProtocolRequest {
+        return repository.findById(id).orElseThrow {
+            PublishProtocolRequestNotFoundException("PublishApproachRequest with id $id not found")
+        }
+    }
+
+    override fun create(info: PublishProtocolRequestInfo): PublishProtocolRequest {
+        val publishProtocolRequest = factory.create(info)
+        return repository.save(publishProtocolRequest)
+    }
+
+    override fun approve(id: Long): PublishProtocolRequest {
+        return changeState(id, RequestState.APPROVED)
+    }
+
+    override fun cancel(id: Long): PublishProtocolRequest {
+        return changeState(id, RequestState.CANCELED)
+    }
+
+    override fun addReview(id: Long, review: Review): PublishProtocolRequest {
+        val publishProtocolRequest = get(id)
+        publishProtocolRequest.reviews.add(review)
+        return repository.save(publishProtocolRequest)
+    }
+
+    private fun changeState(id: Long, state: RequestState): PublishProtocolRequest {
+        val publishProtocolRequest = get(id)
+        if (publishProtocolRequest.state != RequestState.PENDING) {
+            throw RequestImmutableStateException(
+                "Can't change state of ${publishProtocolRequest.state} " +
+                    "PublishProtocolRequest to $state"
+            )
+        }
+        factory.changeState(publishProtocolRequest, state)
+        return repository.save(publishProtocolRequest)
+    }
+}
