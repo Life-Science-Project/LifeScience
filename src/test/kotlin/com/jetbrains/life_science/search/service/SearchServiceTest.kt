@@ -1,9 +1,10 @@
 package com.jetbrains.life_science.search.service
 
 import com.jetbrains.life_science.search.query.SearchUnitType
-import com.jetbrains.life_science.search.result.article.ApproachSearchResult
+import com.jetbrains.life_science.search.result.approach.ApproachSearchResult
 import com.jetbrains.life_science.search.result.category.CategorySearchResult
 import com.jetbrains.life_science.search.result.content.ContentSearchResult
+import com.jetbrains.life_science.search.result.protocol.ProtocolSearchResult
 import com.jetbrains.life_science.search.service.maker.makeSearchQueryInfo
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
@@ -35,6 +36,7 @@ internal class SearchServiceTest {
             addPopulator("category", "elastic/category.json")
             addPopulator("content", "elastic/content.json")
             addPopulator("approach", "elastic/approach.json")
+            addPopulator("protocol", "elastic/protocol.json")
         }
     }
 
@@ -81,6 +83,30 @@ internal class SearchServiceTest {
         )
         val expectedResults = setOf(
             ApproachSearchResult(publishApproachId = 3, name = "approach three"),
+        )
+
+        // Action
+        val searchResult = service.search(searchQueryInfo)
+
+        // Assert
+        assertEquals(expectedResults, searchResult.toSet())
+    }
+
+    /**
+     * Should find expected protocols
+     */
+    @Test
+    fun `protocols search`() {
+        // Prepare
+        val searchQueryInfo = makeSearchQueryInfo(
+            text = "zeta",
+            includeTypes = listOf(SearchUnitType.PROTOCOL),
+            from = 0,
+            size = 100
+        )
+        val expectedResults = setOf(
+            ProtocolSearchResult(publishProtocolId = 1, name = "omega zeta"),
+            ProtocolSearchResult(publishProtocolId = 2, name = "zeta bi two")
         )
 
         // Action

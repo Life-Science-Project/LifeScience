@@ -76,7 +76,7 @@ class PublicApproachServiceTest {
     }
 
     /**
-     * Should throw DraftApproachNotFound exception
+     * Should throw PublicApproachNotFound exception
      */
     @Test
     fun `get non-existing approach`() {

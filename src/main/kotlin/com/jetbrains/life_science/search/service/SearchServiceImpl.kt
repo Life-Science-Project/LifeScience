@@ -27,7 +27,8 @@ class SearchServiceImpl(
     override val supportedTypes: List<SearchUnitType> = listOf(
         SearchUnitType.CATEGORY,
         SearchUnitType.CONTENT,
-        SearchUnitType.APPROACH
+        SearchUnitType.APPROACH,
+        SearchUnitType.PROTOCOL
     )
 
     @Autowired
