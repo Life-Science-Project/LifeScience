@@ -6,9 +6,9 @@ import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
 
 interface PublisherService {
-    fun publishDraftApproach(draftApproach: DraftApproach) : PublicApproach
+    fun publishDraftApproach(draftApproach: DraftApproach): PublicApproach
 
-    fun publishDraftProtocol(draftProtocol: DraftProtocol) : PublicProtocol
+    fun publishDraftProtocol(draftProtocol: DraftProtocol): PublicProtocol
 
     fun publishApproachEditRecord()
 

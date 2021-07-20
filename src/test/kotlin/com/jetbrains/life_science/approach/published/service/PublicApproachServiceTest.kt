@@ -42,7 +42,7 @@ class PublicApproachServiceTest {
 
         // Assert
         assertEquals(info.approach.name, publicApproach.name)
-        assertEquals(info.approach.tags, publicApproach.tags)
+        assertEquals(info.approach.tags.toSet(), publicApproach.tags.toSet())
         assertContainsCoAuthor(publicApproach, draftApproach.owner.id)
         draftApproach.participants.forEach {
             assertContainsCoAuthor(publicApproach, it.id)

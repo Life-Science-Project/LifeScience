@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.judge.service
 
+import com.jetbrains.life_science.exception.judge.RequestJudgeWrongStateException
 import com.jetbrains.life_science.judge.events.JudgePublishApproachApproveEvent
 import com.jetbrains.life_science.judge.events.JudgePublishApproachRejectEvent
 import com.jetbrains.life_science.judge.events.JudgePublishProtocolApproveEvent
@@ -7,6 +8,7 @@ import com.jetbrains.life_science.judge.events.JudgePublishProtocolRejectEvent
 import com.jetbrains.life_science.publisher.service.PublisherService
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
+import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.review.request.service.PublishApproachRequestService
 import com.jetbrains.life_science.review.request.service.PublishProtocolRequestService
@@ -32,6 +34,9 @@ class JudgePublishServiceImpl(
     override val approveLimit = 7
 
     override fun judgeApproachPublish(request: PublishApproachRequest) {
+        if (request.state == RequestState.CANCELED) {
+            throw RequestJudgeWrongStateException("Public approach request ${request.id} has wrong state to be judged")
+        }
         if (!canBeJudged(request)) {
             return
         }
@@ -58,6 +63,9 @@ class JudgePublishServiceImpl(
     }
 
     override fun judgeProtocolPublish(request: PublishProtocolRequest) {
+        if (request.state == RequestState.CANCELED) {
+            throw RequestJudgeWrongStateException("Public protocol request ${request.id} has wrong state to be judged")
+        }
         if (!canBeJudged(request)) {
             return
         }
@@ -84,7 +92,7 @@ class JudgePublishServiceImpl(
     }
 
     private fun canBeApproved(request: ReviewRequest) =
-        request.reviews.count { it.resolution == ReviewResolution.APPROVE } == approveLimit
+        request.reviews.count { it.resolution == ReviewResolution.APPROVE } >= approveLimit
 
-    private fun canBeJudged(request: ReviewRequest) = request.reviews.size != verdictLimit
+    private fun canBeJudged(request: ReviewRequest) = request.reviews.size == verdictLimit
 }
