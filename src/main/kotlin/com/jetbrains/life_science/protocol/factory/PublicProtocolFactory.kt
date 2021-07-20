@@ -10,10 +10,10 @@ class PublicProtocolFactory {
         return PublicProtocol(
             id = 0,
             name = info.protocol.name,
-            sections = info.protocol.sections,
+            sections = info.protocol.sections.toMutableList(),
             owner = info.protocol.owner,
             approach = info.protocol.approach,
-            coAuthors = info.protocol.participants,
+            coAuthors = info.protocol.participants.toMutableList(),
             rating = 0L
         )
     }
