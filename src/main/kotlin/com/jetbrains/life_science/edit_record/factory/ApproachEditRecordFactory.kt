@@ -19,27 +19,7 @@ class ApproachEditRecordFactory {
         )
     }
 
-    fun addSection(approachEditRecord: ApproachEditRecord, section: Section) {
-        if (section in approachEditRecord.createdSections) {
-            return
-        }
+    fun setCurrentTimeToLastEditDate(approachEditRecord: ApproachEditRecord) {
         approachEditRecord.lastEditDate = LocalDateTime.now(ZoneId.of("UTC"))
-        if (section in approachEditRecord.deletedSections) {
-            approachEditRecord.deletedSections.remove(section)
-            return
-        }
-        approachEditRecord.createdSections.add(section)
-    }
-
-    fun deleteSection(approachEditRecord: ApproachEditRecord, section: Section) {
-        if (section in approachEditRecord.deletedSections) {
-            return
-        }
-        approachEditRecord.lastEditDate = LocalDateTime.now(ZoneId.of("UTC"))
-        if (section in approachEditRecord.createdSections) {
-            approachEditRecord.createdSections.remove(section)
-            return
-        }
-        approachEditRecord.deletedSections.add(section)
     }
 }
