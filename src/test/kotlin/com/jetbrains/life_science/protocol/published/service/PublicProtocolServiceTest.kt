@@ -2,7 +2,6 @@ package com.jetbrains.life_science.protocol.published.service
 
 import com.jetbrains.life_science.exception.not_found.PublicProtocolNotFoundException
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
-import com.jetbrains.life_science.protocol.published.service.maker.makePublicProtocolInfo
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.protocol.service.PublicProtocolService
 import org.junit.jupiter.api.Assertions
@@ -32,16 +31,13 @@ class PublicProtocolServiceTest {
     fun `create new draft approach`() {
         // Prepare data
         val draftProtocol = draftProtocolService.get(2L)
-        val info = makePublicProtocolInfo(
-            draftProtocol
-        )
 
         // Action
-        val createdProtocol = service.create(info)
+        val createdProtocol = service.create(draftProtocol)
         val publicProtocol = service.get(createdProtocol.id)
 
         // Assert
-        assertEquals(info.protocol.name, publicProtocol.name)
+        assertEquals(draftProtocol.name, publicProtocol.name)
         assertContainsCoAuthor(publicProtocol, draftProtocol.owner.id)
         draftProtocol.participants.forEach {
             assertContainsCoAuthor(publicProtocol, it.id)

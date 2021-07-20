@@ -3,12 +3,10 @@ package com.jetbrains.life_science.publisher.service
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.approach.service.DraftApproachService
-import com.jetbrains.life_science.approach.service.PublicApproachInfo
 import com.jetbrains.life_science.approach.service.PublicApproachService
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
-import com.jetbrains.life_science.protocol.service.PublicProtocolInfo
 import com.jetbrains.life_science.protocol.service.PublicProtocolService
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.service.SectionService
@@ -27,9 +25,7 @@ class PublisherServiceImpl(
     override fun publishDraftApproach(draftApproach: DraftApproach): PublicApproach {
         // Create public entity
         val publicApproach = publicApproachService.create(
-            object : PublicApproachInfo {
-                override val approach = draftApproach
-            }
+            draftApproach
         )
 
         // Delete draft entity
@@ -45,9 +41,7 @@ class PublisherServiceImpl(
 
         // Create public entity
         val publicProtocol = publicProtocolService.create(
-            object : PublicProtocolInfo {
-                override val protocol = draftProtocol
-            }
+            draftProtocol
         )
 
         // Delete draft entity
