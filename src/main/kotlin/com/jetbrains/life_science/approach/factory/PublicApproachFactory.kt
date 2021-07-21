@@ -10,12 +10,12 @@ class PublicApproachFactory {
         return PublicApproach(
             id = 0,
             name = approach.name,
-            sections = approach.sections,
-            tags = approach.tags,
+            sections = approach.sections.toMutableList(),
+            tags = approach.tags.toMutableList(),
             owner = approach.owner,
-            categories = approach.categories,
+            categories = approach.categories.toMutableList(),
             creationDate = approach.creationDate,
-            coAuthors = approach.participants,
+            coAuthors = approach.participants.toMutableList(),
             protocols = mutableListOf()
         )
     }

@@ -21,4 +21,9 @@ class ReviewServiceImpl(
         val review = factory.createReview(info)
         return repository.save(review)
     }
+
+    override fun deleteReview(id: Long) {
+        val review = getReview(id)
+        repository.deleteById(review.id)
+    }
 }
