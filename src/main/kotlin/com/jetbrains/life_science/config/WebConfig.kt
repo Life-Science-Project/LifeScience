@@ -21,7 +21,6 @@ class WebConfig : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
-            .allowedOriginPatterns("https://jetscience-frontend-git-dev-teptind.vercel.app/**")
-            .allowedMethods("*")
+            .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
     }
 }
