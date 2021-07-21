@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
 
 @Configuration
 @EnableWebSecurity
@@ -42,7 +43,8 @@ class WebSecurityConfig(
     }
 
     override fun configure(http: HttpSecurity) {
-        http.cors().disable()
+        http.cors().configurationSource { corsConfig() }
+            .and()
             .csrf().disable()
             .authorizeRequests()
             .antMatchers(
@@ -66,5 +68,11 @@ class WebSecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
         http.addFilterBefore(jwtAuthTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
+    }
+
+    private fun corsConfig(): CorsConfiguration {
+        val config = CorsConfiguration().applyPermitDefaultValues()
+        config.allowedMethods = listOf("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")
+        return config
     }
 }
