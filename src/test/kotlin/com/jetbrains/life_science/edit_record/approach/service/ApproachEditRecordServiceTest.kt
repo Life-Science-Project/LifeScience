@@ -253,7 +253,7 @@ class ApproachEditRecordServiceTest {
     }
 
     /**
-     * Should add section to approach edit record
+     * Should throw EditRecordNotFoundException
      */
     @Test
     fun `delete section from non-existing approach_edit_record`() {
