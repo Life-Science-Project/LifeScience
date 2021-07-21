@@ -2,6 +2,7 @@ package com.jetbrains.life_science.config
 
 import com.jetbrains.life_science.auth.JWTAuthEntryPoint
 import com.jetbrains.life_science.auth.JWTAuthTokenFilter
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -25,6 +26,9 @@ class WebSecurityConfig(
     val unauthorizedHandler: JWTAuthEntryPoint,
     val jwtAuthTokenFilter: JWTAuthTokenFilter
 ) : WebSecurityConfigurerAdapter() {
+
+    @Value("#{'\${cors.allowed}'.split(',')}")
+    lateinit var corsAllowedList: List<String>
 
     @Bean
     fun bCryptPasswordEncoder(): BCryptPasswordEncoder {
@@ -74,7 +78,7 @@ class WebSecurityConfig(
         val config = CorsConfiguration().applyPermitDefaultValues()
         config.allowedMethods = listOf("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")
         config.allowCredentials = true
-        config.allowedOrigins = listOf("https://jetscience-frontend-git-dev-teptind.vercel.app")
+        config.allowedOrigins = corsAllowedList
         return config
     }
 }
