@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.config
 
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.servlet.config.annotation.CorsRegistry
 
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -17,10 +16,5 @@ class WebConfig : WebMvcConfigurer {
 
         registry.addViewController("/{x:^(?!swagger-ui$).*$}/**/{y:[\\w\\-]+}")
             .setViewName("forward:/")
-    }
-
-    override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")
-            .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
     }
 }
