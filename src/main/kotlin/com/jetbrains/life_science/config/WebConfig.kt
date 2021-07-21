@@ -24,5 +24,4 @@ class WebConfig : WebMvcConfigurer {
             .allowedOriginPatterns("https://jetscience-frontend-git-dev-teptind.vercel.app/**")
             .allowedMethods("*")
     }
-
 }
