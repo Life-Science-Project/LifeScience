@@ -73,6 +73,8 @@ class WebSecurityConfig(
     private fun corsConfig(): CorsConfiguration {
         val config = CorsConfiguration().applyPermitDefaultValues()
         config.allowedMethods = listOf("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")
+        config.allowCredentials = true
+        config.allowedOrigins = listOf("https://jetscience-frontend-git-dev-teptind.vercel.app")
         return config
     }
 }
