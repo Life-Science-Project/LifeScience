@@ -82,7 +82,7 @@ class PublishProtocolRequestServiceTest {
         val publicApproach = createPublicApproach(1L, "approach 1", owner, approachCreationLocalDateTime)
         val protocol = createDraftProtocol(1L, "first protocol", publicApproach, owner)
         val info = makePublishProtocolRequestInfo(
-            id = 4L,
+            id = 3L,
             date = protocolCreationLocalDateTime,
             editor = editor,
             protocol = protocol
@@ -101,56 +101,33 @@ class PublishProtocolRequestServiceTest {
     }
 
     /**
-     * Should approve existing publish protocol request
+     * Should delete existing publish protocol request
      */
     @Test
-    fun `approve existing pending publish protocol request`() {
+    fun `delete existing pending publish protocol request`() {
         // Prepare data
         val publishProtocolId = 1L
-        val expectedState = RequestState.APPROVED
 
         // Action
-        val prevPublishProtocolRequest = service.get(publishProtocolId)
-        service.approve(publishProtocolId)
-        val publishProtocolRequest = service.get(publishProtocolId)
+        service.delete(publishProtocolId)
 
         // Assert
-        assertEquals(prevPublishProtocolRequest.id, publishProtocolRequest.id)
-        assertEquals(prevPublishProtocolRequest.editor.id, publishProtocolRequest.editor.id)
-        assertEquals(prevPublishProtocolRequest.protocol.id, publishProtocolRequest.protocol.id)
-        assertEquals(prevPublishProtocolRequest.date, publishProtocolRequest.date)
-        assertEquals(expectedState, publishProtocolRequest.state)
+        assertThrows<PublishProtocolRequestNotFoundException> {
+            service.get(publishProtocolId)
+        }
     }
 
     /**
      * Should throw PublishProtocolRequestNotFoundException
      */
     @Test
-    fun `approve non-existing publish protocol request`() {
+    fun `delete non-existing publish protocol request`() {
         // Prepare data
         val publishProtocolId = 239L
 
         // Action & Assert
         assertThrows<PublishProtocolRequestNotFoundException> {
-            service.approve(publishProtocolId)
-        }
-    }
-
-    /**
-     * Should throw RequestImmutableStateException
-     */
-    @Test
-    fun `approve existing publish protocol request with approved or canceled state`() {
-        // Prepare data
-        val canceledPublishProtocolId = 2L
-        val approvedPublishProtocolId = 3L
-
-        // Action & Assert
-        assertThrows<RequestImmutableStateException> {
-            service.approve(canceledPublishProtocolId)
-        }
-        assertThrows<RequestImmutableStateException> {
-            service.approve(approvedPublishProtocolId)
+            service.delete(publishProtocolId)
         }
     }
 
@@ -197,14 +174,10 @@ class PublishProtocolRequestServiceTest {
     fun `cancel existing publish protocol request with approved or canceled state`() {
         // Prepare data
         val canceledPublishProtocolId = 2L
-        val approvedPublishProtocolId = 3L
 
         // Action & Assert
         assertThrows<RequestImmutableStateException> {
             service.cancel(canceledPublishProtocolId)
-        }
-        assertThrows<RequestImmutableStateException> {
-            service.cancel(approvedPublishProtocolId)
         }
     }
 

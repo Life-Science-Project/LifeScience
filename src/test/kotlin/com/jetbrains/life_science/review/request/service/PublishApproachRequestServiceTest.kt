@@ -77,7 +77,7 @@ class PublishApproachRequestServiceTest {
         val approach = createDraftApproach(1L, "first approach", approachOwner)
         val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val info = makePublishApproachRequestInfo(
-            id = 4L,
+            id = 3L,
             date = creationLocalDateTime,
             editor = editor,
             approach = approach
@@ -96,56 +96,33 @@ class PublishApproachRequestServiceTest {
     }
 
     /**
-     * Should approve existing publish approach request
+     * Should delete existing publish approach request
      */
     @Test
-    fun `approve existing pending publish approach request`() {
+    fun `delete existing pending publish approach request`() {
         // Prepare data
         val publishApproachId = 1L
-        val expectedState = RequestState.APPROVED
 
         // Action
-        val prevPublishApproachRequest = service.get(publishApproachId)
-        service.approve(publishApproachId)
-        val publishApproachRequest = service.get(publishApproachId)
+        service.delete(publishApproachId)
 
         // Assert
-        assertEquals(prevPublishApproachRequest.id, publishApproachRequest.id)
-        assertEquals(prevPublishApproachRequest.editor.id, publishApproachRequest.editor.id)
-        assertEquals(prevPublishApproachRequest.approach.id, publishApproachRequest.approach.id)
-        assertEquals(prevPublishApproachRequest.date, publishApproachRequest.date)
-        assertEquals(expectedState, publishApproachRequest.state)
+        assertThrows<PublishApproachRequestNotFoundException> {
+            service.get(publishApproachId)
+        }
     }
 
     /**
      * Should throw PublishApproachRequestNotFoundException
      */
     @Test
-    fun `approve non-existing publish approach request`() {
+    fun `delete non-existing publish approach request`() {
         // Prepare data
         val publishApproachId = 239L
 
         // Action & Assert
         assertThrows<PublishApproachRequestNotFoundException> {
-            service.approve(publishApproachId)
-        }
-    }
-
-    /**
-     * Should throw RequestImmutableStateException
-     */
-    @Test
-    fun `approve existing publish approach request with approved or canceled state`() {
-        // Prepare data
-        val canceledPublishApproachId = 2L
-        val approvedPublishApproachId = 3L
-
-        // Action & Assert
-        assertThrows<RequestImmutableStateException> {
-            service.approve(canceledPublishApproachId)
-        }
-        assertThrows<RequestImmutableStateException> {
-            service.approve(approvedPublishApproachId)
+            service.delete(publishApproachId)
         }
     }
 
@@ -189,17 +166,13 @@ class PublishApproachRequestServiceTest {
      * Should throw RequestImmutableStateException
      */
     @Test
-    fun `cancel existing publish approach request with approved or canceled state`() {
+    fun `cancel existing publish approach request with canceled state`() {
         // Prepare data
         val canceledPublishApproachId = 2L
-        val approvedPublishApproachId = 3L
 
         // Action & Assert
         assertThrows<RequestImmutableStateException> {
             service.cancel(canceledPublishApproachId)
-        }
-        assertThrows<RequestImmutableStateException> {
-            service.cancel(approvedPublishApproachId)
         }
     }
 

@@ -1,0 +1,52 @@
+package com.jetbrains.life_science.controller.approach.published
+
+import com.jetbrains.life_science.ApiTest
+import com.jetbrains.life_science.controller.approach.published.view.PublicApproachView
+import com.jetbrains.life_science.controller.category.view.CategoryShortView
+import com.jetbrains.life_science.controller.user.UserShortView
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.springframework.test.context.jdbc.Sql
+import java.time.LocalDateTime
+
+@Sql(
+    "/scripts/initial_data.sql",
+    "/scripts/section/section_data.sql",
+    "/scripts/approach/public_approach_data.sql"
+)
+internal class PublicApproachControllerTest : ApiTest() {
+
+    private val path = "/api/approaches/public"
+
+    /**
+     * Test should return public approach view
+     */
+    @Test
+    fun `get public approach test`() {
+        val expectedView = PublicApproachView(
+            id = 1,
+            name = "approach 1",
+            categories = listOf(
+                CategoryShortView(1, "catalog 1", timeOf(2020, 9, 17)),
+            ),
+            sections = emptyList(),
+            coAuthors = listOf(
+                UserShortView(id = 1, fullName = "Alex"),
+                UserShortView(id = 2, fullName = "Ben")
+            ),
+            protocols = emptyList()
+        )
+
+        val approach = getView<PublicApproachView>(makePath(1))
+
+        assertEquals(expectedView, approach)
+    }
+
+    private fun makePath(addition: Any): String {
+        return "$path/$addition"
+    }
+
+    fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
+        return LocalDateTime.of(year, month, day, 0, 0, 0)
+    }
+}

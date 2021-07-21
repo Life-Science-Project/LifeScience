@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.protocol.service
 
 import com.jetbrains.life_science.exception.not_found.PublicProtocolNotFoundException
+import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.protocol.factory.PublicProtocolFactory
 import com.jetbrains.life_science.protocol.repository.PublicProtocolRepository
@@ -19,8 +20,8 @@ class PublicProtocolServiceImpl(
         }
     }
 
-    override fun create(info: PublicProtocolInfo): PublicProtocol {
-        val publicProtocol = factory.create(info)
+    override fun create(protocol: DraftProtocol): PublicProtocol {
+        val publicProtocol = factory.create(protocol)
         val savedPublicProtocol = repository.save(publicProtocol)
         searchUnitService.createSearchUnit(savedPublicProtocol)
         return savedPublicProtocol
