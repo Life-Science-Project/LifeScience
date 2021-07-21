@@ -2,6 +2,7 @@ package com.jetbrains.life_science.edit_record.factory
 
 import com.jetbrains.life_science.edit_record.entity.ProtocolEditRecord
 import com.jetbrains.life_science.edit_record.service.ProtocolEditRecordInfo
+import com.jetbrains.life_science.util.UTC
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -17,7 +18,7 @@ class ProtocolEditRecordFactory {
         )
     }
 
-    fun changeLastEditDate(protocolEditRecord: ProtocolEditRecord, lastEditDate: LocalDateTime) {
-        protocolEditRecord.lastEditDate = lastEditDate
+    fun setCurrentTimeToLastEditDate(protocolEditRecord: ProtocolEditRecord) {
+        protocolEditRecord.lastEditDate = LocalDateTime.now(UTC)
     }
 }

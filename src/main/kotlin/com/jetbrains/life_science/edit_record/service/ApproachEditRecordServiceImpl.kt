@@ -5,6 +5,7 @@ import com.jetbrains.life_science.edit_record.factory.ApproachEditRecordFactory
 import com.jetbrains.life_science.edit_record.repository.ApproachEditRecordRepository
 import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
+import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
 
@@ -27,10 +28,17 @@ class ApproachEditRecordServiceImpl(
 
     override fun addSection(id: Long, section: Section): ApproachEditRecord {
         val approachEditRecord = get(id)
-        if (section in approachEditRecord.createdSections) {
-            return approachEditRecord
+        if (section in approachEditRecord.deletedSections) {
+            approachEditRecord.deletedSections.remove(section)
+        } else if (section in approachEditRecord.createdSections ||
+            section in approachEditRecord.approach.sections
+        ) {
+            throw SectionAlreadyExistsException(
+                "Section with id ${section.id} is already exists in createdSections or approach"
+            )
+        } else {
+            approachEditRecord.createdSections.add(section)
         }
-        approachEditRecord.createdSections.add(section)
         factory.setCurrentTimeToLastEditDate(approachEditRecord)
         return repository.save(approachEditRecord)
     }
@@ -38,30 +46,20 @@ class ApproachEditRecordServiceImpl(
     override fun deleteSection(id: Long, section: Section): ApproachEditRecord {
         val approachEditRecord = get(id)
         if (section in approachEditRecord.deletedSections) {
-            return approachEditRecord
+            throw SectionAlreadyExistsException("Section with id ${section.id} is already exists in deletedSections")
         }
-        approachEditRecord.deletedSections.add(section)
-        factory.setCurrentTimeToLastEditDate(approachEditRecord)
-        return repository.save(approachEditRecord)
-    }
-
-    override fun recoverDeletedSection(id: Long, section: Section): ApproachEditRecord {
-        val approachEditRecord = get(id)
-        if (section !in approachEditRecord.deletedSections) {
-            throw SectionNotFoundException("There are no remote sections with id ${section.id}")
-        }
-        factory.setCurrentTimeToLastEditDate(approachEditRecord)
-        approachEditRecord.deletedSections.remove(section)
-        return repository.save(approachEditRecord)
-    }
-
-    override fun deleteCreatedSection(id: Long, section: Section): ApproachEditRecord {
-        val approachEditRecord = get(id)
-        if (section !in approachEditRecord.createdSections) {
-            throw SectionNotFoundException("There are no created sections with id ${section.id}")
+        when (section) {
+            in approachEditRecord.approach.sections -> {
+                approachEditRecord.deletedSections.add(section)
+            }
+            in approachEditRecord.createdSections -> {
+                approachEditRecord.createdSections.remove(section)
+            }
+            else -> {
+                throw SectionNotFoundException("Section with id ${section.id} not found in deletedSections")
+            }
         }
         factory.setCurrentTimeToLastEditDate(approachEditRecord)
-        approachEditRecord.createdSections.remove(section)
         return repository.save(approachEditRecord)
     }
 

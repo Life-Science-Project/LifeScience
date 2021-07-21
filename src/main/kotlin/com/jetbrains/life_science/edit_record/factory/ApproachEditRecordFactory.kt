@@ -2,9 +2,9 @@ package com.jetbrains.life_science.edit_record.factory
 
 import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordInfo
+import com.jetbrains.life_science.util.UTC
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 @Component
 class ApproachEditRecordFactory {
@@ -19,6 +19,6 @@ class ApproachEditRecordFactory {
     }
 
     fun setCurrentTimeToLastEditDate(approachEditRecord: ApproachEditRecord) {
-        approachEditRecord.lastEditDate = LocalDateTime.now(ZoneId.of("UTC"))
+        approachEditRecord.lastEditDate = LocalDateTime.now(UTC)
     }
 }

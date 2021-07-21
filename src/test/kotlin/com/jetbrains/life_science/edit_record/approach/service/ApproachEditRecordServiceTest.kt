@@ -6,8 +6,10 @@ import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
+import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.util.UTC
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
@@ -17,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
-import java.time.ZoneId
 
 @SpringBootTest
 @Sql("/scripts/initial_data.sql", "/scripts/edit_record/approach_edit_record_data.sql")
@@ -77,7 +78,7 @@ class ApproachEditRecordServiceTest {
         // Prepare data
         val expectedRecordId = 3L
         val approach = publicApproachService.get(1L)
-        val expectedDate = LocalDateTime.now(ZoneId.of("UTC"))
+        val expectedDate = LocalDateTime.now(UTC)
         val info = makeApproachEditRecordInfo(
             id = expectedRecordId,
             lastEditDate = expectedDate,
@@ -98,7 +99,7 @@ class ApproachEditRecordServiceTest {
      * Should add section to approach edit record
      */
     @Test
-    fun `add created section to existing approach_edit_record`() {
+    fun `add section to existing approach_edit_record`() {
         // Prepare data
         val recordId = 1L
         val section = sectionService.getById(2L)
@@ -116,6 +117,59 @@ class ApproachEditRecordServiceTest {
      * Should add section to approach edit record
      */
     @Test
+    fun `add deleted section to existing approach_edit_record`() {
+        // Prepare data
+        val recordId = 2L
+        val section = sectionService.getById(3L)
+        val prevApproachEditRecord = service.get(recordId)
+
+        // Pre-check
+        assertEquals(recordId, prevApproachEditRecord.id)
+        assertSectionDeleted(section.id, prevApproachEditRecord)
+
+        // Action
+        service.addSection(recordId, section)
+        val approachEditRecord = service.get(recordId)
+
+        // Assert
+        assertEquals(recordId, approachEditRecord.id)
+        assertSectionNotDeleted(section.id, approachEditRecord)
+    }
+
+    /**
+     * Should throw SectionAlreadyExistsException
+     */
+    @Test
+    fun `add existing in approach section to existing approach_edit_record`() {
+        // Prepare data
+        val recordId = 1L
+        val section = sectionService.getById(1L)
+
+        // Action & Assert
+        assertThrows<SectionAlreadyExistsException> {
+            service.addSection(recordId, section)
+        }
+    }
+
+    /**
+     * Should throw SectionAlreadyExistsException
+     */
+    @Test
+    fun `add existing in edit_record section to existing approach_edit_record`() {
+        // Prepare data
+        val recordId = 1L
+        val section = sectionService.getById(3L)
+
+        // Action & Assert
+        assertThrows<SectionAlreadyExistsException> {
+            service.addSection(recordId, section)
+        }
+    }
+
+    /**
+     * Should throw EditRecordNotFoundException
+     */
+    @Test
     fun `add created section to non-existing approach_edit_record`() {
         // Prepare data
         val recordId = 239L
@@ -131,7 +185,7 @@ class ApproachEditRecordServiceTest {
      * Should add section to approach edit record
      */
     @Test
-    fun `delete section from existing approach_edit_record`() {
+    fun `delete section from approach of existing approach_edit_record`() {
         // Prepare data
         val recordId = 1L
         val section = sectionService.getById(1L)
@@ -143,6 +197,59 @@ class ApproachEditRecordServiceTest {
         // Assert
         assertEquals(recordId, approachEditRecord.id)
         assertSectionDeleted(section.id, approachEditRecord)
+    }
+
+    /**
+     * Should add section to approach edit record
+     */
+    @Test
+    fun `delete created section from existing approach_edit_record`() {
+        // Prepare data
+        val recordId = 1L
+        val section = sectionService.getById(3L)
+        val prevApproachEditRecord = service.get(recordId)
+
+        // Pre-check
+        assertEquals(recordId, prevApproachEditRecord.id)
+        assertContainsSection(section.id, prevApproachEditRecord)
+
+        // Action
+        service.deleteSection(recordId, section)
+        val approachEditRecord = service.get(recordId)
+
+        // Assert
+        assertEquals(recordId, approachEditRecord.id)
+        assertSectionNotCreated(section.id, approachEditRecord)
+    }
+
+    /**
+     * Should throw SectionAlreadyExistsException
+     */
+    @Test
+    fun `delete deleted section from existing approach_edit_record`() {
+        // Prepare data
+        val recordId = 2L
+        val section = sectionService.getById(3L)
+
+        // Action & Assert
+        assertThrows<SectionAlreadyExistsException> {
+            service.deleteSection(recordId, section)
+        }
+    }
+
+    /**
+     * Should throw SectionNotFoundException
+     */
+    @Test
+    fun `delete non-existing section from existing approach_edit_record`() {
+        // Prepare data
+        val recordId = 1L
+        val section = sectionService.getById(2L)
+
+        // Action & Assert
+        assertThrows<SectionNotFoundException> {
+            service.deleteSection(recordId, section)
+        }
     }
 
     /**
@@ -194,117 +301,11 @@ class ApproachEditRecordServiceTest {
         }
     }
 
-    /**
-     * Should remove section from list of deleted sections
-     */
-    @Test
-    fun `recover existing deleted section to existing approach_edit_record`() {
-        // Prepare data
-        val recordId = 2L
-        val deletedSectionId = 3L
-        val deletedSection = sectionService.getById(deletedSectionId)
-        var approachEditRecord = service.get(recordId)
-
-        // Pre-check
-        assertSectionDeleted(deletedSectionId, approachEditRecord)
-
-        // Action
-        service.recoverDeletedSection(recordId, deletedSection)
-        approachEditRecord = service.get(recordId)
-
-        // Assert
-        assertEquals(recordId, approachEditRecord.id)
-        assertNotDeleted(deletedSectionId, approachEditRecord)
-    }
-
-    /**
-     * Should throw SectionNotFoundException
-     */
-    @Test
-    fun `recover non-existing deleted section to existing approach_edit_record`() {
-        // Prepare data
-        val recordId = 1L
-        val deletedSection = sectionService.getById(3L)
-
-        // Action & Assert
-        assertThrows<SectionNotFoundException> {
-            service.recoverDeletedSection(recordId, deletedSection)
-        }
-    }
-
-    /**
-     * Should throw EditRecordNotFound exception
-     */
-    @Test
-    fun `recover section to non-existing approach_edit_record`() {
-        // Prepare data
-        val recordId = 239L
-        val section = sectionService.getById(3L)
-
-        // Action & Assert
-        assertThrows<EditRecordNotFoundException> {
-            service.recoverDeletedSection(recordId, section)
-        }
-    }
-
-    /**
-     * Should remove section from list of created sections
-     */
-    @Test
-    fun `delete existing created section from existing approach_edit_record`() {
-        // Prepare data
-        val recordId = 1L
-        val createdSectionId = 3L
-        val createdSection = sectionService.getById(createdSectionId)
-        var approachEditRecord = service.get(recordId)
-
-        // Pre-check
-        assertSectionCreated(createdSectionId, approachEditRecord)
-
-        // Action
-        service.deleteCreatedSection(recordId, createdSection)
-        approachEditRecord = service.get(recordId)
-
-        // Assert
-        assertEquals(recordId, approachEditRecord.id)
-        assertNotCreated(createdSectionId, approachEditRecord)
-    }
-
-    /**
-     * Should throw SectionNotFoundException
-     */
-    @Test
-    fun `delete non-existing created section from existing approach_edit_record`() {
-        // Prepare data
-        val recordId = 2L
-        val createdSection = sectionService.getById(3L)
-
-        // Action & Assert
-        assertThrows<SectionNotFoundException> {
-            service.deleteCreatedSection(recordId, createdSection)
-        }
-    }
-
-    /**
-     * Should throw EditRecordNotFound exception
-     */
-    @Test
-    fun `delete created section from non-existing approach_edit_record`() {
-        // Prepare data
-        val recordId = 239L
-        val section = sectionService.getById(3L)
-
-        // Action & Assert
-        assertThrows<EditRecordNotFoundException> {
-            service.deleteCreatedSection(recordId, section)
-        }
-    }
-
     private fun assertSectionCreated(sectionId: Long, approachEditRecord: ApproachEditRecord) {
         assertTrue(approachEditRecord.createdSections.any { it.id == sectionId })
     }
 
-    private fun assertNotCreated(sectionId: Long, approachEditRecord: ApproachEditRecord) {
+    private fun assertSectionNotCreated(sectionId: Long, approachEditRecord: ApproachEditRecord) {
         assertTrue(approachEditRecord.createdSections.all { it.id != sectionId })
     }
 
@@ -312,7 +313,14 @@ class ApproachEditRecordServiceTest {
         assertTrue(approachEditRecord.deletedSections.any { it.id == sectionId })
     }
 
-    private fun assertNotDeleted(sectionId: Long, approachEditRecord: ApproachEditRecord) {
+    private fun assertSectionNotDeleted(sectionId: Long, approachEditRecord: ApproachEditRecord) {
         assertTrue(approachEditRecord.deletedSections.all { it.id != sectionId })
+    }
+
+    private fun assertContainsSection(sectionId: Long, approachEditRecord: ApproachEditRecord) {
+        assertTrue(
+            approachEditRecord.createdSections.any { it.id == sectionId } ||
+                approachEditRecord.approach.sections.any { it.id == sectionId }
+        )
     }
 }
