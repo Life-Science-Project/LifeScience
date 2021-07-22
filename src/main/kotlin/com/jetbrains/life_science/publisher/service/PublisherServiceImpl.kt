@@ -58,20 +58,23 @@ class PublisherServiceImpl(
 
     override fun publishApproachEditRecord(approachEditRecord: ApproachEditRecord): PublicApproach {
         val approach = approachEditRecord.approach
+        val toCreate = approachEditRecord.createdSections.toList()
+        val toDelete = approachEditRecord.deletedSections.toList()
+
+        // Clear
+        approachEditRecordService.clear(approachEditRecord.id)
 
         // Delete
-        approachEditRecord.deletedSections.forEach {
+        toDelete.forEach {
             publicApproachService.removeSection(approach.id, it)
             sectionService.deleteById(it.id)
         }
 
         // Create
-        approachEditRecord.createdSections.forEach {
+        toCreate.forEach {
             publicApproachService.addSection(approach.id, it)
+            sectionService.publish(it.id)
         }
-
-        // Clear
-        approachEditRecordService.clear(approachEditRecord.id)
 
         return approach
     }
