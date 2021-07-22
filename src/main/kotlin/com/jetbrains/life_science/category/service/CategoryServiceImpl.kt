@@ -9,6 +9,7 @@ import com.jetbrains.life_science.exception.category.CategoryNotFoundException
 import com.jetbrains.life_science.exception.category.CategoryParentAlreadyExistException
 import com.jetbrains.life_science.exception.category.CategoryParentNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CategoryServiceImpl(
@@ -25,6 +26,7 @@ class CategoryServiceImpl(
         return savedCategory
     }
 
+    @Transactional
     override fun updateCategory(categoryInfo: CategoryUpdateInfo): Category {
         val category = getCategory(categoryInfo.id)
         updateParents(categoryInfo, category)
@@ -60,6 +62,7 @@ class CategoryServiceImpl(
         }
     }
 
+    @Transactional
     override fun deleteCategory(id: Long) {
         val category = getCategory(id)
         if (!category.isEmpty) {
