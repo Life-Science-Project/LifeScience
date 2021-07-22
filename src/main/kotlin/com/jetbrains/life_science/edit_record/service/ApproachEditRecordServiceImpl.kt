@@ -5,6 +5,7 @@ import com.jetbrains.life_science.edit_record.factory.ApproachEditRecordFactory
 import com.jetbrains.life_science.edit_record.repository.ApproachEditRecordRepository
 import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
+import com.jetbrains.life_science.exception.section.SectionAlreadyDeletedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
@@ -28,16 +29,16 @@ class ApproachEditRecordServiceImpl(
 
     override fun addSection(id: Long, section: Section): ApproachEditRecord {
         val approachEditRecord = get(id)
-        if (section in approachEditRecord.deletedSections) {
-            approachEditRecord.deletedSections.remove(section)
-        } else if (section in approachEditRecord.createdSections ||
-            section in approachEditRecord.approach.sections
-        ) {
-            throw SectionAlreadyExistsException(
-                "Section with id ${section.id} is already exists in createdSections or approach"
-            )
-        } else {
-            approachEditRecord.createdSections.add(section)
+        when (section) {
+            in approachEditRecord.deletedSections -> {
+                approachEditRecord.deletedSections.remove(section)
+            }
+            in approachEditRecord.createdSections, in approachEditRecord.approach.sections -> {
+                throw SectionAlreadyExistsException(
+                    "Section with id ${section.id} is already exists in createdSections or approach"
+                )
+            }
+            else -> approachEditRecord.createdSections.add(section)
         }
         factory.setCurrentTimeToLastEditDate(approachEditRecord)
         return repository.save(approachEditRecord)
@@ -45,10 +46,12 @@ class ApproachEditRecordServiceImpl(
 
     override fun deleteSection(id: Long, section: Section): ApproachEditRecord {
         val approachEditRecord = get(id)
-        if (section in approachEditRecord.deletedSections) {
-            throw SectionAlreadyExistsException("Section with id ${section.id} is already exists in deletedSections")
-        }
         when (section) {
+            in approachEditRecord.deletedSections -> {
+                throw SectionAlreadyDeletedException(
+                    "Section with id ${section.id} is already exists in deletedSections"
+                )
+            }
             in approachEditRecord.approach.sections -> {
                 approachEditRecord.deletedSections.add(section)
             }

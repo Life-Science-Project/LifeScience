@@ -6,10 +6,11 @@ import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
+import com.jetbrains.life_science.exception.section.SectionAlreadyDeletedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
-import com.jetbrains.life_science.util.UTC
+import com.jetbrains.life_science.util.UTCZone
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
@@ -78,7 +79,7 @@ class ApproachEditRecordServiceTest {
         // Prepare data
         val expectedRecordId = 3L
         val approach = publicApproachService.get(1L)
-        val expectedDate = LocalDateTime.now(UTC)
+        val expectedDate = LocalDateTime.now(UTCZone)
         val info = makeApproachEditRecordInfo(
             id = expectedRecordId,
             lastEditDate = expectedDate,
@@ -232,7 +233,7 @@ class ApproachEditRecordServiceTest {
         val section = sectionService.getById(3L)
 
         // Action & Assert
-        assertThrows<SectionAlreadyExistsException> {
+        assertThrows<SectionAlreadyDeletedException> {
             service.deleteSection(recordId, section)
         }
     }
