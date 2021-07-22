@@ -5,6 +5,7 @@ import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.approach.service.PublicApproachService
 import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
+import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
@@ -21,6 +22,7 @@ class PublisherServiceImpl(
     val publicProtocolService: PublicProtocolService,
     val draftApproachService: DraftApproachService,
     val draftProtocolService: DraftProtocolService,
+    val approachEditRecordService: ApproachEditRecordService,
     val sectionService: SectionService
 ) : PublisherService {
     override fun publishDraftApproach(draftApproach: DraftApproach): PublicApproach {
@@ -55,7 +57,23 @@ class PublisherServiceImpl(
     }
 
     override fun publishApproachEditRecord(approachEditRecord: ApproachEditRecord): PublicApproach {
-        TODO("Not yet implemented")
+        val approach = approachEditRecord.approach
+
+        // Delete
+        approachEditRecord.deletedSections.forEach {
+            publicApproachService.removeSection(approach.id, it)
+            sectionService.deleteById(it.id)
+        }
+
+        // Create
+        approachEditRecord.createdSections.forEach {
+            publicApproachService.addSection(approach.id, it)
+        }
+
+        // Clear
+        approachEditRecordService.clear(approachEditRecord.id)
+
+        return approach
     }
 
     override fun publishProtocolEditRecord(protocolEditRecord: ApproachEditRecord): PublicProtocol {
