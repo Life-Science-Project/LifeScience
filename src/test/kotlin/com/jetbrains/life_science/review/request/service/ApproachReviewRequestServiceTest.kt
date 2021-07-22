@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.review.request.service
 
+import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.exception.not_found.ApproachReviewRequestNotFoundException
-import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.ApproachReviewRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -31,6 +31,9 @@ class ApproachReviewRequestServiceTest {
 
     @Autowired
     lateinit var credentialsService: CredentialsService
+
+    @Autowired
+    lateinit var editRecordService: ApproachEditRecordService
 
     /**
      * Should return existing approach request
@@ -73,11 +76,11 @@ class ApproachReviewRequestServiceTest {
     @Test
     fun `create new approach review request`() {
         // Prepare data
-        val editor = credentialsService.getById(3L)
+        val editor = credentialsService.getById(1L)
         val editRecord = editRecordService.get(1L)
         val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val info = makeApproachReviewRequestInfo(
-            id = 3L,
+            id = 2L,
             date = creationLocalDateTime,
             editor = editor,
             editRecord = editRecord
@@ -200,14 +203,14 @@ class ApproachReviewRequestServiceTest {
      * Should throw PublishApproachRequestNotFoundException
      */
     @Test
-    fun `add review to non-existing publish approach request`() {
+    fun `add review to non-existing approach review request`() {
         // Prepare data
         val publishApproachId = 239L
         val reviewer = credentialsService.getById(3L)
         val review = createReview(3, LocalDateTime.now(), "third review", ReviewResolution.APPROVE, reviewer)
 
         // Action & Assert
-        assertThrows<PublishApproachRequestNotFoundException> {
+        assertThrows<ApproachReviewRequestNotFoundException> {
             service.addReview(publishApproachId, review)
         }
     }

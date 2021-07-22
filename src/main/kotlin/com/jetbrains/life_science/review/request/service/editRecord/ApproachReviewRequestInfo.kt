@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.review.request.service.editRecord
 
-import com.jetbrains.life_science.review.edit_record.entity.ApproachEditRecord
+import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
 

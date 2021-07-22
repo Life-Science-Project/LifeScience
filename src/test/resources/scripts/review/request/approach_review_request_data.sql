@@ -1,3 +1,7 @@
+insert into approach_edit_record (id, approach_id)
+values (1, 1);
+alter sequence approach_edit_record_seq restart with 2;
+
 -- state = PENDING
 insert into approach_review_request (id, date, state, editor_id, edit_record_id)
 values (1, parsedatetime('22-05-2021 12:53:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 0, 1, 1);

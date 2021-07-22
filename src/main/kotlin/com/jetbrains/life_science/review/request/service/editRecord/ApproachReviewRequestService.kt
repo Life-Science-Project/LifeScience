@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.review.request.service.editRecord
 
 import com.jetbrains.life_science.review.request.entity.ApproachReviewRequest
-import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.service.JudgeExecutorService
 import com.jetbrains.life_science.review.response.entity.Review
 
