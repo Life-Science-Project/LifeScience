@@ -5,6 +5,7 @@ import com.jetbrains.life_science.category.factory.CategoryFactory
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.exception.category.CategoryNoParentsException
+import com.jetbrains.life_science.exception.category.CategoryNotEmptyException
 import com.jetbrains.life_science.exception.category.CategoryNotFoundException
 import com.jetbrains.life_science.exception.category.CategoryParentNotFoundException
 import org.springframework.stereotype.Service
@@ -64,7 +65,7 @@ class CategoryServiceImpl(
     override fun deleteCategory(id: Long) {
         val category = getCategory(id)
         if (!category.isEmpty) {
-            throw IllegalStateException("Category is not empty")
+            throw CategoryNotEmptyException(id)
         }
         categoryRepository.deleteById(id)
         searchService.deleteSearchUnitById(id)
