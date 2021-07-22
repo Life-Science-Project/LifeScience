@@ -321,7 +321,7 @@ class ProtocolEditRecordServiceTest {
     private fun assertContainsSection(sectionId: Long, protocolEditRecord: ProtocolEditRecord) {
         assertTrue(
             protocolEditRecord.createdSections.any { it.id == sectionId } ||
-                    protocolEditRecord.protocol.sections.any { it.id == sectionId }
+                protocolEditRecord.protocol.sections.any { it.id == sectionId }
         )
     }
 }
