@@ -11,6 +11,7 @@ import com.jetbrains.life_science.review.response.entity.Review
 import com.jetbrains.life_science.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.util.UTCZone
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -209,7 +210,10 @@ class PublishProtocolRequestServiceTest {
         // Prepare data
         val publishProtocolId = 239L
         val reviewer = credentialsService.getById(3L)
-        val review = createReview(3, LocalDateTime.now(), "third review", ReviewResolution.APPROVE, reviewer)
+        val review = createReview(
+            3, LocalDateTime.now(UTCZone),
+            "third review", ReviewResolution.APPROVE, reviewer
+        )
 
         // Action & Assert
         assertThrows<PublishProtocolRequestNotFoundException> {

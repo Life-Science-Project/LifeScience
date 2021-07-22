@@ -13,6 +13,7 @@ import com.jetbrains.life_science.review.request.service.PublishApproachRequestI
 import com.jetbrains.life_science.review.request.service.PublishApproachRequestService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.util.UTCZone
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -96,6 +97,6 @@ class DraftApproachController(
         override val approach: DraftApproach
     ) : PublishApproachRequestInfo {
         override val id: Long = 0
-        override val date: LocalDateTime = LocalDateTime.now()
+        override val date: LocalDateTime = LocalDateTime.now(UTCZone)
     }
 }
