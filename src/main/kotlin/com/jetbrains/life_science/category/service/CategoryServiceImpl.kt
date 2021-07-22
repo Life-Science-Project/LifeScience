@@ -10,7 +10,6 @@ import com.jetbrains.life_science.exception.category.CategoryParentAlreadyExistE
 import com.jetbrains.life_science.exception.category.CategoryParentNotFoundException
 import org.springframework.stereotype.Service
 
-
 @Service
 class CategoryServiceImpl(
     val categoryRepository: CategoryRepository,
@@ -85,5 +84,4 @@ class CategoryServiceImpl(
     override fun getRootCategories(): List<Category> {
         return categoryRepository.findCategoriesByParentsEmpty()
     }
-
 }

@@ -96,5 +96,4 @@ class GeneralControllerAdvisor {
             HttpStatus.BAD_REQUEST
         )
     }
-
 }

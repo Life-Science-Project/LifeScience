@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.category.entity
 
 import com.jetbrains.life_science.approach.entity.PublicApproach
-import org.hibernate.annotations.Parent
 import java.time.LocalDateTime
 import javax.persistence.*
 
