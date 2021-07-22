@@ -129,27 +129,6 @@ internal class CategoryControllerTest : ApiTest() {
     }
 
     /**
-     * Test checks for exception when trying to add already existent parent
-     *
-     * Expected 403 http code and 404_999 system code result
-     * with message id in view arguments.
-     */
-    @Test
-    fun `category update repeated parent id test`() {
-        val loginTokens = login("admin@gmail.ru", "password")
-        val categoryDTO = CategoryUpdateDTO(
-            name = "changed name",
-            parentsToAdd = listOf(1), parentsToDelete = listOf(),
-            aliases = listOf(CategoryAliasDTO("le name"))
-        )
-
-        val request = patchRequestAuthorized(makePath("/3"), categoryDTO, loginTokens.accessToken)
-        val exceptionView = getApiExceptionView(400, request)
-        assertEquals(400_999, exceptionView.systemCode)
-        assertEquals(listOf(listOf("Category with id \"3\" already has parent category with id \"1\"")), exceptionView.arguments)
-    }
-
-    /**
      * Delete category test with admin
      */
     @Test

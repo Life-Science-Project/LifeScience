@@ -6,7 +6,6 @@ import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.exception.category.CategoryNoParentsException
 import com.jetbrains.life_science.exception.category.CategoryNotFoundException
-import com.jetbrains.life_science.exception.category.CategoryParentAlreadyExistException
 import com.jetbrains.life_science.exception.category.CategoryParentNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -46,10 +45,9 @@ class CategoryServiceImpl(
 
     private fun addParents(category: Category, idsToAdd: List<Long>) {
         idsToAdd.distinct().map { parentIdToAdd ->
-            if (category.hasParent(parentIdToAdd)) {
-                throw CategoryParentAlreadyExistException(parentIdToAdd, category.id)
+            if (!category.hasParent(parentIdToAdd)) {
+                category.parents.add(getCategoryParent(parentIdToAdd))
             }
-            category.parents.add(getCategoryParent(parentIdToAdd))
         }
     }
 
