@@ -13,8 +13,8 @@ import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.entity.ReviewRequest
 import com.jetbrains.life_science.review.request.service.JudgeExecutorService
-import com.jetbrains.life_science.review.request.service.PublishApproachRequestService
-import com.jetbrains.life_science.review.request.service.PublishProtocolRequestService
+import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestService
+import com.jetbrains.life_science.review.request.service.publish.PublishProtocolRequestService
 import com.jetbrains.life_science.review.response.entity.ReviewResolution
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.ApplicationEventPublisher

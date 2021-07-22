@@ -1,6 +1,7 @@
-package com.jetbrains.life_science.review.request.service
+package com.jetbrains.life_science.review.request.service.publish
 
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
+import com.jetbrains.life_science.review.request.service.JudgeExecutorService
 import com.jetbrains.life_science.review.response.entity.Review
 
 interface PublishProtocolRequestService : JudgeExecutorService {

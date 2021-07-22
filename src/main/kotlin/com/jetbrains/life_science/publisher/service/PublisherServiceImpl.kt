@@ -8,6 +8,7 @@ import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.protocol.service.PublicProtocolService
+import com.jetbrains.life_science.review.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.service.SectionService
 import org.springframework.stereotype.Service
@@ -53,11 +54,11 @@ class PublisherServiceImpl(
         return publicProtocol
     }
 
-    override fun publishApproachEditRecord() {
+    override fun publishApproachEditRecord(approachEditRecord: ApproachEditRecord): PublicApproach {
         TODO("Not yet implemented")
     }
 
-    override fun publishProtocolEditRecord() {
+    override fun publishProtocolEditRecord(protocolEditRecord: ApproachEditRecord): PublicProtocol {
         TODO("Not yet implemented")
     }
 

@@ -9,8 +9,8 @@ import com.jetbrains.life_science.controller.approach.draft.dto.DraftCategoryCre
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachViewMapper
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
-import com.jetbrains.life_science.review.request.service.PublishApproachRequestInfo
-import com.jetbrains.life_science.review.request.service.PublishApproachRequestService
+import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestInfo
+import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.springframework.security.core.annotation.AuthenticationPrincipal

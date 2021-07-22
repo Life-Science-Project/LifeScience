@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.review.request.service
+package com.jetbrains.life_science.review.request.service.publish
 
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException

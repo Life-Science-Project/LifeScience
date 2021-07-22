@@ -7,6 +7,7 @@ import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.service.maker.makePublishProtocolRequestInfo
+import com.jetbrains.life_science.review.request.service.publish.PublishProtocolRequestService
 import com.jetbrains.life_science.review.response.entity.Review
 import com.jetbrains.life_science.review.response.entity.ReviewResolution
 import com.jetbrains.life_science.user.credentials.entity.Credentials
