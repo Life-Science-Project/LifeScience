@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository
 interface CategoryRepository : JpaRepository<Category, Long> {
 
     fun findCategoryById(id: Long): Category?
+
+    fun findCategoriesByParentsEmpty(): List<Category>
 }

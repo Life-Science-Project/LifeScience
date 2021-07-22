@@ -6,10 +6,10 @@ import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.exception.category.CategoryNoParentsException
 import com.jetbrains.life_science.exception.category.CategoryNotFoundException
+import com.jetbrains.life_science.exception.category.CategoryParentAlreadyExistException
 import com.jetbrains.life_science.exception.category.CategoryParentNotFoundException
 import org.springframework.stereotype.Service
 
-private const val HEAD_CATEGORY_ID = 0L
 
 @Service
 class CategoryServiceImpl(
@@ -19,7 +19,7 @@ class CategoryServiceImpl(
 ) : CategoryService {
 
     override fun createCategory(categoryInfo: CategoryInfo): Category {
-        val parent = getCategoryParent(categoryInfo.parentId)
+        val parent = categoryInfo.parentId?.let { getCategoryParent(it) }
         val createdCategory = categoryFactory.createCategory(categoryInfo, parent)
         val savedCategory = categoryRepository.save(createdCategory)
         searchService.createSearchUnit(savedCategory)
@@ -44,12 +44,16 @@ class CategoryServiceImpl(
     }
 
     private fun addParents(category: Category, idsToAdd: List<Long>) {
-        val newParents = idsToAdd.map { getCategoryParent(it) }
-        category.parents.addAll(newParents)
+        idsToAdd.distinct().map { parentIdToAdd ->
+            if (category.hasParent(parentIdToAdd)) {
+                throw CategoryParentAlreadyExistException(parentIdToAdd, category.id)
+            }
+            category.parents.add(getCategoryParent(parentIdToAdd))
+        }
     }
 
     private fun deleteParents(category: Category, idsToDelete: List<Long>) {
-        idsToDelete.forEach { parentIdToDelete ->
+        idsToDelete.distinct().forEach { parentIdToDelete ->
             val removed = category.parents.removeIf { parent -> parent.id == parentIdToDelete }
             if (!removed) {
                 throw CategoryParentNotFoundException(parentIdToDelete)
@@ -79,12 +83,7 @@ class CategoryServiceImpl(
     }
 
     override fun getRootCategories(): List<Category> {
-        return getCategory(HEAD_CATEGORY_ID).subCategories
+        return categoryRepository.findCategoriesByParentsEmpty()
     }
 
-    private fun existById(id: Long) {
-        if (!categoryRepository.existsById(id)) {
-            throw CategoryNotFoundException(id)
-        }
-    }
 }

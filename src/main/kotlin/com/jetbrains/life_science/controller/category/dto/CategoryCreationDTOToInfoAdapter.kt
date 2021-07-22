@@ -10,5 +10,5 @@ class CategoryCreationDTOToInfoAdapter(
 
     override val aliases = dto.aliases.map { it.alias }
 
-    override val parentId = dto.initialParentId ?: 0L // to root category otherwise
+    override val parentId = dto.initialParentId
 }
