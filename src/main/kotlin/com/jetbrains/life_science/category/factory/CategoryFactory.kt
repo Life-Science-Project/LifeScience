@@ -7,13 +7,14 @@ import java.time.LocalDateTime
 
 @Component
 class CategoryFactory {
-    fun createCategory(info: CategoryInfo, parent: Category): Category {
+    fun createCategory(info: CategoryInfo, parent: Category?): Category {
+        val parents = parent?.let { mutableListOf(it) } ?: mutableListOf()
         return Category(
             id = 0,
             name = info.name,
             subCategories = mutableListOf(),
             approaches = mutableListOf(),
-            parents = mutableListOf(parent),
+            parents = parents,
             creationDate = LocalDateTime.now(),
             aliases = info.aliases
         )

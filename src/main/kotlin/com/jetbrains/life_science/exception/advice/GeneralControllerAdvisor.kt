@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
+import com.jetbrains.life_science.exception.common.WrongRequestWithMessageException
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import com.jetbrains.life_science.exception.maker.makeExceptionView
 import org.springframework.http.HttpStatus
@@ -84,6 +85,14 @@ class GeneralControllerAdvisor {
     fun handleInvalidJSON(exception: MismatchedInputException): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
             makeExceptionView(400_999),
+            HttpStatus.BAD_REQUEST
+        )
+    }
+
+    @ExceptionHandler(WrongRequestWithMessageException::class)
+    fun handleWrongRequestWithMessageException(exception: WrongRequestWithMessageException): ResponseEntity<ApiExceptionView> {
+        return ResponseEntity(
+            makeExceptionView(400_999, exception.message),
             HttpStatus.BAD_REQUEST
         )
     }

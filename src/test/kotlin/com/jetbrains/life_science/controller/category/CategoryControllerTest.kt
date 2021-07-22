@@ -143,6 +143,26 @@ internal class CategoryControllerTest : ApiTest() {
     }
 
     /**
+     * Test checks deleting not empty category
+     *
+     * Expected 400 http code and 400_999 system code result
+     * with message in view arguments.
+     */
+    @Test
+    fun `not empty category delete test`() {
+        val accessToken = loginAccessToken("admin@gmail.ru", "password")
+        val request = deleteRequestAuthorized(makePath("/1"), accessToken)
+
+        val exceptionView = getApiExceptionView(400, request)
+
+        assertEquals(400_999, exceptionView.systemCode)
+        assertEquals(
+            listOf(listOf("Category with id \"1\" is not empty and can not be deleted")),
+            exceptionView.arguments
+        )
+    }
+
+    /**
      * Category not found test.
      *
      * Expected 404 http code and 404_001 system code result

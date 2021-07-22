@@ -46,4 +46,6 @@ class Category(
 ) {
 
     val isEmpty: Boolean get() = subCategories.isEmpty() && approaches.isEmpty()
+
+    fun hasParent(parentId: Long) = parents.any { it.id == parentId }
 }
