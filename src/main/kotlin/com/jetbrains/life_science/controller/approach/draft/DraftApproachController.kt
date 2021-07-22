@@ -2,7 +2,6 @@ package com.jetbrains.life_science.controller.approach.draft
 
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.approach.service.DraftApproachService
-import com.jetbrains.life_science.approach.service.PublicApproachService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAddParticipantDTO
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
@@ -10,10 +9,13 @@ import com.jetbrains.life_science.controller.approach.draft.dto.DraftCategoryCre
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachViewMapper
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
+import com.jetbrains.life_science.review.request.service.PublishApproachRequestInfo
+import com.jetbrains.life_science.review.request.service.PublishApproachRequestService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/approaches/draft")
@@ -21,7 +23,7 @@ class DraftApproachController(
     val draftApproachService: DraftApproachService,
     val viewMapper: DraftApproachViewMapper,
     val categoryService: CategoryService,
-    val publicationRequestService: PublicApproachService,
+    val publishApproachRequestService: PublishApproachRequestService,
     val credentialsService: CredentialsService
 ) {
 
@@ -49,7 +51,8 @@ class DraftApproachController(
     ) {
         val approach = draftApproachService.get(approachId)
         checkOwnerAccess(approach, author)
-        publicationRequestService.create(approach)
+        val publicationInfo = DraftApproachToPublicationRequestAdapter(author, approach)
+        publishApproachRequestService.create(publicationInfo)
     }
 
     @PostMapping("/{approachId}/participants")
@@ -86,5 +89,13 @@ class DraftApproachController(
         if (approach.owner.id != credentials.id) {
             throw ForbiddenOperationException()
         }
+    }
+
+    private class DraftApproachToPublicationRequestAdapter(
+        override val editor: Credentials,
+        override val approach: DraftApproach
+    ) : PublishApproachRequestInfo {
+        override val id: Long = 0
+        override val date: LocalDateTime = LocalDateTime.now()
     }
 }

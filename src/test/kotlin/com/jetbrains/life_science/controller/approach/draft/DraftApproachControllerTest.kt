@@ -1,19 +1,17 @@
 package com.jetbrains.life_science.controller.approach.draft
 
 import com.jetbrains.life_science.ApiTest
-import com.jetbrains.life_science.approach.service.PublicApproachService
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAddParticipantDTO
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.user.UserShortView
-import com.nhaarman.mockitokotlin2.argThat
+import com.jetbrains.life_science.review.request.repository.PublishApproachRequestRepository
 import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
 import java.time.LocalDateTime
 
@@ -26,8 +24,8 @@ internal class DraftApproachControllerTest : ApiTest() {
 
     private val path = "/api/approaches/draft"
 
-    @MockBean
-    lateinit var publicationRequestService: PublicApproachService
+    @Autowired
+    lateinit var publishApproachRequestRepository: PublishApproachRequestRepository
 
     /**
      * Test should return draft approach view
@@ -146,11 +144,8 @@ internal class DraftApproachControllerTest : ApiTest() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
         patchAuthorized(makePath("1/send"), loginAccessToken)
 
-        verify(publicationRequestService, times(1)).create(
-            argThat { approach ->
-                approach.id == 1L
-            }
-        )
+        val request = publishApproachRequestRepository.findAll().filter { it.approach.id == 1L }
+        assertTrue(request.size == 1)
     }
 
     /**
