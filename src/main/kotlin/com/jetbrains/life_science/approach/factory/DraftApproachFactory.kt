@@ -2,6 +2,7 @@ package com.jetbrains.life_science.approach.factory
 
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.approach.service.DraftApproachInfo
+import com.jetbrains.life_science.util.UTCZone
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -16,7 +17,7 @@ class DraftApproachFactory {
             owner = info.owner,
             participants = mutableListOf(info.owner),
             sections = mutableListOf(),
-            creationDate = LocalDateTime.now()
+            creationDate = LocalDateTime.now(UTCZone)
         )
     }
 
