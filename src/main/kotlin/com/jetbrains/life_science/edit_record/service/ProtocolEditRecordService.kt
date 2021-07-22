@@ -1,0 +1,3 @@
+package com.jetbrains.life_science.edit_record.service
+
+interface ProtocolEditRecordService
