@@ -3,7 +3,7 @@ package com.jetbrains.life_science.edit_record.service
 import com.jetbrains.life_science.edit_record.entity.ProtocolEditRecord
 import com.jetbrains.life_science.edit_record.factory.ProtocolEditRecordFactory
 import com.jetbrains.life_science.edit_record.repository.ProtocolEditRecordRepository
-import com.jetbrains.life_science.exception.not_found.ProtocolEditRecordNotFoundException
+import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.exception.section.SectionAlreadyDeletedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
@@ -18,7 +18,7 @@ class ProtocolEditRecordServiceImpl(
 
     override fun get(id: Long): ProtocolEditRecord {
         return repository.findById(id).orElseThrow {
-            throw ProtocolEditRecordNotFoundException("ProtocolEditRecord not found by id: $id")
+            throw EditRecordNotFoundException("ProtocolEditRecord not found by id: $id")
         }
     }
 
