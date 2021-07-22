@@ -7,7 +7,7 @@ interface ProtocolEditRecordService {
 
     fun get(id: Long): ProtocolEditRecord
 
-    fun create(info: ProtocolEditRecordInfo): ProtocolEditRecordInfo
+    fun create(info: ProtocolEditRecordInfo): ProtocolEditRecord
 
     fun addSection(id: Long, section: Section): ProtocolEditRecord
 
