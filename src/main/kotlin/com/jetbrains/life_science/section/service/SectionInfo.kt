@@ -1,15 +1,13 @@
 package com.jetbrains.life_science.section.service
 
-import com.jetbrains.life_science.content.publish.service.ContentInfo
+import com.jetbrains.life_science.section.entity.Section
 
 interface SectionInfo {
     val id: Long
 
-    var name: String
+    val name: String
 
-    var order: Long
+    val visible: Boolean
 
-    var visible: Boolean
-
-    val contentInfo: ContentInfo
+    val prevSection: Section?
 }

@@ -17,14 +17,15 @@ class Section(
 
     var name: String,
 
-    @Column(name = "order_num")
-    var order: Long,
-
     var visible: Boolean,
 
-    var published: Boolean
+    var published: Boolean,
+
+    @OneToOne
+    var next: Section? = null
 
 ) {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -33,9 +34,9 @@ class Section(
 
         if (id != other.id) return false
         if (name != other.name) return false
-        if (order != other.order) return false
         if (visible != other.visible) return false
         if (published != other.published) return false
+        if (next != other.next) return false
 
         return true
     }
@@ -43,9 +44,9 @@ class Section(
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + order.hashCode()
         result = 31 * result + visible.hashCode()
         result = 31 * result + published.hashCode()
+        result = 31 * result + (next?.hashCode() ?: 0)
         return result
     }
 }

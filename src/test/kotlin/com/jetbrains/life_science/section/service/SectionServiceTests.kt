@@ -3,7 +3,7 @@ package com.jetbrains.life_science.section.service
 import com.jetbrains.life_science.content.maker.makeContentInfo
 import com.jetbrains.life_science.content.publish.entity.Content
 import com.jetbrains.life_science.content.version.service.ContentVersionService
-import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
+import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.exception.section.SectionAlreadyArchivedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyPublishedException
 import com.jetbrains.life_science.section.entity.Section

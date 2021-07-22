@@ -6,11 +6,20 @@ import org.springframework.stereotype.Component
 @Component
 class SectionViewMapper {
 
-    fun toViewAll(sections: List<Section>): List<SectionShortView> {
-        return sections.map { toView(it) }
+    fun toView(section: Section, contentText: String? = null): SectionView {
+        return SectionView(
+            id = section.id,
+            name = section.name,
+            hidden = !section.visible,
+            content = contentText
+        )
     }
 
-    fun toView(section: Section): SectionShortView {
+    fun toViewShortAll(sections: List<Section>): List<SectionShortView> {
+        return sections.map { toViewShort(it) }
+    }
+
+    fun toViewShort(section: Section): SectionShortView {
         return SectionShortView(
             id = section.id,
             name = section.name
