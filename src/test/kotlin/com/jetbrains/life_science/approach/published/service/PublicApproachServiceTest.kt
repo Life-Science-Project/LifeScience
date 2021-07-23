@@ -131,7 +131,8 @@ class PublicApproachServiceTest {
         val section = sectionService.getById(1L)
 
         // Action
-        val publicApproach = service.removeSection(approachId, section)
+        service.removeSection(approachId, section)
+        val publicApproach = service.get(approachId)
 
         // Assert
         assertNotContainsSection(publicApproach, section.id)

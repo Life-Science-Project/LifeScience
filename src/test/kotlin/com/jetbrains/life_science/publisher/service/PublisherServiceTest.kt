@@ -3,6 +3,7 @@ package com.jetbrains.life_science.publisher.service
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.approach.service.PublicApproachService
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
+import com.jetbrains.life_science.edit_record.service.ProtocolEditRecordService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
@@ -28,7 +29,8 @@ import javax.annotation.PostConstruct
     "/scripts/initial_data.sql",
     "/scripts/publisher/draft_approach_data.sql",
     "/scripts/publisher/draft_protocol_data.sql",
-    "/scripts/publisher/approach_edit_record_data.sql"
+    "/scripts/publisher/approach_edit_record_data.sql",
+    "/scripts/publisher/protocol_edit_record_data.sql"
 )
 @Transactional
 internal class PublisherServiceTest {
@@ -50,6 +52,9 @@ internal class PublisherServiceTest {
 
     @Autowired
     lateinit var approachEditRecordService: ApproachEditRecordService
+
+    @Autowired
+    lateinit var protocolEditRecordService: ProtocolEditRecordService
 
     @Autowired
     lateinit var sectionService: SectionService
@@ -143,6 +148,30 @@ internal class PublisherServiceTest {
         }
         approachEditRecord.deletedSections.forEach {
             assertFalse(approach.sections.contains(it))
+            assertThrows<SectionNotFoundException> {
+                sectionService.getById(it.id)
+            }
+        }
+    }
+
+    /**
+     * Should publish existing protocol edit record
+     */
+    @Test
+    fun `publish existing protocol edit record`() {
+        // Prepare
+        val protocolEditRecord = protocolEditRecordService.get(1L)
+
+        // Action
+        val protocol = service.publishProtocolEditRecord(protocolEditRecord)
+
+        // Assert
+        protocolEditRecord.createdSections.forEach {
+            assertTrue(protocol.sections.contains(it))
+            assertTrue(it.published)
+        }
+        protocolEditRecord.deletedSections.forEach {
+            assertFalse(protocol.sections.contains(it))
             assertThrows<SectionNotFoundException> {
                 sectionService.getById(it.id)
             }

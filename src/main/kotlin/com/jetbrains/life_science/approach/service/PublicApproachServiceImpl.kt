@@ -28,19 +28,17 @@ class PublicApproachServiceImpl(
         return savedPublicApproach
     }
 
-    override fun addSection(approachId: Long, section: Section): PublicApproach {
-        val publicApproach = get(approachId)
+    override fun addSection(id: Long, section: Section) {
+        val publicApproach = get(id)
         if (!publicApproach.sections.any { it.id == section.id }) {
             publicApproach.sections.add(section)
             repository.save(publicApproach)
         }
-        return publicApproach
     }
 
-    override fun removeSection(approachId: Long, section: Section): PublicApproach {
-        val publicApproach = get(approachId)
+    override fun removeSection(id: Long, section: Section) {
+        val publicApproach = get(id)
         publicApproach.sections.removeAll { it.id == section.id }
         repository.save(publicApproach)
-        return publicApproach
     }
 }

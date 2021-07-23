@@ -6,6 +6,7 @@ import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.protocol.factory.PublicProtocolFactory
 import com.jetbrains.life_science.protocol.repository.PublicProtocolRepository
 import com.jetbrains.life_science.protocol.search.service.ProtocolSearchUnitService
+import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
 
 @Service
@@ -25,5 +26,19 @@ class PublicProtocolServiceImpl(
         val savedPublicProtocol = repository.save(publicProtocol)
         searchUnitService.createSearchUnit(savedPublicProtocol)
         return savedPublicProtocol
+    }
+
+    override fun addSection(id: Long, section: Section) {
+        val publicProtocol = get(id)
+        if (!publicProtocol.sections.any { it.id == section.id }) {
+            publicProtocol.sections.add(section)
+            repository.save(publicProtocol)
+        }
+    }
+
+    override fun removeSection(id: Long, section: Section) {
+        val publicProtocol = get(id)
+        publicProtocol.sections.removeAll { it.id == section.id }
+        repository.save(publicProtocol)
     }
 }
