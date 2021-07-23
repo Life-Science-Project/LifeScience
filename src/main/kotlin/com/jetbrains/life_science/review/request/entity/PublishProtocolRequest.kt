@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.review.request.entity
 
-import com.jetbrains.life_science.protocol.entity.DraftProtocol
+import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.review.response.entity.Review
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime

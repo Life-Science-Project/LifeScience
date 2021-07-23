@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.edit_record.approach.service
 
-import com.jetbrains.life_science.approach.service.PublicApproachService
+import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.edit_record.approach.service.maker.makeApproachEditRecordInfo
 import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService

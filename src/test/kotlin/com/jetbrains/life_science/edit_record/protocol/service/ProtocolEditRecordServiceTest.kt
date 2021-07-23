@@ -7,7 +7,7 @@ import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundExceptio
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.exception.section.SectionAlreadyDeletedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
-import com.jetbrains.life_science.protocol.service.PublicProtocolService
+import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import com.jetbrains.life_science.util.UTCZone

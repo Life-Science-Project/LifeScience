@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.user.group.entity
 
-import com.jetbrains.life_science.approach.entity.PublicApproach
-import com.jetbrains.life_science.protocol.entity.PublicProtocol
+import com.jetbrains.life_science.container.approach.entity.PublicApproach
+import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import javax.persistence.*
 
 @Entity

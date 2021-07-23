@@ -1,9 +1,9 @@
 package com.jetbrains.life_science.review.request.service
 
-import com.jetbrains.life_science.approach.entity.PublicApproach
+import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.exception.not_found.PublishProtocolRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
-import com.jetbrains.life_science.protocol.entity.DraftProtocol
+import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.service.maker.makePublishProtocolRequestInfo

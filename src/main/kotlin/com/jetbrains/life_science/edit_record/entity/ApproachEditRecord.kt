@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.edit_record.entity
 
-import com.jetbrains.life_science.approach.entity.PublicApproach
+import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.section.entity.Section
 import java.time.LocalDateTime
 import javax.persistence.*

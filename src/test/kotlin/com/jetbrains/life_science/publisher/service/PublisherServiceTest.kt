@@ -1,14 +1,14 @@
 package com.jetbrains.life_science.publisher.service
 
-import com.jetbrains.life_science.approach.service.DraftApproachService
-import com.jetbrains.life_science.approach.service.PublicApproachService
+import com.jetbrains.life_science.container.approach.service.DraftApproachService
+import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.edit_record.service.ProtocolEditRecordService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
 import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
-import com.jetbrains.life_science.protocol.service.DraftProtocolService
-import com.jetbrains.life_science.protocol.service.PublicProtocolService
+import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
+import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient

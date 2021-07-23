@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.controller.approach.draft
 
-import com.jetbrains.life_science.approach.entity.DraftApproach
-import com.jetbrains.life_science.approach.service.DraftApproachService
+import com.jetbrains.life_science.container.approach.entity.DraftApproach
+import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAddParticipantDTO
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO

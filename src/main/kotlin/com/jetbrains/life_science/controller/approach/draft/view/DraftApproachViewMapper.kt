@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.controller.approach.draft.view
 
-import com.jetbrains.life_science.approach.entity.DraftApproach
+import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.controller.category.view.CategoryViewMapper
 import com.jetbrains.life_science.controller.section.view.SectionViewMapper
 import com.jetbrains.life_science.controller.user.UserViewMapper
