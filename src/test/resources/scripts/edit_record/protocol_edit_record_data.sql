@@ -2,6 +2,7 @@ insert into public_protocol (id, name, rating, approach_id, owner_id)
 values (1, 'first published', 0, 1, 1);
 insert into public_protocol (id, name, rating, approach_id, owner_id)
 values (2, 'second published', 0, 1, 1);
+alter sequence public_approach_seq restart with 3;
 
 insert into protocol_edit_record (id, last_edit_date, protocol_id)
 values (1, parsedatetime('17-12-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1);

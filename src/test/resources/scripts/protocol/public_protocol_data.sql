@@ -1,5 +1,6 @@
 insert into public_protocol (id, name, rating, approach_id, owner_id)
 values (1, 'first published', 0, 1, 1);
+alter sequence public_protocol_seq restart with 2;
 
 insert into public_protocol_co_authors (public_protocol_id, co_authors_id)
 values (1, 1);
