@@ -4,6 +4,7 @@ import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.approach.service.PublicApproachService
+import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
@@ -53,11 +54,11 @@ class PublisherServiceImpl(
         return publicProtocol
     }
 
-    override fun publishApproachEditRecord() {
+    override fun publishApproachEditRecord(approachEditRecord: ApproachEditRecord): PublicApproach {
         TODO("Not yet implemented")
     }
 
-    override fun publishProtocolEditRecord() {
+    override fun publishProtocolEditRecord(protocolEditRecord: ApproachEditRecord): PublicProtocol {
         TODO("Not yet implemented")
     }
 

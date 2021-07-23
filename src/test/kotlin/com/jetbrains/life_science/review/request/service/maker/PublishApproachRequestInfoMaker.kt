@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.review.request.service.maker
 
 import com.jetbrains.life_science.approach.entity.DraftApproach
-import com.jetbrains.life_science.review.request.service.PublishApproachRequestInfo
+import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestInfo
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
 
