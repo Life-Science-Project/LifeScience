@@ -28,7 +28,15 @@ class ApproachReviewRequestServiceImpl(
     }
 
     override fun cancel(id: Long): ApproachReviewRequest {
-        return changeState(id, RequestState.CANCELED)
+        val approachRequest = get(id)
+        if (approachRequest.state != RequestState.PENDING) {
+            throw RequestImmutableStateException(
+                "Can't change state of ${approachRequest.state} " +
+                    "ApproachReviewRequest to ${RequestState.CANCELED}"
+            )
+        }
+        factory.changeState(approachRequest, RequestState.CANCELED)
+        return repository.save(approachRequest)
     }
 
     override fun addReview(id: Long, review: Review): ApproachReviewRequest {
@@ -43,17 +51,5 @@ class ApproachReviewRequestServiceImpl(
             reviewService.deleteReview(it.id)
         }
         repository.deleteById(request.id)
-    }
-
-    private fun changeState(id: Long, state: RequestState): ApproachReviewRequest {
-        val approachRequest = get(id)
-        if (approachRequest.state != RequestState.PENDING) {
-            throw RequestImmutableStateException(
-                "Can't change state of ${approachRequest.state} " +
-                    "ApproachReviewRequest to $state"
-            )
-        }
-        factory.changeState(approachRequest, state)
-        return repository.save(approachRequest)
     }
 }
