@@ -5,9 +5,12 @@ import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.controller.section.dto.SectionCreationDTO
 import com.jetbrains.life_science.controller.section.dto.SectionCreationDTOToInfoAdapter
+import com.jetbrains.life_science.controller.section.dto.SectionDTO
+import com.jetbrains.life_science.controller.section.dto.SectionDTOToInfoAdapter
 import com.jetbrains.life_science.controller.section.view.SectionView
 import com.jetbrains.life_science.controller.section.view.SectionViewMapper
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
+import com.jetbrains.life_science.exception.section.SectionAlreadyPublishedException
 import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.service.SectionService
@@ -16,7 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/approaches/draft/{approachId}")
+@RequestMapping("/api/approaches/draft/{approachId}/sections")
 class DraftSectionController(
     val sectionService: SectionService,
     val draftApproachService: DraftApproachService,
@@ -24,7 +27,7 @@ class DraftSectionController(
     val contentVersionService: ContentVersionService
 ) {
 
-    @GetMapping("/sections/{sectionId}")
+    @GetMapping("/{sectionId}")
     fun getSection(
         @PathVariable approachId: Long,
         @PathVariable sectionId: Long,
@@ -43,9 +46,41 @@ class DraftSectionController(
     ): SectionView {
         val approach = getApproachSecured(approachId, credentials)
         val prevSection = dto.prevSectionId?.let { getSectionSecured(approach, it) }
-        val info = SectionCreationDTOToInfoAdapter(dto, prevSection)
+        val info = SectionCreationDTOToInfoAdapter(dto, prevSection, approach.sections)
         val section = sectionService.create(info)
         return viewMapper.toView(section)
+    }
+
+    @DeleteMapping("/{sectionId}")
+    fun delete(
+        @PathVariable approachId: Long,
+        @PathVariable sectionId: Long,
+        @AuthenticationPrincipal credentials: Credentials
+    ) {
+        val approach = getApproachSecured(approachId, credentials)
+        if (approach.hasSection(sectionId)) {
+            throw SectionNotFoundException(sectionId)
+        }
+        sectionService.deleteById(sectionId, approach.sections)
+    }
+
+    @PatchMapping("/{sectionId}")
+    fun updateSection(
+        @PathVariable approachId: Long,
+        @PathVariable sectionId: Long,
+        @AuthenticationPrincipal credentials: Credentials,
+        @RequestBody dto: SectionDTO
+    ): SectionView {
+        val approach = getApproachSecured(approachId, credentials)
+        val section = getSectionSecured(approach, sectionId)
+
+        if (section.published) throw SectionAlreadyPublishedException()
+
+        val prevSection = dto.prevSectionId?.let { getSectionSecured(approach, it) }
+        val info = SectionDTOToInfoAdapter(dto, approach.sections, prevSection)
+        val result = sectionService.update(section, info)
+
+        return viewMapper.toView(result)
     }
 
     private fun getSectionSecured(

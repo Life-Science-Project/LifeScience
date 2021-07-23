@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.section.service
 
+import com.jetbrains.life_science.content.publish.service.ContentInfo
 import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.exception.section.SectionNotFoundException
@@ -25,21 +26,35 @@ class SectionServiceImpl(
     lateinit var contentVersionService: ContentVersionService
 
     @Transactional
-    override fun create(info: SectionInfo): Section {
-        var section = factory.create(info)
-        section = repository.save(section)
-        info.contentInfo.sectionId = section.id
-        contentVersionService.create(info.contentInfo)
-        return section
+    override fun create(info: SectionCreationInfo): Section {
+        val section = factory.create(info)
+        moveOrdersOnCreate(info.prevSection, info.allSections)
+        return repository.save(section)
+    }
+
+    private fun moveOrdersOnCreate(previous: Section?, allSections: List<Section>) {
+        if (previous == null) {
+            allSections.onEach { it.order++ }
+                .forEach { repository.save(it) }
+        } else {
+            allSections.filter { it.order > previous.order }
+                .onEach { it.order++ }
+                .forEach { repository.save(it) }
+        }
     }
 
     @Transactional
-    override fun deleteById(id: Long) {
-        throwNotExist(id)
-        val section = repository.findById(id).orElseThrow()
+    override fun deleteById(id: Long, allSections: List<Section>) {
+        val section = getById(id)
+        moveOrdersOnDelete(section.id, section.order, allSections)
         contentService.deleteBySectionId(id)
-        // Deleting row in database
-        repository.delete(section)
+        repository.deleteById(id)
+    }
+
+    private fun moveOrdersOnDelete(deletedId: Long, oldOrder: Int, allSections: List<Section>) {
+        allSections.filter { it.order > oldOrder && it.id != deletedId }
+            .onEach { it.order-- }
+            .forEach { repository.save(it) }
     }
 
     override fun getById(id: Long): Section {
@@ -53,21 +68,34 @@ class SectionServiceImpl(
 
     private fun throwNotExist(id: Long) {
         if (!existsById(id)) {
-            throw SectionNotFoundException("Section not found by id: $id")
+            throw SectionNotFoundException(id)
         }
     }
 
     @Transactional
-    override fun update(info: SectionInfo): Section {
-        val section = getById(info.id)
-        if (!section.published) {
-            factory.setParams(section, info)
-            info.contentInfo.sectionId = info.id
-            contentVersionService.update(info.contentInfo)
-            return section
-        } else {
-            throw SectionAlreadyPublishedException()
-        }
+    override fun update(section: Section, info: SectionInfo): Section {
+        factory.setParams(section, info)
+        val saved = repository.save(section)
+        moveOrdersOnUpdate(section, info.allSections)
+
+        val contentInfo = SectionInfoToContentInfoAdapter(section.id, info.content)
+        contentVersionService.updateOrCreateIfNotExists(contentInfo)
+        return saved
+    }
+
+    class SectionInfoToContentInfoAdapter(
+        override var sectionId: Long,
+        override var text: String
+    ) : ContentInfo {
+        override var references: List<String> = emptyList()
+        override var tags: List<String> = emptyList()
+    }
+
+
+    private fun moveOrdersOnUpdate(section: Section, allSections: List<Section>) {
+        allSections.filter { it.id != section.id && it.order >= section.order }
+            .onEach { it.order++ }
+            .forEach { repository.save(it) }
     }
 
     override fun publish(sectionId: Long) {

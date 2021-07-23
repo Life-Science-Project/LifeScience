@@ -24,6 +24,7 @@ class ContentVersionRepositoryImpl(
         elasticsearchOperations.delete(query, Content::class.java, indexCoordinates)
     }
 
+
     override fun save(content: Content): Content {
         return elasticsearchOperations.save(content, indexCoordinates)
     }

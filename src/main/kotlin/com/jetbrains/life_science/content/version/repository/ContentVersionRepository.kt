@@ -13,4 +13,5 @@ interface ContentVersionRepository {
     fun findBySectionId(sectionId: Long): Content?
 
     fun deleteBySectionId(sectionId: Long)
+
 }
