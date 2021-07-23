@@ -29,11 +29,12 @@ class ApproachEditRecordServiceImpl(
 
     override fun addSection(id: Long, section: Section): ApproachEditRecord {
         val approachEditRecord = get(id)
-        when (section) {
-            in approachEditRecord.deletedSections -> {
+        when {
+            containsById(section.id, approachEditRecord.deletedSections) -> {
                 approachEditRecord.deletedSections.remove(section)
             }
-            in approachEditRecord.createdSections, in approachEditRecord.approach.sections -> {
+            containsById(id, approachEditRecord.createdSections)
+                || containsById(id, approachEditRecord.approach.sections) -> {
                 throw SectionAlreadyExistsException(
                     "Section with id ${section.id} is already exists in createdSections or approach"
                 )
@@ -46,16 +47,16 @@ class ApproachEditRecordServiceImpl(
 
     override fun deleteSection(id: Long, section: Section): ApproachEditRecord {
         val approachEditRecord = get(id)
-        when (section) {
-            in approachEditRecord.deletedSections -> {
+        when {
+            containsById(section.id, approachEditRecord.deletedSections) -> {
                 throw SectionAlreadyDeletedException(
                     "Section with id ${section.id} is already exists in deletedSections"
                 )
             }
-            in approachEditRecord.approach.sections -> {
+            containsById(section.id, approachEditRecord.approach.sections) -> {
                 approachEditRecord.deletedSections.add(section)
             }
-            in approachEditRecord.createdSections -> {
+            containsById(section.id, approachEditRecord.createdSections) -> {
                 approachEditRecord.createdSections.remove(section)
             }
             else -> {
@@ -72,5 +73,9 @@ class ApproachEditRecordServiceImpl(
         approachEditRecord.deletedSections.clear()
         factory.setCurrentTimeToLastEditDate(approachEditRecord)
         repository.save(approachEditRecord)
+    }
+
+    private fun containsById(id: Long, list: List<Section>): Boolean {
+        return list.any { it.id == id }
     }
 }
