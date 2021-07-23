@@ -30,11 +30,11 @@ class ProtocolEditRecordServiceImpl(
     override fun addSection(id: Long, section: Section): ProtocolEditRecord {
         val protocolEditRecord = get(id)
         when {
-            containsById(section.id, protocolEditRecord.deletedSections) -> {
+            protocolEditRecord.containsDeletedSectionById(section.id) -> {
                 protocolEditRecord.deletedSections.remove(section)
             }
-            containsById(section.id, protocolEditRecord.createdSections) ||
-                containsById(section.id, protocolEditRecord.protocol.sections) -> {
+            protocolEditRecord.containsCreatedSectionById(section.id) ||
+                protocolEditRecord.containsSectionById(section.id) -> {
                 throw SectionAlreadyExistsException(
                     "Section with id ${section.id} is already exists in createdSections or protocol"
                 )
@@ -48,15 +48,15 @@ class ProtocolEditRecordServiceImpl(
     override fun deleteSection(id: Long, section: Section): ProtocolEditRecord {
         val protocolEditRecord = get(id)
         when {
-            containsById(section.id, protocolEditRecord.deletedSections) -> {
+            protocolEditRecord.containsDeletedSectionById(section.id) -> {
                 throw SectionAlreadyDeletedException(
                     "Section with id ${section.id} is already exists in deletedSections of protocolEditRecord"
                 )
             }
-            containsById(section.id, protocolEditRecord.protocol.sections) -> {
+            protocolEditRecord.containsSectionById(section.id) -> {
                 protocolEditRecord.deletedSections.add(section)
             }
-            containsById(section.id, protocolEditRecord.createdSections) -> {
+            protocolEditRecord.containsCreatedSectionById(section.id) -> {
                 protocolEditRecord.createdSections.remove(section)
             }
             else -> {
@@ -75,9 +75,5 @@ class ProtocolEditRecordServiceImpl(
         protocolEditRecord.deletedSections.clear()
         factory.setCurrentTimeToLastEditDate(protocolEditRecord)
         repository.save(protocolEditRecord)
-    }
-
-    private fun containsById(id: Long, list: List<Section>): Boolean {
-        return list.any { it.id == id }
     }
 }
