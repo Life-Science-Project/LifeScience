@@ -32,7 +32,7 @@ class PublicProtocolServiceTest {
      * Should create new protocol
      */
     @Test
-    fun `create new draft approach`() {
+    fun `create new draft protocol`() {
         // Prepare data
         val draftProtocol = draftProtocolService.get(2L)
 
@@ -75,7 +75,7 @@ class PublicProtocolServiceTest {
      * Should throw PublicProtocolNotFound exception
      */
     @Test
-    fun `get non-existing approach`() {
+    fun `get non-existing protocol`() {
         // Prepare data
         val protocolId = 666L
 
@@ -106,7 +106,7 @@ class PublicProtocolServiceTest {
      * Should throw PublicProtocolNotFoundException
      */
     @Test
-    fun `add section to sections of not existing public approach`() {
+    fun `add section to sections of not existing public protocol`() {
         // Prepare data
         val protocolId = 666L
         val section = sectionService.getById(1L)
@@ -153,11 +153,11 @@ class PublicProtocolServiceTest {
         Assertions.assertTrue(publicProtocol.coAuthors.any { it.id == userId })
     }
 
-    private fun assertContainsSection(publicApproach: PublicProtocol, sectionId: Long) {
-        Assertions.assertTrue(publicApproach.sections.any { it.id == sectionId })
+    private fun assertContainsSection(publicProtocol: PublicProtocol, sectionId: Long) {
+        Assertions.assertTrue(publicProtocol.sections.any { it.id == sectionId })
     }
 
-    private fun assertNotContainsSection(publicApproach: PublicProtocol, sectionId: Long) {
-        Assertions.assertFalse(publicApproach.sections.any { it.id == sectionId })
+    private fun assertNotContainsSection(publicProtocol: PublicProtocol, sectionId: Long) {
+        Assertions.assertFalse(publicProtocol.sections.any { it.id == sectionId })
     }
 }

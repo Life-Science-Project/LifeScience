@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.controller.category
 
 import com.jetbrains.life_science.ApiTest
-import com.jetbrains.life_science.controller.approach.view.ApproachShortView
 import com.jetbrains.life_science.controller.category.dto.CategoryAliasDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryUpdateDTO
@@ -69,9 +68,7 @@ internal class CategoryControllerTest : ApiTest() {
             name = "catalog 1",
             aliases = emptyList(),
             creationDate = timeOf(2020, 9, 17),
-            approaches = listOf(
-                ApproachShortView(1, "approach 1", timeOf(2020, 12, 17), emptyList())
-            ),
+            approaches = emptyList(),
             subCategories = listOf(
                 CategoryShortView(3, "child 1-2", timeOf(2020, 11, 17))
             )
