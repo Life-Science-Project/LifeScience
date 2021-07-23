@@ -20,8 +20,15 @@ class ContentVersionServiceImpl(
     @Autowired
     lateinit var contentService: ContentService
 
-    @Autowired
-    lateinit var sectionService: SectionService
+
+    override fun updateOrCreateIfNotExists(info: ContentInfo) {
+        val content = findBySectionId(info.sectionId)
+        if (content != null) {
+            update(content, info)
+        } else {
+            create(info)
+        }
+    }
 
     override fun create(info: ContentInfo): Content {
         validateContentNotExists(info.sectionId)
@@ -38,6 +45,13 @@ class ContentVersionServiceImpl(
 
     override fun update(info: ContentInfo): Content {
         val content = findBySectionId(info.sectionId)
+        return update(content, info)
+    }
+
+    private fun update(
+        content: Content?,
+        info: ContentInfo
+    ): Content {
         if (content != null) {
             factory.setParams(content, info)
         } else {

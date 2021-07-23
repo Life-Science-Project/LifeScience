@@ -21,8 +21,7 @@ class Section(
 
     var published: Boolean,
 
-    @OneToOne
-    var next: Section? = null
+    var order: Int
 
 ) {
 
@@ -36,7 +35,7 @@ class Section(
         if (name != other.name) return false
         if (visible != other.visible) return false
         if (published != other.published) return false
-        if (next != other.next) return false
+        if (order != other.order) return false
 
         return true
     }
@@ -46,7 +45,7 @@ class Section(
         result = 31 * result + name.hashCode()
         result = 31 * result + visible.hashCode()
         result = 31 * result + published.hashCode()
-        result = 31 * result + (next?.hashCode() ?: 0)
+        result = 31 * result + order.hashCode()
         return result
     }
 }

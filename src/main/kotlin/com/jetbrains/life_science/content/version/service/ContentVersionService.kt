@@ -18,4 +18,6 @@ interface ContentVersionService {
     fun deleteBySectionId(sectionId: Long)
 
     fun archiveBySectionId(sectionId: Long)
+
+    fun updateOrCreateIfNotExists( info: ContentInfo)
 }
