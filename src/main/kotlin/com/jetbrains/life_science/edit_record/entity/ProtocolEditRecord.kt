@@ -25,4 +25,16 @@ class ProtocolEditRecord(
     @OneToOne
     val protocol: PublicProtocol
 
-) : EditRecord(lastEditDate, deletedSections, createdSections)
+) : EditRecord(lastEditDate, deletedSections, createdSections) {
+    fun containsSectionById(id: Long): Boolean {
+        return protocol.sections.any { it.id == id }
+    }
+
+    fun containsDeletedSectionById(id: Long): Boolean {
+        return deletedSections.any { it.id == id }
+    }
+
+    fun containsCreatedSectionById(id: Long): Boolean {
+        return createdSections.any { it.id == id }
+    }
+}
