@@ -2,6 +2,7 @@ package com.jetbrains.life_science.category.factory
 
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.service.CategoryInfo
+import com.jetbrains.life_science.util.UTCZone
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -15,7 +16,7 @@ class CategoryFactory {
             subCategories = mutableListOf(),
             approaches = mutableListOf(),
             parents = parents,
-            creationDate = LocalDateTime.now(),
+            creationDate = LocalDateTime.now(UTCZone),
             aliases = info.aliases
         )
     }
