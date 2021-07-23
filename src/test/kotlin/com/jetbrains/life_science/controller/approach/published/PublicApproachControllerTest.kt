@@ -2,6 +2,7 @@ package com.jetbrains.life_science.controller.approach.published
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.approach.published.view.PublicApproachView
+import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.user.UserShortView
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -24,7 +25,9 @@ internal class PublicApproachControllerTest : ApiTest() {
         val expectedView = PublicApproachView(
             id = 1,
             name = "approach 1",
-            categories = emptyList(),
+            categories = listOf(
+                CategoryShortView(1, "catalog 1", timeOf(2020, 9, 17)),
+            ),
             sections = emptyList(),
             coAuthors = listOf(
                 UserShortView(id = 1, fullName = "Alex"),

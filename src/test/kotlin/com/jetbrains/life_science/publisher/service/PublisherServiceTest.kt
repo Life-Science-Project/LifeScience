@@ -1,7 +1,9 @@
 package com.jetbrains.life_science.publisher.service
 
+import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.container.approach.service.PublicApproachService
+import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.edit_record.service.ProtocolEditRecordService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
@@ -20,6 +22,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 import javax.annotation.PostConstruct
@@ -34,6 +37,12 @@ import javax.annotation.PostConstruct
 )
 @Transactional
 internal class PublisherServiceTest {
+
+    @MockBean
+    lateinit var protocolSearchUnitService: ProtocolSearchUnitService
+
+    @MockBean
+    lateinit var approachSearchUnitService: ApproachSearchUnitService
 
     @Autowired
     lateinit var service: PublisherService

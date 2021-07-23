@@ -73,5 +73,9 @@ alter sequence category_seq restart with 6;
 
 insert into public_approach (id, name, creation_date, owner_id)
 values (1, 'approach 1', parsedatetime('17-12-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1);
+insert into category_approaches (category_id, approaches_id)
+values (1, 1);
+insert into public_approach_categories (public_approach_id, categories_id)
+values (1, 1);
 -- nextPublicApproachId = 2
 alter sequence public_approach_seq restart with 2;

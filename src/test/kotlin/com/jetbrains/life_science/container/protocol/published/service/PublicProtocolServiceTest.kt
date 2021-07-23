@@ -2,6 +2,7 @@ package com.jetbrains.life_science.container.protocol.published.service
 
 import com.jetbrains.life_science.exception.not_found.PublicProtocolNotFoundException
 import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
+import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
 import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
 import com.jetbrains.life_science.section.service.SectionService
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional
 @Sql("/scripts/initial_data.sql", "/scripts/protocol/public_protocol_data.sql")
 @Transactional
 class PublicProtocolServiceTest {
+
+    @MockBean
+    lateinit var protocolSearchUnitService: ProtocolSearchUnitService
 
     @Autowired
     lateinit var service: PublicProtocolService
@@ -32,7 +37,7 @@ class PublicProtocolServiceTest {
      * Should create new protocol
      */
     @Test
-    fun `create new draft protocol`() {
+    fun `create new public protocol`() {
         // Prepare data
         val draftProtocol = draftProtocolService.get(2L)
 

@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.judge.service
 
+import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
+import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
 import com.jetbrains.life_science.exception.judge.RequestJudgeWrongStateException
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.not_found.PublishProtocolRequestNotFoundException
@@ -27,6 +29,12 @@ import org.springframework.transaction.annotation.Transactional
 )
 @Transactional
 internal class JudgePublishServiceTest {
+
+    @MockBean
+    lateinit var protocolSearchUnitService: ProtocolSearchUnitService
+
+    @MockBean
+    lateinit var approachSearchUnitService: ApproachSearchUnitService
 
     @MockBean
     lateinit var eventHandler: JudgePublishServiceTestHandler
