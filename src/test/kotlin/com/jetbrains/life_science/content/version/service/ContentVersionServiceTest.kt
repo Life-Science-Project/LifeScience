@@ -55,7 +55,6 @@ internal class ContentVersionServiceTest {
     fun `create content`() {
         // Prepare
         val info = makeContentInfo(
-            id = "",
             sectionId = 15,
             text = "new content text",
             tags = mutableListOf(),
@@ -86,7 +85,6 @@ internal class ContentVersionServiceTest {
     fun `create content with existing sectionId`() {
         // Prepare
         val info = makeContentInfo(
-            id = "",
             sectionId = 4,
             text = "new content text",
             tags = mutableListOf(),
@@ -259,7 +257,6 @@ internal class ContentVersionServiceTest {
         // Prepare
         val expectedId = "abracadabra"
         val info = makeContentInfo(
-            id = expectedId,
             sectionId = 5,
             text = "updated text",
             references = mutableListOf(),

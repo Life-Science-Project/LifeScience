@@ -52,11 +52,7 @@ class WebSecurityConfig(
             .csrf().disable()
             .authorizeRequests()
             .antMatchers(
-                "/api/articles/versions/*/reviews/**",
-                "/api/articles/versions/*/copy",
-                "/api/articles/versions/*/approve",
-                "/api/articles/versions/*/archive",
-                "/api/articles/*/versions",
+                "/api/approaches/draft/**",
                 "/api/review/request/**",
                 "/api/ping/**"
             ).fullyAuthenticated()

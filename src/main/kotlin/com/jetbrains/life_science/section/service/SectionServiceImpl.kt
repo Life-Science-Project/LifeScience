@@ -74,6 +74,9 @@ class SectionServiceImpl(
 
     @Transactional
     override fun update(section: Section, info: SectionInfo): Section {
+        if (section.published) {
+            throw SectionAlreadyPublishedException()
+        }
         factory.setParams(section, info)
         val saved = repository.save(section)
         moveOrdersOnUpdate(section, info.allSections)
