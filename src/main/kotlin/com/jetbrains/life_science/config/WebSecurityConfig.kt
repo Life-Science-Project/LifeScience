@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
+import java.util.*
 
 @Configuration
 @EnableWebSecurity
@@ -72,7 +73,7 @@ class WebSecurityConfig(
 
     private fun corsConfig(): CorsConfiguration {
         val config = CorsConfiguration().applyPermitDefaultValues()
-        config.allowedMethods = listOf("GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS")
+        config.allowedMethods = HttpMethod.values().map { value -> value.name }
         config.allowCredentials = true
         config.allowedOrigins = corsAllowedList
         return config
