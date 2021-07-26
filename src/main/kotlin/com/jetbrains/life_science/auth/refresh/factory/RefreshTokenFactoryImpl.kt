@@ -2,6 +2,7 @@ package com.jetbrains.life_science.auth.refresh.factory
 
 import com.jetbrains.life_science.auth.refresh.entity.RefreshToken
 import com.jetbrains.life_science.user.credentials.entity.Credentials
+import com.jetbrains.life_science.util.UTCZone
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.security.MessageDigest
@@ -28,7 +29,7 @@ class RefreshTokenFactoryImpl : RefreshTokenFactory {
     }
 
     private fun generateExpirationTime(): LocalDateTime {
-        return LocalDateTime.now().plusSeconds(refreshExpirationSeconds.toLong())
+        return LocalDateTime.now(UTCZone).plusSeconds(refreshExpirationSeconds.toLong())
     }
 
     private fun generateRefreshToken(username: String): String {

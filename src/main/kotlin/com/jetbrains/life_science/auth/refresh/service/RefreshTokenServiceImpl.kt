@@ -6,6 +6,7 @@ import com.jetbrains.life_science.auth.refresh.repository.RefreshTokenRepository
 import com.jetbrains.life_science.exception.auth.ExpiredRefreshTokenException
 import com.jetbrains.life_science.exception.auth.InvalidRefreshTokenException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
+import com.jetbrains.life_science.util.UTCZone
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -24,7 +25,7 @@ class RefreshTokenServiceImpl(
 
     override fun getCredentialsByRefreshToken(refreshTokenCode: RefreshTokenCode): Credentials {
         val refreshToken = repository.findByCode(refreshTokenCode.code) ?: throw InvalidRefreshTokenException()
-        if (refreshToken.expirationDateTime < LocalDateTime.now()) {
+        if (refreshToken.expirationDateTime < LocalDateTime.now(UTCZone)) {
             throw ExpiredRefreshTokenException()
         }
         return refreshToken.credentials

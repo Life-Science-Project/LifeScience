@@ -2,7 +2,7 @@ package com.jetbrains.life_science.user.data.dto
 
 data class UserPersonalDataDTO(
 
-    val doctorDegree: String,
+    val doctorDegree: Boolean,
 
     val academicDegree: String,
 

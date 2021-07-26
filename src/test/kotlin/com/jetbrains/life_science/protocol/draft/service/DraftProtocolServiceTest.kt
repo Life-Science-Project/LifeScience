@@ -9,6 +9,7 @@ import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.util.UTCZone
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -344,6 +345,6 @@ class DraftProtocolServiceTest {
             coAuthors = mutableListOf(),
             categories = mutableListOf(),
             protocols = mutableListOf(),
-            creationDate = LocalDateTime.now()
+            creationDate = LocalDateTime.now(UTCZone)
         )
 }

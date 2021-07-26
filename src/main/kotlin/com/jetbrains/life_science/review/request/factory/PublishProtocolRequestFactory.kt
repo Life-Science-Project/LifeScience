@@ -2,7 +2,7 @@ package com.jetbrains.life_science.review.request.factory
 
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
-import com.jetbrains.life_science.review.request.service.PublishProtocolRequestInfo
+import com.jetbrains.life_science.review.request.service.publish.PublishProtocolRequestInfo
 import org.springframework.stereotype.Component
 
 @Component

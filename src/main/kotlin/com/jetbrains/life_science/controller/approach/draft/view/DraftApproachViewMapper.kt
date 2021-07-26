@@ -3,7 +3,7 @@ package com.jetbrains.life_science.controller.approach.draft.view
 import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.controller.category.view.CategoryViewMapper
 import com.jetbrains.life_science.controller.section.view.SectionViewMapper
-import com.jetbrains.life_science.controller.user.UserViewMapper
+import com.jetbrains.life_science.controller.user.view.UserViewMapper
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import org.springframework.stereotype.Component
 
@@ -15,8 +15,8 @@ class DraftApproachViewMapper(
 ) {
 
     fun toView(draftApproach: DraftApproach): DraftApproachView {
-        val users = userViewMapper.toViewShortAll(extractUsers(draftApproach))
-        val sections = sectionViewMapper.toViewShortAll(draftApproach.sections)
+        val users = userViewMapper.toShortViewAll(extractUsers(draftApproach))
+        val sections = sectionViewMapper.toViewAll(draftApproach.sections)
         val categories = categoryViewMapper.toViewsShort(draftApproach.categories)
         return DraftApproachView(
             id = draftApproach.id,

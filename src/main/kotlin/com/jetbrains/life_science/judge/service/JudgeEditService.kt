@@ -1,8 +1,11 @@
 package com.jetbrains.life_science.judge.service
 
-interface JudgeEditService : JudgeService {
+import com.jetbrains.life_science.review.request.entity.ApproachReviewRequest
+import com.jetbrains.life_science.review.request.entity.ProtocolReviewRequest
 
-    fun judgeApproachEdit()
+interface JudgeEditService {
 
-    fun judgeProtocolEdit()
+    fun judgeApproachEdit(request: ApproachReviewRequest)
+
+    fun judgeProtocolEdit(request: ProtocolReviewRequest)
 }

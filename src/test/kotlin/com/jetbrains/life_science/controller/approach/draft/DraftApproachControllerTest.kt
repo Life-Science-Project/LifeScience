@@ -5,7 +5,7 @@ import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAdd
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
-import com.jetbrains.life_science.controller.user.UserShortView
+import com.jetbrains.life_science.controller.user.view.UserShortView
 import com.jetbrains.life_science.review.request.repository.PublishApproachRequestRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
