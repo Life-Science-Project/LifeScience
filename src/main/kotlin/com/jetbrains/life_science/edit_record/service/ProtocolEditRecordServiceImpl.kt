@@ -29,11 +29,12 @@ class ProtocolEditRecordServiceImpl(
 
     override fun addSection(id: Long, section: Section): ProtocolEditRecord {
         val protocolEditRecord = get(id)
-        when (section) {
-            in protocolEditRecord.deletedSections -> {
+        when {
+            protocolEditRecord.containsDeletedSectionById(section.id) -> {
                 protocolEditRecord.deletedSections.remove(section)
             }
-            in protocolEditRecord.createdSections, in protocolEditRecord.protocol.sections -> {
+            protocolEditRecord.containsCreatedSectionById(section.id) ||
+                protocolEditRecord.containsSectionById(section.id) -> {
                 throw SectionAlreadyExistsException(
                     "Section with id ${section.id} is already exists in createdSections or protocol"
                 )
@@ -46,16 +47,16 @@ class ProtocolEditRecordServiceImpl(
 
     override fun deleteSection(id: Long, section: Section): ProtocolEditRecord {
         val protocolEditRecord = get(id)
-        when (section) {
-            in protocolEditRecord.deletedSections -> {
+        when {
+            protocolEditRecord.containsDeletedSectionById(section.id) -> {
                 throw SectionAlreadyDeletedException(
                     "Section with id ${section.id} is already exists in deletedSections of protocolEditRecord"
                 )
             }
-            in protocolEditRecord.protocol.sections -> {
+            protocolEditRecord.containsSectionById(section.id) -> {
                 protocolEditRecord.deletedSections.add(section)
             }
-            in protocolEditRecord.createdSections -> {
+            protocolEditRecord.containsCreatedSectionById(section.id) -> {
                 protocolEditRecord.createdSections.remove(section)
             }
             else -> {
