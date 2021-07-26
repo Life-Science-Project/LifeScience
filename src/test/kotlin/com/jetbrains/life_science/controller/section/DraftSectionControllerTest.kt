@@ -44,9 +44,17 @@ internal class DraftSectionControllerTest : ApiTest() {
         val approachId = 1L
         val expectedView = SectionView(id = 1, name = "general 1", hidden = false, content = "user text 12")
 
-        val section = getViewAuthorized<SectionView>(makePath(approachId, "/1"), accessToken)
+        val section = getSectionViewAuthorized(approachId, accessToken)
 
         assertEquals(expectedView, section)
+    }
+
+    private fun getSectionViewAuthorized(
+        approachId: Long,
+        accessToken: String
+    ): SectionView {
+        val result = getAuthorized(makePath(approachId, "/1"), accessToken).andExpect { status { isOk() } }.andReturn()
+        return toView(result)
     }
 
     @Test
