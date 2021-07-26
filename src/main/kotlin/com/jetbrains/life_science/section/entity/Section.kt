@@ -21,6 +21,7 @@ class Section(
 
     var published: Boolean,
 
+    @Column(name = "order_num")
     var order: Int
 
 ) {

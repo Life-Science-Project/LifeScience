@@ -4,13 +4,11 @@ import com.jetbrains.life_science.content.publish.entity.Content
 import com.jetbrains.life_science.content.publish.service.ContentInfo
 
 fun makeContentInfo(
-    id: String,
     sectionId: Long,
     text: String,
     references: List<String>,
     tags: List<String>
 ) = object : ContentInfo {
-    override val id = id
     override var sectionId = sectionId
     override var text = text
     override var references = references
@@ -18,7 +16,6 @@ fun makeContentInfo(
 }
 
 fun makeContentInfo(content: Content) = object : ContentInfo {
-    override val id = content.id
     override var sectionId = content.sectionId
     override var text = content.text
     override var references: List<String> = content.references

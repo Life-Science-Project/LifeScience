@@ -1,18 +1,33 @@
 package com.jetbrains.life_science.section.service.maker
 
-import com.jetbrains.life_science.content.publish.service.ContentInfo
+import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.service.SectionCreationInfo
+import com.jetbrains.life_science.section.service.SectionInfo
 
 fun makeSectionInfo(
+    name: String,
+    prevSection: Section?,
+    visible: Boolean,
+    content: String,
+    allSections: List<Section>
+): SectionInfo = object : SectionInfo {
+    override val content = content
+    override val name = name
+    override val visible = visible
+    override val prevSection = prevSection
+    override val allSections = allSections
+}
+
+fun makeSectionCreationInfo(
     id: Long,
     name: String,
-    order: Long,
+    prevSection: Section?,
     visible: Boolean,
-    contentInfo: ContentInfo
+    allSections: List<Section>
 ): SectionCreationInfo = object : SectionCreationInfo {
     override val id = id
-    override var name = name
-    override var order = order
-    override var visible = visible
-    override val contentInfo = contentInfo
+    override val name = name
+    override val visible = visible
+    override val prevSection = prevSection
+    override val allSections = allSections
 }

@@ -7,7 +7,6 @@ import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.content.version.repository.ContentVersionRepository
 import com.jetbrains.life_science.exception.not_found.ContentNotFoundException
 import com.jetbrains.life_science.exception.request.ContentAlreadyExistsException
-import com.jetbrains.life_science.section.service.SectionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
