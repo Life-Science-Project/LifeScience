@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct
 
 @Sql(
     "/scripts/initial_data.sql",
-    "/scripts/section/section_data.sql",
     "/scripts/approach/public_approach_data.sql",
 )
 internal class PublicSectionControllerTest : ApiTest() {
@@ -40,9 +39,9 @@ internal class PublicSectionControllerTest : ApiTest() {
     @Test
     fun `get existing section`() {
         // Prepare
-        val approachId = 1L
-        val expectedView = SectionView(id = 4, name = "last", hidden = true, content = "user text 12")
-        val sectionId = 4L
+        val approachId = 2L
+        val expectedView = SectionView(id = 1, name = "section", hidden = false, content = "user text 12")
+        val sectionId = 1L
 
         // Action
         val section = getView<SectionView>(makePath(approachId, "//$sectionId"))

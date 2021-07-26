@@ -67,7 +67,7 @@ class PublisherServiceImpl(
         // Delete
         toDelete.forEach {
             publicApproachService.removeSection(approach.id, it)
-            sectionService.deleteById(it.id)
+            sectionService.deleteById(it.id, approach.sections)
         }
 
         // Create
