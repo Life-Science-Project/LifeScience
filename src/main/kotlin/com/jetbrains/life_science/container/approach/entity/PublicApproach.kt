@@ -33,4 +33,7 @@ class PublicApproach(
     @OneToMany
     var protocols: MutableList<PublicProtocol>
 
-) : Approach(name, sections, categories, tags, owner, creationDate)
+) : Approach(name, sections, categories, tags, owner, creationDate) {
+
+    fun hasSection(sectionId: Long) = sections.any { it.id == sectionId }
+}
