@@ -11,7 +11,6 @@ import java.time.LocalDateTime
 
 @Sql(
     "/scripts/initial_data.sql",
-    "/scripts/section/section_data.sql",
     "/scripts/approach/public_approach_data.sql"
 )
 internal class PublicApproachControllerTest : ApiTest() {
