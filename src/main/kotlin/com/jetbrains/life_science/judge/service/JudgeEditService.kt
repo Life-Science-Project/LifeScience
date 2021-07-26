@@ -5,7 +5,7 @@ import com.jetbrains.life_science.review.request.entity.ProtocolReviewRequest
 
 interface JudgeEditService {
 
-    fun judgeApproachEdit(request: ApproachReviewRequest)
+    fun judgeApproachEditRecord(request: ApproachReviewRequest)
 
-    fun judgeProtocolEdit(request: ProtocolReviewRequest)
+    fun judgeProtocolEditRecord(request: ProtocolReviewRequest)
 }
