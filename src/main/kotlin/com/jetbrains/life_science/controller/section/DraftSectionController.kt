@@ -48,6 +48,7 @@ class DraftSectionController(
         val prevSection = dto.prevSectionId?.let { getSectionSecured(approach, it) }
         val info = SectionCreationDTOToInfoAdapter(dto, prevSection, approach.sections)
         val section = sectionService.create(info)
+        draftApproachService.addSection(approachId, section)
         return viewMapper.toView(section)
     }
 
@@ -58,9 +59,8 @@ class DraftSectionController(
         @AuthenticationPrincipal credentials: Credentials
     ) {
         val approach = getApproachSecured(approachId, credentials)
-        if (approach.hasSection(sectionId)) {
-            throw SectionNotFoundException(sectionId)
-        }
+        val section = sectionService.getById(sectionId)
+        draftApproachService.removeSection(approachId, section)
         sectionService.deleteById(sectionId, approach.sections)
     }
 
@@ -92,7 +92,6 @@ class DraftSectionController(
         return getSectionSecured(approach, sectionId)
     }
 
-
     private fun getApproachSecured(
         approachId: Long,
         credentials: Credentials
@@ -113,6 +112,4 @@ class DraftSectionController(
         }
         return sectionService.getById(sectionId)
     }
-
-
 }

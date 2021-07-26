@@ -19,7 +19,6 @@ class ContentVersionServiceImpl(
     @Autowired
     lateinit var contentService: ContentService
 
-
     override fun updateOrCreateIfNotExists(info: ContentInfo) {
         val content = findBySectionId(info.sectionId)
         if (content != null) {

@@ -94,7 +94,6 @@ class SectionServiceImpl(
         override var tags: List<String> = emptyList()
     }
 
-
     private fun moveOrdersOnUpdate(section: Section, allSections: List<Section>) {
         allSections.filter { it.id != section.id && it.order >= section.order }
             .onEach { it.order++ }

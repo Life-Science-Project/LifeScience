@@ -34,5 +34,4 @@ class DraftApproach(
     fun hasParticipant(credentials: Credentials) = participants.any { it.id == credentials.id }
 
     fun hasSection(sectionId: Long) = sections.any { it.id == sectionId }
-
 }
