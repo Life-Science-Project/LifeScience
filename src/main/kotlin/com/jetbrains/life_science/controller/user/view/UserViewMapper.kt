@@ -41,7 +41,7 @@ class UserViewMapper(
         return UserFullView(
             id = credentials.id,
             email = credentials.email,
-            roles = credentials.roles.toList().map { it.name },
+            roles = credentials.roles.map { it.name },
             personalData = toPersonalDataView(userData)
         )
     }

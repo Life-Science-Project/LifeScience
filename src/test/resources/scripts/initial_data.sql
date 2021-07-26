@@ -7,6 +7,10 @@ values (3, 'ROLE_MODERATOR');
 -- nextId = 4
 alter sequence role_seq restart with 4;
 
+insert into favorite_group (id, name) values (1, 'Favorite');
+-- nextFavoriteGroupId = 2
+alter sequence favorite_group_seq restart with 2;
+
 -- login=email@email.ru, password=password, role = user
 insert into credentials (id, email, password)
 values (1, 'email@email.ru', '$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86');
@@ -22,8 +26,8 @@ values (4, 'regular@gmail.ru', '$2a$10$deGk.zxpc23BWE7Upb89IOG1eELe3cK0RIA0h91aB
 -- nextId = 4
 alter sequence credentials_seq restart with 5;
 
-insert into users (id, first_name, last_name, credentials_id)
-values (1, 'Alex', 'R', 1);
+insert into users (id, first_name, last_name, credentials_id, favorite_group_id)
+values (1, 'Alex', 'R', 1, 1);
 update credentials
 set user_personal_data_id = 1
 where id = 1;
