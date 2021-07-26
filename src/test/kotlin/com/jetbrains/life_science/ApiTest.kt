@@ -40,6 +40,7 @@ abstract class ApiTest {
 
     final inline fun <reified T> toView(mvcResult: MvcResult): T {
         val content = mvcResult.response.contentAsString
+        println("===".repeat(30) + " " + T::class.java.name)
         return objectMapper.readValue(content)
     }
 
@@ -151,7 +152,7 @@ abstract class ApiTest {
         return toViewSuccess(getRequest(path))
     }
 
-    final inline fun <reified T> getViewAuthorized(path: String, accessToken: String) {
+    final inline fun <reified T> getViewAuthorized(path: String, accessToken: String): T {
         val result = getAuthorized(path, accessToken).andExpect { status { isOk() } }.andReturn()
         return toView(result)
     }

@@ -5,8 +5,8 @@ import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotF
 import com.jetbrains.life_science.exception.not_found.PublishProtocolRequestNotFoundException
 import com.jetbrains.life_science.judge.service.handler.JudgePublishServiceTestHandler
 import com.jetbrains.life_science.review.request.entity.RequestState
-import com.jetbrains.life_science.review.request.service.PublishApproachRequestService
-import com.jetbrains.life_science.review.request.service.PublishProtocolRequestService
+import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestService
+import com.jetbrains.life_science.review.request.service.publish.PublishProtocolRequestService
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify

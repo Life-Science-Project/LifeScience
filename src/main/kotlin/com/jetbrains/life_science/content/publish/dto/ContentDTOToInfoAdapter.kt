@@ -4,7 +4,6 @@ import com.jetbrains.life_science.content.publish.service.ContentInfo
 
 class ContentDTOToInfoAdapter(
     val dto: ContentDTO,
-    override val id: String? = null
 ) : ContentInfo {
 
     override var sectionId: Long = dto.sectionId

@@ -1,34 +1,25 @@
 package com.jetbrains.life_science.section.factory
 
 import com.jetbrains.life_science.section.entity.Section
+import com.jetbrains.life_science.section.service.SectionCreationInfo
 import com.jetbrains.life_science.section.service.SectionInfo
 import org.springframework.stereotype.Component
 
 @Component
 class SectionFactory {
-    fun create(info: SectionInfo): Section {
+    fun create(info: SectionCreationInfo): Section {
         return Section(
             id = 0,
             name = info.name,
-            order = info.order,
             visible = info.visible,
-            published = false
-        )
-    }
-
-    fun copy(section: Section): Section {
-        return Section(
-            id = 0,
-            name = section.name,
-            order = section.order,
-            visible = section.visible,
-            published = false
+            published = false,
+            order = info.prevSection?.let { it.order + 1 } ?: 0
         )
     }
 
     fun setParams(origin: Section, info: SectionInfo) {
         origin.name = info.name
-        origin.order = info.order
         origin.visible = info.visible
+        origin.order = info.prevSection?.let { it.order + 1 } ?: 0
     }
 }

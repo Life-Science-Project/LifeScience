@@ -2,13 +2,17 @@ package com.jetbrains.life_science.publisher.service
 
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.approach.service.PublicApproachService
+import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
+import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.protocol.service.PublicProtocolService
+import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -23,7 +27,8 @@ import javax.annotation.PostConstruct
 @Sql(
     "/scripts/initial_data.sql",
     "/scripts/publisher/draft_approach_data.sql",
-    "/scripts/publisher/draft_protocol_data.sql"
+    "/scripts/publisher/draft_protocol_data.sql",
+    "/scripts/publisher/approach_edit_record_data.sql"
 )
 @Transactional
 internal class PublisherServiceTest {
@@ -42,6 +47,12 @@ internal class PublisherServiceTest {
 
     @Autowired
     lateinit var publicProtocolService: PublicProtocolService
+
+    @Autowired
+    lateinit var approachEditRecordService: ApproachEditRecordService
+
+    @Autowired
+    lateinit var sectionService: SectionService
 
     @Autowired
     lateinit var highLevelClient: RestHighLevelClient
@@ -111,6 +122,30 @@ internal class PublisherServiceTest {
         )
         publicProtocol.sections.forEach {
             assertTrue(it.published)
+        }
+    }
+
+    /**
+     * Should publish existing approach edit record
+     */
+    @Test
+    fun `publish existing approach edit record`() {
+        // Prepare
+        val approachEditRecord = approachEditRecordService.get(1L)
+
+        // Action
+        val approach = service.publishApproachEditRecord(approachEditRecord)
+
+        // Assert
+        approachEditRecord.createdSections.forEach {
+            assertTrue(approach.sections.contains(it))
+            assertTrue(it.published)
+        }
+        approachEditRecord.deletedSections.forEach {
+            assertFalse(approach.sections.contains(it))
+            assertThrows<SectionNotFoundException> {
+                sectionService.getById(it.id)
+            }
         }
     }
 }

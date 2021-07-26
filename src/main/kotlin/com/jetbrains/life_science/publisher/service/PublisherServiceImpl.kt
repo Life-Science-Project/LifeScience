@@ -4,6 +4,8 @@ import com.jetbrains.life_science.approach.entity.DraftApproach
 import com.jetbrains.life_science.approach.entity.PublicApproach
 import com.jetbrains.life_science.approach.service.DraftApproachService
 import com.jetbrains.life_science.approach.service.PublicApproachService
+import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
+import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.protocol.service.DraftProtocolService
@@ -20,6 +22,7 @@ class PublisherServiceImpl(
     val publicProtocolService: PublicProtocolService,
     val draftApproachService: DraftApproachService,
     val draftProtocolService: DraftProtocolService,
+    val approachEditRecordService: ApproachEditRecordService,
     val sectionService: SectionService
 ) : PublisherService {
     override fun publishDraftApproach(draftApproach: DraftApproach): PublicApproach {
@@ -53,11 +56,30 @@ class PublisherServiceImpl(
         return publicProtocol
     }
 
-    override fun publishApproachEditRecord() {
-        TODO("Not yet implemented")
+    override fun publishApproachEditRecord(approachEditRecord: ApproachEditRecord): PublicApproach {
+        val approach = approachEditRecord.approach
+        val toCreate = approachEditRecord.createdSections.toList()
+        val toDelete = approachEditRecord.deletedSections.toList()
+
+        // Clear
+        approachEditRecordService.clear(approachEditRecord.id)
+
+        // Delete
+        toDelete.forEach {
+            publicApproachService.removeSection(approach.id, it)
+            sectionService.deleteById(it.id, approach.sections)
+        }
+
+        // Create
+        toCreate.forEach {
+            publicApproachService.addSection(approach.id, it)
+            sectionService.publish(it.id)
+        }
+
+        return approach
     }
 
-    override fun publishProtocolEditRecord() {
+    override fun publishProtocolEditRecord(protocolEditRecord: ApproachEditRecord): PublicProtocol {
         TODO("Not yet implemented")
     }
 

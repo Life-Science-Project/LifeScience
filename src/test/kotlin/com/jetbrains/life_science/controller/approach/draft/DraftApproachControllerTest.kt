@@ -5,9 +5,8 @@ import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAdd
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
-import com.jetbrains.life_science.controller.user.UserShortView
+import com.jetbrains.life_science.controller.user.view.UserShortView
 import com.jetbrains.life_science.review.request.repository.PublishApproachRequestRepository
-import com.nhaarman.mockitokotlin2.times
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -32,6 +31,7 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `get draft approach test`() {
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
         val expectedView = DraftApproachView(
             id = 1,
             name = "approach 1",
@@ -46,7 +46,7 @@ internal class DraftApproachControllerTest : ApiTest() {
             )
         )
 
-        val approach = getView<DraftApproachView>(makePath(1))
+        val approach = getViewAuthorized<DraftApproachView>(makePath(1), loginAccessToken)
 
         assertEquals(expectedView, approach)
     }
@@ -59,7 +59,8 @@ internal class DraftApproachControllerTest : ApiTest() {
      */
     @Test
     fun `get not existent approach test`() {
-        val request = getRequest(makePath(199))
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+        val request = getAuthorized(makePath(199), loginAccessToken)
 
         val exceptionView = getApiExceptionView(404, request)
 
@@ -79,7 +80,7 @@ internal class DraftApproachControllerTest : ApiTest() {
         )
 
         val created = postAuthorized<DraftApproachView>(path, dto, loginAccessToken)
-        val approach = getView<DraftApproachView>(makePath(created.id))
+        val approach = getViewAuthorized<DraftApproachView>(makePath(created.id), loginAccessToken)
 
         val expectedView = DraftApproachView(
             id = approach.id,
@@ -188,7 +189,7 @@ internal class DraftApproachControllerTest : ApiTest() {
         val dto = DraftApproachAddParticipantDTO("admin@gmail.ru")
 
         postRequestAuthorized(makePath("1/participants"), dto, loginAccessToken)
-        val approach = getView<DraftApproachView>(makePath(1))
+        val approach = getViewAuthorized<DraftApproachView>(makePath(1), loginAccessToken)
 
         val expectedView = DraftApproachView(
             id = 1,
@@ -250,10 +251,9 @@ internal class DraftApproachControllerTest : ApiTest() {
         `add participant test`()
 
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachAddParticipantDTO("admin@gmail.ru")
 
         deleteAuthorized(makePath("1/participants/2"), loginAccessToken)
-        val approach = getView<DraftApproachView>(makePath(1))
+        val approach = getViewAuthorized<DraftApproachView>(makePath(1), loginAccessToken)
 
         val expectedView = DraftApproachView(
             id = 1,

@@ -4,9 +4,9 @@ import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.edit_record.factory.ApproachEditRecordFactory
 import com.jetbrains.life_science.edit_record.repository.ApproachEditRecordRepository
 import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
-import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.exception.section.SectionAlreadyDeletedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
+import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
 
@@ -29,11 +29,12 @@ class ApproachEditRecordServiceImpl(
 
     override fun addSection(id: Long, section: Section): ApproachEditRecord {
         val approachEditRecord = get(id)
-        when (section) {
-            in approachEditRecord.deletedSections -> {
+        when {
+            approachEditRecord.containsDeletedSectionById(section.id) -> {
                 approachEditRecord.deletedSections.remove(section)
             }
-            in approachEditRecord.createdSections, in approachEditRecord.approach.sections -> {
+            approachEditRecord.containsCreatedSectionById(section.id)
+                || approachEditRecord.containsSectionById(section.id) -> {
                 throw SectionAlreadyExistsException(
                     "Section with id ${section.id} is already exists in createdSections or approach"
                 )
@@ -46,20 +47,20 @@ class ApproachEditRecordServiceImpl(
 
     override fun deleteSection(id: Long, section: Section): ApproachEditRecord {
         val approachEditRecord = get(id)
-        when (section) {
-            in approachEditRecord.deletedSections -> {
+        when {
+            approachEditRecord.containsDeletedSectionById(section.id) -> {
                 throw SectionAlreadyDeletedException(
                     "Section with id ${section.id} is already exists in deletedSections"
                 )
             }
-            in approachEditRecord.approach.sections -> {
+            approachEditRecord.containsSectionById(section.id) -> {
                 approachEditRecord.deletedSections.add(section)
             }
-            in approachEditRecord.createdSections -> {
+            approachEditRecord.containsCreatedSectionById(section.id) -> {
                 approachEditRecord.createdSections.remove(section)
             }
             else -> {
-                throw SectionNotFoundException("Section with id ${section.id} not found in deletedSections")
+                throw SectionNotFoundException(section.id)
             }
         }
         factory.setCurrentTimeToLastEditDate(approachEditRecord)
