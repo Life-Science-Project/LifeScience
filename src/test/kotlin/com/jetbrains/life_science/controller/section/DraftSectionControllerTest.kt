@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.controller.section
 
 import com.jetbrains.life_science.ApiTest
-import com.jetbrains.life_science.controller.section.dto.SectionCreationDTO
 import com.jetbrains.life_science.controller.section.view.SectionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
@@ -41,150 +40,49 @@ internal class DraftSectionControllerTest : ApiTest() {
 
     @Test
     fun `get existing section`() {
-        // Prepare
         val accessToken = loginAccessToken("email@email.ru", "password")
         val approachId = 1L
         val expectedView = SectionView(id = 1, name = "general 1", hidden = false, content = "user text 12")
-        val sectionId = 1L
 
-        // Action
-        val section = getViewAuthorized<SectionView>(makePath(approachId, "//$sectionId"), accessToken)
+        val section = getSectionViewAuthorized(approachId, accessToken)
 
-        // Assert
         assertEquals(expectedView, section)
+    }
+
+    private fun getSectionViewAuthorized(
+        approachId: Long,
+        accessToken: String
+    ): SectionView {
+        val result = getAuthorized(makePath(approachId, "/1"), accessToken).andExpect { status { isOk() } }.andReturn()
+        return toView(result)
     }
 
     @Test
     fun `get existing section with wrong approach id`() {
-        // Prepare
-        val accessToken = loginAccessToken("email@email.ru", "password")
-        val approachId = 666L
-        val sectionId = 1L
-
-        // Action
-        val request = getAuthorized(makePath(approachId, "//$sectionId"), accessToken)
-        val exceptionView = getApiExceptionView(404, request)
-
-        // Assert
-        assertEquals(404_003, exceptionView.systemCode)
-        assertEquals(emptyList<List<String>>(), exceptionView.arguments)
     }
 
     @Test
     fun `get not existing section`() {
-        // Prepare
-        val accessToken = loginAccessToken("email@email.ru", "password")
-        val approachId = 1L
-        val sectionId = 666L
-
-        // Action
-        val request = getAuthorized(makePath(approachId, "//$sectionId"), accessToken)
-        val exceptionView = getApiExceptionView(404, request)
-
-        // Assert
-        assertEquals(404_006, exceptionView.systemCode)
-        assertEquals(emptyList<List<String>>(), exceptionView.arguments)
     }
 
     @Test
     fun `create new section`() {
-        // Prepare
-        val accessToken = loginAccessToken("email@email.ru", "password")
-        val sectionCreationDTO = SectionCreationDTO(
-            name = "created",
-            hidden = false,
-            prevSectionId = null
-        )
-        val approachId = 1L
-
-        // Action
-        val created = postAuthorized<SectionView>(makePath(approachId, "/"), sectionCreationDTO, accessToken)
-
-        // Prepare
-        flushChanges()
-        val section = getViewAuthorized<SectionView>(makePath(approachId, "//${created.id}"), accessToken)
-
-        // Assert
-        assertEquals(created.id, section.id)
-        assertEquals(sectionCreationDTO.name, section.name)
-        assertEquals(sectionCreationDTO.hidden, section.hidden)
-        assertEquals(null, section.content)
     }
 
     @Test
     fun `create new section with not existing approach`() {
-        // Prepare
-        val accessToken = loginAccessToken("email@email.ru", "password")
-        val sectionCreationDTO = SectionCreationDTO(
-            name = "created",
-            hidden = false,
-            prevSectionId = null
-        )
-        val approachId = 666L
-
-        // Action
-        val request = postRequestAuthorized(makePath(approachId, "/"), sectionCreationDTO, accessToken)
-        val exceptionView = getApiExceptionView(404, request)
-
-        // Assert
-        assertEquals(404_003, exceptionView.systemCode)
-        assertEquals(emptyList<List<String>>(), exceptionView.arguments)
     }
 
     @Test
     fun `create new section with not existing prev section`() {
-        // Prepare
-        val accessToken = loginAccessToken("email@email.ru", "password")
-        val sectionCreationDTO = SectionCreationDTO(
-            name = "created",
-            hidden = false,
-            prevSectionId = 666
-        )
-        val approachId = 1L
-
-        // Action
-        val request = postRequestAuthorized(makePath(approachId, "/"), sectionCreationDTO, accessToken)
-        val exceptionView = getApiExceptionView(404, request)
-
-        // Assert
-        assertEquals(404_006, exceptionView.systemCode)
-        assertEquals(emptyList<List<String>>(), exceptionView.arguments)
     }
 
     @Test
     fun `delete existing section`() {
-        // Prepare
-        val accessToken = loginAccessToken("email@email.ru", "password")
-        val idToDelete = 1L
-        val approachId = 1L
-
-        // Action
-        deleteRequestAuthorized(makePath(1L, "//$idToDelete"), accessToken)
-
-        // Prepare
-        flushChanges()
-        val request = getAuthorized(makePath(approachId, "//$idToDelete"), accessToken)
-        val exceptionView = getApiExceptionView(404, request)
-
-        // Assert
-        assertEquals(404_006, exceptionView.systemCode)
-        assertEquals(emptyList<List<String>>(), exceptionView.arguments)
     }
 
     @Test
     fun `delete section with not existing approach`() {
-        // Prepare
-        val accessToken = loginAccessToken("email@email.ru", "password")
-        val idToDelete = 1L
-        val approachId = 666L
-
-        // Action
-        val request = deleteRequestAuthorized(makePath(approachId, "//$idToDelete"), accessToken)
-        val exceptionView = getApiExceptionView(404, request)
-
-        // Assert
-        assertEquals(404_003, exceptionView.systemCode)
-        assertEquals(emptyList<List<String>>(), exceptionView.arguments)
     }
 
     @Test
