@@ -38,7 +38,7 @@ class UserPersonalData(
 
     var about: String? = null,
 
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.PERSIST])
     var favoriteGroup: FavoriteGroup,
 
     @OneToOne

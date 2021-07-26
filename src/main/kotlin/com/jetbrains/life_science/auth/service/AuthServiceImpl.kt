@@ -6,6 +6,7 @@ import com.jetbrains.life_science.auth.refresh.service.RefreshTokenService
 import com.jetbrains.life_science.exception.auth.InvalidCredentialsException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.util.getLogger
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -18,6 +19,8 @@ class AuthServiceImpl(
     val refreshTokenService: RefreshTokenService,
     val userCredentialsService: CredentialsService
 ) : AuthService {
+
+    private val logger = getLogger()
 
     override fun login(authCredentials: AuthCredentials): AuthTokens {
         setAuthentication(authCredentials)
@@ -46,7 +49,8 @@ class AuthServiceImpl(
         try {
             val loginPasswordToken = UsernamePasswordAuthenticationToken(authInfo.email, authInfo.password)
             authenticationManager.authenticate(loginPasswordToken)
-        } catch (exception: BadCredentialsException) {
+        } catch (exception: Exception) {
+            logger.info("Bad credentials", exception)
             throw InvalidCredentialsException()
         }
     }
