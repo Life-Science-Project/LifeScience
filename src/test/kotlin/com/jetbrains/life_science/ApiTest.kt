@@ -152,7 +152,7 @@ abstract class ApiTest {
         return toViewSuccess(getRequest(path))
     }
 
-    final inline fun <reified T> getViewAuthorized(path: String, accessToken: String) {
+    final inline fun <reified T> getViewAuthorized(path: String, accessToken: String): T {
         val result = getAuthorized(path, accessToken).andExpect { status { isOk() } }.andReturn()
         return toView(result)
     }
