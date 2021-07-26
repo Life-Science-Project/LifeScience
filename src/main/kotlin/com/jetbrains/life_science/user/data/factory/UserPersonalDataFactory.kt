@@ -4,11 +4,14 @@ import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import com.jetbrains.life_science.user.data.service.UserPersonalDataInfo
 import com.jetbrains.life_science.user.credentials.service.NewUserInfo
+import com.jetbrains.life_science.user.group.service.FavoriteGroupService
 import com.jetbrains.life_science.user.organisation.entity.Organisation
 import org.springframework.stereotype.Component
 
 @Component
-class UserPersonalDataFactory {
+class UserPersonalDataFactory(
+    val favoriteGroupService: FavoriteGroupService
+) {
 
     fun create(info: NewUserInfo, credentials: Credentials): UserPersonalData {
         return UserPersonalData(
@@ -16,7 +19,8 @@ class UserPersonalDataFactory {
             firstName = info.firstName,
             lastName = info.lastName,
             organisations = mutableListOf(),
-            credentials = credentials
+            credentials = credentials,
+            favoriteGroup = favoriteGroupService.createDefault()
         )
     }
 

@@ -78,9 +78,9 @@ class ApproachReviewRequestServiceTest {
         // Prepare data
         val editor = credentialsService.getById(1L)
         val editRecord = editRecordService.get(1L)
+        val expectedId = 3L
         val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val info = makeApproachReviewRequestInfo(
-            id = 2L,
             date = creationLocalDateTime,
             editor = editor,
             editRecord = editRecord
@@ -89,10 +89,10 @@ class ApproachReviewRequestServiceTest {
 
         // Action
         service.create(info)
-        val approachReviewRequest = service.get(info.id)
+        val approachReviewRequest = service.get(expectedId)
 
         // Assert
-        assertEquals(info.id, approachReviewRequest.id)
+        assertEquals(expectedId, approachReviewRequest.id)
         assertEquals(editor.id, approachReviewRequest.editor.id)
         assertEquals(editRecord.id, approachReviewRequest.editRecord.id)
         assertEquals(expectedState, approachReviewRequest.state)

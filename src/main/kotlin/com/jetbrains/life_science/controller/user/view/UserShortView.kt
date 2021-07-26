@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.user
+package com.jetbrains.life_science.controller.user.view
 
 data class UserShortView(
     val id: Long,
