@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class ApproachReviewRequestFactory {
     fun create(info: ApproachReviewRequestInfo): ApproachReviewRequest {
         return ApproachReviewRequest(
-            id = info.id,
+            id = 0,
             date = info.date,
             state = RequestState.PENDING,
             reviews = mutableListOf(),

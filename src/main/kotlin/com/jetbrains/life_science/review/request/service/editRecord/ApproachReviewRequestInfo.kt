@@ -5,11 +5,7 @@ import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
 
 interface ApproachReviewRequestInfo {
-    val id: Long
-
     val date: LocalDateTime
-
     val editor: Credentials
-
     val approachEditRecord: ApproachEditRecord
 }

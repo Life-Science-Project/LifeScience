@@ -6,12 +6,10 @@ import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
 
 fun makeApproachReviewRequestInfo(
-    id: Long,
     date: LocalDateTime,
     editor: Credentials,
     editRecord: ApproachEditRecord
 ): ApproachReviewRequestInfo = object : ApproachReviewRequestInfo {
-    override val id = id
     override val date = date
     override val editor = editor
     override val approachEditRecord = editRecord
