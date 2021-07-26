@@ -1,12 +1,12 @@
 package com.jetbrains.life_science.section.service
 
-import com.jetbrains.life_science.content.maker.makeContentInfo
 import com.jetbrains.life_science.content.publish.entity.Content
 import com.jetbrains.life_science.content.version.service.ContentVersionService
-import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.exception.section.SectionAlreadyArchivedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyPublishedException
+import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.section.entity.Section
+import com.jetbrains.life_science.section.service.maker.makeSectionCreationInfo
 import com.jetbrains.life_science.section.service.maker.makeSectionInfo
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
@@ -58,19 +58,12 @@ internal class SectionServiceTests {
     @Test
     fun `create new section with content`() {
         // Prepare
-        val contentInfo = makeContentInfo(
-            id = "",
-            sectionId = 0,
-            text = "new text",
-            references = mutableListOf(),
-            tags = mutableListOf()
-        )
-        val info = makeSectionInfo(
+        val info = makeSectionCreationInfo(
             id = 0,
             name = "new name",
-            order = 1,
+            prevSection = null,
             visible = true,
-            contentInfo = contentInfo
+            allSections = listOf()
         )
 
         // Action
@@ -80,26 +73,11 @@ internal class SectionServiceTests {
         elasticPopulator.flush()
         Thread.sleep(1000)
 
-        // Prepare
-        val content = contentService.findBySectionId(section.id)
-        val expectedContent = Content(
-            id = content?.id,
-            sectionId = section.id,
-            text = contentInfo.text,
-            references = contentInfo.references.toMutableList(),
-            tags = contentInfo.tags.toMutableList()
-        )
-        val expected = Section(
-            id = section.id,
-            name = info.name,
-            order = info.order,
-            visible = info.visible,
-            published = false
-        )
-
         // Assert
-        assertEquals(expected, section)
-        assertEquals(expectedContent, content)
+        assertEquals(info.name, section.name)
+        assertEquals(0, section.order)
+        assertEquals(info.visible, section.visible)
+        assertFalse(section.published)
     }
 
     /**
@@ -111,7 +89,7 @@ internal class SectionServiceTests {
         val idToDelete = 2L
 
         // Action
-        service.deleteById(idToDelete)
+        service.deleteById(idToDelete, listOf())
 
         // Assert
         assertThrows<SectionNotFoundException>("Section not found by id: $idToDelete") {
@@ -129,7 +107,7 @@ internal class SectionServiceTests {
 
         // Action & Assert
         assertThrows<SectionNotFoundException>("Section not found by id: $idToDelete") {
-            service.deleteById(idToDelete)
+            service.deleteById(idToDelete, listOf())
         }
     }
 
@@ -152,7 +130,11 @@ internal class SectionServiceTests {
         val section = service.getById(expectedId)
 
         // Assert
-        assertEquals(expected, section)
+        assertEquals(expected.id, section.id)
+        assertEquals(expected.name, section.name)
+        assertEquals(expected.order, section.order)
+        assertEquals(expected.visible, section.visible)
+        assertEquals(expected.published, section.published)
     }
 
     /**
@@ -205,47 +187,45 @@ internal class SectionServiceTests {
     @Test
     fun `update not published section`() {
         // Prepare
-        val contentInfo = makeContentInfo(
-            id = "",
-            sectionId = 0,
-            text = "new text",
-            references = mutableListOf(),
-            tags = mutableListOf()
-        )
+        val existingSection = service.getById(1)
         val info = makeSectionInfo(
-            id = 4,
             name = "updated name",
-            order = 12,
+            prevSection = null,
             visible = false,
-            contentInfo = contentInfo
+            content = "new text",
+            allSections = listOf()
         )
 
         // Action
-        val section = service.update(info)
+        val section = service.update(existingSection, info)
 
         // Wait
         elasticPopulator.flush()
         Thread.sleep(1000)
 
         // Prepare
-        val content = contentService.findBySectionId(info.id)
+        val content = contentService.findBySectionId(existingSection.id)
         val expected = Section(
-            id = info.id,
+            id = existingSection.id,
             name = info.name,
-            order = info.order,
+            order = 0,
             visible = info.visible,
-            published = section.published
+            published = existingSection.published
         )
         val expectedContent = Content(
             id = content?.id,
-            sectionId = contentInfo.sectionId,
-            text = contentInfo.text,
-            tags = contentInfo.tags.toMutableList(),
-            references = contentInfo.references.toMutableList()
+            sectionId = existingSection.id,
+            text = info.content,
+            tags = mutableListOf(),
+            references = mutableListOf()
         )
 
         // Assert
-        assertEquals(expected, section)
+        assertEquals(expected.id, section.id)
+        assertEquals(expected.name, section.name)
+        assertEquals(expected.order, section.order)
+        assertEquals(expected.visible, section.visible)
+        assertEquals(expected.published, section.published)
         assertEquals(expectedContent, content)
     }
 
@@ -255,51 +235,18 @@ internal class SectionServiceTests {
     @Test
     fun `update published section`() {
         // Prepare
-        val contentInfo = makeContentInfo(
-            id = "",
-            sectionId = 0,
-            text = "new text",
-            references = mutableListOf(),
-            tags = mutableListOf()
-        )
+        val existingSection = service.getById(2)
         val info = makeSectionInfo(
-            id = 2,
             name = "updated name",
-            order = 12,
+            prevSection = null,
             visible = false,
-            contentInfo = contentInfo
+            content = "new text",
+            allSections = mutableListOf()
         )
 
         // Action & Assert
         assertThrows<SectionAlreadyPublishedException> {
-            service.update(info)
-        }
-    }
-
-    /**
-     * Should throw SectionNotFoundException on attempt to update not existing section
-     */
-    @Test
-    fun `update not existing section`() {
-        // Prepare
-        val contentInfo = makeContentInfo(
-            id = "",
-            sectionId = 0,
-            text = "new text",
-            references = mutableListOf(),
-            tags = mutableListOf()
-        )
-        val info = makeSectionInfo(
-            id = 12321,
-            name = "updated name",
-            order = 12,
-            visible = false,
-            contentInfo = contentInfo
-        )
-
-        // Action & Assert
-        assertThrows<SectionNotFoundException>("Section not found by id: ${info.id}") {
-            service.update(info)
+            service.update(existingSection, info)
         }
     }
 

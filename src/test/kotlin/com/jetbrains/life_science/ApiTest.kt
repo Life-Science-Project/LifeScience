@@ -40,6 +40,7 @@ abstract class ApiTest {
 
     final inline fun <reified T> toView(mvcResult: MvcResult): T {
         val content = mvcResult.response.contentAsString
+        println("===".repeat(30) + " " + T::class.java.name)
         return objectMapper.readValue(content)
     }
 

@@ -4,15 +4,15 @@ import com.jetbrains.life_science.section.entity.Section
 
 interface SectionService {
 
-    fun create(info: SectionInfo): Section
+    fun create(info: SectionCreationInfo): Section
 
-    fun deleteById(id: Long)
+    fun deleteById(id: Long, allSections: List<Section>)
 
     fun getById(id: Long): Section
 
     fun existsById(id: Long): Boolean
 
-    fun update(info: SectionInfo): Section
+    fun update(section: Section, info: SectionInfo): Section
 
     fun publish(sectionId: Long)
 
