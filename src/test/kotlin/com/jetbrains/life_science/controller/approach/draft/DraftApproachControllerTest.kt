@@ -5,9 +5,8 @@ import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAdd
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
-import com.jetbrains.life_science.controller.user.UserShortView
+import com.jetbrains.life_science.controller.user.view.UserShortView
 import com.jetbrains.life_science.review.request.repository.PublishApproachRequestRepository
-import com.nhaarman.mockitokotlin2.times
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -250,7 +249,6 @@ internal class DraftApproachControllerTest : ApiTest() {
         `add participant test`()
 
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachAddParticipantDTO("admin@gmail.ru")
 
         deleteAuthorized(makePath("1/participants/2"), loginAccessToken)
         val approach = getView<DraftApproachView>(makePath(1))

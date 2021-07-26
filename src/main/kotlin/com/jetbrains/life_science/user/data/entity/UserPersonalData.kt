@@ -2,7 +2,7 @@ package com.jetbrains.life_science.user.data.entity
 
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.degree.AcademicDegree
-import com.jetbrains.life_science.user.degree.DoctorDegree
+import com.jetbrains.life_science.user.group.entity.FavoriteGroup
 import com.jetbrains.life_science.user.organisation.entity.Organisation
 import javax.persistence.*
 
@@ -20,12 +20,11 @@ class UserPersonalData(
     )
     val id: Long,
 
-    val firstName: String,
+    var firstName: String,
 
-    val lastName: String,
+    var lastName: String,
 
-    @Enumerated
-    var doctorDegree: DoctorDegree = DoctorDegree.NONE,
+    var doctorDegree: Boolean? = false,
 
     @Enumerated
     var academicDegree: AcademicDegree = AcademicDegree.NONE,
@@ -36,6 +35,11 @@ class UserPersonalData(
     var orcid: String? = null,
 
     var researchId: String? = null,
+
+    var about: String? = null,
+
+    @OneToOne(cascade = [CascadeType.PERSIST])
+    var favoriteGroup: FavoriteGroup,
 
     @OneToOne
     val credentials: Credentials
