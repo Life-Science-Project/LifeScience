@@ -63,19 +63,20 @@ class PublisherServiceImpl(
 
     override fun publishApproachEditRecord(approachEditRecord: ApproachEditRecord): PublicApproach {
         val approach = approachEditRecord.approach
-        processEditRecord(approachEditRecord, publicApproachService, approach.id, approachEditRecordService::clear)
+        processEditRecord(approachEditRecord, publicApproachService, approach.sections, approach.id, approachEditRecordService::clear)
         return approach
     }
 
     override fun publishProtocolEditRecord(protocolEditRecord: ProtocolEditRecord): PublicProtocol {
         val protocol = protocolEditRecord.protocol
-        processEditRecord(protocolEditRecord, publicProtocolService, protocol.id, protocolEditRecordService::clear)
+        processEditRecord(protocolEditRecord, publicProtocolService, protocol.sections, protocol.id, protocolEditRecordService::clear)
         return protocol
     }
 
     private fun processEditRecord(
         editRecord: EditRecord,
         entityService: ContainsSections,
+        sections: List<Section>,
         entityId: Long,
         editRecordClearById: (Long) -> (Unit)
     ) {
@@ -86,7 +87,7 @@ class PublisherServiceImpl(
 
         toDelete.forEach {
             entityService.removeSection(entityId, it)
-            sectionService.deleteById(it.id)
+            sectionService.deleteById(it.id, sections)
         }
         toCreate.forEach {
             entityService.addSection(entityId, it)

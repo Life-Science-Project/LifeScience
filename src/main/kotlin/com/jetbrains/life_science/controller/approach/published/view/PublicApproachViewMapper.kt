@@ -18,7 +18,7 @@ class PublicApproachViewMapper(
 
     fun toView(publicApproach: PublicApproach): PublicApproachView {
         val users = userViewMapper.toShortViewAll(extractUsers(publicApproach))
-        val sections = sectionViewMapper.toViewAll(publicApproach.sections)
+        val sections = sectionViewMapper.toViewShortAll(publicApproach.sections)
         val categories = categoryViewMapper.toViewsShort(publicApproach.categories)
         val protocols = protocolViewMapper.toViewsShort(publicApproach.protocols)
         return PublicApproachView(

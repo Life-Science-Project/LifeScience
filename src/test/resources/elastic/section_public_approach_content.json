@@ -1,22 +1,8 @@
 [
   {
     "id": "13rt",
-    "sectionId": 4,
+    "sectionId": 1,
     "text": "user text 12",
-    "tags": [],
-    "references": []
-  },
-  {
-    "id": "3cd",
-    "sectionId": 5,
-    "text": "some other sample text",
-    "tags": [],
-    "references": []
-  },
-  {
-    "id": "6ef",
-    "sectionId": 6,
-    "text": "test 123",
     "tags": [],
     "references": []
   }

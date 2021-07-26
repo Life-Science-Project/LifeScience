@@ -4,9 +4,9 @@ import com.jetbrains.life_science.edit_record.entity.ApproachEditRecord
 import com.jetbrains.life_science.edit_record.factory.ApproachEditRecordFactory
 import com.jetbrains.life_science.edit_record.repository.ApproachEditRecordRepository
 import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
-import com.jetbrains.life_science.exception.not_found.SectionNotFoundException
 import com.jetbrains.life_science.exception.section.SectionAlreadyDeletedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
+import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
 
@@ -60,7 +60,7 @@ class ApproachEditRecordServiceImpl(
                 approachEditRecord.createdSections.remove(section)
             }
             else -> {
-                throw SectionNotFoundException("Section with id ${section.id} not found in deletedSections")
+                throw SectionNotFoundException(section.id)
             }
         }
         factory.setCurrentTimeToLastEditDate(approachEditRecord)

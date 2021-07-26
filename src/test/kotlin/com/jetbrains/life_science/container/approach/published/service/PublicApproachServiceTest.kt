@@ -15,7 +15,12 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
-@Sql(value = ["/scripts/initial_data.sql", "/scripts/approach/public_approach_data.sql"])
+@Sql(
+    value = [
+        "/scripts/initial_data.sql",
+        "/scripts/approach/public_approach_data.sql"
+    ]
+)
 @Transactional
 class PublicApproachServiceTest {
 
