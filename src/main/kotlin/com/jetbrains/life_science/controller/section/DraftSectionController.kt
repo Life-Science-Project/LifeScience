@@ -92,7 +92,6 @@ class DraftSectionController(
         return getSectionSecured(approach, sectionId)
     }
 
-
     private fun getApproachSecured(
         approachId: Long,
         credentials: Credentials
@@ -113,6 +112,4 @@ class DraftSectionController(
         }
         return sectionService.getById(sectionId)
     }
-
-
 }

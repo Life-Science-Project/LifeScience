@@ -19,5 +19,5 @@ interface ContentVersionService {
 
     fun archiveBySectionId(sectionId: Long)
 
-    fun updateOrCreateIfNotExists( info: ContentInfo)
+    fun updateOrCreateIfNotExists(info: ContentInfo)
 }
