@@ -26,8 +26,8 @@ values (4, 'regular@gmail.ru', '$2a$10$deGk.zxpc23BWE7Upb89IOG1eELe3cK0RIA0h91aB
 -- nextId = 4
 alter sequence credentials_seq restart with 5;
 
-insert into users (id, first_name, last_name, credentials_id, favorite_group_id)
-values (1, 'Alex', 'R', 1, 1);
+insert into users (id, first_name, last_name, credentials_id, favorite_group_id, academic_degree)
+values (1, 'Alex', 'R', 1, 1, 1);
 update credentials
 set user_personal_data_id = 1
 where id = 1;

@@ -47,7 +47,7 @@ internal class UserControllerTest : ApiTest() {
                 organisations = listOf(),
                 about = "",
                 doctorDegree = false,
-                academicDegree = AcademicDegree.NONE,
+                academicDegree = AcademicDegree.BACHELOR,
                 favoriteGroup = FavoriteGroupShortView(
                     id = 1,
                     name = "Favorite"
