@@ -12,6 +12,8 @@ data class ProtocolSearchUnit(
     @Id
     val id: Long,
 
+    val approachId: Long,
+
     @Field
     val names: List<String>,
 

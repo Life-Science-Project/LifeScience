@@ -105,8 +105,8 @@ internal class SearchServiceTest {
             size = 100
         )
         val expectedResults = setOf(
-            ProtocolSearchResult(publishProtocolId = 1, name = "omega zeta"),
-            ProtocolSearchResult(publishProtocolId = 2, name = "zeta bi two")
+            ProtocolSearchResult(publishProtocolId = 1, approachId = 1, name = "omega zeta"),
+            ProtocolSearchResult(publishProtocolId = 2, approachId = 1, name = "zeta bi two")
         )
 
         // Action
