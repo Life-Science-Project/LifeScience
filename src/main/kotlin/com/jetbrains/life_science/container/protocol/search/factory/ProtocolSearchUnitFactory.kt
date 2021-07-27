@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component
 class ProtocolSearchUnitFactory {
 
     fun create(protocol: PublicProtocol, context: List<String>): ProtocolSearchUnit {
-        return ProtocolSearchUnit(protocol.id, listOf(protocol.name), context)
+        return ProtocolSearchUnit(protocol.id, protocol.approach.id, listOf(protocol.name), context)
     }
 }

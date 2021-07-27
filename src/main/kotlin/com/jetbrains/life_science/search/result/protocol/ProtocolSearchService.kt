@@ -10,7 +10,8 @@ class ProtocolSearchService : UnitSearchService {
 
     override fun process(id: String, response: Map<String, Any>): ProtocolSearchResult {
         val names = response.getOrThrow("names") { "Name not found" } as List<*>
-        return ProtocolSearchResult(id.toLong(), names[0].toString())
+        val approachId = response.getOrThrow("approachId") { "ApproachId not found" } as Int
+        return ProtocolSearchResult(id.toLong(), approachId.toLong(), names[0].toString())
     }
 
     override val key = SearchUnitType.PROTOCOL
