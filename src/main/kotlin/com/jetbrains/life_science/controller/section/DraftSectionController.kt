@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.controller.section
 
-import com.jetbrains.life_science.approach.entity.DraftApproach
-import com.jetbrains.life_science.approach.service.DraftApproachService
+import com.jetbrains.life_science.container.approach.entity.DraftApproach
+import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.controller.section.dto.SectionCreationDTO
 import com.jetbrains.life_science.controller.section.dto.SectionCreationDTOToInfoAdapter
