@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.controller.section
 
 import com.jetbrains.life_science.ApiTest
-import com.jetbrains.life_science.controller.section.dto.SectionCreationDTO
 import com.jetbrains.life_science.controller.section.view.SectionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
