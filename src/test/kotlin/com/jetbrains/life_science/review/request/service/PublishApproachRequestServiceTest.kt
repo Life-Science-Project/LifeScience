@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.review.request.service
 
-import com.jetbrains.life_science.approach.entity.DraftApproach
+import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest

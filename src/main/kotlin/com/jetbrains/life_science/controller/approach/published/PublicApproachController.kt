@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.controller.approach.published
 
-import com.jetbrains.life_science.approach.service.PublicApproachService
+import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.controller.approach.published.view.PublicApproachView
 import com.jetbrains.life_science.controller.approach.published.view.PublicApproachViewMapper

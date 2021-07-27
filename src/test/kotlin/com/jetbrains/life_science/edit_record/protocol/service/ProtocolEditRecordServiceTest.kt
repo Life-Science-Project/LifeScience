@@ -1,13 +1,13 @@
 package com.jetbrains.life_science.edit_record.protocol.service
 
 import com.jetbrains.life_science.edit_record.entity.ProtocolEditRecord
-import com.jetbrains.life_science.edit_record.protocol.service.maker.makeProtocolEditRecordInfo
 import com.jetbrains.life_science.edit_record.service.ProtocolEditRecordService
 import com.jetbrains.life_science.exception.not_found.EditRecordNotFoundException
 import com.jetbrains.life_science.exception.section.SectionAlreadyDeletedException
 import com.jetbrains.life_science.exception.section.SectionAlreadyExistsException
 import com.jetbrains.life_science.exception.section.SectionNotFoundException
-import com.jetbrains.life_science.protocol.service.PublicProtocolService
+import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
+import com.jetbrains.life_science.edit_record.protocol.service.maker.makeProtocolEditRecordInfo
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import com.jetbrains.life_science.util.UTCZone

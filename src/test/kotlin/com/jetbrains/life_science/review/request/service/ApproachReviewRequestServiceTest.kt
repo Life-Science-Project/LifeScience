@@ -200,7 +200,7 @@ class ApproachReviewRequestServiceTest {
     }
 
     /**
-     * Should throw PublishApproachRequestNotFoundException
+     * Should throw ApproachReviewRequestNotFoundException
      */
     @Test
     fun `add review to non-existing approach review request`() {

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.controller.section
 
-import com.jetbrains.life_science.approach.service.PublicApproachService
+import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.controller.section.view.SectionView
 import com.jetbrains.life_science.controller.section.view.SectionViewMapper
