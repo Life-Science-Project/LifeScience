@@ -20,5 +20,8 @@ values (2, 2);
 insert into section (id, name, order_num, published, visible)
 values (1, 'section', 1, true, true);
 
+insert into section (id, name, order_num, published, visible)
+values (2, 'section 2', 2, true, true);
+
 insert into public_protocol_sections (public_protocol_id, sections_id)
 values (1, 1);

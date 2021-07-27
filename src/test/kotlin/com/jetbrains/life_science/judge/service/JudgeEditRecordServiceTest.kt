@@ -41,7 +41,7 @@ internal class JudgeEditRecordServiceTest {
     lateinit var protocolRequestService: ProtocolReviewRequestService
 
     /**
-     *
+     * Should do nothing
      */
     @Test
     fun `judge approach edit record with not enough reviews`() {
@@ -58,7 +58,7 @@ internal class JudgeEditRecordServiceTest {
     }
 
     /**
-     *
+     * Should change request state and publish reject event
      */
     @Test
     fun `reject public approach request`() {
@@ -76,7 +76,7 @@ internal class JudgeEditRecordServiceTest {
     }
 
     /**
-     *
+     * Should delete request, merge edit record with approach and clear record
      */
     @Test
     fun `approve public approach request`() {
@@ -95,7 +95,7 @@ internal class JudgeEditRecordServiceTest {
     }
 
     /**
-     *
+     * Should throw RequestJudgeWrongStateException
      */
     @Test
     fun `judge canceled approach request`() {
@@ -109,7 +109,7 @@ internal class JudgeEditRecordServiceTest {
     }
 
     /**
-     *
+     * Should do nothing
      */
     @Test
     fun `judge protocol edit record with not enough reviews`() {
@@ -126,7 +126,7 @@ internal class JudgeEditRecordServiceTest {
     }
 
     /**
-     *
+     * Should change request state and publish reject event
      */
     @Test
     fun `reject public protocol request`() {
@@ -144,7 +144,7 @@ internal class JudgeEditRecordServiceTest {
     }
 
     /**
-     *
+     * Should delete request, merge edit record with protocol and clear record
      */
     @Test
     fun `approve public protocol request`() {
@@ -163,7 +163,7 @@ internal class JudgeEditRecordServiceTest {
     }
 
     /**
-     *
+     * Should throw RequestJudgeWrongStateException
      */
     @Test
     fun `judge canceled protocol request`() {

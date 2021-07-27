@@ -97,6 +97,23 @@ class PublicProtocolServiceTest {
     fun `add section to sections`() {
         // Prepare data
         val protocolId = 1L
+        val section = sectionService.getById(2L)
+
+        // Action
+        service.addSection(protocolId, section)
+        val publicProtocol = service.get(protocolId)
+
+        // Assert
+        assertContainsSection(publicProtocol, section.id)
+    }
+
+    /**
+     * Should do nothing
+     */
+    @Test
+    fun `add section to sections when it already added`() {
+        // Prepare data
+        val protocolId = 1L
         val section = sectionService.getById(1L)
 
         // Action
@@ -152,6 +169,23 @@ class PublicProtocolServiceTest {
         assertThrows<PublicProtocolNotFoundException> {
             service.removeSection(protocolId, section)
         }
+    }
+
+    /**
+     * Should do nothing
+     */
+    @Test
+    fun `remove section from sections when it already deleted`() {
+        // Prepare data
+        val protocolId = 1L
+        val section = sectionService.getById(2L)
+
+        // Action
+        service.removeSection(protocolId, section)
+        val publicProtocol = service.get(protocolId)
+
+        // Assert
+        assertNotContainsSection(publicProtocol, section.id)
     }
 
     private fun assertContainsCoAuthor(publicProtocol: PublicProtocol, userId: Long) {
