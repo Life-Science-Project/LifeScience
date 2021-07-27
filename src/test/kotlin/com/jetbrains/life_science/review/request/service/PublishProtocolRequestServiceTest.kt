@@ -4,6 +4,7 @@ import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.exception.not_found.PublishProtocolRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
+import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.service.maker.makePublishProtocolRequestInfo
@@ -82,9 +83,9 @@ class PublishProtocolRequestServiceTest {
             LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val approachCreationLocalDateTime = LocalDateTime.of(2020, 12, 17, 0, 0)
         val publicApproach = createPublicApproach(1L, "approach 1", owner, approachCreationLocalDateTime)
-        val protocol = createDraftProtocol(1L, "first protocol", publicApproach, owner)
+        val protocol = createDraftProtocol(2L, "second protocol", publicApproach, owner)
         val info = makePublishProtocolRequestInfo(
-            id = 3L,
+            id = 4L,
             date = protocolCreationLocalDateTime,
             editor = editor,
             protocol = protocol
@@ -100,6 +101,33 @@ class PublishProtocolRequestServiceTest {
         assertEquals(editor.id, publishProtocolRequest.editor.id)
         assertEquals(protocol.id, publishProtocolRequest.protocol.id)
         assertEquals(expectedState, publishProtocolRequest.state)
+    }
+
+    /**
+     * Should throw DuplicateRequestException, because of existing
+     * not canceled request.
+     */
+    @Test
+    fun `create duplicate publish protocol request`() {
+        // Prepare data
+        val owner = credentialsService.getById(1L)
+        val editor = credentialsService.getById(3L)
+        val protocolCreationLocalDateTime =
+            LocalDateTime.of(2021, 5, 21, 12, 53, 47)
+        val approachCreationLocalDateTime = LocalDateTime.of(2020, 12, 17, 0, 0)
+        val publicApproach = createPublicApproach(1L, "approach 1", owner, approachCreationLocalDateTime)
+        val protocol = createDraftProtocol(1L, "first protocol", publicApproach, owner)
+        val info = makePublishProtocolRequestInfo(
+            id = 3L,
+            date = protocolCreationLocalDateTime,
+            editor = editor,
+            protocol = protocol
+        )
+
+        // Action & Assert
+        assertThrows<DuplicateRequestException> {
+            service.create(info)
+        }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.review.request.service.editRecord
 
 import com.jetbrains.life_science.exception.not_found.ApproachReviewRequestNotFoundException
+import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.ApproachReviewRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -23,6 +24,13 @@ class ApproachReviewRequestServiceImpl(
     }
 
     override fun create(info: ApproachReviewRequestInfo): ApproachReviewRequest {
+        val requests = repository.getAllByEditRecord(info.approachEditRecord)
+        if (hasAnyActiveRequests(requests)) {
+            throw DuplicateRequestException(
+                "ApproachReviewRequest for approach with " +
+                    "id ${info.approachEditRecord.approach.id} is already exists"
+            )
+        }
         val request = factory.create(info)
         return repository.save(request)
     }
@@ -51,5 +59,9 @@ class ApproachReviewRequestServiceImpl(
             reviewService.deleteReview(it.id)
         }
         repository.deleteById(request.id)
+    }
+
+    private fun hasAnyActiveRequests(requests: List<ApproachReviewRequest>): Boolean {
+        return requests.any { it.state == RequestState.PENDING }
     }
 }

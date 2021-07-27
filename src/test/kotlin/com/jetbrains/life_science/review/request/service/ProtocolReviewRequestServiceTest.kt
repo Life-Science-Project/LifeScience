@@ -2,6 +2,7 @@ package com.jetbrains.life_science.review.request.service
 
 import com.jetbrains.life_science.edit_record.service.ProtocolEditRecordService
 import com.jetbrains.life_science.exception.not_found.ProtocolReviewRequestNotFoundException
+import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.ProtocolReviewRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -77,10 +78,10 @@ class ProtocolReviewRequestServiceTest {
     fun `create new protocol review request`() {
         // Prepare data
         val editor = credentialsService.getById(1L)
-        val editRecord = editRecordService.get(1L)
+        val editRecord = editRecordService.get(2L)
         val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val info = makeProtocolReviewRequestInfo(
-            id = 2L,
+            id = 3L,
             date = creationLocalDateTime,
             editor = editor,
             editRecord = editRecord
@@ -96,6 +97,29 @@ class ProtocolReviewRequestServiceTest {
         assertEquals(editor.id, protocolReviewRequest.editor.id)
         assertEquals(editRecord.id, protocolReviewRequest.editRecord.id)
         assertEquals(expectedState, protocolReviewRequest.state)
+    }
+
+    /**
+     * Should throw DuplicateRequestException, because of existing
+     * not canceled request.
+     */
+    @Test
+    fun `create duplicate protocol review request`() {
+        // Prepare data
+        val editor = credentialsService.getById(1L)
+        val editRecord = editRecordService.get(1L)
+        val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
+        val info = makeProtocolReviewRequestInfo(
+            id = 2L,
+            date = creationLocalDateTime,
+            editor = editor,
+            editRecord = editRecord
+        )
+
+        // Action & Assert
+        assertThrows<DuplicateRequestException> {
+            service.create(info)
+        }
     }
 
     /**

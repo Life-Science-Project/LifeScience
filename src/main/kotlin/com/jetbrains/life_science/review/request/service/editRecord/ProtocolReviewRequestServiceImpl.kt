@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.review.request.service.editRecord
 
 import com.jetbrains.life_science.exception.not_found.ProtocolReviewRequestNotFoundException
+import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.ProtocolReviewRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -23,6 +24,13 @@ class ProtocolReviewRequestServiceImpl(
     }
 
     override fun create(info: ProtocolReviewRequestInfo): ProtocolReviewRequest {
+        val requests = repository.getAllByEditRecord(info.protocolEditRecord)
+        if (hasAnyActiveRequests(requests)) {
+            throw DuplicateRequestException(
+                "ProtocolReviewRequest for protocol with " +
+                    "id ${info.protocolEditRecord.protocol.id} is already exists"
+            )
+        }
         val request = factory.create(info)
         return repository.save(request)
     }
@@ -51,5 +59,9 @@ class ProtocolReviewRequestServiceImpl(
             reviewService.deleteReview(it.id)
         }
         repository.deleteById(request.id)
+    }
+
+    private fun hasAnyActiveRequests(requests: List<ProtocolReviewRequest>): Boolean {
+        return requests.any { it.state == RequestState.PENDING }
     }
 }

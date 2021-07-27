@@ -2,6 +2,7 @@ package com.jetbrains.life_science.review.request.service
 
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
+import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -76,10 +77,10 @@ class PublishApproachRequestServiceTest {
         // Prepare data
         val approachOwner = credentialsService.getById(1L)
         val editor = credentialsService.getById(3L)
-        val approach = createDraftApproach(1L, "first approach", approachOwner)
+        val approach = createDraftApproach(2L, "second approach", approachOwner)
         val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val info = makePublishApproachRequestInfo(
-            id = 3L,
+            id = 4L,
             date = creationLocalDateTime,
             editor = editor,
             approach = approach
@@ -95,6 +96,30 @@ class PublishApproachRequestServiceTest {
         assertEquals(editor.id, publishApproachRequest.editor.id)
         assertEquals(approach.id, publishApproachRequest.approach.id)
         assertEquals(expectedState, publishApproachRequest.state)
+    }
+
+    /**
+     * Should throw DuplicateRequestException, because of existing
+     * not canceled request.
+     */
+    @Test
+    fun `create duplicate publish approach request`() {
+        // Prepare data
+        val approachOwner = credentialsService.getById(1L)
+        val editor = credentialsService.getById(3L)
+        val approach = createDraftApproach(1L, "first approach", approachOwner)
+        val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
+        val info = makePublishApproachRequestInfo(
+            id = 3L,
+            date = creationLocalDateTime,
+            editor = editor,
+            approach = approach
+        )
+
+        // Action & Assert
+        assertThrows<DuplicateRequestException> {
+            service.create(info)
+        }
     }
 
     /**

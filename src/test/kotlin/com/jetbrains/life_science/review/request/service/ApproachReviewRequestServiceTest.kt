@@ -2,6 +2,7 @@ package com.jetbrains.life_science.review.request.service
 
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.exception.not_found.ApproachReviewRequestNotFoundException
+import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.ApproachReviewRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -77,8 +78,8 @@ class ApproachReviewRequestServiceTest {
     fun `create new approach review request`() {
         // Prepare data
         val editor = credentialsService.getById(1L)
-        val editRecord = editRecordService.get(1L)
-        val expectedId = 3L
+        val editRecord = editRecordService.get(2L)
+        val expectedId = 4L
         val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val info = makeApproachReviewRequestInfo(
             date = creationLocalDateTime,
@@ -96,6 +97,28 @@ class ApproachReviewRequestServiceTest {
         assertEquals(editor.id, approachReviewRequest.editor.id)
         assertEquals(editRecord.id, approachReviewRequest.editRecord.id)
         assertEquals(expectedState, approachReviewRequest.state)
+    }
+
+    /**
+     * Should throw DuplicateRequestException, because of existing
+     * not canceled request.
+     */
+    @Test
+    fun `create duplicate approach review request`() {
+        // Prepare data
+        val editor = credentialsService.getById(1L)
+        val editRecord = editRecordService.get(1L)
+        val creationLocalDateTime = LocalDateTime.of(2021, 5, 21, 12, 53, 47)
+        val info = makeApproachReviewRequestInfo(
+            date = creationLocalDateTime,
+            editor = editor,
+            editRecord = editRecord
+        )
+
+        // Action & Assert
+        assertThrows<DuplicateRequestException> {
+            service.create(info)
+        }
     }
 
     /**

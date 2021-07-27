@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.review.request.service.publish
 
 import com.jetbrains.life_science.exception.not_found.PublishProtocolRequestNotFoundException
+import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -25,6 +26,13 @@ class PublishProtocolRequestServiceImpl(
     }
 
     override fun create(info: PublishProtocolRequestInfo): PublishProtocolRequest {
+        val requests = repository.findAllByProtocol(info.protocol)
+        if (hasAnyActiveRequests(requests)) {
+            throw DuplicateRequestException(
+                "PublishProtocolRequest for protocol with " +
+                    "id ${info.protocol.id} is already exists"
+            )
+        }
         val publishProtocolRequest = factory.create(info)
         return repository.save(publishProtocolRequest)
     }
@@ -58,5 +66,9 @@ class PublishProtocolRequestServiceImpl(
         }
         factory.changeState(publishProtocolRequest, state)
         return repository.save(publishProtocolRequest)
+    }
+
+    private fun hasAnyActiveRequests(requests: List<PublishProtocolRequest>): Boolean {
+        return requests.any { it.state == RequestState.PENDING }
     }
 }
