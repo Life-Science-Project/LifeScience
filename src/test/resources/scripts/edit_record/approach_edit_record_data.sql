@@ -1,6 +1,6 @@
 insert into public_approach (id, name, creation_date, owner_id)
 values (2, 'approach 2', parsedatetime('17-12-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1);
-insert into category_approaches (category_id, approaches_id) values (1, 2);
+insert into category_approaches (categories_id, approaches_id) values (1, 2);
 
 insert into approach_edit_record (id, last_edit_date, approach_id)
 values (1, parsedatetime('17-12-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1);
