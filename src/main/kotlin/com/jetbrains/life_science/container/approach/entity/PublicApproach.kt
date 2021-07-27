@@ -24,16 +24,18 @@ class PublicApproach(
     sections: MutableList<Section>,
     tags: MutableList<String>,
     owner: Credentials,
-    categories: MutableList<Category>,
     creationDate: LocalDateTime,
 
     @ManyToMany
     var coAuthors: MutableList<Credentials>,
 
     @OneToMany
-    var protocols: MutableList<PublicProtocol>
+    var protocols: MutableList<PublicProtocol>,
 
-) : Approach(name, sections, categories, tags, owner, creationDate) {
+    @ManyToMany(mappedBy = "approaches")
+    var categories: MutableList<Category>
+
+) : Approach(name, sections, tags, owner, creationDate) {
 
     fun hasSection(sectionId: Long) = sections.any { it.id == sectionId }
 }

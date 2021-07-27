@@ -1,6 +1,5 @@
 package com.jetbrains.life_science.container.approach.entity
 
-import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
@@ -13,9 +12,6 @@ abstract class Approach(
 
     @OneToMany
     var sections: MutableList<Section>,
-
-    @ManyToMany
-    var categories: MutableList<Category>,
 
     @ElementCollection
     var tags: MutableList<String>,

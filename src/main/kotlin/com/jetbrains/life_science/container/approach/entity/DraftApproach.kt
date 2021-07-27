@@ -23,13 +23,15 @@ class DraftApproach(
     sections: MutableList<Section>,
     tags: MutableList<String>,
     owner: Credentials,
-    categories: MutableList<Category>,
     creationDate: LocalDateTime,
 
     @ManyToMany
-    var participants: MutableList<Credentials>
+    var participants: MutableList<Credentials>,
 
-) : Approach(name, sections, categories, tags, owner, creationDate) {
+    @ManyToMany
+    var categories: MutableList<Category>
+
+) : Approach(name, sections, tags, owner, creationDate) {
 
     fun hasParticipant(credentials: Credentials) = participants.any { it.id == credentials.id }
 
