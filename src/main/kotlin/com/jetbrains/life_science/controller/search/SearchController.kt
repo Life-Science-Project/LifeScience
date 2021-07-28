@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller
+package com.jetbrains.life_science.controller.search
 
 import com.jetbrains.life_science.search.dto.SearchQueryDTO
 import com.jetbrains.life_science.search.dto.SearchQueryDTOToQueryInfoAdapter
