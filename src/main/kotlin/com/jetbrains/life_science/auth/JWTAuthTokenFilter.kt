@@ -34,7 +34,7 @@ class JWTAuthTokenFilter(
         try {
             tryAuth(request, filterChain, response)
         } catch (exception: Exception) {
-            resolver.resolveException(request, response, null, exception)
+            resolver.resolveException(request, response, null, exception) ?: throw IllegalStateException(exception)
         }
     }
 

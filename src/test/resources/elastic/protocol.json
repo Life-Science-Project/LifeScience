@@ -2,12 +2,14 @@
   {
     "_class": "Protocol",
     "id": 1,
+    "approachId": 1,
     "names": ["omega zeta"],
     "context": ["catalog 1", "catalog 2", "approach one", "approach one second name", "omega zeta"]
   },
   {
     "_class": "Protocol",
     "id": 2,
+    "approachId": 1,
     "names": ["zeta bi two"],
     "context": ["catalog 1", "catalog 2", "approach two", "approach two second name", "zeta bi two"]
   }

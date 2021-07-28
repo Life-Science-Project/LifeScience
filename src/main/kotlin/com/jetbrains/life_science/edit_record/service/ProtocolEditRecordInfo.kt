@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.edit_record.service
 
-import com.jetbrains.life_science.protocol.entity.PublicProtocol
+import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import java.time.LocalDateTime
 
 interface ProtocolEditRecordInfo {

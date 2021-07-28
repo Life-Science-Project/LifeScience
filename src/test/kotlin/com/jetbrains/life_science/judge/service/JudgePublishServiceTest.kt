@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.judge.service
 
+import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
+import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
 import com.jetbrains.life_science.exception.judge.RequestJudgeWrongStateException
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
 import com.jetbrains.life_science.exception.not_found.PublishProtocolRequestNotFoundException
@@ -29,6 +31,12 @@ import org.springframework.transaction.annotation.Transactional
 internal class JudgePublishServiceTest {
 
     @MockBean
+    lateinit var protocolSearchUnitService: ProtocolSearchUnitService
+
+    @MockBean
+    lateinit var approachSearchUnitService: ApproachSearchUnitService
+
+    @MockBean
     lateinit var eventHandler: JudgePublishServiceTestHandler
 
     @Autowired
@@ -40,8 +48,11 @@ internal class JudgePublishServiceTest {
     @Autowired
     lateinit var protocolRequestService: PublishProtocolRequestService
 
+    /**
+     * Should do nothing
+     */
     @Test
-    fun `judge with not enough reviews`() {
+    fun `judge approach publish request with not enough reviews`() {
         // Prepare
         val approachRequest = approachRequestService.get(3)
 
@@ -54,6 +65,9 @@ internal class JudgePublishServiceTest {
         assertEquals(approachRequest.state, newRequest.state)
     }
 
+    /**
+     * Should change request state and create reject event
+     */
     @Test
     fun `reject public approach request`() {
         // Prepare
@@ -69,6 +83,9 @@ internal class JudgePublishServiceTest {
             .listenApproachReject(any())
     }
 
+    /**
+     * Should delete request, create public approach and approve event
+     */
     @Test
     fun `approve public approach request`() {
         // Prepare
@@ -85,6 +102,9 @@ internal class JudgePublishServiceTest {
             .listenApproachApprove(any())
     }
 
+    /**
+     * Should throw RequestJudgeWrongStateException
+     */
     @Test
     fun `judge canceled approach request`() {
         // Prepare
@@ -96,6 +116,9 @@ internal class JudgePublishServiceTest {
         }
     }
 
+    /**
+     * Should change request state and create reject event
+     */
     @Test
     fun `reject public protocol request`() {
         // Prepare
@@ -111,6 +134,9 @@ internal class JudgePublishServiceTest {
             .listenProtocolReject(any())
     }
 
+    /**
+     * Should delete request, create public approach and approve event
+     */
     @Test
     fun `approve public protocol request`() {
         // Prepare
@@ -127,6 +153,9 @@ internal class JudgePublishServiceTest {
             .listenProtocolApprove(any())
     }
 
+    /**
+     * Should throw RequestJudgeWrongStateException
+     */
     @Test
     fun `judge canceled protocol request`() {
         // Prepare
