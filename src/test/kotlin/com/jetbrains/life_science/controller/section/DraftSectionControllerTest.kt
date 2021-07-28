@@ -189,8 +189,11 @@ internal class DraftSectionControllerTest : ApiTest() {
         assertEquals(emptyList<List<String>>(), exceptionView.arguments)
     }
 
+    /**
+     * Test check insertion section in the start of sections
+     */
     @Test
-    fun `update existing section`() {
+    fun `update existing section insert in the begining`() {
         val approachId = 1L
         val sectionId = 4L
         val accessToken = loginAccessToken("email@email.ru", "password")
@@ -209,6 +212,31 @@ internal class DraftSectionControllerTest : ApiTest() {
 
         // check order
         assertCorrectOrder(approachId, accessToken, listOf(4, 1, 5))
+    }
+
+    /**
+     * Test check insertion section in the end of sections
+     */
+    @Test
+    fun `update existing section insert in the end`() {
+        val approachId = 1L
+        val sectionId = 4L
+        val accessToken = loginAccessToken("email@email.ru", "password")
+        val dto = SectionDTO("section 1", true, "aboba", 5)
+
+        patchRequestAuthorized(makePath(1, "/$sectionId"), dto, accessToken)
+
+        elasticPopulator.flush()
+        Thread.sleep(1000)
+
+        val section = getViewAuthorized<SectionView>(makePath(approachId, "/$sectionId"), accessToken)
+
+        // check section
+        assertEquals(section.name, "section 1")
+        assertEquals("aboba", section.content)
+
+        // check order
+        assertCorrectOrder(approachId, accessToken, listOf(1, 5, 4))
     }
 
     private fun assertCorrectOrder(approachId: Long, accessToken: String, idsOrder: List<Long>) {
