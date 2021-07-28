@@ -208,7 +208,7 @@ internal class SectionServiceTests {
         val expected = Section(
             id = existingSection.id,
             name = info.name,
-            order = 0,
+            order = 1,
             visible = info.visible,
             published = existingSection.published
         )
