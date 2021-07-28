@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.controller.user.view
 
 import com.jetbrains.life_science.controller.favorite_group.view.FavoriteGroupViewMapper
+import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import com.jetbrains.life_science.user.organisation.view.OrganisationViewMapper
 import org.springframework.stereotype.Component
@@ -36,8 +37,7 @@ class UserViewMapper(
         )
     }
 
-    fun toFullView(userData: UserPersonalData): UserFullView {
-        val credentials = userData.credentials
+    fun toFullView(credentials: Credentials, userData: UserPersonalData): UserFullView {
         return UserFullView(
             id = credentials.id,
             email = credentials.email,

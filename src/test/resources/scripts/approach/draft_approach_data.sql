@@ -6,8 +6,6 @@ values (2, parsedatetime('17-08-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 'a
 
 insert into draft_approach (id, creation_date, name, owner_id)
 values (3, parsedatetime('17-08-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 'approach 333', 1);
-insert into draft_approach_sections (draft_approach_id, sections_id)
-values (3, 3);
 
 alter sequence draft_approach_seq restart with 3;
 
