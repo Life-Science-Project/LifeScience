@@ -46,6 +46,7 @@ class DraftApproachServiceTest {
         val info = makeDraftApproachInfo(
             id = 0L,
             name = "bradford",
+            aliases = mutableListOf(),
             tags = listOf(),
             categories = listOf(
                 category
@@ -110,6 +111,7 @@ class DraftApproachServiceTest {
         val info = makeDraftApproachInfo(
             id = 1L,
             name = "updated name",
+            aliases = mutableListOf(),
             tags = listOf(),
             categories = listOf(
                 category
@@ -141,6 +143,7 @@ class DraftApproachServiceTest {
         val info = makeDraftApproachInfo(
             id = 666L,
             name = "updated name",
+            aliases = mutableListOf(),
             tags = listOf(),
             categories = listOf(
                 category

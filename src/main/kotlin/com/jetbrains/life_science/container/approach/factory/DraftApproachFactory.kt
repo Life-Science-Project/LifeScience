@@ -12,6 +12,7 @@ class DraftApproachFactory {
         return DraftApproach(
             id = 0,
             name = info.name,
+            aliases = info.aliases,
             categories = info.categories.toMutableList(),
             tags = info.tags.toMutableList(),
             owner = info.owner,

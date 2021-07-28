@@ -20,6 +20,7 @@ class DraftApproach(
     override val id: Long,
 
     name: String,
+    aliases: List<String>,
     sections: MutableList<Section>,
     tags: MutableList<String>,
     owner: Credentials,
@@ -31,7 +32,7 @@ class DraftApproach(
     @ManyToMany
     var categories: MutableList<Category>
 
-) : Approach(name, sections, tags, owner, creationDate) {
+) : Approach(name, aliases, sections, tags, owner, creationDate) {
 
     fun hasParticipant(credentials: Credentials) = participants.any { it.id == credentials.id }
 
