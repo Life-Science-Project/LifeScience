@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.section
+package com.jetbrains.life_science.controller.section.approach
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.section.view.SectionView
@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct
     "/scripts/initial_data.sql",
     "/scripts/approach/public_approach_data.sql",
 )
-internal class PublicSectionControllerTest : ApiTest() {
+internal class PublicApproachSectionControllerTest : ApiTest() {
 
     val pathPrefix = listOf("/api/approaches/public/", "/sections")
 
