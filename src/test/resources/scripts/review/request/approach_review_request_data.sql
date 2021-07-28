@@ -1,6 +1,17 @@
+insert into public_approach (id, name, creation_date, owner_id)
+values (2, 'approach 2', parsedatetime('17-12-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1);
+insert into category_approaches (category_id, approaches_id)
+values (1, 2);
+insert into public_approach_categories (public_approach_id, categories_id)
+values (2, 1);
+-- nextPublicApproachId = 3
+alter sequence public_approach_seq restart with 3;
+
 insert into approach_edit_record (id, approach_id)
 values (1, 1);
-alter sequence approach_edit_record_seq restart with 2;
+insert into approach_edit_record (id, approach_id)
+values (2, 2);
+alter sequence approach_edit_record_seq restart with 3;
 
 -- state = PENDING
 insert into approach_review_request (id, date, state, editor_id, edit_record_id)
@@ -8,8 +19,11 @@ values (1, parsedatetime('22-05-2021 12:53:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 0,
 -- state = CANCELED
 insert into approach_review_request (id, date, state, editor_id, edit_record_id)
 values (2, parsedatetime('22-05-2021 12:53:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1, 1, 1);
--- nextId = 3
-alter sequence approach_review_request_seq restart with 3;
+-- state = CANCELED
+insert into approach_review_request (id, date, state, editor_id, edit_record_id)
+values (3, parsedatetime('22-05-2021 12:53:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1, 1, 2);
+-- nextId = 4
+alter sequence approach_review_request_seq restart with 4;
 
 insert into review(id, comment, date, resolution, reviewer_id)
 values (1, 'first review', parsedatetime('22-05-2021 12:54:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1, 3);

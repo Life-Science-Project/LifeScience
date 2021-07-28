@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.review.request.service.publish
 
 import com.jetbrains.life_science.exception.not_found.PublishApproachRequestNotFoundException
+import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -25,6 +26,12 @@ class PublishApproachRequestServiceImpl(
     }
 
     override fun create(info: PublishApproachRequestInfo): PublishApproachRequest {
+        if (repository.existsByApproachAndState(info.approach, RequestState.PENDING)) {
+            throw DuplicateRequestException(
+                "PublishApproachRequest for approach with " +
+                    "id ${info.approach.id} is already exists"
+            )
+        }
         val publishApproachRequest = factory.create(info)
         return repository.save(publishApproachRequest)
     }
