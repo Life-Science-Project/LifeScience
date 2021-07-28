@@ -36,6 +36,9 @@ internal class PublicApproachSectionControllerTest : ApiTest() {
         elasticPopulator.prepareData()
     }
 
+    /**
+     * Should return existing section view
+     */
     @Test
     fun `get existing section`() {
         // Prepare
@@ -48,6 +51,19 @@ internal class PublicApproachSectionControllerTest : ApiTest() {
 
         // Assert
         assertEquals(expectedView, section)
+    }
+
+    /**
+     * Should return 404_006 code
+     */
+    @Test
+    fun `get not existing section test`() {
+        val request = getRequest(makePath(1, "/666"))
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_006, exceptionView.systemCode)
+        assertTrue(exceptionView.arguments.isEmpty())
     }
 
     fun makePath(approachId: Long, suffix: String): String {

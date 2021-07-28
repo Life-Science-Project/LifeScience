@@ -5,6 +5,7 @@ import com.jetbrains.life_science.controller.approach.view.ApproachShortView
 import com.jetbrains.life_science.controller.protocol.published.view.PublicProtocolView
 import com.jetbrains.life_science.controller.section.view.SectionShortView
 import com.jetbrains.life_science.controller.user.view.UserShortView
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.test.context.jdbc.Sql
@@ -44,6 +45,19 @@ internal class PublicProtocolControllerTest : ApiTest() {
         val protocol = getView<PublicProtocolView>(makePath(1))
 
         assertEquals(expectedView, protocol)
+    }
+
+    /**
+     * Should return 404_007 code
+     */
+    @Test
+    fun `get not existent protocol test`() {
+        val request = getRequest(makePath(199))
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_007, exceptionView.systemCode)
+        Assertions.assertTrue(exceptionView.arguments.isEmpty())
     }
 
     private fun makePath(addition: Any): String {
