@@ -26,8 +26,7 @@ class PublishApproachRequestServiceImpl(
     }
 
     override fun create(info: PublishApproachRequestInfo): PublishApproachRequest {
-        val requests = repository.findAllByApproach(info.approach)
-        if (hasAnyActiveRequests(requests)) {
+        if (repository.existsByApproachAndState(info.approach, RequestState.PENDING)) {
             throw DuplicateRequestException(
                 "PublishApproachRequest for approach with " +
                     "id ${info.approach.id} is already exists"
@@ -66,9 +65,5 @@ class PublishApproachRequestServiceImpl(
         }
         factory.changeState(publishApproachRequest, state)
         return repository.save(publishApproachRequest)
-    }
-
-    private fun hasAnyActiveRequests(requests: List<PublishApproachRequest>): Boolean {
-        return requests.any { it.state == RequestState.PENDING }
     }
 }

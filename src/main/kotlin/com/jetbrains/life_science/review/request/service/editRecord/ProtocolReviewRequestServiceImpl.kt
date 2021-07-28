@@ -24,8 +24,7 @@ class ProtocolReviewRequestServiceImpl(
     }
 
     override fun create(info: ProtocolReviewRequestInfo): ProtocolReviewRequest {
-        val requests = repository.getAllByEditRecord(info.protocolEditRecord)
-        if (hasAnyActiveRequests(requests)) {
+        if (repository.existsByEditRecordAndState(info.protocolEditRecord, RequestState.PENDING)) {
             throw DuplicateRequestException(
                 "ProtocolReviewRequest for protocol with " +
                     "id ${info.protocolEditRecord.protocol.id} is already exists"
@@ -59,9 +58,5 @@ class ProtocolReviewRequestServiceImpl(
             reviewService.deleteReview(it.id)
         }
         repository.deleteById(request.id)
-    }
-
-    private fun hasAnyActiveRequests(requests: List<ProtocolReviewRequest>): Boolean {
-        return requests.any { it.state == RequestState.PENDING }
     }
 }

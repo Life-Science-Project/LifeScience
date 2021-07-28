@@ -26,8 +26,7 @@ class PublishProtocolRequestServiceImpl(
     }
 
     override fun create(info: PublishProtocolRequestInfo): PublishProtocolRequest {
-        val requests = repository.findAllByProtocol(info.protocol)
-        if (hasAnyActiveRequests(requests)) {
+        if (repository.existsByProtocolAndState(info.protocol, RequestState.PENDING)) {
             throw DuplicateRequestException(
                 "PublishProtocolRequest for protocol with " +
                     "id ${info.protocol.id} is already exists"
@@ -66,9 +65,5 @@ class PublishProtocolRequestServiceImpl(
         }
         factory.changeState(publishProtocolRequest, state)
         return repository.save(publishProtocolRequest)
-    }
-
-    private fun hasAnyActiveRequests(requests: List<PublishProtocolRequest>): Boolean {
-        return requests.any { it.state == RequestState.PENDING }
     }
 }

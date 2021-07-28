@@ -24,8 +24,7 @@ class ApproachReviewRequestServiceImpl(
     }
 
     override fun create(info: ApproachReviewRequestInfo): ApproachReviewRequest {
-        val requests = repository.getAllByEditRecord(info.approachEditRecord)
-        if (hasAnyActiveRequests(requests)) {
+        if (repository.existsByEditRecordAndState(info.approachEditRecord, RequestState.PENDING)) {
             throw DuplicateRequestException(
                 "ApproachReviewRequest for approach with " +
                     "id ${info.approachEditRecord.approach.id} is already exists"
@@ -59,9 +58,5 @@ class ApproachReviewRequestServiceImpl(
             reviewService.deleteReview(it.id)
         }
         repository.deleteById(request.id)
-    }
-
-    private fun hasAnyActiveRequests(requests: List<ApproachReviewRequest>): Boolean {
-        return requests.any { it.state == RequestState.PENDING }
     }
 }
