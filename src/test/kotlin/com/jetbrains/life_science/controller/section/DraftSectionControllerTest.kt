@@ -1,7 +1,9 @@
 package com.jetbrains.life_science.controller.section
 
 import com.jetbrains.life_science.ApiTest
+import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.section.dto.SectionCreationDTO
+import com.jetbrains.life_science.controller.section.dto.SectionDTO
 import com.jetbrains.life_science.controller.section.view.SectionView
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
@@ -189,6 +191,29 @@ internal class DraftSectionControllerTest : ApiTest() {
 
     @Test
     fun `update existing section`() {
+        val approachId = 1L
+        val sectionId = 4L
+        val accessToken = loginAccessToken("email@email.ru", "password")
+        val dto = SectionDTO("section 1", true, "aboba")
+
+        patchRequestAuthorized(makePath(1, "/$sectionId"), dto, accessToken)
+
+        elasticPopulator.flush()
+        Thread.sleep(1000)
+
+        val section = getViewAuthorized<SectionView>(makePath(approachId, "/$sectionId"), accessToken)
+
+        // check section
+        assertEquals(section.name, "section 1")
+        assertEquals("aboba", section.content)
+
+        // check order
+        assertCorrectOrder(approachId, accessToken, listOf(4, 1, 5))
+    }
+
+    private fun assertCorrectOrder(approachId: Long, accessToken: String, idsOrder: List<Long>) {
+        val approach = getViewAuthorized<DraftApproachView>("/api/approaches/draft/$approachId", accessToken)
+        assertEquals(idsOrder, approach.sections.map { it.id })
     }
 
     @Test
