@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.section
+package com.jetbrains.life_science.controller.section.approach
 
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/approaches/draft/{approachId}/sections")
-class DraftSectionController(
+class DraftApproachSectionController(
     val sectionService: SectionService,
     val draftApproachService: DraftApproachService,
     val viewMapper: SectionViewMapper,

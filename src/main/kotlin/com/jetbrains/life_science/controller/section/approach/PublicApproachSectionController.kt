@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.section
+package com.jetbrains.life_science.controller.section.approach
 
 import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.content.publish.service.ContentService
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/approaches/public/{approachId}/sections")
-class PublicSectionController(
+class PublicApproachSectionController(
     val publicApproachService: PublicApproachService,
     val sectionService: SectionService,
     val contentService: ContentService,
