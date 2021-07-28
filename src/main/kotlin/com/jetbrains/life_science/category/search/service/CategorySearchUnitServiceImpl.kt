@@ -41,14 +41,14 @@ class CategorySearchUnitServiceImpl(
         }
     }
 
-    private fun createContext(category: Category): MutableList<String> {
-        val context = category.aliases.toMutableList()
+    private fun createContext(category: Category): List<String> {
+        val context = category.aliases.toMutableSet()
         context.add(category.name)
         category.parents.forEach {
             if (it.id != 0L) {
                 context.addAll(repository.findById(it.id).get().context)
             }
         }
-        return context
+        return context.toList()
     }
 }
