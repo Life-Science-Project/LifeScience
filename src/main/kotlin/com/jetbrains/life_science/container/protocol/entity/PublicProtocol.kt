@@ -28,6 +28,4 @@ class PublicProtocol(
     @ManyToMany
     var coAuthors: MutableList<Credentials>
 
-) : Protocol(name, approach, sections, owner) {
-    fun hasSection(sectionId: Long) = sections.any { it.id == sectionId }
-}
+) : Protocol(name, approach, sections, owner)

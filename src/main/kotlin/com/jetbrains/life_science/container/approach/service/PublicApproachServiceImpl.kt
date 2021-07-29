@@ -41,4 +41,11 @@ class PublicApproachServiceImpl(
         publicApproach.sections.removeAll { it.id == section.id }
         repository.save(publicApproach)
     }
+
+    override fun hasSection(id: Long, section: Section): Boolean {
+        if (!repository.existsById(id)) {
+            throw PublicApproachNotFoundException("Public approach with id $id is not found")
+        }
+        return repository.existsByIdAndSectionsContains(id, section)
+    }
 }

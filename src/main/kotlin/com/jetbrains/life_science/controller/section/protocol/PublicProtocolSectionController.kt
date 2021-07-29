@@ -35,10 +35,10 @@ class PublicProtocolSectionController(
         publicProtocolId: Long,
         sectionId: Long
     ): Section {
-        val protocol = publicProtocolService.get(publicProtocolId)
-        if (!protocol.hasSection(sectionId)) {
+        val section = sectionService.getById(sectionId)
+        if (!publicProtocolService.hasSection(publicProtocolId, section)) {
             throw SectionNotFoundException(sectionId)
         }
-        return sectionService.getById(sectionId)
+        return section
     }
 }

@@ -97,7 +97,7 @@ class DraftApproachSectionController(
         credentials: Credentials
     ): DraftApproach {
         val approach = draftApproachService.get(approachId)
-        if (!approach.hasParticipant(credentials)) {
+        if (!draftApproachService.hasParticipant(approachId, credentials)) {
             throw ForbiddenOperationException()
         }
         return approach
@@ -107,7 +107,8 @@ class DraftApproachSectionController(
         draftApproach: DraftApproach,
         sectionId: Long
     ): Section {
-        if (!draftApproach.hasSection(sectionId)) {
+        val section = sectionService.getById(sectionId)
+        if (!draftApproachService.hasSection(draftApproach.id, section)) {
             throw SectionNotFoundException(sectionId)
         }
         return sectionService.getById(sectionId)

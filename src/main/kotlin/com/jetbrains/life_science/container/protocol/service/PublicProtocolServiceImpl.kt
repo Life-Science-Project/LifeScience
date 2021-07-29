@@ -28,6 +28,13 @@ class PublicProtocolServiceImpl(
         return savedPublicProtocol
     }
 
+    override fun hasSection(id: Long, section: Section): Boolean {
+        if (!repository.existsById(id)) {
+            throw PublicProtocolNotFoundException("Public protocol with id $id is not found")
+        }
+        return repository.existsByIdAndSectionsContains(id, section)
+    }
+
     override fun addSection(id: Long, section: Section) {
         val publicProtocol = get(id)
         if (!publicProtocol.sections.any { it.id == section.id }) {

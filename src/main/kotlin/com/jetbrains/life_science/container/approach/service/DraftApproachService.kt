@@ -1,10 +1,11 @@
 package com.jetbrains.life_science.container.approach.service
 
+import com.jetbrains.life_science.container.ContainsSections
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 
-interface DraftApproachService {
+interface DraftApproachService : ContainsSections {
 
     fun get(id: Long): DraftApproach
 
@@ -18,7 +19,9 @@ interface DraftApproachService {
 
     fun removeParticipant(draftApproachId: Long, user: Credentials): DraftApproach
 
-    fun addSection(draftApproachId: Long, section: Section): DraftApproach
+    fun hasParticipant(draftApproachId: Long, user: Credentials): Boolean
 
-    fun removeSection(draftApproachId: Long, section: Section): DraftApproach
+    override fun addSection(id: Long, section: Section)
+
+    override fun removeSection(id: Long, section: Section)
 }

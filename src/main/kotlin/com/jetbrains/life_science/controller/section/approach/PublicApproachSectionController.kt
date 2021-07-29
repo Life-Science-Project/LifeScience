@@ -35,10 +35,10 @@ class PublicApproachSectionController(
         publicApproachId: Long,
         sectionId: Long
     ): Section {
-        val approach = publicApproachService.get(publicApproachId)
-        if (!approach.hasSection(sectionId)) {
+        val section = sectionService.getById(sectionId)
+        if (!publicApproachService.hasSection(publicApproachId, section)) {
             throw SectionNotFoundException(sectionId)
         }
-        return sectionService.getById(sectionId)
+        return section
     }
 }
