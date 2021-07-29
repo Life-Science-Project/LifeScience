@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.controller.section
+package com.jetbrains.life_science.controller.section.protocol
 
-import com.jetbrains.life_science.container.approach.service.PublicApproachService
+import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
 import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.controller.section.view.SectionView
 import com.jetbrains.life_science.controller.section.view.SectionViewMapper
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/approaches/public/{approachId}/sections")
-class PublicSectionController(
-    val publicApproachService: PublicApproachService,
+@RequestMapping("/api/protocols/public/{protocolId}/sections")
+class PublicProtocolSectionController(
+    val publicProtocolService: PublicProtocolService,
     val sectionService: SectionService,
     val contentService: ContentService,
     val viewMapper: SectionViewMapper
@@ -23,22 +23,22 @@ class PublicSectionController(
 
     @GetMapping("/{sectionId}")
     fun getSection(
-        @PathVariable approachId: Long,
+        @PathVariable protocolId: Long,
         @PathVariable sectionId: Long,
     ): SectionView {
-        val section = getSectionSecured(approachId, sectionId)
+        val section = getSectionSecured(protocolId, sectionId)
         val content = contentService.findBySectionId(sectionId)
         return viewMapper.toView(section, content?.text)
     }
 
     private fun getSectionSecured(
-        publicApproachId: Long,
+        publicProtocolId: Long,
         sectionId: Long
     ): Section {
-        val approach = publicApproachService.get(publicApproachId)
-        if (!approach.hasSection(sectionId)) {
+        val section = sectionService.getById(sectionId)
+        if (!publicProtocolService.hasSection(publicProtocolId, section)) {
             throw SectionNotFoundException(sectionId)
         }
-        return sectionService.getById(sectionId)
+        return section
     }
 }
