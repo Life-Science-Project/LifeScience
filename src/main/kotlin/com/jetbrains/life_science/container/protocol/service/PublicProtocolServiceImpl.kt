@@ -36,16 +36,18 @@ class PublicProtocolServiceImpl(
     }
 
     override fun addSection(id: Long, section: Section) {
-        val publicProtocol = get(id)
-        if (!publicProtocol.sections.any { it.id == section.id }) {
+        if (!hasSection(id, section)) {
+            val publicProtocol = get(id)
             publicProtocol.sections.add(section)
             repository.save(publicProtocol)
         }
     }
 
     override fun removeSection(id: Long, section: Section) {
-        val publicProtocol = get(id)
-        publicProtocol.sections.removeAll { it.id == section.id }
-        repository.save(publicProtocol)
+        if (hasSection(id, section)) {
+            val publicProtocol = get(id)
+            publicProtocol.sections.removeAll { it.id == section.id }
+            repository.save(publicProtocol)
+        }
     }
 }

@@ -63,17 +63,19 @@ class DraftApproachServiceImpl(
     }
 
     override fun addSection(id: Long, section: Section) {
-        val draftApproach = get(id)
-        if (!draftApproach.sections.any { it.id == section.id }) {
+        if (!hasSection(id, section)) {
+            val draftApproach = get(id)
             draftApproach.sections.add(section)
             repository.save(draftApproach)
         }
     }
 
     override fun removeSection(id: Long, section: Section) {
-        val draftApproach = get(id)
-        draftApproach.sections.removeAll { it.id == section.id }
-        repository.save(draftApproach)
+        if (hasSection(id, section)) {
+            val draftApproach = get(id)
+            draftApproach.sections.removeAll { it.id == section.id }
+            repository.save(draftApproach)
+        }
     }
 
     override fun hasSection(id: Long, section: Section): Boolean {
