@@ -16,7 +16,7 @@ class SectionViewMapper {
     }
 
     fun toViewShortAll(sections: List<Section>): List<SectionShortView> {
-        return sections.map { toViewShort(it) }
+        return sections.sortedBy { it.order }.map { toViewShort(it) }
     }
 
     fun toViewShort(section: Section): SectionShortView {

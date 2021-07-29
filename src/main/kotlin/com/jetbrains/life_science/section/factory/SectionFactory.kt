@@ -20,6 +20,6 @@ class SectionFactory {
     fun setParams(origin: Section, info: SectionInfo) {
         origin.name = info.name
         origin.visible = info.visible
-        origin.order = info.prevSection?.let { it.order + 1 } ?: 0
+        origin.order = info.prevSection?.let { it.order + 1 } ?: 1
     }
 }
