@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller
+package com.jetbrains.life_science.controller.organisation
 
 import com.jetbrains.life_science.user.organisation.service.OrganisationService
 import com.jetbrains.life_science.user.organisation.view.OrganisationView

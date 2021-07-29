@@ -11,8 +11,11 @@ values (1, parsedatetime('22-05-2021 12:53:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 0,
 -- state = CANCELED
 insert into publish_approach_request(id, date, state, editor_id, approach_id)
 values (2, parsedatetime('22-05-2021 12:53:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1, 1, 1);
--- nextId = 3
-ALTER SEQUENCE publish_approach_request_seq RESTART WITH 3;
+-- state = CANCELED
+insert into publish_approach_request(id, date, state, editor_id, approach_id)
+values (3, parsedatetime('22-05-2021 12:53:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1, 1, 2);
+-- nextId = 4
+ALTER SEQUENCE publish_approach_request_seq RESTART WITH 4;
 
 insert into review(id, comment, date, resolution, reviewer_id)
 values (1, 'first review', parsedatetime('22-05-2021 12:54:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1, 3);
