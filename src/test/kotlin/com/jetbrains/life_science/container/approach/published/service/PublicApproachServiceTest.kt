@@ -1,6 +1,8 @@
 package com.jetbrains.life_science.container.approach.published.service
 
+import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.container.approach.entity.PublicApproach
+import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,6 +26,12 @@ import org.springframework.transaction.annotation.Transactional
 )
 @Transactional
 class PublicApproachServiceTest {
+
+    @MockBean
+    lateinit var categorySearchUnitService: CategorySearchUnitService
+
+    @MockBean
+    lateinit var approachSearchUnitService: ApproachSearchUnitService
 
     @Autowired
     lateinit var service: PublicApproachService
