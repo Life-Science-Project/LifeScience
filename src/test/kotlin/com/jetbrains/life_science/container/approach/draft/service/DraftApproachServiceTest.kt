@@ -1,9 +1,11 @@
 package com.jetbrains.life_science.container.approach.draft.service
 
+import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.container.approach.draft.service.maker.makeDraftApproachInfo
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.category.service.CategoryService
+import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.section.service.SectionService
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
@@ -22,6 +25,12 @@ import org.springframework.transaction.annotation.Transactional
 @Sql("/scripts/initial_data.sql", "/scripts/section/section_data.sql", "/scripts/approach/draft_approach_data.sql")
 @Transactional
 class DraftApproachServiceTest {
+
+    @MockBean
+    lateinit var categorySearchUnitService: CategorySearchUnitService
+
+    @MockBean
+    lateinit var approachSearchUnitService: ApproachSearchUnitService
 
     @Autowired
     lateinit var service: DraftApproachService
