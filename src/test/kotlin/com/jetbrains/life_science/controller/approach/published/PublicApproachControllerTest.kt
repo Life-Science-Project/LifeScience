@@ -4,6 +4,7 @@ import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.approach.published.view.PublicApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.user.view.UserShortView
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.test.context.jdbc.Sql
@@ -39,6 +40,19 @@ internal class PublicApproachControllerTest : ApiTest() {
         val approach = getView<PublicApproachView>(makePath(1))
 
         assertEquals(expectedView, approach)
+    }
+
+    /**
+     * Should return 404_003 code
+     */
+    @Test
+    fun `get not existent approach test`() {
+        val request = getRequest(makePath(199))
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_003, exceptionView.systemCode)
+        Assertions.assertTrue(exceptionView.arguments.isEmpty())
     }
 
     private fun makePath(addition: Any): String {

@@ -306,7 +306,8 @@ class DraftApproachServiceTest {
         val section = sectionService.getById(1L)
 
         // Action
-        val draftApproach = service.removeSection(approachId, section)
+        service.removeSection(approachId, section)
+        val draftApproach = service.get(approachId)
 
         // Assert
         assertNotContainsSection(draftApproach, section.id)

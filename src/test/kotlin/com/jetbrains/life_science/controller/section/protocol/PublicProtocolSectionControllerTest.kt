@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.section
+package com.jetbrains.life_science.controller.section.protocol
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.section.view.SectionView
@@ -13,11 +13,11 @@ import javax.annotation.PostConstruct
 
 @Sql(
     "/scripts/initial_data.sql",
-    "/scripts/approach/public_approach_data.sql",
+    "/scripts/protocol/public_protocol_data.sql",
 )
-internal class PublicSectionControllerTest : ApiTest() {
+internal class PublicProtocolSectionControllerTest : ApiTest() {
 
-    val pathPrefix = listOf("/api/approaches/public/", "/sections")
+    val pathPrefix = listOf("/api/protocols/public/", "/sections")
 
     lateinit var elasticPopulator: ElasticPopulator
 
@@ -39,12 +39,12 @@ internal class PublicSectionControllerTest : ApiTest() {
     @Test
     fun `get existing section`() {
         // Prepare
-        val approachId = 2L
+        val protocolId = 1L
         val expectedView = SectionView(id = 1, name = "section", hidden = false, content = "user text 12")
         val sectionId = 1L
 
         // Action
-        val section = getView<SectionView>(makePath(approachId, "//$sectionId"))
+        val section = getView<SectionView>(makePath(protocolId, "//$sectionId"))
 
         // Assert
         assertEquals(expectedView, section)
