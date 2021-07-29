@@ -36,5 +36,4 @@ class PublicApproach(
     @ManyToMany(mappedBy = "approaches")
     var categories: MutableList<Category>
 
-
-) : Approach(name, sections, tags, owner, creationDate)
+) : Approach(name, aliases, sections, tags, owner, creationDate)

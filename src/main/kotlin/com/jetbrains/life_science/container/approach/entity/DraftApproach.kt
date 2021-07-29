@@ -32,7 +32,4 @@ class DraftApproach(
     @ManyToMany
     var categories: MutableList<Category>
 
-) : Approach(name, aliases, sections, tags, owner, creationDate) {
-
-    fun hasParticipant(credentials: Credentials) = participants.any { it.id == credentials.id }
-}
+) : Approach(name, aliases, sections, tags, owner, creationDate)
