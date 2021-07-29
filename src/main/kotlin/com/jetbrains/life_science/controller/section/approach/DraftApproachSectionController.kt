@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.section
+package com.jetbrains.life_science.controller.section.approach
 
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/approaches/draft/{approachId}/sections")
-class DraftSectionController(
+class DraftApproachSectionController(
     val sectionService: SectionService,
     val draftApproachService: DraftApproachService,
     val viewMapper: SectionViewMapper,
@@ -97,7 +97,7 @@ class DraftSectionController(
         credentials: Credentials
     ): DraftApproach {
         val approach = draftApproachService.get(approachId)
-        if (!approach.hasParticipant(credentials)) {
+        if (!draftApproachService.hasParticipant(approachId, credentials)) {
             throw ForbiddenOperationException()
         }
         return approach
@@ -107,7 +107,8 @@ class DraftSectionController(
         draftApproach: DraftApproach,
         sectionId: Long
     ): Section {
-        if (!draftApproach.hasSection(sectionId)) {
+        val section = sectionService.getById(sectionId)
+        if (!draftApproachService.hasSection(draftApproach.id, section)) {
             throw SectionNotFoundException(sectionId)
         }
         return sectionService.getById(sectionId)

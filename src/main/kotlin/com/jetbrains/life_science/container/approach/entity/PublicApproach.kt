@@ -36,7 +36,5 @@ class PublicApproach(
     @ManyToMany(mappedBy = "approaches")
     var categories: MutableList<Category>
 
-) : Approach(name, aliases, sections, tags, owner, creationDate) {
 
-    fun hasSection(sectionId: Long) = sections.any { it.id == sectionId }
-}
+) : Approach(name, sections, tags, owner, creationDate)

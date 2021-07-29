@@ -46,7 +46,7 @@ class PublicApproachServiceTest {
      * Should create new approach
      */
     @Test
-    fun `create new draft approach`() {
+    fun `create new public approach`() {
         // Prepare data
         val draftApproach = draftApproachService.get(1L)
 
