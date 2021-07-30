@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/protocols/public/{approachId}/protocols")
+@RequestMapping("/api/approaches/public/{approachId}/protocols")
 class PublicProtocolController(
     val publicProtocolService: PublicProtocolService,
     val viewMapper: PublicProtocolViewMapper
