@@ -1,0 +1,89 @@
+{
+  "category": [
+    {
+      "id": 1,
+      "name": "root",
+      "aliases": [
+        "root",
+        "ro"
+      ],
+      "parents": []
+    },
+    {
+      "id": 2,
+      "name": "child",
+      "aliases": [
+        "ch",
+        "chld"
+      ],
+      "parents": [
+        1
+      ]
+    },
+    {
+      "id": 3,
+      "name": "second",
+      "aliases": [
+        "sec",
+        "scnd"
+      ],
+      "parents": [
+        1
+      ]
+    },
+    {
+      "id": 4,
+      "name": "romb",
+      "aliases": [
+        "ro",
+        "rmb"
+      ],
+      "parents": [
+        2,
+        3
+      ]
+    }
+  ],
+  "approach": [
+    {
+      "name": "Bradford",
+      "aliases": [
+        "br"
+      ],
+      "categories": [
+        3,
+        4
+      ],
+      "sections": [
+        {
+          "name": "Main",
+          "content": "Some content"
+        },
+        {
+          "name": "Description",
+          "content": "Other content"
+        }
+      ],
+      "protocols": [
+        {
+          "name": "First protocol",
+          "sections": [
+            {
+              "name": "Content",
+              "content": "Protocol data"
+            }
+          ]
+        },
+        {
+          "name": "Second protocol",
+          "sections": [
+            {
+              "name": "Second Content",
+              "content": "Protocol 2 data"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
