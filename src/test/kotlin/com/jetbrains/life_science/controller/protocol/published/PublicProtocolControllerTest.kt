@@ -17,7 +17,7 @@ import java.time.LocalDateTime
 )
 internal class PublicProtocolControllerTest : ApiTest() {
 
-    private val path = "/api/protocols/public"
+    private val path = "/api/approaches/public"
 
     /**
      * Test should return public protocol view
