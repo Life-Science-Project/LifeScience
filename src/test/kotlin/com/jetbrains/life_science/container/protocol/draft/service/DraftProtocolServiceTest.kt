@@ -339,6 +339,7 @@ class DraftProtocolServiceTest {
         PublicApproach(
             id = id,
             name = name,
+            aliases = mutableListOf(),
             owner = owner,
             tags = mutableListOf(),
             sections = mutableListOf(),
