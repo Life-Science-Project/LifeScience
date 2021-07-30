@@ -50,4 +50,8 @@ class PublicProtocolServiceImpl(
             repository.save(publicProtocol)
         }
     }
+
+    override fun isInApproach(protocolId: Long, approachId: Long): Boolean {
+        return repository.existsByIdAndApproachId(protocolId, approachId)
+    }
 }

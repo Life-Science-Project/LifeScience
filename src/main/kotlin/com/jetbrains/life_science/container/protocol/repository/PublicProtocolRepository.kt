@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface PublicProtocolRepository : JpaRepository<PublicProtocol, Long> {
     fun existsByIdAndSectionsContains(id: Long, section: Section): Boolean
+    fun existsByIdAndApproachId(id: Long, approachId: Long): Boolean
 }

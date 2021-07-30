@@ -56,6 +56,7 @@ class PublicApproachServiceTest {
 
         // Assert
         assertEquals(draftApproach.name, publicApproach.name)
+        assertEquals(draftApproach.aliases.toSet(), publicApproach.aliases.toSet())
         assertEquals(draftApproach.tags.toSet(), publicApproach.tags.toSet())
         assertContainsCoAuthor(publicApproach, draftApproach.owner.id)
         draftApproach.participants.forEach {
@@ -77,6 +78,7 @@ class PublicApproachServiceTest {
         val secondCoAuthorId = 2L
         val coAuthorsExpectedCount = 2
         val expectedName = "approach 1"
+        val expectedAliases = setOf("test alias")
 
         // Action
         val publicApproach = service.get(approachId)
@@ -84,6 +86,7 @@ class PublicApproachServiceTest {
         // Assert
         assertEquals(expectedName, publicApproach.name)
         assertEquals(expectedOwnerId, publicApproach.owner.id)
+        assertEquals(expectedAliases, publicApproach.aliases.toSet())
         assertEquals(coAuthorsExpectedCount, publicApproach.coAuthors.size)
         assertContainsCoAuthor(publicApproach, expectedOwnerId)
         assertContainsCoAuthor(publicApproach, secondCoAuthorId)

@@ -10,6 +10,9 @@ abstract class Approach(
 
     var name: String,
 
+    @ElementCollection
+    var aliases: List<String>,
+
     @OneToMany
     var sections: MutableList<Section>,
 

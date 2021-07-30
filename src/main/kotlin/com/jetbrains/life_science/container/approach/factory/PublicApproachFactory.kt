@@ -10,6 +10,7 @@ class PublicApproachFactory {
         return PublicApproach(
             id = 0,
             name = approach.name,
+            aliases = approach.aliases.toMutableList(),
             sections = approach.sections.toMutableList(),
             tags = approach.tags.toMutableList(),
             owner = approach.owner,

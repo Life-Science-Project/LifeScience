@@ -250,6 +250,7 @@ class PublishApproachRequestServiceTest {
         DraftApproach(
             id = id,
             name = name,
+            aliases = mutableListOf(),
             owner = owner,
             tags = mutableListOf(),
             sections = mutableListOf(),

@@ -14,3 +14,8 @@ insert into draft_approach_categories values (1, 2);
 
 insert into draft_approach_participants (draft_approach_id, participants_id) values (1, 1);
 insert into draft_approach_participants (draft_approach_id, participants_id) values (1, 4);
+
+insert into draft_approach_aliases (draft_approach_id, aliases)
+values (1, 'approach 1 alias');
+insert into draft_approach_aliases (draft_approach_id, aliases)
+values (1, 'approach 1 alias 2');

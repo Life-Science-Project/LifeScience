@@ -11,6 +11,7 @@ class DraftCategoryCreationDTOToInfoAdapter(
 ) : DraftApproachInfo {
     override val id: Long = 0
     override val name: String = dto.name
+    override val aliases: List<String> = mutableListOf()
     override val categories: List<Category> = listOf(initialCategory)
     override val tags: List<String> = listOf()
 }

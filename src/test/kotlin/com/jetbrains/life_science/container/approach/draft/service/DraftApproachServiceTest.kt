@@ -46,6 +46,7 @@ class DraftApproachServiceTest {
         val info = makeDraftApproachInfo(
             id = 0L,
             name = "bradford",
+            aliases = mutableListOf("bradford second name"),
             tags = listOf(),
             categories = listOf(
                 category
@@ -60,6 +61,7 @@ class DraftApproachServiceTest {
         // Assert
         assertEquals(info.name, draftApproach.name)
         assertEquals(info.tags, draftApproach.tags)
+        assertEquals(info.aliases, draftApproach.aliases)
         assertContainsParticipant(draftApproach, owner.id)
         assertContainsCategory(draftApproach, category.id)
     }
@@ -74,6 +76,7 @@ class DraftApproachServiceTest {
         val expectedOwnerId = 1L
         val secondParticipantId = 4L
         val expectedName = "approach 1"
+        val expectedAliases = setOf("approach 1 alias", "approach 1 alias 2")
 
         // Action
         val draftApproach = service.get(approachId)
@@ -81,6 +84,7 @@ class DraftApproachServiceTest {
         // Assert
         assertEquals(expectedName, draftApproach.name)
         assertEquals(expectedOwnerId, draftApproach.owner.id)
+        assertEquals(expectedAliases, draftApproach.aliases.toSet())
         assertContainsParticipant(draftApproach, expectedOwnerId)
         assertContainsParticipant(draftApproach, secondParticipantId)
     }
@@ -110,6 +114,7 @@ class DraftApproachServiceTest {
         val info = makeDraftApproachInfo(
             id = 1L,
             name = "updated name",
+            aliases = mutableListOf("new alias"),
             tags = listOf(),
             categories = listOf(
                 category
@@ -124,6 +129,7 @@ class DraftApproachServiceTest {
         // Assert
         assertEquals(info.id, draftApproach.id)
         assertEquals(info.name, draftApproach.name)
+        assertEquals(info.aliases, draftApproach.aliases)
         assertEquals(info.tags, draftApproach.tags)
         assertEquals(owner.id, draftApproach.owner.id)
         assertContainsCategory(draftApproach, category.id)
@@ -141,6 +147,7 @@ class DraftApproachServiceTest {
         val info = makeDraftApproachInfo(
             id = 666L,
             name = "updated name",
+            aliases = mutableListOf(),
             tags = listOf(),
             categories = listOf(
                 category
