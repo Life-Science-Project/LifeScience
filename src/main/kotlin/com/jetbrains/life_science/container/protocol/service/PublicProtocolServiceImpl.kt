@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.container.protocol.service
 
-import com.jetbrains.life_science.exception.not_found.PublicProtocolNotFoundException
+import com.jetbrains.life_science.exception.protocol.PublicProtocolNotFoundException
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.container.protocol.factory.PublicProtocolFactory

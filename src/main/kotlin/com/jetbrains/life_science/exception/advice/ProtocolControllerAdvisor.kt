@@ -2,7 +2,7 @@ package com.jetbrains.life_science.exception.advice
 
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
-import com.jetbrains.life_science.exception.not_found.PublicProtocolNotFoundException
+import com.jetbrains.life_science.exception.protocol.PublicProtocolNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler

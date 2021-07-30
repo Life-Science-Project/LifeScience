@@ -42,7 +42,7 @@ internal class PublicProtocolControllerTest : ApiTest() {
             )
         )
 
-        val protocol = getView<PublicProtocolView>(makePath(1))
+        val protocol = getView<PublicProtocolView>(makePath(1, 1))
 
         assertEquals(expectedView, protocol)
     }
@@ -52,7 +52,7 @@ internal class PublicProtocolControllerTest : ApiTest() {
      */
     @Test
     fun `get not existent protocol test`() {
-        val request = getRequest(makePath(199))
+        val request = getRequest(makePath(1, 199))
 
         val exceptionView = getApiExceptionView(404, request)
 
@@ -60,8 +60,21 @@ internal class PublicProtocolControllerTest : ApiTest() {
         Assertions.assertTrue(exceptionView.arguments.isEmpty())
     }
 
-    private fun makePath(addition: Any): String {
-        return "$path/$addition"
+    /**
+     * Should return 404_007 code
+     */
+    @Test
+    fun `get existent protocol by wrong approach id test`() {
+        val request = getRequest(makePath(199, 1))
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_007, exceptionView.systemCode)
+        Assertions.assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    private fun makePath(approachId: Long, protocolId: Long): String {
+        return "$path/$approachId/protocols/$protocolId"
     }
 
     fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
