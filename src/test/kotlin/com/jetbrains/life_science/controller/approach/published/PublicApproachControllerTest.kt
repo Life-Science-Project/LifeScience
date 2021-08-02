@@ -36,7 +36,7 @@ internal class PublicApproachControllerTest : ApiTest() {
                 UserShortView(id = 2, fullName = "Ben")
             ),
             protocols = listOf(
-                ProtocolShortView(id=1, name= "first published")
+                ProtocolShortView(id = 1, name = "first published")
             )
         )
 
