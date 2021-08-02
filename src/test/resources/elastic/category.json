@@ -2,31 +2,109 @@
   {
     "_class": "Category",
     "id": 1,
-    "names": ["root"],
-    "context": []
+    "names": [
+      "root"
+    ],
+    "context": [],
+    "paths": [
+      []
+    ]
   },
   {
     "_class": "Category",
     "id": 2,
-    "names": ["catalog 1", "catalog one"],
-    "context": ["catalog 1", "catalog one"]
+    "names": [
+      "catalog 1",
+      "catalog one"
+    ],
+    "context": [
+      "catalog 1",
+      "catalog one"
+    ],
+    "paths": [
+      []
+    ]
   },
   {
     "_class": "Category",
     "id": 3,
-    "names": ["catalog"],
-    "context": ["catalog 2", "alpha", "beta"]
+    "names": [
+      "catalog"
+    ],
+    "context": [
+      "catalog 2",
+      "alpha",
+      "beta"
+    ],
+    "paths": [
+      [
+        {
+          "id": 1,
+          "name": "root"
+        }
+      ]
+    ]
   },
   {
     "_class": "Category",
     "id": 4,
-    "names": ["catalog"],
-    "context": ["catalog 1", "catalog 2", "beta", "alpha"]
+    "names": [
+      "catalog"
+    ],
+    "context": [
+      "catalog 1",
+      "catalog 2",
+      "beta",
+      "alpha"
+    ],
+    "paths": [
+      [
+        {
+          "id": 1,
+          "name": "root"
+        },
+        {
+          "id": 2,
+          "name": "catalog 2"
+        }
+      ]
+    ]
   },
   {
     "_class": "Category",
     "id": 5,
-    "names": ["catalog 1","catalog 2"],
-    "context": ["catalog 2"]
+    "names": [
+      "catalog 1",
+      "catalog 2"
+    ],
+    "context": [
+      "catalog 2"
+    ],
+    "paths": [
+      [
+        {
+          "id": 1,
+          "name": "root"
+        },
+        {
+          "id": 2,
+          "name": "catalog 2"
+        }
+      ],
+      [
+        {
+          "id": 1,
+          "name": "root"
+        },
+        {
+          "id": 2,
+          "name": "catalog 2"
+        },
+        {
+          "id": 4,
+          "name": "catalog"
+        }
+      ]
+    ]
   }
 ]
