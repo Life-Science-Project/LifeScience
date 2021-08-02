@@ -1,6 +1,8 @@
 package com.jetbrains.life_science.category.search.service
 
 import com.jetbrains.life_science.category.entity.Category
+import com.jetbrains.life_science.category.search.PathUnit
+import com.jetbrains.life_science.category.search.Path
 import com.jetbrains.life_science.category.search.factory.CategorySearchUnitFactory
 import com.jetbrains.life_science.category.search.repository.CategorySearchUnitRepository
 import com.jetbrains.life_science.exception.search_unit.CategorySearchUnitNotFoundException
@@ -13,7 +15,7 @@ class CategorySearchUnitServiceImpl(
 ) : CategorySearchUnitService {
     override fun createSearchUnit(category: Category) {
         val context = createContext(category)
-        val searchUnit = factory.create(category, context)
+        val searchUnit = factory.create(category, context, createPaths(category))
         repository.save(searchUnit)
     }
 
@@ -25,7 +27,7 @@ class CategorySearchUnitServiceImpl(
     override fun update(category: Category) {
         checkExistsById(category.id)
         val context = createContext(category)
-        val searchUnit = factory.create(category, context)
+        val searchUnit = factory.create(category, context, createPaths(category))
         repository.save(searchUnit)
     }
 
@@ -50,5 +52,18 @@ class CategorySearchUnitServiceImpl(
             }
         }
         return context.toList()
+    }
+
+    private fun createPaths(category: Category): MutableList<Path> {
+        val paths = mutableListOf<Path>()
+        category.parents.forEach {
+            val oldPaths = repository.findById(it.id).get().paths
+            for (oldPath in oldPaths) {
+                val modifiedPath = oldPath.toMutableList()
+                modifiedPath.add(PathUnit(category.id, category.name))
+                paths.add(modifiedPath)
+            }
+        }
+        return paths
     }
 }
