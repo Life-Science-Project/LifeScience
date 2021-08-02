@@ -34,16 +34,16 @@ class CategorySearchUnitGenerator(
         } else {
             visited.add(category.id)
             val currentContext = generateContext(category, previousContext)
-            val currentPaths = generatePaths(category, previousPaths)
             val categorySearchUnit =
                 factory.create(
                     category,
                     currentContext.toList(),
-                    currentPaths
+                    previousPaths
                 )
             categorySearchUnitRepository.save(categorySearchUnit)
+            val newPaths = generatePaths(category, previousPaths)
             category.subCategories.forEach {
-                createUnitDfs(it, currentContext, currentPaths, visited)
+                createUnitDfs(it, currentContext, newPaths, visited)
             }
         }
     }
@@ -71,11 +71,11 @@ class CategorySearchUnitGenerator(
         }
         val currentContext = searchUnit.context.toMutableSet()
         val currentPaths = searchUnit.paths.toMutableList()
-        val newPaths = generatePaths(category, previousPaths)
         currentContext.addAll(previousContext)
-        currentPaths.addAll(newPaths)
+        currentPaths.addAll(previousPaths)
         val categorySearchUnit = factory.create(category, currentContext.toList(), currentPaths)
         categorySearchUnitRepository.save(categorySearchUnit)
+        val newPaths = generatePaths(category, previousPaths)
         category.subCategories.forEach {
             updateContextDfs(it, currentContext, newPaths)
         }

@@ -60,7 +60,7 @@ class CategorySearchUnitServiceImpl(
             val oldPaths = repository.findById(it.id).get().paths
             for (oldPath in oldPaths) {
                 val modifiedPath = oldPath.toMutableList()
-                modifiedPath.add(PathUnit(category.id, category.name))
+                modifiedPath.add(PathUnit(it.id, it.name))
                 paths.add(modifiedPath)
             }
         }
