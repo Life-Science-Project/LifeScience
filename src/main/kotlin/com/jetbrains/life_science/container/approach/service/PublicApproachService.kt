@@ -11,8 +11,6 @@ interface PublicApproachService : ContainsSections {
 
     fun create(approach: DraftApproach): PublicApproach
 
-    fun hasProtocol(approachId: Long, protocol: PublicProtocol): Boolean
-
     override fun addSection(id: Long, section: Section)
 
     override fun removeSection(id: Long, section: Section)

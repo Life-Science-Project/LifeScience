@@ -29,10 +29,6 @@ class PublicApproachServiceImpl(
         return savedPublicApproach
     }
 
-    override fun hasProtocol(approachId: Long, protocol: PublicProtocol): Boolean {
-        return repository.existsByIdAndProtocolsContains(approachId, protocol)
-    }
-
     override fun addSection(id: Long, section: Section) {
         if (!hasSection(id, section)) {
             val publicApproach = get(id)

@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.publisher.service
 
+import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.container.approach.service.PublicApproachService
@@ -121,9 +122,10 @@ internal class PublisherServiceTest {
         // Action
         val protocol = service.publishDraftProtocol(draftProtocol)
         val publicProtocol = publicProtocolService.get(protocol.id)
+        val approach = publicApproachService.get(approachId)
 
         // Assert
-        assertTrue(publicApproachService.hasProtocol(approachId, publicProtocol))
+        assertApproachContainsProtocol(approach, publicProtocol.id)
         assertEquals(draftProtocol.name, publicProtocol.name)
         assertThrows<DraftProtocolNotFoundException> {
             draftProtocolService.get(draftProtocol.id)
@@ -191,5 +193,9 @@ internal class PublisherServiceTest {
             draftSections.map { it.id }.toSet(),
             publicSections.map { it.id }.toSet()
         )
+    }
+
+    fun assertApproachContainsProtocol(approach: PublicApproach, protocolId: Long) {
+        assertTrue(approach.protocols.any { it.id == protocolId })
     }
 }

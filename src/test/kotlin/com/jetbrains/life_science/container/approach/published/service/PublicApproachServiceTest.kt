@@ -37,9 +37,6 @@ class PublicApproachServiceTest {
     lateinit var service: PublicApproachService
 
     @Autowired
-    lateinit var protocolService: PublicProtocolService
-
-    @Autowired
     lateinit var draftApproachService: DraftApproachService
 
     @Autowired
@@ -171,26 +168,6 @@ class PublicApproachServiceTest {
         assertThrows<PublicApproachNotFoundException> {
             service.removeSection(approachId, section)
         }
-    }
-
-    @Test
-    fun `check existing protocol existence`() {
-        // Prepare data
-        val approachId = 1L
-        val protocol = protocolService.get(1L)
-
-        // Action & Assert
-        assertTrue(service.hasProtocol(approachId, protocol))
-    }
-
-    @Test
-    fun `check non-existing protocol existence`() {
-        // Prepare data
-        val approachId = 1L
-        val protocol = protocolService.get(2L)
-
-        // Action & Assert
-        assertFalse(service.hasProtocol(approachId, protocol))
     }
 
     private fun assertContainsCoAuthor(publicApproach: PublicApproach, userId: Long) {
