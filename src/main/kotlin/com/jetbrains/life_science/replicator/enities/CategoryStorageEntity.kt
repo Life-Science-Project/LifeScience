@@ -4,5 +4,5 @@ data class CategoryStorageEntity(
     val id: Long,
     val name: String,
     val aliases: List<String>,
-    val parents: List<String>
+    val parents: List<Long>
 )
