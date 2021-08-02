@@ -5,7 +5,6 @@ import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.container.approach.factory.PublicApproachFactory
 import com.jetbrains.life_science.container.approach.repository.PublicApproachRepository
 import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
-import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
