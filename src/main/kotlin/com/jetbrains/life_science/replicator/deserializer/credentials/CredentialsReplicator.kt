@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.replicator.credentials
+package com.jetbrains.life_science.replicator.deserializer.credentials
 
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.repository.CredentialsRepository

@@ -1,6 +1,6 @@
-package com.jetbrains.life_science.replicator.section
+package com.jetbrains.life_science.replicator.deserializer.section
 
-import com.jetbrains.life_science.replicator.content.ContentReplicator
+import com.jetbrains.life_science.replicator.deserializer.content.ContentReplicator
 import com.jetbrains.life_science.replicator.enities.SectionStorageEntity
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.repository.SectionRepository

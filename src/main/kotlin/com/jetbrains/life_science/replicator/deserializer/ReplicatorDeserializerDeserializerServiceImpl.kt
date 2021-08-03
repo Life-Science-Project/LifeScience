@@ -1,19 +1,19 @@
-package com.jetbrains.life_science.replicator
+package com.jetbrains.life_science.replicator.deserializer
 
 import com.fasterxml.jackson.module.kotlin.*
-import com.jetbrains.life_science.replicator.approach.ApproachReplicator
-import com.jetbrains.life_science.replicator.category.CategoryReplicator
-import com.jetbrains.life_science.replicator.content.ContentReplicator
-import com.jetbrains.life_science.replicator.credentials.CredentialsReplicator
+import com.jetbrains.life_science.replicator.deserializer.approach.ApproachReplicator
+import com.jetbrains.life_science.replicator.deserializer.category.CategoryReplicator
+import com.jetbrains.life_science.replicator.deserializer.content.ContentReplicator
+import com.jetbrains.life_science.replicator.deserializer.credentials.CredentialsReplicator
 import com.jetbrains.life_science.replicator.enities.CommonStorageEntity
-import com.jetbrains.life_science.replicator.protocol.ProtocolReplicator
-import com.jetbrains.life_science.replicator.section.SectionReplicator
+import com.jetbrains.life_science.replicator.deserializer.protocol.ProtocolReplicator
+import com.jetbrains.life_science.replicator.deserializer.section.SectionReplicator
 import com.jetbrains.life_science.util.getLogger
 import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Service
 
 @Service
-class ReplicatorServiceImpl(
+class ReplicatorDeserializerDeserializerServiceImpl(
     val categoryReplicator: CategoryReplicator,
     val resourceLoader: ResourceLoader,
     val approachReplicator: ApproachReplicator,
@@ -21,7 +21,7 @@ class ReplicatorServiceImpl(
     val sectionReplicator: SectionReplicator,
     val contentReplicator: ContentReplicator,
     val credentialsReplicator: CredentialsReplicator
-) : ReplicatorService {
+) : ReplicatorDeserializerService {
 
     private val pathToData = "classpath:replica/data.json"
 

@@ -1,13 +1,13 @@
-package com.jetbrains.life_science.replicator.protocol
+package com.jetbrains.life_science.replicator.deserializer.protocol
 
 import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.container.protocol.repository.PublicProtocolRepository
 import com.jetbrains.life_science.container.protocol.search.repository.ProtocolSearchUnitRepository
 import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
-import com.jetbrains.life_science.replicator.credentials.CredentialsReplicator
+import com.jetbrains.life_science.replicator.deserializer.credentials.CredentialsReplicator
 import com.jetbrains.life_science.replicator.enities.ProtocolStorageEntity
-import com.jetbrains.life_science.replicator.section.SectionReplicator
+import com.jetbrains.life_science.replicator.deserializer.section.SectionReplicator
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional

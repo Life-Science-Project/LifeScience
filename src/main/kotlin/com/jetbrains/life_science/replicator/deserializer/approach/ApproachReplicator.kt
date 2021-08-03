@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.replicator.approach
+package com.jetbrains.life_science.replicator.deserializer.approach
 
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.service.CategoryService
@@ -6,10 +6,10 @@ import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.container.approach.repository.PublicApproachRepository
 import com.jetbrains.life_science.container.approach.search.repository.ApproachSearchUnitRepository
 import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
-import com.jetbrains.life_science.replicator.credentials.CredentialsReplicator
+import com.jetbrains.life_science.replicator.deserializer.credentials.CredentialsReplicator
 import com.jetbrains.life_science.replicator.enities.ApproachStorageEntity
-import com.jetbrains.life_science.replicator.protocol.ProtocolReplicator
-import com.jetbrains.life_science.replicator.section.SectionReplicator
+import com.jetbrains.life_science.replicator.deserializer.protocol.ProtocolReplicator
+import com.jetbrains.life_science.replicator.deserializer.section.SectionReplicator
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime

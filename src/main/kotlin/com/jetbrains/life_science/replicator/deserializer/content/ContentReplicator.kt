@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.replicator.content
+package com.jetbrains.life_science.replicator.deserializer.content
 
 import com.jetbrains.life_science.content.publish.entity.Content
 import com.jetbrains.life_science.content.publish.repository.ContentRepository

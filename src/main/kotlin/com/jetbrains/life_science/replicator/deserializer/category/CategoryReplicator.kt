@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.replicator.category
+package com.jetbrains.life_science.replicator.deserializer.category
 
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.repository.CategoryRepository
