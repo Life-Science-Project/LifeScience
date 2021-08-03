@@ -57,11 +57,13 @@
       "sections": [
         {
           "name": "Main",
-          "content": "Some content"
+          "content": "Some content",
+          "hidden": false
         },
         {
           "name": "Description",
-          "content": "Other content"
+          "content": "Other content",
+          "hidden": false
         }
       ],
       "protocols": [
@@ -70,7 +72,8 @@
           "sections": [
             {
               "name": "Content",
-              "content": "Protocol data"
+              "content": "Protocol data",
+              "hidden": false
             }
           ]
         },
@@ -79,7 +82,8 @@
           "sections": [
             {
               "name": "Second Content",
-              "content": "Protocol 2 data"
+              "content": "Protocol 2 data",
+              "hidden": false
             }
           ]
         }

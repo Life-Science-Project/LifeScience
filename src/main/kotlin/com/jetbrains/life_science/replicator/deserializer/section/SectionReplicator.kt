@@ -30,7 +30,9 @@ class SectionReplicator(
     private fun replicateOne(index: Int, sectionStorageEntity: SectionStorageEntity): Section {
         var section = makeSection(sectionStorageEntity, index)
         section = sectionRepository.save(section)
-        contentReplicator.replicateData(section.id, sectionStorageEntity.content)
+        sectionStorageEntity.content?.let { content ->
+            contentReplicator.replicateData(section.id, content)
+        }
         return section
     }
 

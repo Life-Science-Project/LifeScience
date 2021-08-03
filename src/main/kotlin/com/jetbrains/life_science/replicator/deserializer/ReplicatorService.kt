@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.replicator.deserializer
 
-interface ReplicatorDeserializerService {
+interface ReplicatorService {
 
     fun replicateData()
 }

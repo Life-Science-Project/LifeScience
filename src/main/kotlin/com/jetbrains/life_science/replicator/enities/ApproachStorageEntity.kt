@@ -15,6 +15,6 @@ data class ProtocolStorageEntity(
 
 data class SectionStorageEntity(
     val name: String,
-    val content: String,
+    val content: String?,
     val hidden: Boolean
 )

@@ -13,7 +13,7 @@ import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Service
 
 @Service
-class ReplicatorDeserializerDeserializerServiceImpl(
+class ReplicatorServiceImpl(
     val categoryReplicator: CategoryReplicator,
     val resourceLoader: ResourceLoader,
     val approachReplicator: ApproachReplicator,
@@ -21,7 +21,7 @@ class ReplicatorDeserializerDeserializerServiceImpl(
     val sectionReplicator: SectionReplicator,
     val contentReplicator: ContentReplicator,
     val credentialsReplicator: CredentialsReplicator
-) : ReplicatorDeserializerService {
+) : ReplicatorService {
 
     private val pathToData = "classpath:replica/data.json"
 
