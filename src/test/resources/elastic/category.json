@@ -39,6 +39,7 @@
     "paths": [
       [
         {
+          "_class": "com.jetbrains.life_science.category.search.PathUnit",
           "id": 1,
           "name": "root"
         }
@@ -60,10 +61,12 @@
     "paths": [
       [
         {
+          "_class": "com.jetbrains.life_science.category.search.PathUnit",
           "id": 1,
           "name": "root"
         },
         {
+          "_class": "com.jetbrains.life_science.category.search.PathUnit",
           "id": 2,
           "name": "catalog 2"
         }
@@ -83,24 +86,29 @@
     "paths": [
       [
         {
+          "_class": "com.jetbrains.life_science.category.search.PathUnit",
           "id": 1,
           "name": "root"
         },
         {
+          "_class": "com.jetbrains.life_science.category.search.PathUnit",
           "id": 2,
           "name": "catalog 2"
         }
       ],
       [
         {
+          "_class": "com.jetbrains.life_science.category.search.PathUnit",
           "id": 1,
           "name": "root"
         },
         {
+          "_class": "com.jetbrains.life_science.category.search.PathUnit",
           "id": 2,
           "name": "catalog 2"
         },
         {
+          "_class": "com.jetbrains.life_science.category.search.PathUnit",
           "id": 4,
           "name": "catalog"
         }

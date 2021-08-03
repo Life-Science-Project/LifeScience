@@ -37,6 +37,12 @@ class CategorySearchUnitServiceImpl(
             .context
     }
 
+    override fun getPaths(category: Category): List<Path> {
+        return repository.findById(category.id)
+            .orElseThrow { CategorySearchUnitNotFoundException("Category Search Unit with id ${category.id} not found") }
+            .paths
+    }
+
     private fun checkExistsById(id: Long) {
         if (!repository.existsById(id)) {
             throw CategorySearchUnitNotFoundException("Category search unit not found with id: $id")
