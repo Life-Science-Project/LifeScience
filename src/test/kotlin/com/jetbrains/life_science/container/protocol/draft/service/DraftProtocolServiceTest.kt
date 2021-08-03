@@ -5,6 +5,7 @@ import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundExcep
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.container.protocol.draft.service.maker.makeDraftProtocolInfo
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
+import com.jetbrains.life_science.container.protocol.parameter.entity.ProtocolParameter
 import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
@@ -22,7 +23,11 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @SpringBootTest
-@Sql("/scripts/initial_data.sql", "/scripts/protocol/draft_protocol_data.sql")
+@Sql(
+    "/scripts/initial_data.sql",
+    "/scripts/protocol/parameter/parameters_data.sql",
+    "/scripts/protocol/draft_protocol_data.sql"
+)
 @Transactional
 class DraftProtocolServiceTest {
 
@@ -44,6 +49,18 @@ class DraftProtocolServiceTest {
         val id = 1L
         val expectedName = "draft_protocol_test"
         val expectedOwnerId = 1L
+        val expectedParameters = listOf(
+            ProtocolParameter(
+                id = 1,
+                name = "Mass",
+                value = "12 * x + 3"
+            ),
+            ProtocolParameter(
+                id = 2,
+                name = "Multiplier",
+                value = "666"
+            )
+        )
 
         // Action
         val draftProtocol = service.get(id)
@@ -52,6 +69,7 @@ class DraftProtocolServiceTest {
         assertEquals(id, draftProtocol.id)
         assertEquals(expectedName, draftProtocol.name)
         assertEquals(expectedOwnerId, draftProtocol.owner.id)
+        assertEquals(expectedParameters.map { it.id }, draftProtocol.parameters.map { it.id })
         assertContainsParticipant(draftProtocol, expectedOwnerId)
         assertContainsParticipant(draftProtocol, 2L)
     }
@@ -82,7 +100,14 @@ class DraftProtocolServiceTest {
             id = 3L,
             name = "test",
             owner = owner,
-            approach = approach
+            approach = approach,
+            params = listOf(
+                ProtocolParameter(
+                    id = 3,
+                    name = "Rarity",
+                    value = "Epic"
+                )
+            )
         )
 
         // Action
@@ -94,6 +119,7 @@ class DraftProtocolServiceTest {
         assertEquals(info.name, draftProtocol.name)
         assertEquals(owner.id, draftProtocol.owner.id)
         assertEquals(approach.id, draftProtocol.approach.id)
+        assertEquals(info.params, draftProtocol.parameters)
         assertContainsParticipant(draftProtocol, owner.id)
     }
 
@@ -109,7 +135,8 @@ class DraftProtocolServiceTest {
             id = 1L,
             name = "new_name",
             owner = owner,
-            approach = approach
+            approach = approach,
+            params = emptyList()
         )
 
         // Action
@@ -121,6 +148,7 @@ class DraftProtocolServiceTest {
         assertEquals(info.name, draftProtocol.name)
         assertEquals(owner.id, draftProtocol.owner.id)
         assertEquals(approach.id, draftProtocol.approach.id)
+        assertFalse(draftProtocol.parameters.isEmpty())
         assertContainsParticipant(draftProtocol, owner.id)
     }
 
@@ -136,7 +164,8 @@ class DraftProtocolServiceTest {
             id = 239L,
             name = "update_protocol",
             owner = owner,
-            approach = approach
+            approach = approach,
+            params = emptyList()
         )
 
         // Action & Assert

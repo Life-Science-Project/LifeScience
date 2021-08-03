@@ -39,7 +39,8 @@ internal class PublicProtocolControllerTest : ApiTest() {
             coAuthors = listOf(
                 UserShortView(id = 1, fullName = "Alex"),
                 UserShortView(id = 2, fullName = "Ben")
-            )
+            ),
+            parameters = emptyList()
         )
 
         val protocol = getView<PublicProtocolView>(makePath(1, 1))

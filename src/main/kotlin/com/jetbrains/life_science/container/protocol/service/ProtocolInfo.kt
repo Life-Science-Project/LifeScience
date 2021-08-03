@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.container.protocol.service
 
 import com.jetbrains.life_science.container.approach.entity.PublicApproach
+import com.jetbrains.life_science.container.protocol.parameter.entity.ProtocolParameter
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 
 interface ProtocolInfo {
@@ -11,4 +12,6 @@ interface ProtocolInfo {
     val approach: PublicApproach
 
     val owner: Credentials
+
+    val params: List<ProtocolParameter>
 }

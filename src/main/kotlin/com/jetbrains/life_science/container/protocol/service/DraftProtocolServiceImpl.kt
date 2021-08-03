@@ -4,6 +4,7 @@ import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundExcep
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.container.protocol.factory.DraftProtocolFactory
+import com.jetbrains.life_science.container.protocol.parameter.entity.ProtocolParameter
 import com.jetbrains.life_science.container.protocol.repository.DraftProtocolRepository
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
@@ -70,5 +71,20 @@ class DraftProtocolServiceImpl(
         draftProtocol.sections.removeAll { it.id == section.id }
         repository.save(draftProtocol)
         return draftProtocol
+    }
+
+    override fun addParameter(draftProtocolId: Long, parameter: ProtocolParameter): DraftProtocol {
+        val protocol = get(draftProtocolId)
+        if (!protocol.parameters.any { it.id == parameter.id }) {
+            protocol.parameters.add(parameter)
+            repository.save(protocol)
+        }
+        return protocol
+    }
+
+    override fun removeParameter(draftProtocolId: Long, parameter: ProtocolParameter): DraftProtocol {
+        val protocol = get(draftProtocolId)
+        protocol.parameters.removeAll { it.id == parameter.id }
+        return repository.save(protocol)
     }
 }

@@ -13,7 +13,8 @@ class DraftProtocolFactory {
             approach = info.approach,
             owner = info.owner,
             sections = mutableListOf(),
-            participants = mutableListOf(info.owner)
+            participants = mutableListOf(info.owner),
+            parameters = info.params.toMutableList()
         )
     }
 

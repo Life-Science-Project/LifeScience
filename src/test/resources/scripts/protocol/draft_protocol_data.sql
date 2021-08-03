@@ -18,4 +18,9 @@ insert into section (id, name, order_num, published, visible)
 values (2, 'section_to_add', 2, false, false);
 
 insert into draft_protocol_sections (draft_protocol_id, sections_id)
-values (2, 1)
+values (2, 1);
+
+insert into draft_protocol_parameters (draft_protocol_id, parameters_id)
+values (1, 1);
+insert into draft_protocol_parameters (draft_protocol_id, parameters_id)
+values (1, 2);

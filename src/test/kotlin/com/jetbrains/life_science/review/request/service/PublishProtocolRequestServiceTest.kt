@@ -4,6 +4,7 @@ import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.exception.not_found.PublishProtocolRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
+import com.jetbrains.life_science.container.protocol.parameter.entity.ProtocolParameter
 import com.jetbrains.life_science.exception.request.DuplicateRequestException
 import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
 import com.jetbrains.life_science.review.request.entity.RequestState
@@ -83,7 +84,7 @@ class PublishProtocolRequestServiceTest {
             LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val approachCreationLocalDateTime = LocalDateTime.of(2020, 12, 17, 0, 0)
         val publicApproach = createPublicApproach(1L, "approach 1", owner, approachCreationLocalDateTime)
-        val protocol = createDraftProtocol(2L, "second protocol", publicApproach, owner)
+        val protocol = createDraftProtocol(2L, "second protocol", publicApproach, owner, emptyList())
         val info = makePublishProtocolRequestInfo(
             id = 4L,
             date = protocolCreationLocalDateTime,
@@ -116,7 +117,7 @@ class PublishProtocolRequestServiceTest {
             LocalDateTime.of(2021, 5, 21, 12, 53, 47)
         val approachCreationLocalDateTime = LocalDateTime.of(2020, 12, 17, 0, 0)
         val publicApproach = createPublicApproach(1L, "approach 1", owner, approachCreationLocalDateTime)
-        val protocol = createDraftProtocol(1L, "first protocol", publicApproach, owner)
+        val protocol = createDraftProtocol(1L, "first protocol", publicApproach, owner, emptyList())
         val info = makePublishProtocolRequestInfo(
             id = 3L,
             date = protocolCreationLocalDateTime,
@@ -254,14 +255,21 @@ class PublishProtocolRequestServiceTest {
         assertTrue(publishProtocolRequest.reviews.any { it.id == reviewId })
     }
 
-    private fun createDraftProtocol(id: Long, name: String, approach: PublicApproach, owner: Credentials) =
+    private fun createDraftProtocol(
+        id: Long,
+        name: String,
+        approach: PublicApproach,
+        owner: Credentials,
+        params: List<ProtocolParameter>
+    ) =
         DraftProtocol(
             id = id,
             name = name,
             owner = owner,
             approach = approach,
             sections = mutableListOf(),
-            participants = mutableListOf(owner)
+            participants = mutableListOf(owner),
+            parameters = params.toMutableList()
         )
 
     private fun createReview(
