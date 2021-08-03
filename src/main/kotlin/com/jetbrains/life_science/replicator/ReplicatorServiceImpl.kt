@@ -1,27 +1,50 @@
 package com.jetbrains.life_science.replicator
 
 import com.fasterxml.jackson.module.kotlin.*
-import com.jetbrains.life_science.category.service.CategoryService
-import com.jetbrains.life_science.container.approach.repository.PublicApproachRepository
-import com.jetbrains.life_science.container.protocol.repository.PublicProtocolRepository
-import com.jetbrains.life_science.content.publish.repository.ContentRepository
+import com.jetbrains.life_science.replicator.approach.ApproachReplicator
 import com.jetbrains.life_science.replicator.category.CategoryReplicator
+import com.jetbrains.life_science.replicator.content.ContentReplicator
+import com.jetbrains.life_science.replicator.credentials.CredentialsReplicator
 import com.jetbrains.life_science.replicator.enities.CommonStorageEntity
-import com.jetbrains.life_science.section.repository.SectionRepository
+import com.jetbrains.life_science.replicator.protocol.ProtocolReplicator
+import com.jetbrains.life_science.replicator.section.SectionReplicator
+import com.jetbrains.life_science.util.getLogger
 import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Service
 
 @Service
 class ReplicatorServiceImpl(
     val categoryReplicator: CategoryReplicator,
-    val resourceLoader: ResourceLoader
+    val resourceLoader: ResourceLoader,
+    val approachReplicator: ApproachReplicator,
+    val protocolReplicator: ProtocolReplicator,
+    val sectionReplicator: SectionReplicator,
+    val contentReplicator: ContentReplicator,
+    val credentialsReplicator: CredentialsReplicator
 ) : ReplicatorService {
 
     private val pathToData = "classpath:replica/data.json"
 
+    private val logger = getLogger()
+
     override fun replicateData() {
+        logger.info("Replication started")
+        deleteAll()
+        logger.info("Deletion success")
+        credentialsReplicator.createAdmin()
         val (categories, approaches) = decodeData()
         categoryReplicator.replicateData(categories)
+        approachReplicator.replicateData(approaches)
+        logger.info("Replication success")
+    }
+
+    private fun deleteAll() {
+        contentReplicator.deleteAll()
+        protocolReplicator.deleteAll()
+        approachReplicator.deleteAll()
+        sectionReplicator.deleteAll()
+        categoryReplicator.deleteAll()
+        credentialsReplicator.deleteAll()
     }
 
     private fun decodeData(): CommonStorageEntity {

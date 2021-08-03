@@ -6,23 +6,35 @@ import com.jetbrains.life_science.category.search.repository.CategorySearchUnitR
 import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.replicator.enities.CategoryStorageEntity
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
+import javax.persistence.EntityManager
 
 @Component
 class CategoryReplicator(
     val categoryRepository: CategoryRepository,
     val categorySearchUnitService: CategorySearchUnitService,
-    val categorySearchUnitRepository: CategorySearchUnitRepository
+    val categorySearchUnitRepository: CategorySearchUnitRepository,
+    val entityManager: EntityManager
 ) {
 
+    @Transactional
+    fun deleteAll() {
+        entityManager.createNativeQuery("ALTER SEQUENCE category_seq RESTART WITH 1;")
+            .executeUpdate()
+        categoryRepository.deleteAll()
+        categorySearchUnitRepository.deleteAll()
+    }
+
+    @Transactional
     fun replicateData(data: List<CategoryStorageEntity>) {
         categorySearchUnitRepository.deleteAll()
         data.forEach { createOne(it) }
     }
 
     fun createOne(storageEntity: CategoryStorageEntity) {
-        val category = createCategory(storageEntity)
-        categoryRepository.save(category)
+        var category = createCategory(storageEntity)
+        category = categoryRepository.save(category)
         categorySearchUnitService.createSearchUnit(category)
     }
 
