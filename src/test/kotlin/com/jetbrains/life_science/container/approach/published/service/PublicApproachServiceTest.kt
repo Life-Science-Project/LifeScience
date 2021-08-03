@@ -1,6 +1,8 @@
 package com.jetbrains.life_science.container.approach.published.service
 
+import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.container.approach.entity.PublicApproach
+import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,6 +26,12 @@ import org.springframework.transaction.annotation.Transactional
 )
 @Transactional
 class PublicApproachServiceTest {
+
+    @MockBean
+    lateinit var categorySearchUnitService: CategorySearchUnitService
+
+    @MockBean
+    lateinit var approachSearchUnitService: ApproachSearchUnitService
 
     @Autowired
     lateinit var service: PublicApproachService
@@ -37,7 +46,7 @@ class PublicApproachServiceTest {
      * Should create new approach
      */
     @Test
-    fun `create new draft approach`() {
+    fun `create new public approach`() {
         // Prepare data
         val draftApproach = draftApproachService.get(1L)
 
@@ -47,6 +56,7 @@ class PublicApproachServiceTest {
 
         // Assert
         assertEquals(draftApproach.name, publicApproach.name)
+        assertEquals(draftApproach.aliases.toSet(), publicApproach.aliases.toSet())
         assertEquals(draftApproach.tags.toSet(), publicApproach.tags.toSet())
         assertContainsCoAuthor(publicApproach, draftApproach.owner.id)
         draftApproach.participants.forEach {
@@ -68,6 +78,7 @@ class PublicApproachServiceTest {
         val secondCoAuthorId = 2L
         val coAuthorsExpectedCount = 2
         val expectedName = "approach 1"
+        val expectedAliases = setOf("test alias")
 
         // Action
         val publicApproach = service.get(approachId)
@@ -75,6 +86,7 @@ class PublicApproachServiceTest {
         // Assert
         assertEquals(expectedName, publicApproach.name)
         assertEquals(expectedOwnerId, publicApproach.owner.id)
+        assertEquals(expectedAliases, publicApproach.aliases.toSet())
         assertEquals(coAuthorsExpectedCount, publicApproach.coAuthors.size)
         assertContainsCoAuthor(publicApproach, expectedOwnerId)
         assertContainsCoAuthor(publicApproach, secondCoAuthorId)

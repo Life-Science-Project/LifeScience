@@ -281,6 +281,7 @@ class PublishProtocolRequestServiceTest {
     private fun createPublicApproach(id: Long, name: String, owner: Credentials, date: LocalDateTime) = PublicApproach(
         id = id,
         name = name,
+        aliases = mutableListOf(),
         sections = mutableListOf(),
         tags = mutableListOf(),
         owner = owner,

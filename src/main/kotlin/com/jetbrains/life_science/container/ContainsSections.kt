@@ -6,4 +6,6 @@ interface ContainsSections {
     fun addSection(id: Long, section: Section)
 
     fun removeSection(id: Long, section: Section)
+
+    fun hasSection(id: Long, section: Section): Boolean
 }

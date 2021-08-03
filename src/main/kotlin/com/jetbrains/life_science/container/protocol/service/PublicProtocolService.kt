@@ -13,4 +13,6 @@ interface PublicProtocolService : ContainsSections {
     override fun addSection(id: Long, section: Section)
 
     override fun removeSection(id: Long, section: Section)
+
+    fun isInApproach(protocolId: Long, approachId: Long): Boolean
 }

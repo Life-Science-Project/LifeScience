@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.section
+package com.jetbrains.life_science.controller.section.approach
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.section.view.SectionView
@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct
     "/scripts/initial_data.sql",
     "/scripts/approach/public_approach_data.sql",
 )
-internal class PublicSectionControllerTest : ApiTest() {
+internal class PublicApproachSectionControllerTest : ApiTest() {
 
     val pathPrefix = listOf("/api/approaches/public/", "/sections")
 
@@ -36,6 +36,9 @@ internal class PublicSectionControllerTest : ApiTest() {
         elasticPopulator.prepareData()
     }
 
+    /**
+     * Should return existing section view
+     */
     @Test
     fun `get existing section`() {
         // Prepare
@@ -48,6 +51,19 @@ internal class PublicSectionControllerTest : ApiTest() {
 
         // Assert
         assertEquals(expectedView, section)
+    }
+
+    /**
+     * Should return 404_006 code
+     */
+    @Test
+    fun `get not existing section test`() {
+        val request = getRequest(makePath(1, "/666"))
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_006, exceptionView.systemCode)
+        assertTrue(exceptionView.arguments.isEmpty())
     }
 
     fun makePath(approachId: Long, suffix: String): String {

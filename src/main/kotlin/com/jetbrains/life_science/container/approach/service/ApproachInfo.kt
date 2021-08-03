@@ -8,6 +8,8 @@ interface ApproachInfo {
 
     val name: String
 
+    val aliases: List<String>
+
     val categories: List<Category>
 
     val tags: List<String>

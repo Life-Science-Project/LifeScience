@@ -37,6 +37,9 @@ class CategoryServiceImpl(
     }
 
     private fun updateParents(categoryInfo: CategoryUpdateInfo, category: Category) {
+        if (!category.isEmpty) {
+            throw CategoryNotEmptyException(category.id)
+        }
         deleteParents(category, categoryInfo.parentsToDeleteIds)
         addParents(category, categoryInfo.parentsToAddIds)
         if (category.parents.isEmpty()) {

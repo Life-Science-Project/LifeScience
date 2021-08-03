@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.section
+package com.jetbrains.life_science.controller.section.approach
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct
     "/scripts/approach/draft_approach_data.sql",
     "/scripts/section/section_controller_data.sql"
 )
-internal class DraftSectionControllerTest : ApiTest() {
+internal class DraftApproachSectionControllerTest : ApiTest() {
 
     val pathPrefix = listOf("/api/approaches/draft/", "/sections")
 

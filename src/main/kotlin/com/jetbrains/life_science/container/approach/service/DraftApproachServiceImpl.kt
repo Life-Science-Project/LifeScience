@@ -32,9 +32,7 @@ class DraftApproachServiceImpl(
     }
 
     override fun delete(draftApproachId: Long) {
-        if (!repository.existsById(draftApproachId)) {
-            throw DraftApproachNotFoundException("Draft approach with id $draftApproachId is not found")
-        }
+        exists(draftApproachId)
         repository.deleteById(draftApproachId)
     }
 
@@ -59,19 +57,35 @@ class DraftApproachServiceImpl(
         return draftApproach
     }
 
-    override fun addSection(draftApproachId: Long, section: Section): DraftApproach {
-        val draftApproach = get(draftApproachId)
-        if (!draftApproach.sections.any { it.id == section.id }) {
+    override fun hasParticipant(draftApproachId: Long, user: Credentials): Boolean {
+        exists(draftApproachId)
+        return repository.existsByIdAndParticipantsContains(draftApproachId, user)
+    }
+
+    override fun addSection(id: Long, section: Section) {
+        if (!hasSection(id, section)) {
+            val draftApproach = get(id)
             draftApproach.sections.add(section)
             repository.save(draftApproach)
         }
-        return draftApproach
     }
 
-    override fun removeSection(draftApproachId: Long, section: Section): DraftApproach {
-        val draftApproach = get(draftApproachId)
-        draftApproach.sections.removeAll { it.id == section.id }
-        repository.save(draftApproach)
-        return draftApproach
+    override fun removeSection(id: Long, section: Section) {
+        if (hasSection(id, section)) {
+            val draftApproach = get(id)
+            draftApproach.sections.removeAll { it.id == section.id }
+            repository.save(draftApproach)
+        }
+    }
+
+    override fun hasSection(id: Long, section: Section): Boolean {
+        exists(id)
+        return repository.existsByIdAndSectionsContains(id, section)
+    }
+
+    private fun exists(draftApproachId: Long) {
+        if (!repository.existsById(draftApproachId)) {
+            throw DraftApproachNotFoundException("Draft approach with id $draftApproachId is not found")
+        }
     }
 }

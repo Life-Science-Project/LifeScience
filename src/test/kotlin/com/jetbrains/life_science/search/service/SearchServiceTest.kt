@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.search.service
 
+import com.jetbrains.life_science.category.search.PathUnit
 import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.approach.ApproachSearchResult
 import com.jetbrains.life_science.search.result.category.CategorySearchResult
@@ -58,8 +59,23 @@ internal class SearchServiceTest {
             size = 100
         )
         val expectedResults = setOf(
-            CategorySearchResult(categoryId = 3, name = "catalog"),
-            CategorySearchResult(categoryId = 4, name = "catalog")
+            CategorySearchResult(
+                categoryId = 3, name = "catalog",
+                listOf(
+                    listOf(
+                        PathUnit(1, "root")
+                    )
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 4, name = "catalog",
+                listOf(
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2")
+                    )
+                )
+            )
         )
 
         // Action
@@ -162,7 +178,10 @@ internal class SearchServiceTest {
             ),
             CategorySearchResult(
                 categoryId = 2,
-                name = "catalog 1"
+                name = "catalog 1",
+                paths = listOf(
+                    emptyList()
+                )
             ),
             ContentSearchResult(
                 id = "123",
@@ -191,8 +210,23 @@ internal class SearchServiceTest {
             size = 100
         )
         val expectedResults = setOf(
-            CategorySearchResult(categoryId = 3, name = "catalog"),
-            CategorySearchResult(categoryId = 4, name = "catalog")
+            CategorySearchResult(
+                categoryId = 3, name = "catalog",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root")
+                    )
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 4, name = "catalog",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2")
+                    )
+                )
+            )
         )
 
         // Action

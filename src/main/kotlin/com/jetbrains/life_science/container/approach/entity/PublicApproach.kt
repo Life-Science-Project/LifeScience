@@ -21,6 +21,7 @@ class PublicApproach(
     override val id: Long,
 
     name: String,
+    aliases: List<String>,
     sections: MutableList<Section>,
     tags: MutableList<String>,
     owner: Credentials,
@@ -35,7 +36,4 @@ class PublicApproach(
     @ManyToMany(mappedBy = "approaches")
     var categories: MutableList<Category>
 
-) : Approach(name, sections, tags, owner, creationDate) {
-
-    fun hasSection(sectionId: Long) = sections.any { it.id == sectionId }
-}
+) : Approach(name, aliases, sections, tags, owner, creationDate)

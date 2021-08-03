@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.container.protocol.service
 
-import com.jetbrains.life_science.exception.not_found.PublicProtocolNotFoundException
+import com.jetbrains.life_science.exception.protocol.PublicProtocolNotFoundException
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.container.protocol.factory.PublicProtocolFactory
@@ -28,17 +28,30 @@ class PublicProtocolServiceImpl(
         return savedPublicProtocol
     }
 
+    override fun hasSection(id: Long, section: Section): Boolean {
+        if (!repository.existsById(id)) {
+            throw PublicProtocolNotFoundException("Public protocol with id $id is not found")
+        }
+        return repository.existsByIdAndSectionsContains(id, section)
+    }
+
     override fun addSection(id: Long, section: Section) {
-        val publicProtocol = get(id)
-        if (!publicProtocol.sections.any { it.id == section.id }) {
+        if (!hasSection(id, section)) {
+            val publicProtocol = get(id)
             publicProtocol.sections.add(section)
             repository.save(publicProtocol)
         }
     }
 
     override fun removeSection(id: Long, section: Section) {
-        val publicProtocol = get(id)
-        publicProtocol.sections.removeAll { it.id == section.id }
-        repository.save(publicProtocol)
+        if (hasSection(id, section)) {
+            val publicProtocol = get(id)
+            publicProtocol.sections.removeAll { it.id == section.id }
+            repository.save(publicProtocol)
+        }
+    }
+
+    override fun isInApproach(protocolId: Long, approachId: Long): Boolean {
+        return repository.existsByIdAndApproachId(protocolId, approachId)
     }
 }
