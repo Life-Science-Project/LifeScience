@@ -52,6 +52,4 @@ class ReplicatorServiceImpl(
         val textContent = resource.inputStream.bufferedReader().readText()
         return jacksonObjectMapper().readValue(textContent)
     }
-
-
 }

@@ -57,6 +57,4 @@ class ProtocolReplicator(
         coAuthors = mutableListOf(),
         rating = 1
     )
-
-
 }

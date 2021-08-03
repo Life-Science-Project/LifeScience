@@ -51,7 +51,6 @@ class ApproachReplicator(
         categories.forEach { it.approaches.add(approach) }
     }
 
-
     fun makeApproach(storageEntity: ApproachStorageEntity, categories: MutableList<Category>): PublicApproach {
         val sections = sectionReplicator.replicateData(storageEntity.sections)
         return PublicApproach(
@@ -68,5 +67,4 @@ class ApproachReplicator(
     }
 
     private val creationDate = LocalDateTime.of(2021, 6, 1, 0, 0)
-
 }

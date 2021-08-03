@@ -50,5 +50,4 @@ class CategoryReplicator(
         )
 
     private fun getCreationDate() = LocalDateTime.of(2021, 6, 1, 0, 0)
-
 }

@@ -44,6 +44,4 @@ class SectionReplicator(
         published = true,
         order = index
     )
-
-
 }

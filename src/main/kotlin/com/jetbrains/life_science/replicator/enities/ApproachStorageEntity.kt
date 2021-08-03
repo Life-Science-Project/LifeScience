@@ -13,9 +13,7 @@ data class ProtocolStorageEntity(
     val sections: List<SectionStorageEntity>
 )
 
-
 data class SectionStorageEntity(
     val name: String,
     val content: String
 )
-

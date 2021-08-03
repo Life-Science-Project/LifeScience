@@ -24,6 +24,4 @@ class ContentReplicator(
         )
         contentRepository.save(content)
     }
-
-
 }

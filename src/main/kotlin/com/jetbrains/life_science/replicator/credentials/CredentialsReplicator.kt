@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.replicator.credentials
 
 import com.jetbrains.life_science.user.credentials.entity.Credentials
-import com.jetbrains.life_science.user.credentials.entity.Role
 import com.jetbrains.life_science.user.credentials.repository.CredentialsRepository
 import com.jetbrains.life_science.user.credentials.repository.RoleRepository
 import org.springframework.stereotype.Component
@@ -31,5 +30,4 @@ class CredentialsReplicator(
         )
         admin = credentialsRepository.save(rawAdmin)
     }
-
 }
