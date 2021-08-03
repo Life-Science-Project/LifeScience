@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct
 )
 internal class PublicProtocolSectionControllerTest : ApiTest() {
 
-    val pathPrefix = listOf("/api/protocols/public/", "/sections")
+    val pathPrefix = listOf("/api/approaches/public/", "/protocols/", "/sections/")
 
     lateinit var elasticPopulator: ElasticPopulator
 
@@ -42,15 +42,16 @@ internal class PublicProtocolSectionControllerTest : ApiTest() {
         val protocolId = 1L
         val expectedView = SectionView(id = 1, name = "section", hidden = false, content = "user text 12")
         val sectionId = 1L
+        val approachId = 1L
 
         // Action
-        val section = getView<SectionView>(makePath(protocolId, "//$sectionId"))
+        val section = getView<SectionView>(makePath(approachId, protocolId, sectionId))
 
         // Assert
         assertEquals(expectedView, section)
     }
 
-    fun makePath(approachId: Long, suffix: String): String {
-        return pathPrefix[0] + approachId + pathPrefix[1] + suffix
+    fun makePath(approachId: Long, protocolId: Long, sectionId: Long): String {
+        return pathPrefix[0] + approachId + pathPrefix[1] + protocolId + pathPrefix[2] + sectionId
     }
 }
