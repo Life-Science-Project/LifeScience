@@ -21,7 +21,7 @@ class PublicApproach(
     override val id: Long,
 
     name: String,
-    aliases: List<String>,
+    aliases: MutableList<String>,
     sections: MutableList<Section>,
     tags: MutableList<String>,
     owner: Credentials,

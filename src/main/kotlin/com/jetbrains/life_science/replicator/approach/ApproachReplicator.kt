@@ -60,9 +60,10 @@ class ApproachReplicator(
             owner = credentialsReplicator.admin,
             tags = mutableListOf(),
             creationDate = creationDate,
-            coAuthors = mutableListOf(),
+            coAuthors = mutableListOf(credentialsReplicator.admin),
             protocols = mutableListOf(),
-            categories = categories
+            categories = categories,
+            aliases = storageEntity.aliases
         )
     }
 
