@@ -1,5 +1,7 @@
 package com.jetbrains.life_science.controller.category
 
+import com.jetbrains.life_science.category.search.Path
+import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTOToInfoAdapter
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/categories")
 class CategoryController(
     val categoryService: CategoryService,
+    val categorySearchUnitService: CategorySearchUnitService,
     val viewMapper: CategoryViewMapper
 ) {
 
@@ -31,6 +34,12 @@ class CategoryController(
     fun getCategory(@PathVariable id: Long): CategoryView {
         val category = categoryService.getCategory(id)
         return viewMapper.toView(category)
+    }
+
+    @GetMapping("/{id}/paths")
+    fun getPaths(@PathVariable id: Long): List<Path> {
+        val category = categoryService.getCategory(id)
+        return categorySearchUnitService.getPaths(category)
     }
 
     @PostMapping
