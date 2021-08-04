@@ -29,4 +29,10 @@ insert into public_approach_sections (public_approach_id, sections_id)
 values (2, 1);
 
 insert into public_approach_aliases (public_approach_id, aliases)
-values (1, 'test alias')
+values (1, 'test alias');
+
+insert into public_protocol (id, name, rating, approach_id, owner_id)
+values (1, 'first published', 0, 1, 1);
+insert into public_protocol (id, name, rating, approach_id, owner_id)
+values (2, 'second published', 0, 2, 1);
+alter sequence public_protocol_seq restart with 2;
