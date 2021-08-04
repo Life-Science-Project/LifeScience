@@ -17,7 +17,7 @@ class SectionToStorageEntityMapper(
     fun mapOne(section: Section): SectionStorageEntity {
         return SectionStorageEntity(
             name = section.name,
-            hidden = !section.visible,
+            hidden = section.hidden,
             content = contentRepository.findBySectionId(section.id)?.text
         )
     }

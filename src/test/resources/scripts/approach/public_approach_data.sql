@@ -22,8 +22,8 @@ values (1, 2);
 -- nextPublicApproachId = 3
 alter sequence public_approach_seq restart with 3;
 
-insert into section (id, name, order_num, published, visible)
-values (1, 'section', 1, true, true);
+insert into section (id, name, order_num, published, hidden)
+values (1, 'section', 1, true, false);
 
 insert into public_approach_sections (public_approach_id, sections_id)
 values (2, 1);

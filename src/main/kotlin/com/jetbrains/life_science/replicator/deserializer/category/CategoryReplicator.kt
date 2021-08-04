@@ -32,7 +32,7 @@ class CategoryReplicator(
         data.forEach { createOne(it) }
     }
 
-    fun createOne(storageEntity: CategoryStorageEntity) {
+    private fun createOne(storageEntity: CategoryStorageEntity) {
         var category = createCategory(storageEntity)
         category = categoryRepository.save(category)
         categorySearchUnitService.createSearchUnit(category)
@@ -44,7 +44,7 @@ class CategoryReplicator(
             name = storageEntity.name,
             aliases = storageEntity.aliases,
             subCategories = mutableListOf(),
-            parents = storageEntity.parents.map { categoryRepository.findCategoryById(it)!! }.toMutableList(),
+            parents = storageEntity.parents.map { categoryRepository.getOne(it) }.toMutableList(),
             approaches = mutableListOf(),
             creationDate = getCreationDate()
         )

@@ -27,7 +27,7 @@ fun makeSectionCreationInfo(
 ): SectionCreationInfo = object : SectionCreationInfo {
     override val id = id
     override val name = name
-    override val visible = visible
+    override val hidden = visible
     override val prevSection = prevSection
     override val allSections = allSections
 }

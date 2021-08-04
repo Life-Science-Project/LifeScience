@@ -42,7 +42,7 @@ class SectionReplicator(
     ) = Section(
         id = 0,
         name = sectionStorageEntity.name,
-        visible = true,
+        hidden = sectionStorageEntity.hidden,
         published = true,
         order = index
     )
