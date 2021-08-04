@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ContentReplicator(
-    val contentRepository: ContentRepository
+    private val contentRepository: ContentRepository,
 ) {
 
     fun deleteAll() {

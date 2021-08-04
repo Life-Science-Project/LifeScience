@@ -5,6 +5,7 @@ import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.category.search.repository.CategorySearchUnitRepository
 import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
 import com.jetbrains.life_science.replicator.enities.CategoryStorageEntity
+import com.jetbrains.life_science.util.ElasticFlusher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -15,7 +16,9 @@ class CategoryReplicator(
     val categoryRepository: CategoryRepository,
     val categorySearchUnitService: CategorySearchUnitService,
     val categorySearchUnitRepository: CategorySearchUnitRepository,
-    val entityManager: EntityManager
+    val entityManager: EntityManager,
+    private val elasticFlusher: ElasticFlusher
+
 ) {
 
     @Transactional
@@ -36,6 +39,7 @@ class CategoryReplicator(
         var category = createCategory(storageEntity)
         category = categoryRepository.save(category)
         categorySearchUnitService.createSearchUnit(category)
+        elasticFlusher.flush(100)
     }
 
     private fun createCategory(storageEntity: CategoryStorageEntity) =

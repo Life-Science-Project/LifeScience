@@ -24,7 +24,7 @@ class ApproachReplicator(
     private val approachSearchUnitRepository: ApproachSearchUnitRepository,
     private val categoryService: CategoryService,
     private val credentialsReplicator: CredentialsReplicator,
-    private val entityManager: EntityManager
+    private val entityManager: EntityManager,
 ) {
 
     @Transactional

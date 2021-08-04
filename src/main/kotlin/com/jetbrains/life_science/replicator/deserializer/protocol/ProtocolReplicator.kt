@@ -20,7 +20,7 @@ class ProtocolReplicator(
     private val protocolSearchUnitRepository: ProtocolSearchUnitRepository,
     private val sectionReplicator: SectionReplicator,
     private val credentialsReplicator: CredentialsReplicator,
-    private val entityManager: EntityManager
+    private val entityManager: EntityManager,
 ) {
 
     @Transactional

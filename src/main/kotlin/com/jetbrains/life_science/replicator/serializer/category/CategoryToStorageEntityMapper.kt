@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CategoryToStorageEntityMapper(
-    private val categoryService: CategoryService
+    private val categoryService: CategoryService,
 ) {
 
     @Synchronized
