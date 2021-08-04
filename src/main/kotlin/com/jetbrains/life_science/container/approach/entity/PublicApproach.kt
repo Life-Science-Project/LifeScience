@@ -30,7 +30,7 @@ class PublicApproach(
     @ManyToMany
     var coAuthors: MutableList<Credentials>,
 
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
     var protocols: MutableList<PublicProtocol>,
 
     @ManyToMany(mappedBy = "approaches")

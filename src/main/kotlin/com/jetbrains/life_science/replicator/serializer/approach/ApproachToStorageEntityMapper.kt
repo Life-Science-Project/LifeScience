@@ -14,18 +14,18 @@ class ApproachToStorageEntityMapper(
     val publicApproachRepository: PublicApproachRepository
 ) {
 
-    fun getStorageEntities(): List<ApproachStorageEntity> {
-        return publicApproachRepository.findAll().map { mapOne(it) }
+    fun getStorageEntities(categoriesIdsMap: Map<Long, Long>): List<ApproachStorageEntity> {
+        return publicApproachRepository.findAll().map { mapOne(it, categoriesIdsMap) }
     }
 
-    fun mapOne(approach: PublicApproach): ApproachStorageEntity {
+    fun mapOne(approach: PublicApproach, categoriesIdsMap: Map<Long, Long>): ApproachStorageEntity {
         val section = sectionToStorageEntityMapper.getStorageEntities(approach.sections)
         val protocols = protocolToStorageEntityMapper.getStorageEntities(approach.protocols)
         return ApproachStorageEntity(
             name = approach.name,
             sections = section,
             protocols = protocols,
-            categories = approach.categories.map { it.id },
+            categories = approach.categories.map { categoriesIdsMap[it.id]!! },
             aliases = approach.aliases
         )
     }
