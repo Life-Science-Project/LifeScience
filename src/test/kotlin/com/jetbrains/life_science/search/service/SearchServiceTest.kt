@@ -236,6 +236,9 @@ internal class SearchServiceTest {
         assertEquals(expectedResults, searchResult.toSet())
     }
 
+    /**
+     * Should find expected categories with different letter cases request
+     */
     @Test
     fun `uppercase test`() {
         // Prepare
@@ -282,5 +285,62 @@ internal class SearchServiceTest {
         assertEquals(expectedResults, searchResultUppercase.toSet())
         assertEquals(expectedResults, searchResultLowercaseFuzzy.toSet())
         assertEquals(expectedResults, searchResultUppercaseFuzzy.toSet())
+    }
+
+    @Test
+    fun `suggest query test`() {
+        // Prepare
+        val searchQueryInfo = makeSearchQueryInfo(
+            text = "cat",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val expectedResults = setOf(
+            CategorySearchResult(
+                categoryId = 2,
+                name = "catalog 1",
+                paths = listOf(
+                    emptyList()
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 3, name = "catalog",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root")
+                    )
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 4, name = "catalog",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2")
+                    )
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 5, name = "catalog 1",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2")
+                    ),
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2"),
+                        PathUnit(4, "catalog")
+                    )
+                )
+            )
+        )
+
+        // Action
+        val searchResult = service.suggest(searchQueryInfo)
+
+        // Assert
+        assertEquals(expectedResults, searchResult.toSet())
     }
 }

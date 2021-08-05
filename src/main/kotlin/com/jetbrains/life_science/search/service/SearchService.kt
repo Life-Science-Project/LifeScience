@@ -8,5 +8,7 @@ interface SearchService {
 
     fun search(query: SearchQueryInfo): List<SearchResult>
 
+    fun suggest(query: SearchQueryInfo): List<SearchResult>
+
     val supportedTypes: List<SearchUnitType>
 }
