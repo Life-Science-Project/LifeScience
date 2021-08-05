@@ -1,0 +1,20 @@
+[
+  {
+    "_class": "Approach",
+    "id": 1,
+    "names": ["approach one", "approach one second name"],
+    "context": ["catalog 1", "catalog 2", "approach one", "approach one second name"]
+  },
+  {
+    "_class": "Approach",
+    "id": 2,
+    "names": ["approach two", "approach two second name"],
+    "context": ["catalog 1", "catalog 2", "approach two", "approach two second name"]
+  },
+  {
+    "_class": "Approach",
+    "id": 3,
+    "names": ["approach three"],
+    "context": ["catalog 1", "catalog 2", "approach three"]
+  }
+]

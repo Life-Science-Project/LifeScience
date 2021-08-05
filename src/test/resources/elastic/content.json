@@ -1,0 +1,34 @@
+[
+  {
+    "id": "123",
+    "_class": "Content",
+    "sectionId": 1,
+    "text": "general info text one",
+    "tags": [],
+    "references": []
+  },
+  {
+    "id": "456",
+    "_class": "Content",
+    "sectionId": 2,
+    "text": "some text",
+    "tags": [],
+    "references": []
+  },
+  {
+    "id": "789",
+    "_class": "Content",
+    "sectionId": 3,
+    "text": "some other text",
+    "tags": [],
+    "references": []
+  },
+  {
+    "id": "32281337",
+    "_class": "Content",
+    "sectionId": 15,
+    "text": "bradford assay is my favourite method",
+    "tags": [],
+    "references": []
+  }
+]
