@@ -18,7 +18,6 @@ class CategoryReplicator(
     val categorySearchUnitRepository: CategorySearchUnitRepository,
     val entityManager: EntityManager,
     private val elasticFlusher: ElasticFlusher
-
 ) {
 
     @Transactional

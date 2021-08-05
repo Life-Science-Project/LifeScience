@@ -1097,13 +1097,13 @@
       ],
       "sections": [
         {
-          "name": "Equipment and reagents required",
-          "content": "#### Reagents: \n* Bradford dye reagent\n* Standard protein\n* Solution buffer\n\n#### Equipment: \n* Spectrophotometer\n* Micropipette\n* Plastic tubes or cuvette \n\n#### Materials: \n* Diluted",
+          "name": "Application",
+          "content": "No applications found for this method",
           "hidden": false
         },
         {
-          "name": "Application",
-          "content": "No applications found for this method",
+          "name": "Equipment and reagents required",
+          "content": "#### Reagents: \n* Bradford dye reagent\n* Standard protein\n* Solution buffer\n\n#### Equipment: \n* Spectrophotometer\n* Micropipette\n* Plastic tubes or cuvette \n\n#### Materials: \n* Diluted",
           "hidden": false
         },
         {
@@ -1113,7 +1113,7 @@
         },
         {
           "name": "Method advantages and disadvantages",
-          "content": "| Advantages | Disatvantages |\n| :------: | :------: |\n| Some text | Some text |",
+          "content": "| Advantages | Disatvantages |\n| :------: | :------: |\n|  |  |",
           "hidden": false
         },
         {
@@ -1128,7 +1128,7 @@
         },
         {
           "name": "Education",
-          "content": "Тест 1:\n![alt text][logo]\n\n[logo]: https://avatars.mds.yandex.net/get-zen_doc/1945572/pub_5d1b61e5f221ef00adfa5de1_5d1b61f129063700add5128f/scale_1200\n\nТест2:\n![alt text](https://avatars.mds.yandex.net/get-zen_doc/1945572/pub_5d1b61e5f221ef00adfa5de1_5d1b61f129063700add5128f/scale_1200)",
+          "content": "Education",
           "hidden": false
         }
       ],
@@ -1138,7 +1138,7 @@
           "sections": [
             {
               "name": "General information",
-              "content": "#### Remark :\n> *This protocol is suitable for determination of protein concentration in the range of 125-1,500 μg / ml*.\n\n-------------------------\n#### Protocol :\n\nThe protocol can be performed in three different formats, **5 ml** and a **1 ml** cuvette assay, and a **250 μl** microplate assay.\n\n1) Equilibrate all reagents and probes to room temperature and mix gently. [^1]\n2) Use off-the-shelf (if provided) or prepare standard samples.\n3) Pipet each standard and unknown sample solution (**100 μl** /  **20 μl** /  **5 μl**) into separate clean *test tube / disposable cuvette / microplate well add*  (**5ml** /  **1 ml** / **250 μl**) of 1x dye reagent to each tube (or cuvette) and mix it.\n4) Incubate all probes at room temperature for at least **5 min** (but not longer than 1 hour).\n5) Measure the absorbance of the standards and samples at **595 nm**.\n6) Process the received data.\n\n[^1]: Protein solutions are normally assayed in triplicate.\n\n-------------------------\n#### References :\n\n* _Bradford MM, A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the principle of protein-dye binding, Anal Biochem, 72, 248–254 (1976)_\n* _Quick Start™ Bradford Protein Assay Instruction Manual. Bio-Rad Laboratories, Inc.\n2000._",
+              "content": "#### Remark :\n> *This protocol is suitable for determination of protein concentration in the range of 125-1,500 μg / ml*.\n\n-------------------------\n#### Protocol :\n\nThe protocol can be performed in three different formats, **5 ml** and a **1 ml** cuvette assay, and a **250 μl** microplate assay.\n\n1) Equilibrate all reagents and probes to room temperature and mix gently. [^1]\n2) Use off-the-shelf (if provided) or prepare standard samples.\n3) Pipet each standard and unknown sample solution (**100 μl** /  **20 μl** /  **5 μl**) into separate clean *test tube / disposable cuvette / microplate* well add  (**5ml** /  **1 ml** / **250 μl**) of 1x dye reagent to each tube (or cuvette) and mix it.\n4) Incubate all probes at room temperature for at least **5 min** (but not longer than 1 hour).\n5) Measure the absorbance of the standards and samples at **595 nm**.\n6) Process the received data.\n\n[^1]: Protein solutions are normally assayed in triplicate.\n\n-------------------------\n#### References :\n\n* _Bradford MM, A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the principle of protein-dye binding, Anal Biochem, 72, 248–254 (1976)_\n* _Quick Start™ Bradford Protein Assay Instruction Manual. Bio-Rad Laboratories, Inc. 2000._",
               "hidden": false
             }
           ]
@@ -1148,7 +1148,7 @@
           "sections": [
             {
               "name": "General information",
-              "content": "#### Remark :\n> *This protocol is suitable for determination of protein concentration in the range of 1.25–20 μg/ml.*\n\n-------------------------\n#### Protocol :\n\nThe protocol can be performed in three different formats, **2 ml** cuvette assay, and a **300 μl** microplate assay.\n\n1) Equilibrate all reagents and probes to room temperature and mix gently. [^1]\n2) Use off-the-shelf (if provided) or prepare standard samples.\n3) Pipet each standard and unknown sample solution (1 ml /  150 μl) into separate clean test tube/ disposable cuvette/ microplate well add  (1 ml /  150 μl) of 1x dye reagent to each tube (or cuvette) and mix it.\n4) Incubate all probes at room temperature for at least 5 min (but not longer than 1 hour).\n5) Measure the absorbance of the standards and samples at 595 nm.\n6) Process the received data.\n\n[^1]:  Protein solutions are normally assayed in triplicate.\n\n-------------------------\n#### References :\n\n1. _Bradford MM, A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the principle of protein-dye binding, Anal Biochem, 72, 248–254 (1976)._\n2. _Quick Start™ Bradford Protein Assay Instruction Manual. Bio-Rad Laboratories, Inc. 2000._",
+              "content": "#### Remark :\n> *This protocol is suitable for determination of protein concentration in the range of 1.25–20 μg/ml.*\n\n-------------------------\n#### Protocol :\n\nThe protocol can be performed in three different formats, **2 ml** cuvette assay, and a **300 μl** microplate assay.\n\n1) Equilibrate all reagents and probes to room temperature and mix gently. [^1]\n2) Use off-the-shelf (if provided) or prepare standard samples.\n3) Pipet each standard and unknown sample solution (**1 ml** /  **150 μl**) into separate clean *test tube / disposable cuvette / microplate* well add  (**1 ml** /  **150 μl**) of **1x** dye reagent to each tube (or cuvette) and mix it.\n4) Incubate all probes at room temperature for at least **5 min** (but not longer than **1 hour**).\n5) Measure the absorbance of the standards and samples at **595 nm**.\n6) Process the received data.\n\n[^1]:  Protein solutions are normally assayed in triplicate.\n-------------------------\n#### References :\n\n1. _Bradford MM, A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the principle of protein-dye binding, Anal Biochem, 72, 248–254 (1976)._\n2. _Quick Start™ Bradford Protein Assay Instruction Manual. Bio-Rad Laboratories, Inc. 2000._",
               "hidden": false
             }
           ]
@@ -1158,7 +1158,17 @@
           "sections": [
             {
               "name": "General information",
-              "content": "#### Remark :\n> *This protocol is suitable for determination of protein concentration on Nano drop 2000/2000c in the range 100-1000 μg/ml.*\n\n-------------------------\n#### Protocol :\n\n1) Equilibrate all reagents and probes to room temperature and mix gently. [^1]\n2) Use off-the-shelf (if provided) or prepare standard samples.\n3) Pipet **10 μl** of each standard and unknown sample solution into separate clean test tube.\n4) Add **300 μl** of **1x** dye reagent to each tube and mix it.\n5) Incubate all probes at room temperature for at le ast **5 min** (but not longer than **1 hour**).\n6) Select the Protein Bradford application from the Home page. If the wavelength verification window appears, ensure the arm is down and click OK.\n7) Enter the values for each standard concentration in the right\npane table. \n8) In the left window pane select Add to report to automatically\ninclude all measurements in the current report. The default setting is for all samples to be added to reports. The Add to report checkbox must be selected prior to a measurement to save the sample data to a workbook.\n9) Select the file drop-down option Use current settings as default as a convenient way to limit set-up time for each new workbook.\n10) Select Overlay spectra to display multiple spectra at a time.\n11) Pipette **2 μL** of blank solution onto the bottom pedestal, lower the arm and click Blank.\n12) After all of the Standards have been measured, click on the Samples radio button. Enter a sample ID. Load **2 μL** of sample when using the pedestal. Click Measure.\n13) Process the received data.\n\n[^1]: Protein solutions are normally assayed in triplicate.\n\n-------------------------\n#### References :\n\n1. _Bradford MM, A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the principle of protein-dye binding, Anal Biochem, 72, 248–254 (1976)._\n2. _Quick Start™ Bradford Protein Assay Instruction Manual. Bio-Rad Laboratories, Inc. 2000._\n3. _Bradford Protein Assay. NanoDrop 2000/2000c. Thermo Fisher Scientific. 2010_",
+              "content": "#### Remark :\n> *This protocol is suitable for determination of protein concentration on Nano drop 2000/2000c in the range 100-1000 μg/ml.*\n\n-------------------------\n#### Protocol :\n\n1) Equilibrate all reagents and probes to room temperature and mix gently. [^1]\n2) Use off-the-shelf (if provided) or prepare standard samples.\n3) Pipet **10 μl** of each standard and unknown sample solution into separate clean test tube.\n4) Add **300 μl** of **1x** dye reagent to each tube and mix it.\n5) Incubate all probes at room temperature for at least **5 min** (but not longer than **1 hour**).\n6) Select the Protein Bradford application from the Home page. If the wavelength verification window appears, ensure the arm is down and click OK.\n7) Enter the values for each standard concentration in the right pane table. \n8) In the left window pane select Add to report to automatically include all measurements in the current report. The default setting is for all samples to be added to reports. The Add to report checkbox must be selected prior to a measurement to save the sample data to a workbook.\n9) Select the file drop-down option Use current settings as default as a convenient way to limit set-up time for each new workbook.\n10) Select Overlay spectra to display multiple spectra at a time.\n11) Pipette **2 μL** of blank solution onto the bottom pedestal, lower the arm and click Blank.\n12) After all of the Standards have been measured, click on the Samples radio button. Enter a sample ID. Load **2 μL** of sample when using the pedestal. Click Measure.\n13) Process the received data.\n\n[^1]: Protein solutions are normally assayed in triplicate.\n\n-------------------------\n#### References :\n\n1. _Bradford MM, A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the principle of protein-dye binding, Anal Biochem, 72, 248–254 (1976)._\n2. _Quick Start™ Bradford Protein Assay Instruction Manual. Bio-Rad Laboratories, Inc. 2000._\n3. _Bradford Protein Assay. NanoDrop 2000/2000c. Thermo Fisher Scientific. 2010_",
+              "hidden": false
+            }
+          ]
+        },
+        {
+          "name": "Microassay protocol adapted for NanoDrop 2000/2000c",
+          "sections": [
+            {
+              "name": "General information",
+              "content": "#### Remark :\n> *This protocol is suitable for determination of protein concentration in on Nano drop 2000/2000c in the range 15-100 μg/ml.*\n\n-------------------------\n#### Protocol :\n\n1) Equilibrate all reagents and probes to room temperature and mix gently. [^1]\n2) Use off-the-shelf (if provided) or prepare standard samples.\n3) Pipet **10 μl** of each standard and unknown sample solution into separate clean test tube.\n4) Add **10 μl** of **1x** dye reagent to each tube and mix it.\n5) Incubate all probes at room temperature for at least **5 min** (but not longer than **1 hour**).\n6) Select the Protein Bradford application from the Home page. If the wavelength verification window appears, ensure the arm is down and click OK.\n7) Enter the values for each standard concentration in the right pane table. \n8) In the left window pane select Add to report to automatically include all measurements in the current report. The default setting is for all samples to be added to reports. The Add to report checkbox must be selected prior to a measurement to save the sample data to a workbook.\n9) Select the file drop-down option Use current settings as default as a convenient way to limit set-up time for each new workbook.\n10) Select Overlay spectra to display multiple spectra at a time.\n11) Pipette **2 μL** of blank solution onto the bottom pedestal, lower the arm and click Blank.\n12) After all of the Standards have been measured, click on the Samples radio button. Enter a sample ID. Load **2 μL** of sample when using the pedestal. Click Measure.\n13) Process the received data.\n\n[^1]: Protein solutions are normally assayed in triplicate.\n\n-------------------------\n#### References :\n\n1. _Bradford MM, A rapid and sensitive method for the quantitation of microgram quantities of protein utilizing the principle of protein-dye binding, Anal Biochem, 72, 248–254 (1976)._\n2. _Quick Start™ Bradford Protein Assay Instruction Manual. Bio-Rad Laboratories, Inc. 2000._\n3. _Bradford Protein Assay. NanoDrop 2000/2000c. Thermo Fisher Scientific. 2010._",
               "hidden": false
             }
           ]
@@ -1897,17 +1907,17 @@
       ],
       "sections": [
         {
+          "name": "Application",
+          "content": null,
+          "hidden": false
+        },
+        {
           "name": "General info",
           "content": null,
           "hidden": false
         },
         {
           "name": "Equipment and reagents required",
-          "content": null,
-          "hidden": false
-        },
-        {
-          "name": "Application",
           "content": null,
           "hidden": false
         },
