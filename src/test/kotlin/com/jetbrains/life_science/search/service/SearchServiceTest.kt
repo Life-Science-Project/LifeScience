@@ -235,4 +235,52 @@ internal class SearchServiceTest {
         // Assert
         assertEquals(expectedResults, searchResult.toSet())
     }
+
+    @Test
+    fun `uppercase test`() {
+        // Prepare
+        val searchQueryInfoLowercase = makeSearchQueryInfo(
+            text = "fplc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoUppercase = makeSearchQueryInfo(
+            text = "FPLC",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoLowercaseFuzzy = makeSearchQueryInfo(
+            text = "flpc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoUppercaseFuzzy = makeSearchQueryInfo(
+            text = "FLPC",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+
+        val expectedResults = setOf(
+            CategorySearchResult(
+                categoryId = 1, name = "root",
+                paths = listOf(emptyList())
+            )
+        )
+
+        // Action
+        val searchResultLowercase = service.search(searchQueryInfoLowercase)
+        val searchResultUppercase = service.search(searchQueryInfoUppercase)
+        val searchResultLowercaseFuzzy = service.search(searchQueryInfoLowercaseFuzzy)
+        val searchResultUppercaseFuzzy = service.search(searchQueryInfoUppercaseFuzzy)
+
+        // Assert
+        assertEquals(expectedResults, searchResultLowercase.toSet())
+        assertEquals(expectedResults, searchResultUppercase.toSet())
+        assertEquals(expectedResults, searchResultLowercaseFuzzy.toSet())
+        assertEquals(expectedResults, searchResultUppercaseFuzzy.toSet())
+    }
 }
