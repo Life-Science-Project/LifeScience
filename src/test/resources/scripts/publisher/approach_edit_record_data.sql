@@ -1,9 +1,9 @@
-insert into section (id, name, order_num, published, visible)
-values (12, 'general 12', 1, false, true);
-insert into section (id, name, order_num, published, visible)
-values (13, 'general 13', 2, false, false);
-insert into section (id, name, order_num, published, visible)
-values (14, 'general 13', 2, true, false);
+insert into section (id, name, order_num, published, hidden)
+values (12, 'general 12', 1, false, false);
+insert into section (id, name, order_num, published, hidden)
+values (13, 'general 13', 2, false, true);
+insert into section (id, name, order_num, published, hidden)
+values (14, 'general 13', 2, true, true);
 -- nextId = 15
 alter sequence section_seq restart with 15;
 

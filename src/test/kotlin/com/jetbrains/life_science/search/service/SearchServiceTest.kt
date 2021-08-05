@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.search.service
 
+import com.jetbrains.life_science.category.search.PathUnit
 import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.approach.ApproachSearchResult
 import com.jetbrains.life_science.search.result.category.CategorySearchResult
@@ -58,8 +59,23 @@ internal class SearchServiceTest {
             size = 100
         )
         val expectedResults = setOf(
-            CategorySearchResult(categoryId = 3, name = "catalog"),
-            CategorySearchResult(categoryId = 4, name = "catalog")
+            CategorySearchResult(
+                categoryId = 3, name = "catalog",
+                listOf(
+                    listOf(
+                        PathUnit(1, "root")
+                    )
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 4, name = "catalog",
+                listOf(
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2")
+                    )
+                )
+            )
         )
 
         // Action
@@ -162,7 +178,10 @@ internal class SearchServiceTest {
             ),
             CategorySearchResult(
                 categoryId = 2,
-                name = "catalog 1"
+                name = "catalog 1",
+                paths = listOf(
+                    emptyList()
+                )
             ),
             ContentSearchResult(
                 id = "123",
@@ -191,8 +210,23 @@ internal class SearchServiceTest {
             size = 100
         )
         val expectedResults = setOf(
-            CategorySearchResult(categoryId = 3, name = "catalog"),
-            CategorySearchResult(categoryId = 4, name = "catalog")
+            CategorySearchResult(
+                categoryId = 3, name = "catalog",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root")
+                    )
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 4, name = "catalog",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2")
+                    )
+                )
+            )
         )
 
         // Action
@@ -200,5 +234,53 @@ internal class SearchServiceTest {
 
         // Assert
         assertEquals(expectedResults, searchResult.toSet())
+    }
+
+    @Test
+    fun `uppercase test`() {
+        // Prepare
+        val searchQueryInfoLowercase = makeSearchQueryInfo(
+            text = "fplc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoUppercase = makeSearchQueryInfo(
+            text = "FPLC",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoLowercaseFuzzy = makeSearchQueryInfo(
+            text = "flpc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoUppercaseFuzzy = makeSearchQueryInfo(
+            text = "FLPC",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+
+        val expectedResults = setOf(
+            CategorySearchResult(
+                categoryId = 1, name = "root",
+                paths = listOf(emptyList())
+            )
+        )
+
+        // Action
+        val searchResultLowercase = service.search(searchQueryInfoLowercase)
+        val searchResultUppercase = service.search(searchQueryInfoUppercase)
+        val searchResultLowercaseFuzzy = service.search(searchQueryInfoLowercaseFuzzy)
+        val searchResultUppercaseFuzzy = service.search(searchQueryInfoUppercaseFuzzy)
+
+        // Assert
+        assertEquals(expectedResults, searchResultLowercase.toSet())
+        assertEquals(expectedResults, searchResultUppercase.toSet())
+        assertEquals(expectedResults, searchResultLowercaseFuzzy.toSet())
+        assertEquals(expectedResults, searchResultUppercaseFuzzy.toSet())
     }
 }

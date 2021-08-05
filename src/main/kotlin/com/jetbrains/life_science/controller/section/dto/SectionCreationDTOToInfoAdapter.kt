@@ -10,5 +10,5 @@ class SectionCreationDTOToInfoAdapter(
 ) : SectionCreationInfo {
     override val id: Long = 0L
     override val name: String = dto.name
-    override val visible: Boolean = !dto.hidden
+    override val hidden: Boolean = dto.hidden
 }

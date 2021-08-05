@@ -7,8 +7,7 @@ import com.jetbrains.life_science.container.approach.service.DraftApproachServic
 import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
 import com.jetbrains.life_science.section.service.SectionService
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -171,18 +170,18 @@ class PublicApproachServiceTest {
     }
 
     private fun assertContainsCoAuthor(publicApproach: PublicApproach, userId: Long) {
-        Assertions.assertTrue(publicApproach.coAuthors.any { it.id == userId })
+        assertTrue(publicApproach.coAuthors.any { it.id == userId })
     }
 
     private fun assertContainsCategory(publicApproach: PublicApproach, categoryId: Long) {
-        Assertions.assertTrue(publicApproach.categories.any { it.id == categoryId })
+        assertTrue(publicApproach.categories.any { it.id == categoryId })
     }
 
     private fun assertContainsSection(publicApproach: PublicApproach, sectionId: Long) {
-        Assertions.assertTrue(publicApproach.sections.any { it.id == sectionId })
+        assertTrue(publicApproach.sections.any { it.id == sectionId })
     }
 
     private fun assertNotContainsSection(publicApproach: PublicApproach, sectionId: Long) {
-        Assertions.assertFalse(publicApproach.sections.any { it.id == sectionId })
+        assertFalse(publicApproach.sections.any { it.id == sectionId })
     }
 }

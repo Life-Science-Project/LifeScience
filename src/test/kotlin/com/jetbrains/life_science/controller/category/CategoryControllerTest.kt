@@ -1,6 +1,8 @@
 package com.jetbrains.life_science.controller.category
 
 import com.jetbrains.life_science.ApiTest
+import com.jetbrains.life_science.category.search.Path
+import com.jetbrains.life_science.category.search.PathUnit
 import com.jetbrains.life_science.controller.approach.view.ApproachShortView
 import com.jetbrains.life_science.controller.category.dto.CategoryAliasDTO
 import com.jetbrains.life_science.controller.category.dto.CategoryCreationDTO
@@ -430,6 +432,35 @@ internal class CategoryControllerTest : ApiTest() {
 
         assertEquals(403_000, exceptionView.systemCode)
         assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * Should return list of path of existing category
+     */
+    @Test
+    fun `get existing category paths`() {
+        val expected: List<Path> = listOf(
+            listOf(
+                PathUnit(1, "root")
+            )
+        )
+
+        val paths = getView<List<Path>>(makePath("/3/paths"))
+
+        assertEquals(expected, paths)
+    }
+
+    /**
+     * Expected 400 http code and 400_001 system code result
+     * with requested category id in view arguments.
+     */
+    @Test
+    fun `get non-existing category paths`() {
+        val request = getRequest(makePath("/666/paths"))
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_001, exceptionView.systemCode)
+        assertEquals("666", exceptionView.arguments[0][0])
     }
 
     private fun assertCategoryAvailableFromParent(parentId: Long, childId: Long) {
