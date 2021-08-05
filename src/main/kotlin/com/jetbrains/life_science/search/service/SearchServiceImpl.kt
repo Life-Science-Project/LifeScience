@@ -38,13 +38,34 @@ class SearchServiceImpl(
     override fun search(query: SearchQueryInfo): List<SearchResult> {
         val request = makeRequest(query)
         val response = getResponse(request)
-        return response.hits
-            .mapNotNull {
-                processHit(it)
-            }
-            .sortedBy {
-                SearchUnitType.valueOf(it.typeName.toUpperCase()).order
-            }
+        return processHits(response)
+    }
+
+    override fun suggest(query: SearchQueryInfo): List<SearchResult> {
+        val request = makeSuggestRequest(query)
+        val response = getResponse(request)
+        return processHits(response)
+    }
+
+    private fun processHits(response: SearchResponse) = response.hits
+        .mapNotNull {
+            processHit(it)
+        }
+        .sortedBy {
+            SearchUnitType.valueOf(it.typeName.toUpperCase()).order
+        }
+
+    private fun makeSuggestRequest(query: SearchQueryInfo): SearchRequest {
+        val queryBuilder = QueryBuilders.prefixQuery("names", query.text)
+
+        val searchBuilder = SearchSourceBuilder()
+            .query(queryBuilder)
+            .from(query.from)
+            .size(query.size)
+
+        return SearchRequest()
+            .source(searchBuilder)
+            .indices(*getRequestIndices(query))
     }
 
     private fun getResponse(request: SearchRequest): SearchResponse {
