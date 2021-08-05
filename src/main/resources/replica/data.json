@@ -1097,8 +1097,8 @@
       ],
       "sections": [
         {
-          "name": "Application",
-          "content": "No applications found for this method",
+          "name": "General information",
+          "content": "Method for quantify the protein content in sample. This method has multiple applications in experimental sciences. Chemical basis of the Bradford method (1976) is based on the absorbance shift observed in an acidic solution of dye Coomassie® Brilliant Blue G-250. When added to a solution of protein, the dye binds to the protein resulting in a colour change from a reddish brown to blue.",
           "hidden": false
         },
         {
@@ -1107,13 +1107,13 @@
           "hidden": false
         },
         {
-          "name": "General information",
-          "content": "Method for quantify the protein content in sample. This method has multiple applications in experimental sciences. Chemical basis of the Bradford method (1976) is based on the absorbance shift observed in an acidic solution of dye Coomassie® Brilliant Blue G-250. When added to a solution of protein, the dye binds to the protein resulting in a colour change from a reddish brown to blue.",
+          "name": "Application",
+          "content": "No applications found for this method",
           "hidden": false
         },
         {
           "name": "Method advantages and disadvantages",
-          "content": "| Advantages | Disatvantages |\n| :------: | :------: |\n|  |  |",
+          "content": "| Advantages | Disatvantages |\n| :------: | :------: |\n| Some text | Some text |",
           "hidden": false
         },
         {
@@ -1128,7 +1128,7 @@
         },
         {
           "name": "Education",
-          "content": "Education",
+          "content": "Тест 1:\n![alt text][logo]\n\n[logo]: https://avatars.mds.yandex.net/get-zen_doc/1945572/pub_5d1b61e5f221ef00adfa5de1_5d1b61f129063700add5128f/scale_1200\n\nТест2:\n![alt text](https://avatars.mds.yandex.net/get-zen_doc/1945572/pub_5d1b61e5f221ef00adfa5de1_5d1b61f129063700add5128f/scale_1200)",
           "hidden": false
         }
       ],
@@ -1907,17 +1907,17 @@
       ],
       "sections": [
         {
-          "name": "Application",
-          "content": null,
-          "hidden": false
-        },
-        {
           "name": "General info",
           "content": null,
           "hidden": false
         },
         {
           "name": "Equipment and reagents required",
+          "content": null,
+          "hidden": false
+        },
+        {
+          "name": "Application",
           "content": null,
           "hidden": false
         },

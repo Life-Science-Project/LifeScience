@@ -19,7 +19,7 @@ class ApproachToStorageEntityMapper(
     }
 
     fun mapOne(approach: PublicApproach, categoriesIdsMap: Map<Long, Long>): ApproachStorageEntity {
-        val section = sectionToStorageEntityMapper.getStorageEntities(approach.sections)
+        val section = sectionToStorageEntityMapper.getStorageEntities(approach.sections.sortedBy { it.order })
         val protocols = protocolToStorageEntityMapper.getStorageEntities(approach.protocols)
         return ApproachStorageEntity(
             name = approach.name,

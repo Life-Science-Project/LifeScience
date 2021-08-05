@@ -15,7 +15,7 @@ class ProtocolToStorageEntityMapper(
     }
 
     fun mapOne(protocol: PublicProtocol): ProtocolStorageEntity {
-        val section = sectionToStorageEntityMapper.getStorageEntities(protocol.sections)
+        val section = sectionToStorageEntityMapper.getStorageEntities(protocol.sections.sortedBy { it.order })
         return ProtocolStorageEntity(
             name = protocol.name,
             sections = section
