@@ -16,10 +16,10 @@ values (2, 1);
 insert into draft_protocol_participants (draft_protocol_id, participants_id)
 values (3, 1);
 
-insert into section (id, name, order_num, published, visible)
-values (10, 'general 1', 1, false, true);
-insert into section (id, name, order_num, published, visible)
-values (11, 'general 2', 2, false, false);
+insert into section (id, name, order_num, published, hidden)
+values (10, 'general 1', 1, false, false);
+insert into section (id, name, order_num, published, hidden)
+values (11, 'general 2', 2, false, true);
 -- nextId = 12
 alter sequence section_seq restart with 12;
 

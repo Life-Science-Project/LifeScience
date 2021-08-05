@@ -10,7 +10,7 @@ class SectionViewMapper {
         return SectionView(
             id = section.id,
             name = section.name,
-            hidden = !section.visible,
+            hidden = section.hidden,
             content = contentText
         )
     }

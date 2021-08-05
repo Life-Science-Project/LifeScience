@@ -11,7 +11,7 @@ class SectionFactory {
         return Section(
             id = 0,
             name = info.name,
-            visible = info.visible,
+            hidden = info.hidden,
             published = false,
             order = info.prevSection?.let { it.order + 1 } ?: 0
         )
@@ -19,7 +19,7 @@ class SectionFactory {
 
     fun setParams(origin: Section, info: SectionInfo) {
         origin.name = info.name
-        origin.visible = info.visible
+        origin.hidden = info.visible
         origin.order = info.prevSection?.let { it.order + 1 } ?: 1
     }
 }

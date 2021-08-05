@@ -7,7 +7,7 @@ interface SectionCreationInfo {
 
     val name: String
 
-    val visible: Boolean
+    val hidden: Boolean
 
     val prevSection: Section?
 

@@ -76,7 +76,7 @@ internal class SectionServiceTests {
         // Assert
         assertEquals(info.name, section.name)
         assertEquals(0, section.order)
-        assertEquals(info.visible, section.visible)
+        assertEquals(info.hidden, section.hidden)
         assertFalse(section.published)
     }
 
@@ -122,7 +122,7 @@ internal class SectionServiceTests {
             id = expectedId,
             name = "general 1",
             order = 1,
-            visible = true,
+            hidden = false,
             published = false
         )
 
@@ -133,7 +133,7 @@ internal class SectionServiceTests {
         assertEquals(expected.id, section.id)
         assertEquals(expected.name, section.name)
         assertEquals(expected.order, section.order)
-        assertEquals(expected.visible, section.visible)
+        assertEquals(expected.hidden, section.hidden)
         assertEquals(expected.published, section.published)
     }
 
@@ -209,7 +209,7 @@ internal class SectionServiceTests {
             id = existingSection.id,
             name = info.name,
             order = 1,
-            visible = info.visible,
+            hidden = info.visible,
             published = existingSection.published
         )
         val expectedContent = Content(
@@ -224,7 +224,7 @@ internal class SectionServiceTests {
         assertEquals(expected.id, section.id)
         assertEquals(expected.name, section.name)
         assertEquals(expected.order, section.order)
-        assertEquals(expected.visible, section.visible)
+        assertEquals(expected.hidden, section.hidden)
         assertEquals(expected.published, section.published)
         assertEquals(expectedContent, content)
     }

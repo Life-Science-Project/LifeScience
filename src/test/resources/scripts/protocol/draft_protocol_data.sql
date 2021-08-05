@@ -12,10 +12,10 @@ values (1, 2);
 insert into draft_protocol_participants (draft_protocol_id, participants_id)
 values (2, 1);
 
-insert into section (id, name, order_num, published, visible)
-values (1, 'draft_protocol_section', 2, false, false);
-insert into section (id, name, order_num, published, visible)
-values (2, 'section_to_add', 2, false, false);
+insert into section (id, name, order_num, published, hidden)
+values (1, 'draft_protocol_section', 2, false, true);
+insert into section (id, name, order_num, published, hidden)
+values (2, 'section_to_add', 2, false, true);
 
 insert into draft_protocol_sections (draft_protocol_id, sections_id)
 values (2, 1)
