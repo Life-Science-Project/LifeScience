@@ -252,13 +252,13 @@ internal class SearchServiceTest {
             size = 100
         )
         val searchQueryInfoLowercaseFuzzy = makeSearchQueryInfo(
-            text = "fplc",
+            text = "flpc",
             includeTypes = listOf(SearchUnitType.CATEGORY),
             from = 0,
             size = 100
         )
         val searchQueryInfoUppercaseFuzzy = makeSearchQueryInfo(
-            text = "FPLC",
+            text = "FLPC",
             includeTypes = listOf(SearchUnitType.CATEGORY),
             from = 0,
             size = 100
