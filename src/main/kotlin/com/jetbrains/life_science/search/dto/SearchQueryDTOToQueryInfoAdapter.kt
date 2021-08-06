@@ -20,7 +20,7 @@ class SearchQueryDTOToQueryInfoAdapter(val dto: SearchQueryDTO, supportedTypes: 
         includeTypes = types
     }
 
-    override val text: String = dto.text.toLowerCase()
+    override val text: String = dto.text
 
     override val from: Int = dto.from
 

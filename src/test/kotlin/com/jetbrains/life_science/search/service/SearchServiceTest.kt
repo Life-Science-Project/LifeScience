@@ -244,13 +244,36 @@ internal class SearchServiceTest {
     @Test
     fun `uppercase test`() {
         // Prepare
-        val lowerCaseDTO = SearchQueryDTO(text = "fplc", size = 100)
-        val upperCaseDTO = SearchQueryDTO(text = "FPLC", size = 100)
-        val lowerCaseFuzzyDTO = SearchQueryDTO(text = "flpc", size = 100)
-        val upperCaseFuzzyDTO = SearchQueryDTO(text = "FLPC", size = 100)
-        val mixedCaseDTO = SearchQueryDTO(text = "FpLc", size = 100)
-
-        val includeTypes = listOf(SearchUnitType.CATEGORY, SearchUnitType.APPROACH, SearchUnitType.PROTOCOL)
+        val searchQueryInfoLowercase = makeSearchQueryInfo(
+            text = "fplc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoUppercase = makeSearchQueryInfo(
+            text = "FPLC",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoLowercaseFuzzy = makeSearchQueryInfo(
+            text = "flpc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoUppercaseFuzzy = makeSearchQueryInfo(
+            text = "FLPC",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoMixedCase = makeSearchQueryInfo(
+            text = "FpLc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
 
         val expectedResults = setOf(
             CategorySearchResult(
@@ -258,13 +281,6 @@ internal class SearchServiceTest {
                 paths = listOf(emptyList())
             )
         )
-
-        // Prepare info
-        val searchQueryInfoLowercase = SearchQueryDTOToQueryInfoAdapter(lowerCaseDTO, includeTypes)
-        val searchQueryInfoUppercase = SearchQueryDTOToQueryInfoAdapter(upperCaseDTO, includeTypes)
-        val searchQueryInfoLowercaseFuzzy = SearchQueryDTOToQueryInfoAdapter(lowerCaseFuzzyDTO, includeTypes)
-        val searchQueryInfoUppercaseFuzzy = SearchQueryDTOToQueryInfoAdapter(upperCaseFuzzyDTO, includeTypes)
-        val searchQueryInfoMixedCase = SearchQueryDTOToQueryInfoAdapter(mixedCaseDTO, includeTypes)
 
         // Action
         val searchResultLowercase = service.search(searchQueryInfoLowercase)

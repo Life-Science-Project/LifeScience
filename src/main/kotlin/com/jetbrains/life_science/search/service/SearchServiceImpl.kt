@@ -56,7 +56,7 @@ class SearchServiceImpl(
         }
 
     private fun makeSuggestRequest(query: SearchQueryInfo): SearchRequest {
-        val queryBuilder = QueryBuilders.prefixQuery("names", query.text)
+        val queryBuilder = QueryBuilders.prefixQuery("names", query.text.toLowerCase())
 
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
@@ -73,7 +73,7 @@ class SearchServiceImpl(
     }
 
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
-        val tokens = query.text.trim().split("\\s+".toRegex())
+        val tokens = query.text.trim().split("\\s+".toRegex()).map { it.toLowerCase() }
 
         var shouldContainSetPartQuery = QueryBuilders.boolQuery().minimumShouldMatch((tokens.size * 0.7).toInt())
         var shouldContainNamePartInQuery = QueryBuilders.boolQuery().minimumShouldMatch(1)
