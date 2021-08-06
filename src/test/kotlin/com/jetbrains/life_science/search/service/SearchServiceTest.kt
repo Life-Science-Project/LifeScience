@@ -1,6 +1,8 @@
 package com.jetbrains.life_science.search.service
 
 import com.jetbrains.life_science.category.search.PathUnit
+import com.jetbrains.life_science.search.dto.SearchQueryDTO
+import com.jetbrains.life_science.search.dto.SearchQueryDTOToQueryInfoAdapter
 import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.approach.ApproachSearchResult
 import com.jetbrains.life_science.search.result.category.CategorySearchResult
@@ -242,30 +244,13 @@ internal class SearchServiceTest {
     @Test
     fun `uppercase test`() {
         // Prepare
-        val searchQueryInfoLowercase = makeSearchQueryInfo(
-            text = "fplc",
-            includeTypes = listOf(SearchUnitType.CATEGORY),
-            from = 0,
-            size = 100
-        )
-        val searchQueryInfoUppercase = makeSearchQueryInfo(
-            text = "FPLC",
-            includeTypes = listOf(SearchUnitType.CATEGORY),
-            from = 0,
-            size = 100
-        )
-        val searchQueryInfoLowercaseFuzzy = makeSearchQueryInfo(
-            text = "flpc",
-            includeTypes = listOf(SearchUnitType.CATEGORY),
-            from = 0,
-            size = 100
-        )
-        val searchQueryInfoUppercaseFuzzy = makeSearchQueryInfo(
-            text = "FLPC",
-            includeTypes = listOf(SearchUnitType.CATEGORY),
-            from = 0,
-            size = 100
-        )
+        val lowerCaseDTO = SearchQueryDTO(text = "fplc", size = 100)
+        val upperCaseDTO = SearchQueryDTO(text = "FPLC", size = 100)
+        val lowerCaseFuzzyDTO = SearchQueryDTO(text = "flpc", size = 100)
+        val upperCaseFuzzyDTO = SearchQueryDTO(text = "FLPC", size = 100)
+        val mixedCaseDTO = SearchQueryDTO(text = "FpLc", size = 100)
+
+        val includeTypes = listOf(SearchUnitType.CATEGORY, SearchUnitType.APPROACH, SearchUnitType.PROTOCOL)
 
         val expectedResults = setOf(
             CategorySearchResult(
@@ -274,17 +259,26 @@ internal class SearchServiceTest {
             )
         )
 
+        // Prepare info
+        val searchQueryInfoLowercase = SearchQueryDTOToQueryInfoAdapter(lowerCaseDTO, includeTypes)
+        val searchQueryInfoUppercase = SearchQueryDTOToQueryInfoAdapter(upperCaseDTO, includeTypes)
+        val searchQueryInfoLowercaseFuzzy = SearchQueryDTOToQueryInfoAdapter(lowerCaseFuzzyDTO, includeTypes)
+        val searchQueryInfoUppercaseFuzzy = SearchQueryDTOToQueryInfoAdapter(upperCaseFuzzyDTO, includeTypes)
+        val searchQueryInfoMixedCase = SearchQueryDTOToQueryInfoAdapter(mixedCaseDTO, includeTypes)
+
         // Action
         val searchResultLowercase = service.search(searchQueryInfoLowercase)
         val searchResultUppercase = service.search(searchQueryInfoUppercase)
         val searchResultLowercaseFuzzy = service.search(searchQueryInfoLowercaseFuzzy)
         val searchResultUppercaseFuzzy = service.search(searchQueryInfoUppercaseFuzzy)
+        val searchResultMix = service.search(searchQueryInfoMixedCase)
 
         // Assert
         assertEquals(expectedResults, searchResultLowercase.toSet())
         assertEquals(expectedResults, searchResultUppercase.toSet())
         assertEquals(expectedResults, searchResultLowercaseFuzzy.toSet())
         assertEquals(expectedResults, searchResultUppercaseFuzzy.toSet())
+        assertEquals(expectedResults, searchResultMix.toSet())
     }
 
     @Test

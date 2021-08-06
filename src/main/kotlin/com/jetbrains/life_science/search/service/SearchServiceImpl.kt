@@ -73,7 +73,7 @@ class SearchServiceImpl(
     }
 
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
-        val tokens = query.text.trim().split("\\s+".toRegex()).map { it.toLowerCase() }
+        val tokens = query.text.trim().split("\\s+".toRegex())
 
         var shouldContainSetPartQuery = QueryBuilders.boolQuery().minimumShouldMatch((tokens.size * 0.7).toInt())
         var shouldContainNamePartInQuery = QueryBuilders.boolQuery().minimumShouldMatch(1)
