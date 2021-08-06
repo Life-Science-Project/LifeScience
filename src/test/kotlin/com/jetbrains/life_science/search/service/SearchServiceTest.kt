@@ -1,8 +1,6 @@
 package com.jetbrains.life_science.search.service
 
 import com.jetbrains.life_science.category.search.PathUnit
-import com.jetbrains.life_science.search.dto.SearchQueryDTO
-import com.jetbrains.life_science.search.dto.SearchQueryDTOToQueryInfoAdapter
 import com.jetbrains.life_science.search.query.SearchUnitType
 import com.jetbrains.life_science.search.result.approach.ApproachSearchResult
 import com.jetbrains.life_science.search.result.category.CategorySearchResult
