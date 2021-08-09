@@ -33,6 +33,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.10.6")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("commons-net:commons-net:3.6")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 

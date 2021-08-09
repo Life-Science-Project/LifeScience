@@ -1,5 +1,6 @@
 package com.jetbrains.life_science.user.credentials.entity
 
+import com.jetbrains.life_science.user.data.entity.UserFTPData
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -36,6 +37,9 @@ class Credentials(
 
     @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], fetch = FetchType.LAZY)
     var userPersonalData: UserPersonalData? = null
+
+    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], fetch = FetchType.LAZY)
+    var userFTPData: UserFTPData? = null
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return roles
