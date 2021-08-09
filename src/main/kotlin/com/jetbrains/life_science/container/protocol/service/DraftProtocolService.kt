@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.container.protocol.service
 
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
+import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 
@@ -21,4 +22,8 @@ interface DraftProtocolService {
     fun addSection(draftProtocolId: Long, section: Section): DraftProtocol
 
     fun removeSection(draftProtocolId: Long, section: Section): DraftProtocol
+
+    fun addFile(draftProtocolId: Long, file: FTPFile): DraftProtocol
+
+    fun removeFile(draftProtocolId: Long, file: FTPFile): DraftProtocol
 }

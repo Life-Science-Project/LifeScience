@@ -18,7 +18,8 @@ class DraftApproachFactory {
             owner = info.owner,
             participants = mutableListOf(info.owner),
             sections = mutableListOf(),
-            creationDate = LocalDateTime.now(UTCZone)
+            creationDate = LocalDateTime.now(UTCZone),
+            files = mutableListOf()
         )
     }
 

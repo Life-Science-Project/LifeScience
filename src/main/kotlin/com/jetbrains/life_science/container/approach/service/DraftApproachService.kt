@@ -2,6 +2,7 @@ package com.jetbrains.life_science.container.approach.service
 
 import com.jetbrains.life_science.container.ContainsSections
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
+import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 
@@ -20,6 +21,12 @@ interface DraftApproachService : ContainsSections {
     fun removeParticipant(draftApproachId: Long, user: Credentials): DraftApproach
 
     fun hasParticipant(draftApproachId: Long, user: Credentials): Boolean
+
+    fun addFile(draftApproachId: Long, file: FTPFile): DraftApproach
+
+    fun removeFile(draftApproachId: Long, file: FTPFile): DraftApproach
+
+    fun hasFile(draftApproachId: Long, file: FTPFile): Boolean
 
     override fun addSection(id: Long, section: Section)
 

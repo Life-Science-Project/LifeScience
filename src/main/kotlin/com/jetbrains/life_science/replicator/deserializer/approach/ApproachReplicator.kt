@@ -63,7 +63,8 @@ class ApproachReplicator(
             coAuthors = mutableListOf(credentialsReplicator.admin),
             protocols = mutableListOf(),
             categories = categories,
-            aliases = storageEntity.aliases
+            aliases = storageEntity.aliases,
+            files = mutableListOf()
         )
     }
 

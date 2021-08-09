@@ -5,6 +5,7 @@ import com.jetbrains.life_science.container.approach.factory.DraftApproachFactor
 import com.jetbrains.life_science.container.approach.repository.DraftApproachRepository
 import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
+import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.stereotype.Service
@@ -81,6 +82,27 @@ class DraftApproachServiceImpl(
     override fun hasSection(id: Long, section: Section): Boolean {
         exists(id)
         return repository.existsByIdAndSectionsContains(id, section)
+    }
+
+    override fun addFile(draftApproachId: Long, file: FTPFile): DraftApproach {
+        val draftApproach = get(draftApproachId)
+        if (!draftApproach.files.any { it.id == file.id }) {
+            draftApproach.files.add(file)
+            repository.save(draftApproach)
+        }
+        return draftApproach
+    }
+
+    override fun removeFile(draftApproachId: Long, file: FTPFile): DraftApproach {
+        val draftApproach = get(draftApproachId)
+        draftApproach.files.removeAll { it.id == file.id }
+        repository.save(draftApproach)
+        return draftApproach
+    }
+
+    override fun hasFile(draftApproachId: Long, file: FTPFile): Boolean {
+        exists(draftApproachId)
+        return repository.existsByIdAndFilesContains(draftApproachId, file)
     }
 
     private fun exists(draftApproachId: Long) {

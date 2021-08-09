@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.container.approach.entity
 
 import com.jetbrains.life_science.category.entity.Category
+import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import java.time.LocalDateTime
@@ -25,6 +26,7 @@ class DraftApproach(
     tags: MutableList<String>,
     owner: Credentials,
     creationDate: LocalDateTime,
+    files: MutableList<FTPFile>,
 
     @ManyToMany
     var participants: MutableList<Credentials>,
@@ -32,4 +34,4 @@ class DraftApproach(
     @ManyToMany
     var categories: MutableList<Category>
 
-) : Approach(name, aliases, sections, tags, owner, creationDate)
+) : Approach(name, aliases, sections, tags, owner, creationDate, files)

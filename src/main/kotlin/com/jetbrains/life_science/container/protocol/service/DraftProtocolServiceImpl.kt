@@ -5,6 +5,7 @@ import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsE
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.container.protocol.factory.DraftProtocolFactory
 import com.jetbrains.life_science.container.protocol.repository.DraftProtocolRepository
+import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.stereotype.Service
@@ -68,6 +69,22 @@ class DraftProtocolServiceImpl(
     override fun removeSection(draftProtocolId: Long, section: Section): DraftProtocol {
         val draftProtocol = get(draftProtocolId)
         draftProtocol.sections.removeAll { it.id == section.id }
+        repository.save(draftProtocol)
+        return draftProtocol
+    }
+
+    override fun addFile(draftProtocolId: Long, file: FTPFile): DraftProtocol {
+        val draftProtocol = get(draftProtocolId)
+        if (!draftProtocol.files.any { it.id == file.id }) {
+            draftProtocol.files.add(file)
+            repository.save(draftProtocol)
+        }
+        return draftProtocol
+    }
+
+    override fun removeFile(draftProtocolId: Long, file: FTPFile): DraftProtocol {
+        val draftProtocol = get(draftProtocolId)
+        draftProtocol.files.removeAll { it.id == file.id }
         repository.save(draftProtocol)
         return draftProtocol
     }

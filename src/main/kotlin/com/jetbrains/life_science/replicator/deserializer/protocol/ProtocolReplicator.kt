@@ -55,6 +55,7 @@ class ProtocolReplicator(
         sections = sections.toMutableList(),
         owner = credentialsReplicator.admin,
         coAuthors = mutableListOf(credentialsReplicator.admin),
-        rating = 1
+        rating = 1,
+        files = mutableListOf()
     )
 }

@@ -29,8 +29,12 @@ class DraftApproachController(
 ) {
 
     @GetMapping("/{approachId}")
-    fun getApproach(@PathVariable approachId: Long): DraftApproachView {
+    fun getApproach(
+        @PathVariable approachId: Long,
+        @AuthenticationPrincipal author: Credentials
+    ): DraftApproachView {
         val approach = draftApproachService.get(approachId)
+        checkOwnerAccess(approach, author)
         return viewMapper.toView(approach)
     }
 

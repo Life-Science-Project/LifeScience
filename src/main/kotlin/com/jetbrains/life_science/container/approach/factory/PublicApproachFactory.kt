@@ -17,7 +17,8 @@ class PublicApproachFactory {
             categories = approach.categories.toMutableList(),
             creationDate = approach.creationDate,
             coAuthors = approach.participants.toMutableList(),
-            protocols = mutableListOf()
+            protocols = mutableListOf(),
+            files = approach.files.toMutableList()
         )
     }
 }

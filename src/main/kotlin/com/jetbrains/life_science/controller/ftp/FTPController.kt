@@ -1,9 +1,7 @@
 package com.jetbrains.life_science.controller.ftp
 
-import com.jetbrains.life_science.exception.not_found.UserFTPDataNotFoundException
 import com.jetbrains.life_science.ftp.service.FTPService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
-import com.jetbrains.life_science.user.data.service.UserFTPDataService
 import org.springframework.http.MediaType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
@@ -20,8 +18,7 @@ import javax.validation.constraints.NotBlank
 @RestController
 @RequestMapping("/api/ftp")
 class FTPController(
-    val service: FTPService,
-    val ftpDataService: UserFTPDataService
+    val service: FTPService
 ) {
     @GetMapping(
         value = ["/{fileName}"],
@@ -31,13 +28,9 @@ class FTPController(
         @PathVariable fileName: String,
         @AuthenticationPrincipal credentials: Credentials
     ): ByteArray {
-        if (ftpDataService.contains(fileName, credentials)) {
-            val output = ByteArrayOutputStream()
-            service.getFile(fileName, output)
-            return output.toByteArray()
-        } else {
-            throw UserFTPDataNotFoundException("File not found in user's files")
-        }
+        val output = ByteArrayOutputStream()
+        service.getFile(fileName, output)
+        return output.toByteArray()
     }
 
     @PostMapping(value = ["/{fileName}"])
@@ -47,7 +40,6 @@ class FTPController(
         @RequestParam("file") file: MultipartFile,
         @AuthenticationPrincipal credentials: Credentials
     ) {
-        ftpDataService.addFileName(credentials, fileName)
         service.saveFile(fileName, file.inputStream)
     }
 }

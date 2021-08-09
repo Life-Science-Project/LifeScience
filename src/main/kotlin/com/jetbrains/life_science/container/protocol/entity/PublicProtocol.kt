@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.container.protocol.entity
 
 import com.jetbrains.life_science.container.approach.entity.PublicApproach
+import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import javax.persistence.*
@@ -22,10 +23,11 @@ class PublicProtocol(
     approach: PublicApproach,
     sections: MutableList<Section>,
     owner: Credentials,
+    files: MutableList<FTPFile>,
 
     var rating: Long,
 
     @ManyToMany
     var coAuthors: MutableList<Credentials>
 
-) : Protocol(name, approach, sections, owner)
+) : Protocol(name, approach, sections, owner, files)

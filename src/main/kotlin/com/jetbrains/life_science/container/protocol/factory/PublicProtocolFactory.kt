@@ -14,7 +14,8 @@ class PublicProtocolFactory {
             owner = protocol.owner,
             approach = protocol.approach,
             coAuthors = protocol.participants.toMutableList(),
-            rating = 0L
+            rating = 0L,
+            files = protocol.files.toMutableList()
         )
     }
 }
