@@ -9,8 +9,9 @@ class FTPFileFactory {
     fun create(info: FTPFileInfo): FTPFile {
         return FTPFile(
             id = info.id,
-            name = info.name,
-            filePath = info.path
+            name = info.file.originalFilename ?: "file",
+            path = info.path,
+            contentType = info.file.contentType ?: "text/txt"
         )
     }
 }

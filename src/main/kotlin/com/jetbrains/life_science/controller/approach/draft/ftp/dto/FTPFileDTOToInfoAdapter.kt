@@ -4,10 +4,8 @@ import com.jetbrains.life_science.ftp.service.FTPFileInfo
 import org.springframework.web.multipart.MultipartFile
 
 class FTPFileDTOToInfoAdapter(
-    dto: FTPFileDTO,
-    override val file: MultipartFile
+    override val file: MultipartFile,
+    override val path: String
 ) : FTPFileInfo {
     override val id: Long = 0
-    override val name = dto.name
-    override val path = dto.path
 }

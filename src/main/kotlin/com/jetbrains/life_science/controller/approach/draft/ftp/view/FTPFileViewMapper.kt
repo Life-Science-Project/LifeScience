@@ -9,7 +9,7 @@ class FTPFileViewMapper {
         return FTPFileView(
             id = file.id,
             name = file.name,
-            path = file.filePath
+            contentType = file.contentType
         )
     }
 }

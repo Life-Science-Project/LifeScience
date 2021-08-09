@@ -13,5 +13,7 @@ class FTPFile(
 
     val name: String,
 
-    val filePath: String
+    val path: String,
+
+    val contentType: String
 )
