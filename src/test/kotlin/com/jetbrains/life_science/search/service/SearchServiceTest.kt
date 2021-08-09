@@ -304,6 +304,12 @@ internal class SearchServiceTest {
             from = 0,
             size = 100
         )
+        val mixedCaseSearchQueryInfo = makeSearchQueryInfo(
+            text = "CaT",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
         val expectedResults = setOf(
             CategorySearchResult(
                 categoryId = 2,
@@ -346,9 +352,11 @@ internal class SearchServiceTest {
         )
 
         // Action
-        val searchResult = service.suggest(searchQueryInfo)
+        val searchLowerCaseResult = service.suggest(searchQueryInfo)
+        val searchMixedCaseResult = service.suggest(mixedCaseSearchQueryInfo)
 
         // Assert
-        assertEquals(expectedResults, searchResult.toSet())
+        assertEquals(expectedResults, searchLowerCaseResult.toSet())
+        assertEquals(expectedResults, searchMixedCaseResult.toSet())
     }
 }
