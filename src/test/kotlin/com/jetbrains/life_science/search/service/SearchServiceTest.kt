@@ -266,6 +266,12 @@ internal class SearchServiceTest {
             from = 0,
             size = 100
         )
+        val searchQueryInfoMixedCase = makeSearchQueryInfo(
+            text = "FpLc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
 
         val expectedResults = setOf(
             CategorySearchResult(
@@ -279,12 +285,14 @@ internal class SearchServiceTest {
         val searchResultUppercase = service.search(searchQueryInfoUppercase)
         val searchResultLowercaseFuzzy = service.search(searchQueryInfoLowercaseFuzzy)
         val searchResultUppercaseFuzzy = service.search(searchQueryInfoUppercaseFuzzy)
+        val searchResultMix = service.search(searchQueryInfoMixedCase)
 
         // Assert
         assertEquals(expectedResults, searchResultLowercase.toSet())
         assertEquals(expectedResults, searchResultUppercase.toSet())
         assertEquals(expectedResults, searchResultLowercaseFuzzy.toSet())
         assertEquals(expectedResults, searchResultUppercaseFuzzy.toSet())
+        assertEquals(expectedResults, searchResultMix.toSet())
     }
 
     @Test
@@ -292,6 +300,12 @@ internal class SearchServiceTest {
         // Prepare
         val searchQueryInfo = makeSearchQueryInfo(
             text = "cat",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val mixedCaseSearchQueryInfo = makeSearchQueryInfo(
+            text = "CaT",
             includeTypes = listOf(SearchUnitType.CATEGORY),
             from = 0,
             size = 100
@@ -338,9 +352,11 @@ internal class SearchServiceTest {
         )
 
         // Action
-        val searchResult = service.suggest(searchQueryInfo)
+        val searchLowerCaseResult = service.suggest(searchQueryInfo)
+        val searchMixedCaseResult = service.suggest(mixedCaseSearchQueryInfo)
 
         // Assert
-        assertEquals(expectedResults, searchResult.toSet())
+        assertEquals(expectedResults, searchLowerCaseResult.toSet())
+        assertEquals(expectedResults, searchMixedCaseResult.toSet())
     }
 }
