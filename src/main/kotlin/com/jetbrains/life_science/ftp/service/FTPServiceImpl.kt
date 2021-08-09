@@ -32,10 +32,12 @@ class FTPServiceImpl(
     }
 
     override fun getFile(remotePath: String, outputStream: OutputStream): Boolean {
-        return client.retrieveFile(remotePath, outputStream)
+        open()
+        return client.retrieveFile(remotePath, outputStream).also { close() }
     }
 
     override fun saveFile(destPath: String, inputStream: InputStream): Boolean {
-        return client.storeFile(destPath, inputStream)
+        open()
+        return client.storeFile(destPath, inputStream).also { close() }
     }
 }

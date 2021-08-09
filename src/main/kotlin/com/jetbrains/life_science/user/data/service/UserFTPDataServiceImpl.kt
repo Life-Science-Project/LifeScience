@@ -16,7 +16,8 @@ class UserFTPDataServiceImpl(
     }
 
     override fun contains(fileName: String, credentials: Credentials): Boolean {
-        return repository.existsByCredentialsAndFileNamesContains(credentials, fileName)
+        val userFTPData = getByCredentials(credentials)
+        return userFTPData.fileNames.contains(fileName)
     }
 
     override fun addFileName(credentials: Credentials, fileName: String): UserFTPData {

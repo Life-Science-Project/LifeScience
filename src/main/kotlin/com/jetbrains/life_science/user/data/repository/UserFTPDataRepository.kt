@@ -8,5 +8,5 @@ interface UserFTPDataRepository : JpaRepository<UserFTPData, Long> {
 
     fun findByCredentials(credentials: Credentials): UserFTPData?
 
-    fun existsByCredentialsAndFileNamesContains(credentials: Credentials, filename: String): Boolean
+    fun existsByFileNamesContains(filename: String): Boolean
 }
