@@ -56,7 +56,7 @@ class SearchServiceImpl(
         }
 
     private fun makeSuggestRequest(query: SearchQueryInfo): SearchRequest {
-        val queryBuilder = QueryBuilders.prefixQuery("names", query.text)
+        val queryBuilder = QueryBuilders.prefixQuery("names", query.text.toLowerCase())
 
         val searchBuilder = SearchSourceBuilder()
             .query(queryBuilder)
