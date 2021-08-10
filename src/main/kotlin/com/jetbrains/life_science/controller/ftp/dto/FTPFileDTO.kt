@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.approach.draft.ftp.dto
+package com.jetbrains.life_science.controller.ftp.dto
 
 data class FTPFileDTO(
     val name: String,

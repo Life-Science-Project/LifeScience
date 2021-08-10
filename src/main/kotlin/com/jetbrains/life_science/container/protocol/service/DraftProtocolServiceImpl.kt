@@ -88,4 +88,8 @@ class DraftProtocolServiceImpl(
         repository.save(draftProtocol)
         return draftProtocol
     }
+
+    override fun hasFile(draftProtocolId: Long, file: FTPFile): Boolean {
+        return repository.existsByIdAndFilesContains(draftProtocolId, file)
+    }
 }

@@ -1,7 +1,7 @@
-package com.jetbrains.life_science.controller.approach.draft.ftp
+package com.jetbrains.life_science.controller.protocol.draft.ftp
 
-import com.jetbrains.life_science.container.approach.entity.DraftApproach
-import com.jetbrains.life_science.container.approach.service.DraftApproachService
+import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
+import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.controller.ftp.dto.FTPFileDTOToInfoAdapter
 import com.jetbrains.life_science.controller.ftp.view.FTPFileView
 import com.jetbrains.life_science.controller.ftp.view.FTPFileViewMapper
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping("/api/approaches/draft/{approachId}/ftp")
-class DraftApproachFTPController(
-    val draftApproachService: DraftApproachService,
+@RequestMapping("/api/protocols/draft/{protocolId}/ftp")
+class DraftProtocolFTPController(
+    val draftProtocolService: DraftProtocolService,
     val ftpFileService: FTPFileService,
     val mapper: FTPFileViewMapper
 ) {
@@ -32,14 +32,14 @@ class DraftApproachFTPController(
         produces = [MediaType.ALL_VALUE]
     )
     fun getFile(
-        @PathVariable approachId: Long,
+        @PathVariable protocolId: Long,
         @PathVariable fileId: Long,
         @AuthenticationPrincipal credentials: Credentials
     ): ByteArray {
-        val approach = draftApproachService.get(approachId)
-        checkOwnerAccess(approach, credentials)
+        val protocol = draftProtocolService.get(protocolId)
+        checkOwnerAccess(protocol, credentials)
         val file = ftpFileService.getInfo(fileId)
-        if (draftApproachService.hasFile(approachId, file)) {
+        if (draftProtocolService.hasFile(protocolId, file)) {
             return ftpFileService.get(fileId)
         } else {
             throw FTPFileNotFoundException("File $fileId is not found")
@@ -48,37 +48,37 @@ class DraftApproachFTPController(
 
     @PostMapping("/")
     fun saveFile(
-        @PathVariable approachId: Long,
+        @PathVariable protocolId: Long,
         @RequestParam("file") file: MultipartFile,
         @AuthenticationPrincipal credentials: Credentials
     ): FTPFileView {
-        val approach = draftApproachService.get(approachId)
-        checkOwnerAccess(approach, credentials)
-        val info = FTPFileDTOToInfoAdapter(file, "/approach/draft/${file.originalFilename}")
+        val protocol = draftProtocolService.get(protocolId)
+        checkOwnerAccess(protocol, credentials)
+        val info = FTPFileDTOToInfoAdapter(file, "/protocol/draft/${file.originalFilename}")
         val ftpFile = ftpFileService.create(info)
-        draftApproachService.addFile(approachId, ftpFile)
+        draftProtocolService.addFile(protocolId, ftpFile)
         return mapper.toView(ftpFile)
     }
 
     @DeleteMapping("/{fileId}")
     fun deleteFile(
-        @PathVariable approachId: Long,
+        @PathVariable protocolId: Long,
         @PathVariable fileId: Long,
         @AuthenticationPrincipal credentials: Credentials
     ) {
-        val approach = draftApproachService.get(approachId)
-        checkOwnerAccess(approach, credentials)
+        val protocol = draftProtocolService.get(protocolId)
+        checkOwnerAccess(protocol, credentials)
         val file = ftpFileService.getInfo(fileId)
-        if (draftApproachService.hasFile(approachId, file)) {
-            draftApproachService.removeFile(approachId, file)
+        if (draftProtocolService.hasFile(protocolId, file)) {
+            draftProtocolService.removeFile(protocolId, file)
             ftpFileService.delete(file.id)
         } else {
             throw FTPFileNotFoundException("File $fileId is not found")
         }
     }
 
-    fun checkOwnerAccess(approach: DraftApproach, credentials: Credentials) {
-        if (approach.owner.id != credentials.id) {
+    fun checkOwnerAccess(protocol: DraftProtocol, credentials: Credentials) {
+        if (protocol.owner.id != credentials.id) {
             throw ForbiddenOperationException()
         }
     }

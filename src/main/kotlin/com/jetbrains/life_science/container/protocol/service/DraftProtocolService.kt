@@ -26,4 +26,6 @@ interface DraftProtocolService {
     fun addFile(draftProtocolId: Long, file: FTPFile): DraftProtocol
 
     fun removeFile(draftProtocolId: Long, file: FTPFile): DraftProtocol
+
+    fun hasFile(draftProtocolId: Long, file: FTPFile): Boolean
 }

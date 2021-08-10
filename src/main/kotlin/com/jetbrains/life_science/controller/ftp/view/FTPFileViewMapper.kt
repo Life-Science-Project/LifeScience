@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.approach.draft.ftp.view
+package com.jetbrains.life_science.controller.ftp.view
 
 import com.jetbrains.life_science.ftp.entity.FTPFile
 import org.springframework.stereotype.Component

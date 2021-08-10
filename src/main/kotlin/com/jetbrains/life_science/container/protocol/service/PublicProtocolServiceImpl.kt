@@ -6,6 +6,7 @@ import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.container.protocol.factory.PublicProtocolFactory
 import com.jetbrains.life_science.container.protocol.repository.PublicProtocolRepository
 import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
+import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
 
@@ -26,6 +27,10 @@ class PublicProtocolServiceImpl(
         val savedPublicProtocol = repository.save(publicProtocol)
         searchUnitService.createSearchUnit(savedPublicProtocol)
         return savedPublicProtocol
+    }
+
+    override fun hasFile(id: Long, file: FTPFile): Boolean {
+        return repository.existsByIdAndFilesContains(id, file)
     }
 
     override fun hasSection(id: Long, section: Section): Boolean {

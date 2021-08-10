@@ -256,7 +256,8 @@ class PublishApproachRequestServiceTest {
             sections = mutableListOf(),
             categories = mutableListOf(),
             creationDate = LocalDateTime.now(UTCZone),
-            participants = mutableListOf(owner)
+            participants = mutableListOf(owner),
+            files = mutableListOf()
         )
 
     private fun createReview(

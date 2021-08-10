@@ -6,6 +6,7 @@ import com.jetbrains.life_science.container.approach.factory.PublicApproachFacto
 import com.jetbrains.life_science.container.approach.repository.PublicApproachRepository
 import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
 import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
+import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import org.springframework.stereotype.Service
 
@@ -26,6 +27,10 @@ class PublicApproachServiceImpl(
         val savedPublicApproach = repository.save(publicApproach)
         searchUnitService.createSearchUnit(savedPublicApproach)
         return savedPublicApproach
+    }
+
+    override fun hasFile(id: Long, file: FTPFile): Boolean {
+        return repository.existsByIdAndFilesContains(id, file)
     }
 
     override fun addSection(id: Long, section: Section) {

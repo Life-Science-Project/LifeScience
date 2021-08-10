@@ -346,6 +346,7 @@ class DraftProtocolServiceTest {
             coAuthors = mutableListOf(),
             categories = mutableListOf(),
             protocols = mutableListOf(),
-            creationDate = LocalDateTime.now(UTCZone)
+            creationDate = LocalDateTime.now(UTCZone),
+            files = mutableListOf()
         )
 }

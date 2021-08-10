@@ -5,44 +5,44 @@ import org.apache.commons.net.ftp.FTPClient
 import org.springframework.stereotype.Service
 import java.io.InputStream
 import java.io.OutputStream
+import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
 
 @Service
 class FTPServiceImpl(
     val config: FTPConfig
 ) : FTPService {
 
-    lateinit var client: FTPClient
+    val client = FTPClient()
 
+    @PostConstruct
     override fun open(): Boolean {
-        client = FTPClient()
-        client.connect(config.server, config.port)
-        client.login(config.username, config.password)
-        client.setFileType(FTPClient.BINARY_FILE_TYPE)
-        return true
+        with(client) {
+            connect(config.server, config.port)
+            return login(config.username, config.password).also {
+                setFileType(FTPClient.BINARY_FILE_TYPE)
+            }
+        }
     }
 
+    @PreDestroy
     override fun close(): Boolean {
-        return if (this::client.isInitialized) {
-            client.logout()
-            client.disconnect()
-            true
-        } else {
-            false
+        with(client) {
+            return logout().also {
+                disconnect()
+            }
         }
     }
 
     override fun getFile(remotePath: String, outputStream: OutputStream): Boolean {
-        open()
-        return client.retrieveFile(remotePath, outputStream).also { close() }
+        return client.retrieveFile(remotePath, outputStream)
     }
 
     override fun saveFile(destPath: String, inputStream: InputStream): Boolean {
-        open()
-        return client.storeFile(destPath, inputStream).also { close() }
+        return client.storeFile(destPath, inputStream)
     }
 
     override fun deleteFile(remotePath: String): Boolean {
-        open()
-        return client.deleteFile(remotePath).also { close() }
+        return client.deleteFile(remotePath)
     }
 }
