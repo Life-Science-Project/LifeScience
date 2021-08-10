@@ -40,4 +40,9 @@ class FTPServiceImpl(
         open()
         return client.storeFile(destPath, inputStream).also { close() }
     }
+
+    override fun deleteFile(remotePath: String): Boolean {
+        open()
+        return client.deleteFile(remotePath).also { close() }
+    }
 }

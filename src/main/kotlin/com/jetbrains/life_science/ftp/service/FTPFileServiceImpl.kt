@@ -36,4 +36,10 @@ class FTPFileServiceImpl(
         ftpService.getFile(file.path, output)
         return output.toByteArray()
     }
+
+    override fun delete(id: Long) {
+        val file = getInfo(id)
+        ftpService.deleteFile(file.path)
+        repository.delete(file)
+    }
 }

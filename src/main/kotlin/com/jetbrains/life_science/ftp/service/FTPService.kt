@@ -9,4 +9,5 @@ interface FTPService {
 
     fun getFile(remotePath: String, outputStream: OutputStream): Boolean
     fun saveFile(destPath: String, inputStream: InputStream): Boolean
+    fun deleteFile(remotePath: String): Boolean
 }

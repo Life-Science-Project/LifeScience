@@ -261,7 +261,8 @@ class PublishProtocolRequestServiceTest {
             owner = owner,
             approach = approach,
             sections = mutableListOf(),
-            participants = mutableListOf(owner)
+            participants = mutableListOf(owner),
+            files = mutableListOf()
         )
 
     private fun createReview(
@@ -288,6 +289,7 @@ class PublishProtocolRequestServiceTest {
         categories = mutableListOf(),
         creationDate = date,
         coAuthors = mutableListOf(),
-        protocols = mutableListOf()
+        protocols = mutableListOf(),
+        files = mutableListOf()
     )
 }

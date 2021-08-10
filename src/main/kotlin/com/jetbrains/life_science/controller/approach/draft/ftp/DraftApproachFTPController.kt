@@ -11,6 +11,7 @@ import com.jetbrains.life_science.ftp.service.FTPFileService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.http.MediaType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -45,7 +46,7 @@ class DraftApproachFTPController(
         }
     }
 
-    @PostMapping(value = ["/"])
+    @PostMapping("/")
     fun saveFile(
         @PathVariable approachId: Long,
         @RequestParam("file") file: MultipartFile,
@@ -57,6 +58,23 @@ class DraftApproachFTPController(
         val ftpFile = ftpFileService.create(info)
         draftApproachService.addFile(approachId, ftpFile)
         return mapper.toView(ftpFile)
+    }
+
+    @DeleteMapping("/{fileId}")
+    fun deleteFile(
+        @PathVariable approachId: Long,
+        @PathVariable fileId: Long,
+        @AuthenticationPrincipal credentials: Credentials
+    ) {
+        val approach = draftApproachService.get(approachId)
+        checkOwnerAccess(approach, credentials)
+        val file = ftpFileService.getInfo(fileId)
+        if (draftApproachService.hasFile(approachId, file)) {
+            draftApproachService.removeFile(approachId, file)
+            ftpFileService.delete(file.id)
+        } else {
+            throw FTPFileNotFoundException("File $fileId is not found")
+        }
     }
 
     fun checkOwnerAccess(approach: DraftApproach, credentials: Credentials) {

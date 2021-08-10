@@ -6,4 +6,5 @@ interface FTPFileService {
     fun create(info: FTPFileInfo): FTPFile
     fun getInfo(id: Long): FTPFile
     fun get(id: Long): ByteArray
+    fun delete(id: Long)
 }
