@@ -34,7 +34,10 @@ class Credentials(
 
 ) : UserDetails {
 
-    @OneToOne(cascade = [CascadeType.PERSIST, CascadeType.REMOVE], fetch = FetchType.LAZY)
+    @OneToOne(
+        cascade = [CascadeType.PERSIST, CascadeType.REMOVE],
+        fetch = FetchType.LAZY
+    )
     var userPersonalData: UserPersonalData? = null
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {

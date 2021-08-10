@@ -1,8 +1,8 @@
 package com.jetbrains.life_science.controller.approach.draft
 
+import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
-import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAddParticipantDTO
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftCategoryCreationDTOToInfoAdapter
@@ -13,9 +13,17 @@ import com.jetbrains.life_science.review.request.service.publish.PublishApproach
 import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.user.data.service.UserPersonalDataService
 import com.jetbrains.life_science.util.UTCZone
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 
 @RestController
@@ -25,13 +33,14 @@ class DraftApproachController(
     val viewMapper: DraftApproachViewMapper,
     val categoryService: CategoryService,
     val publishApproachRequestService: PublishApproachRequestService,
-    val credentialsService: CredentialsService
+    val credentialsService: CredentialsService,
+    val userPersonalDataService: UserPersonalDataService
 ) {
 
     @GetMapping("/{approachId}")
     fun getApproach(@PathVariable approachId: Long): DraftApproachView {
         val approach = draftApproachService.get(approachId)
-        return viewMapper.toView(approach)
+        return viewMapper.toView(approach, approach.participants.mapNotNull { it.userPersonalData })
     }
 
     @PostMapping
@@ -42,7 +51,8 @@ class DraftApproachController(
         val category = categoryService.getCategory(dto.initialCategoryId)
         val info = DraftCategoryCreationDTOToInfoAdapter(dto, category, author)
         val approach = draftApproachService.create(info)
-        return viewMapper.toView(approach)
+        val usersData = listOf(userPersonalDataService.getByCredentials(author))
+        return viewMapper.toView(approach, usersData)
     }
 
     @PatchMapping("/{approachId}/send")

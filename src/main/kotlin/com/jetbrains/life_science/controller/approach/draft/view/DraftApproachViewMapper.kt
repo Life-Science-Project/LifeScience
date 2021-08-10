@@ -14,8 +14,8 @@ class DraftApproachViewMapper(
     val categoryViewMapper: CategoryViewMapper
 ) {
 
-    fun toView(draftApproach: DraftApproach): DraftApproachView {
-        val users = userViewMapper.toShortViewAll(extractUsers(draftApproach))
+    fun toView(draftApproach: DraftApproach, usersData: List<UserPersonalData>): DraftApproachView {
+        val users = userViewMapper.toShortViewAll(usersData)
         val sections = sectionViewMapper.toViewShortAll(draftApproach.sections)
         val categories = categoryViewMapper.toViewsShort(draftApproach.categories)
         return DraftApproachView(
@@ -25,9 +25,5 @@ class DraftApproachViewMapper(
             participants = users,
             categories = categories
         )
-    }
-
-    fun extractUsers(draftApproach: DraftApproach): List<UserPersonalData> {
-        return draftApproach.participants.mapNotNull { it.userPersonalData }
     }
 }
