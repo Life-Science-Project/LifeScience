@@ -107,7 +107,7 @@ internal class DraftProtocolControllerTest : ApiTest() {
         // Assert
         Assertions.assertEquals(404_003, exceptionView.systemCode)
     }
-    
+
     /**
      * Successful adding user to protocol participants.
      */

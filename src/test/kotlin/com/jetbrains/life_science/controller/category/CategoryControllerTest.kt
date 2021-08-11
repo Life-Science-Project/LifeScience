@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.jdbc.Sql
-import java.time.LocalDateTime
 import javax.annotation.PostConstruct
 
 @Sql("/scripts/initial_data.sql")
