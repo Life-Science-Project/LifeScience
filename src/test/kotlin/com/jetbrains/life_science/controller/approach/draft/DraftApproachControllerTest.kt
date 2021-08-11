@@ -306,8 +306,4 @@ internal class DraftApproachControllerTest : ApiTest() {
     private fun makePath(addition: Any): String {
         return "$path/$addition"
     }
-
-    fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
-        return LocalDateTime.of(year, month, day, 0, 0, 0)
-    }
 }

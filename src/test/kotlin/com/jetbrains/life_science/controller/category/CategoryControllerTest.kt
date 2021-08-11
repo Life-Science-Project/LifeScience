@@ -473,10 +473,6 @@ internal class CategoryControllerTest : ApiTest() {
         assertTrue(parentCategory.subCategories.none { it.id == childId })
     }
 
-    fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
-        return LocalDateTime.of(year, month, day, 0, 0, 0)
-    }
-
     fun makePath(suffix: String): String {
         return pathPrefix + suffix
     }
