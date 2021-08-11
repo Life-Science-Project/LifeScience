@@ -2,7 +2,7 @@ package com.jetbrains.life_science.controller.approach.draft
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAddParticipantDTO
-import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
+import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachDTO
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.user.view.UserShortView
@@ -74,7 +74,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `create method with base sections test`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 1
         )
@@ -104,7 +104,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `create method with wrong initial parent category id`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 199
         )
@@ -125,7 +125,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `create method by regular user failure test`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 199
         )
