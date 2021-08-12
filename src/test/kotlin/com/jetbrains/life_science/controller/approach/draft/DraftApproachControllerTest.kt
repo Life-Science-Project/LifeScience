@@ -137,49 +137,6 @@ internal class DraftApproachControllerTest : ApiTest() {
     }
 
     /**
-     * Test checks sending to publication draft approach
-     */
-    @Test
-    fun `send to publication test`() {
-        val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        patchAuthorized(makePath("1/send"), loginAccessToken)
-
-        val request = publishApproachRequestRepository.findAll().filter { it.approach.id == 1L }
-        assertTrue(request.size == 1)
-    }
-
-    /**
-     * Test checks reject to publication by other user
-     *
-     * Expected 403 http code and 403_000 system code result
-     * with requested category id in view arguments.
-     */
-    @Test
-    fun `send to publication by regular user`() {
-        val loginAccessToken = loginAccessToken("simple@gmail.ru", "user123")
-        val request = patchRequestAuthorized(makePath("1/send"), loginAccessToken)
-
-        val exceptionView = getApiExceptionView(403, request)
-
-        assertEquals(403_000, exceptionView.systemCode)
-    }
-
-    /**
-     * Test checks reject to publication by anonymous user
-     *
-     * Expected 403 http code and 403_000 system code result
-     * with requested category id in view arguments.
-     */
-    @Test
-    fun `send to publication by anonymous user`() {
-        val request = patchRequest(makePath("1/send"))
-
-        val exceptionView = getApiExceptionView(403, request)
-
-        assertEquals(403_000, exceptionView.systemCode)
-    }
-
-    /**
      * Test checks user addition to participants
      */
     @Test
