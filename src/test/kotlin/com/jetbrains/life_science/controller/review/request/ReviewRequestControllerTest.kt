@@ -50,7 +50,7 @@ internal class ReviewRequestControllerTest : ApiTest() {
 
         val exceptionView = getApiExceptionView(403, request)
 
-       assertEquals(403_000, exceptionView.systemCode)
+        assertEquals(403_000, exceptionView.systemCode)
     }
 
     /**
