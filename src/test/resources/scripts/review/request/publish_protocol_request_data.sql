@@ -17,9 +17,9 @@ values (3, parsedatetime('22-05-2021 12:53:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1,
 -- nextId = 4
 alter sequence publish_protocol_request_seq restart with 4;
 
-insert into review(id, comment, date, resolution, reviewer_id)
+merge into review(id, comment, date, resolution, reviewer_id)
 values (1, 'first review', parsedatetime('22-05-2021 12:54:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 1, 3);
-insert into review(id, comment, date, resolution, reviewer_id)
+merge into review(id, comment, date, resolution, reviewer_id)
 values (2, 'second review', parsedatetime('22-05-2021 12:55:47.00', 'dd-MM-yyyy hh:mm:ss.SS'), 0, 3);
 -- nextId = 3
 alter sequence review_seq restart with 3;

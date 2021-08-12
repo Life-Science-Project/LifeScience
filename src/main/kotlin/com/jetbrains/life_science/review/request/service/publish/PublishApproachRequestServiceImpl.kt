@@ -49,9 +49,6 @@ class PublishApproachRequestServiceImpl(
     @Transactional
     override fun delete(id: Long) {
         val request = get(id)
-        if (request.state != RequestState.CANCELED) {
-            throw RequestImmutableStateException("Can't delete active request")
-        }
         request.reviews.forEach {
             reviewService.deleteReview(it.id)
         }

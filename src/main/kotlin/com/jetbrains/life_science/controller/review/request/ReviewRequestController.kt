@@ -6,6 +6,10 @@ import com.jetbrains.life_science.controller.review.request.dto.DraftApproachToP
 import com.jetbrains.life_science.controller.review.request.dto.DraftProtocolToPublicationRequestAdapter
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.exception.not_found.ReviewRequestNotFoundException
+import com.jetbrains.life_science.exception.request.RequestImmutableStateException
+import com.jetbrains.life_science.review.request.entity.PublishApproachRequest
+import com.jetbrains.life_science.review.request.entity.PublishProtocolRequest
+import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestService
 import com.jetbrains.life_science.review.request.service.publish.PublishProtocolRequestService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
@@ -43,7 +47,8 @@ class ReviewRequestController(
         @PathVariable requestId: Long,
         @AuthenticationPrincipal author: Credentials
     ) {
-        checkApproachAndRequestAuthorities(approachId, author, requestId)
+        val request = publishApproachRequestService.get(requestId)
+        checkApproachAndRequestAuthorities(approachId, author, request)
         publishApproachRequestService.cancel(requestId)
     }
 
@@ -53,7 +58,11 @@ class ReviewRequestController(
         @PathVariable requestId: Long,
         @AuthenticationPrincipal author: Credentials
     ) {
-        checkApproachAndRequestAuthorities(approachId, author, requestId)
+        val request = publishApproachRequestService.get(requestId)
+        if (request.state != RequestState.CANCELED) {
+            throw RequestImmutableStateException("Can't delete active request")
+        }
+        checkApproachAndRequestAuthorities(approachId, author, request)
         publishApproachRequestService.delete(requestId)
     }
 
@@ -74,7 +83,8 @@ class ReviewRequestController(
         @PathVariable requestId: Long,
         @AuthenticationPrincipal author: Credentials
     ) {
-        checkProtocolAndRequestAuthorities(protocolId, author, requestId)
+        val request = publishProtocolRequestService.get(requestId)
+        checkProtocolAndRequestAuthorities(protocolId, author, request)
         publishProtocolRequestService.cancel(requestId)
     }
 
@@ -84,7 +94,11 @@ class ReviewRequestController(
         @PathVariable requestId: Long,
         @AuthenticationPrincipal author: Credentials
     ) {
-        checkProtocolAndRequestAuthorities(protocolId, author, requestId)
+        val request = publishProtocolRequestService.get(requestId)
+        if (request.state != RequestState.CANCELED) {
+            throw RequestImmutableStateException("Can't delete active request")
+        }
+        checkProtocolAndRequestAuthorities(protocolId, author, request)
         publishProtocolRequestService.delete(requestId)
     }
 
@@ -97,11 +111,10 @@ class ReviewRequestController(
     private fun checkApproachAndRequestAuthorities(
         approachId: Long,
         author: Credentials,
-        requestId: Long
+        request: PublishApproachRequest
     ) {
         val approach = draftApproachService.get(approachId)
         checkOwnerOrAdminAccess(approach.owner, author)
-        val request = publishApproachRequestService.get(requestId)
         if (request.approach.id != approachId) {
             throw ReviewRequestNotFoundException("Review request with id ${request.id} is not found in that approach")
         }
@@ -110,11 +123,10 @@ class ReviewRequestController(
     private fun checkProtocolAndRequestAuthorities(
         protocolId: Long,
         author: Credentials,
-        requestId: Long
+        request: PublishProtocolRequest
     ) {
         val protocol = draftProtocolService.get(protocolId)
         checkOwnerOrAdminAccess(protocol.owner, author)
-        val request = publishProtocolRequestService.get(requestId)
         if (request.protocol.id != protocolId) {
             throw ReviewRequestNotFoundException("Review request with id ${request.id} is not found in that protocol")
         }
