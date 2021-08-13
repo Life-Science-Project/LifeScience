@@ -1,9 +1,16 @@
 package com.jetbrains.life_science.controller.review.request
 
 import com.jetbrains.life_science.ApiTest
+import com.jetbrains.life_science.container.protocol.view.ProtocolShortView
+import com.jetbrains.life_science.controller.approach.view.ApproachShortView
+import com.jetbrains.life_science.controller.review.request.view.ApproachReviewRequestView
+import com.jetbrains.life_science.controller.review.request.view.ProtocolReviewRequestView
+import com.jetbrains.life_science.controller.review.response.view.ReviewView
+import com.jetbrains.life_science.controller.user.view.UserShortView
 import com.jetbrains.life_science.review.request.entity.RequestState
 import com.jetbrains.life_science.review.request.repository.PublishApproachRequestRepository
 import com.jetbrains.life_science.review.request.repository.PublishProtocolRequestRepository
+import com.jetbrains.life_science.review.response.entity.ReviewResolution
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -26,6 +33,55 @@ internal class ReviewRequestControllerTest : ApiTest() {
 
     @Autowired
     lateinit var publishProtocolRequestRepository: PublishProtocolRequestRepository
+
+    /**
+     * Should return existing draft approach request
+     */
+    @Test
+    fun `get existing draft approach request`() {
+        // Prepare
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+        val expectedView = ApproachReviewRequestView(
+            id = 1,
+            date = timeOf(2021, 5, 22),
+            state = RequestState.PENDING,
+            reviews = listOf(
+                ReviewView(
+                    id = 1,
+                    comment = "first review",
+                    date = timeOf(2021, 5, 22),
+                    resolution = ReviewResolution.CHANGES_REQUESTED,
+                    reviewer = null
+                ),
+                ReviewView(
+                    id = 2,
+                    comment = "second review",
+                    date = timeOf(2021, 5, 22),
+                    resolution = ReviewResolution.APPROVE,
+                    reviewer = null
+                )
+            ),
+            editor = UserShortView(
+                id = 1,
+                fullName = "Alex"
+            ),
+            approach = ApproachShortView(
+                id = 1,
+                name = "first approach",
+                creationDate = timeOf(2021, 5, 22),
+                tags = emptyList()
+            )
+        )
+
+        // Action
+        val actualView = getViewAuthorized<ApproachReviewRequestView>(
+            makeDraftApproachPath("1/1"),
+            loginAccessToken
+        )
+
+        // Assert
+        assertEquals(expectedView, actualView)
+    }
 
     /**
      * Test checks sending to publication draft approach
@@ -62,6 +118,53 @@ internal class ReviewRequestControllerTest : ApiTest() {
         assertThrows<NoSuchElementException> {
             publishApproachRequestRepository.findById(2).get()
         }
+    }
+
+    /**
+     * Should return existing draft protocol request
+     */
+    @Test
+    fun `get existing draft protocol request`() {
+        // Prepare
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+        val expectedView = ProtocolReviewRequestView(
+            id = 1,
+            date = timeOf(2021, 5, 22),
+            state = RequestState.PENDING,
+            reviews = listOf(
+                ReviewView(
+                    id = 1,
+                    comment = "first review",
+                    date = timeOf(2021, 5, 22),
+                    resolution = ReviewResolution.CHANGES_REQUESTED,
+                    reviewer = null
+                ),
+                ReviewView(
+                    id = 2,
+                    comment = "second review",
+                    date = timeOf(2021, 5, 22),
+                    resolution = ReviewResolution.APPROVE,
+                    reviewer = null
+                )
+            ),
+            editor = UserShortView(
+                id = 1,
+                fullName = "Alex"
+            ),
+            protocol = ProtocolShortView(
+                id = 1,
+                name = "first protocol"
+            )
+        )
+
+        // Action
+        val actualView = getViewAuthorized<ProtocolReviewRequestView>(
+            makeDraftProtocolPath("1/1"),
+            loginAccessToken
+        )
+
+        // Assert
+        assertEquals(expectedView, actualView)
     }
 
     /**

@@ -4,6 +4,9 @@ import com.jetbrains.life_science.container.approach.service.DraftApproachServic
 import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.controller.review.request.dto.DraftApproachToPublicationRequestAdapter
 import com.jetbrains.life_science.controller.review.request.dto.DraftProtocolToPublicationRequestAdapter
+import com.jetbrains.life_science.controller.review.request.view.ApproachReviewRequestView
+import com.jetbrains.life_science.controller.review.request.view.ProtocolReviewRequestView
+import com.jetbrains.life_science.controller.review.request.view.ReviewRequestViewMapper
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.exception.not_found.ReviewRequestNotFoundException
 import com.jetbrains.life_science.exception.request.RequestImmutableStateException
@@ -15,6 +18,7 @@ import com.jetbrains.life_science.review.request.service.publish.PublishProtocol
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,7 +31,8 @@ class ReviewRequestController(
     val draftApproachService: DraftApproachService,
     val publishApproachRequestService: PublishApproachRequestService,
     val draftProtocolService: DraftProtocolService,
-    val publishProtocolRequestService: PublishProtocolRequestService
+    val publishProtocolRequestService: PublishProtocolRequestService,
+    val reviewRequestViewMapper: ReviewRequestViewMapper
 ) {
 
     @PostMapping("/approaches/draft/{approachId}")
@@ -39,6 +44,17 @@ class ReviewRequestController(
         checkOwnerOrAdminAccess(approach.owner, author)
         val publicationInfo = DraftApproachToPublicationRequestAdapter(author, approach)
         publishApproachRequestService.create(publicationInfo)
+    }
+
+    @GetMapping("/approaches/draft/{approachId}/{requestId}")
+    fun getDraftApproachRequest(
+        @PathVariable approachId: Long,
+        @PathVariable requestId: Long,
+        @AuthenticationPrincipal author: Credentials
+    ): ApproachReviewRequestView {
+        val request = publishApproachRequestService.get(requestId)
+        checkApproachAndRequestAuthorities(approachId, author, request)
+        return reviewRequestViewMapper.draftApproachRequestToView(request)
     }
 
     @PatchMapping("/approaches/draft/{approachId}/{requestId}/cancel")
@@ -75,6 +91,17 @@ class ReviewRequestController(
         checkOwnerOrAdminAccess(protocol.owner, author)
         val publicationInfo = DraftProtocolToPublicationRequestAdapter(author, protocol)
         publishProtocolRequestService.create(publicationInfo)
+    }
+
+    @GetMapping("/protocols/draft/{protocolId}/{requestId}")
+    fun getDraftProtocolRequest(
+        @PathVariable protocolId: Long,
+        @PathVariable requestId: Long,
+        @AuthenticationPrincipal author: Credentials
+    ): ProtocolReviewRequestView {
+        val request = publishProtocolRequestService.get(requestId)
+        checkProtocolAndRequestAuthorities(protocolId, author, request)
+        return reviewRequestViewMapper.draftProtocolRequestToView(request)
     }
 
     @PatchMapping("/protocols/draft/{protocolId}/{requestId}/cancel")
