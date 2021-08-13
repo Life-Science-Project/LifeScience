@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.patch
 import org.springframework.test.web.servlet.post
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import javax.persistence.EntityManager
 
 @SpringBootTest
@@ -204,5 +205,9 @@ abstract class ApiTest {
     fun getApiExceptionView(expectedHttpCode: Int, request: ResultActionsDsl): ApiExceptionView {
         val result = request.andExpect { status { isEqualTo(expectedHttpCode) } }.andReturn()
         return objectMapper.readValue(result.response.contentAsString)
+    }
+
+    fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
+        return LocalDateTime.of(year, month, day, 0, 0, 0)
     }
 }

@@ -2,7 +2,7 @@ package com.jetbrains.life_science.controller.approach.draft
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAddParticipantDTO
-import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
+import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachDTO
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.user.view.UserShortView
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
-import java.time.LocalDateTime
 
 @Sql(
     "/scripts/initial_data.sql",
@@ -74,7 +73,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `create method with base sections test`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 1
         )
@@ -104,7 +103,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `create method with wrong initial parent category id`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 199
         )
@@ -125,7 +124,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `create method by regular user failure test`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 199
         )
@@ -305,9 +304,5 @@ internal class DraftApproachControllerTest : ApiTest() {
 
     private fun makePath(addition: Any): String {
         return "$path/$addition"
-    }
-
-    fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
-        return LocalDateTime.of(year, month, day, 0, 0, 0)
     }
 }
