@@ -41,7 +41,7 @@ class UserPersonalData(
     @OneToOne(cascade = [CascadeType.PERSIST])
     var favoriteGroup: FavoriteGroup,
 
-    @OneToOne
+    @OneToOne(mappedBy = "userPersonalData")
     val credentials: Credentials
 
 )
