@@ -13,6 +13,7 @@ import com.jetbrains.life_science.review.request.service.publish.PublishApproach
 import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.user.data.service.UserPersonalDataService
 import com.jetbrains.life_science.util.UTCZone
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -25,13 +26,15 @@ class DraftApproachController(
     val viewMapper: DraftApproachViewMapper,
     val categoryService: CategoryService,
     val publishApproachRequestService: PublishApproachRequestService,
-    val credentialsService: CredentialsService
+    val credentialsService: CredentialsService,
+    val userPersonalDataService: UserPersonalDataService
 ) {
 
     @GetMapping("/{approachId}")
     fun getApproach(@PathVariable approachId: Long): DraftApproachView {
         val approach = draftApproachService.get(approachId)
-        return viewMapper.toView(approach)
+        val usersData = approach.participants.map { userPersonalDataService.getByCredentials(it) }
+        return viewMapper.toView(approach, usersData)
     }
 
     @PostMapping
@@ -42,7 +45,8 @@ class DraftApproachController(
         val category = categoryService.getCategory(dto.initialCategoryId)
         val info = DraftCategoryCreationDTOToInfoAdapter(dto, category, author)
         val approach = draftApproachService.create(info)
-        return viewMapper.toView(approach)
+        val usersData = approach.participants.map { userPersonalDataService.getByCredentials(it) }
+        return viewMapper.toView(approach, usersData)
     }
 
     @PatchMapping("/{approachId}/send")
