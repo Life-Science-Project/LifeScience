@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.test.context.jdbc.Sql
-import java.time.LocalDateTime
 
 @Sql(
     "/scripts/initial_data.sql",
@@ -60,9 +59,5 @@ internal class PublicApproachControllerTest : ApiTest() {
 
     private fun makePath(addition: Any): String {
         return "$path/$addition"
-    }
-
-    fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
-        return LocalDateTime.of(year, month, day, 0, 0, 0)
     }
 }

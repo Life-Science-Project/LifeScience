@@ -1,7 +1,7 @@
-insert into draft_protocol (id, name, owner_id)
-values (1, 'draft_protocol_test', 1);
-insert into draft_protocol (id, name, owner_id)
-values (2, 'draft_protocol_second_test', 1);
+insert into draft_protocol (id, name, approach_id, owner_id)
+values (1, 'draft_protocol_test', 1, 1);
+insert into draft_protocol (id, name, approach_id, owner_id)
+values (2, 'draft_protocol_second_test', 1, 1);
 -- nextId = 3
 alter sequence draft_protocol_seq restart with 3;
 

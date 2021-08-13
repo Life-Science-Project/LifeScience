@@ -13,7 +13,6 @@ import com.jetbrains.life_science.review.request.service.publish.PublishApproach
 import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
-import com.jetbrains.life_science.user.data.service.UserPersonalDataService
 import com.jetbrains.life_science.util.UTCZone
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -31,19 +30,23 @@ class DraftApproachController(
 ) {
 
     @GetMapping("/{approachId}")
-    fun getApproach(@PathVariable approachId: Long): DraftApproachView {
+    fun getApproach(
+        @PathVariable approachId: Long,
+        @AuthenticationPrincipal user: Credentials
+    ): DraftApproachView {
         val approach = draftApproachService.get(approachId)
+        checkDraftApproachAccess(approach, user)
         val usersData = approach.participants.map { userPersonalDataService.getByCredentials(it) }
         return viewMapper.toView(approach, usersData)
     }
 
     @PostMapping
     fun create(
-        @RequestBody dto: DraftApproachCreationDTO,
+        @RequestBody dto: DraftApproachDTO,
         @AuthenticationPrincipal author: Credentials
     ): DraftApproachView {
         val category = categoryService.getCategory(dto.initialCategoryId)
-        val info = DraftCategoryCreationDTOToInfoAdapter(dto, category, author)
+        val info = DraftApproachDTOToInfoAdapter(dto, category, author)
         val approach = draftApproachService.create(info)
         val usersData = approach.participants.map { userPersonalDataService.getByCredentials(it) }
         return viewMapper.toView(approach, usersData)
@@ -55,7 +58,7 @@ class DraftApproachController(
         @AuthenticationPrincipal author: Credentials
     ) {
         val approach = draftApproachService.get(approachId)
-        checkOwnerAccess(approach, author)
+        checkOwnerOrAdminAccess(approach, author)
         val publicationInfo = DraftApproachToPublicationRequestAdapter(author, approach)
         publishApproachRequestService.create(publicationInfo)
     }
@@ -68,7 +71,7 @@ class DraftApproachController(
     ) {
         val userCredentials = credentialsService.getByEmail(dto.email)
         val approach = draftApproachService.get(approachId)
-        checkOwnerAccess(approach, author)
+        checkOwnerOrAdminAccess(approach, author)
         draftApproachService.addParticipant(approach.id, userCredentials)
     }
 
@@ -84,14 +87,14 @@ class DraftApproachController(
         draftApproachService.removeParticipant(approach.id, user)
     }
 
-    fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {
-        if (approach.owner.id != credentials.id && !credentials.isAdminOrModerator()) {
+    fun checkDraftApproachAccess(approach: DraftApproach, credentials: Credentials) {
+        if (approach.participants.all { it.id != credentials.id } && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
     }
 
-    fun checkOwnerAccess(approach: DraftApproach, credentials: Credentials) {
-        if (approach.owner.id != credentials.id) {
+    fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {
+        if (approach.owner.id != credentials.id && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
     }
