@@ -13,7 +13,7 @@ class DraftProtocolViewMapper(
     val sectionViewMapper: SectionViewMapper,
     val userViewMapper: UserViewMapper
 ) {
-    fun toView(draftProtocol: DraftProtocol, usersData: List<UserPersonalData>): DraftProtocolView {
+    fun toView(draftProtocol: DraftProtocol, usersData: List<UserPersonalData?>): DraftProtocolView {
         return DraftProtocolView(
             id = draftProtocol.id,
             name = draftProtocol.name,

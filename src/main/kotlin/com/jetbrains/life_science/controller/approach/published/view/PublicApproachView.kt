@@ -10,6 +10,6 @@ data class PublicApproachView(
     val name: String,
     val categories: List<CategoryShortView>,
     val sections: List<SectionShortView>,
-    val coAuthors: List<UserShortView>,
+    val coAuthors: List<UserShortView?>,
     val protocols: List<ProtocolShortView>
 )
