@@ -32,8 +32,10 @@ class DraftProtocolController(
     ): DraftProtocolView {
         val protocol = draftProtocolService.get(protocolId)
         checkDraftProtocolAccess(protocol, user)
-        val usersData = protocol.participants.map { userPersonalDataService.getByCredentials(it) }
-        return viewMapper.toView(protocol, usersData)
+        return viewMapper.toView(
+            draftProtocol = protocol,
+            usersData = extractUsersData(protocol)
+        )
     }
 
     @PostMapping
@@ -44,8 +46,10 @@ class DraftProtocolController(
         val approach = approachService.get(dto.approachId)
         val info = DraftProtocolDTOToInfoAdapter(dto, approach, author)
         val protocol = draftProtocolService.create(info)
-        val usersData = protocol.participants.map { userPersonalDataService.getByCredentials(it) }
-        return viewMapper.toView(protocol, usersData)
+        return viewMapper.toView(
+            draftProtocol = protocol,
+            usersData = extractUsersData(protocol)
+        )
     }
 
     @PostMapping("/{protocolId}/participants")
@@ -72,13 +76,16 @@ class DraftProtocolController(
         draftProtocolService.removeParticipant(protocol.id, participant)
     }
 
-    fun checkDraftProtocolAccess(protocol: DraftProtocol, credentials: Credentials) {
+    private fun extractUsersData(protocol: DraftProtocol) =
+        protocol.participants.map { userPersonalDataService.getByCredentials(it) }
+
+    private fun checkDraftProtocolAccess(protocol: DraftProtocol, credentials: Credentials) {
         if (protocol.participants.all { it.id != credentials.id } && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
     }
 
-    fun checkOwnerOrAdminAccess(protocol: DraftProtocol, credentials: Credentials) {
+    private fun checkOwnerOrAdminAccess(protocol: DraftProtocol, credentials: Credentials) {
         if (protocol.owner.id != credentials.id && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }

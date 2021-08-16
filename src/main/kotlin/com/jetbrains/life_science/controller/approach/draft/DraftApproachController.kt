@@ -37,8 +37,10 @@ class DraftApproachController(
     ): DraftApproachView {
         val approach = draftApproachService.get(approachId)
         checkDraftApproachAccess(approach, user)
-        val usersData = approach.participants.map { userPersonalDataService.getByCredentials(it) }
-        return viewMapper.toView(approach, usersData)
+        return viewMapper.toView(
+            draftApproach = approach,
+            usersData = extractUsersData(approach)
+        )
     }
 
     @PostMapping
@@ -49,8 +51,10 @@ class DraftApproachController(
         val category = categoryService.getCategory(dto.initialCategoryId)
         val info = DraftApproachDTOToInfoAdapter(dto, category, author)
         val approach = draftApproachService.create(info)
-        val usersData = approach.participants.map { userPersonalDataService.getByCredentials(it) }
-        return viewMapper.toView(approach, usersData)
+        return viewMapper.toView(
+            draftApproach = approach,
+            usersData = extractUsersData(approach)
+        )
     }
 
     @PatchMapping("/{approachId}/send")
@@ -88,13 +92,16 @@ class DraftApproachController(
         draftApproachService.removeParticipant(approach.id, user)
     }
 
-    fun checkDraftApproachAccess(approach: DraftApproach, credentials: Credentials) {
+    private fun extractUsersData(approach: DraftApproach) =
+        approach.participants.map { userPersonalDataService.getByCredentials(it) }
+
+    private fun checkDraftApproachAccess(approach: DraftApproach, credentials: Credentials) {
         if (approach.participants.all { it.id != credentials.id } && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
     }
 
-    fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {
+    private fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {
         if (approach.owner.id != credentials.id && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
