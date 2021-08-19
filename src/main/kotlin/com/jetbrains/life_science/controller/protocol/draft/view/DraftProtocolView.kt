@@ -9,5 +9,5 @@ data class DraftProtocolView(
     val name: String,
     val approach: ApproachShortView,
     val sections: List<SectionShortView>,
-    val participants: List<UserShortView>
+    val participants: List<UserShortView?>
 )

@@ -38,10 +38,13 @@ class UserPersonalData(
 
     var about: String? = null,
 
-    @OneToOne(cascade = [CascadeType.PERSIST])
+    @OneToOne(
+        cascade = [CascadeType.PERSIST],
+        fetch = FetchType.LAZY
+    )
     var favoriteGroup: FavoriteGroup,
 
-    @OneToOne
+    @OneToOne(mappedBy = "userPersonalData")
     val credentials: Credentials
 
 )

@@ -13,17 +13,13 @@ class DraftProtocolViewMapper(
     val sectionViewMapper: SectionViewMapper,
     val userViewMapper: UserViewMapper
 ) {
-    fun toView(draftProtocol: DraftProtocol): DraftProtocolView {
+    fun toView(draftProtocol: DraftProtocol, usersData: List<UserPersonalData?>): DraftProtocolView {
         return DraftProtocolView(
             id = draftProtocol.id,
             name = draftProtocol.name,
             approach = approachViewMapper.toViewShort(draftProtocol.approach),
             sections = sectionViewMapper.toViewShortAll(draftProtocol.sections),
-            participants = userViewMapper.toShortViewAll(extractUsers(draftProtocol))
+            participants = userViewMapper.toShortViewAll(usersData)
         )
-    }
-
-    fun extractUsers(draftProtocol: DraftProtocol): List<UserPersonalData> {
-        return draftProtocol.participants.mapNotNull { it.userPersonalData }
     }
 }
