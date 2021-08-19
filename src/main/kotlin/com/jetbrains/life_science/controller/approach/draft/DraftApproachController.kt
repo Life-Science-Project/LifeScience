@@ -11,6 +11,8 @@ import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachVi
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.user.data.service.UserPersonalDataService
+import com.jetbrains.life_science.util.UTCZone
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,7 +28,8 @@ class DraftApproachController(
     val draftApproachService: DraftApproachService,
     val viewMapper: DraftApproachViewMapper,
     val categoryService: CategoryService,
-    val credentialsService: CredentialsService
+    val credentialsService: CredentialsService,
+    val userPersonalDataService: UserPersonalDataService
 ) {
 
     @GetMapping("/{approachId}")
@@ -36,7 +39,10 @@ class DraftApproachController(
     ): DraftApproachView {
         val approach = draftApproachService.get(approachId)
         checkDraftApproachAccess(approach, user)
-        return viewMapper.toView(approach)
+        return viewMapper.toView(
+            draftApproach = approach,
+            usersData = extractUsersData(approach)
+        )
     }
 
     @PostMapping
@@ -47,7 +53,10 @@ class DraftApproachController(
         val category = categoryService.getCategory(dto.initialCategoryId)
         val info = DraftApproachDTOToInfoAdapter(dto, category, author)
         val approach = draftApproachService.create(info)
-        return viewMapper.toView(approach)
+        return viewMapper.toView(
+            draftApproach = approach,
+            usersData = extractUsersData(approach)
+        )
     }
 
     @PostMapping("/{approachId}/participants")
@@ -74,13 +83,16 @@ class DraftApproachController(
         draftApproachService.removeParticipant(approach.id, user)
     }
 
-    fun checkDraftApproachAccess(approach: DraftApproach, credentials: Credentials) {
+    private fun extractUsersData(approach: DraftApproach) =
+        approach.participants.map { userPersonalDataService.getByCredentials(it) }
+
+    private fun checkDraftApproachAccess(approach: DraftApproach, credentials: Credentials) {
         if (approach.participants.all { it.id != credentials.id } && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
     }
 
-    fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {
+    private fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {
         if (approach.owner.id != credentials.id && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }

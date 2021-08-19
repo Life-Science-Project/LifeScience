@@ -11,37 +11,37 @@ insert into favorite_group (id, name) values (1, 'Favorite');
 -- nextFavoriteGroupId = 2
 alter sequence favorite_group_seq restart with 2;
 
--- login=email@email.ru, password=password, role = user
-insert into credentials (id, email, password)
-values (1, 'email@email.ru', '$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86');
--- login=admin@gmail.ru, password=password, role = admin
-insert into credentials (id, email, password)
-values (2, 'admin@gmail.ru', '$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86');
--- login=simple@gmail.ru, password=user123, role = user
-insert into credentials (id, email, password)
-values (3, 'simple@gmail.ru', '$2a$10$deGk.zxpc23BWE7Upb89IOG1eELe3cK0RIA0h91aB/wjLFOkE/a8.');
--- login=regular@gmail.ru, password=user123, role = user
-insert into credentials (id, email, password)
-values (4, 'regular@gmail.ru', '$2a$10$deGk.zxpc23BWE7Upb89IOG1eELe3cK0RIA0h91aB/wjLFOkE/a8.');
--- nextId = 4
-alter sequence credentials_seq restart with 5;
-
-insert into users (id, first_name, last_name, credentials_id, favorite_group_id, academic_degree)
-values (1, 'Alex', 'R', 1, 1, 1);
+insert into users (id, first_name, last_name, favorite_group_id, academic_degree)
+values (1, 'Alex', 'R', 1, 1);
 update credentials
 set user_personal_data_id = 1
 where id = 1;
-insert into users (id, first_name, last_name, credentials_id)
-values (2, 'Ben', 'S', 2);
+insert into users (id, first_name, last_name)
+values (2, 'Ben', 'S');
 update credentials
 set user_personal_data_id = 2
 where id = 2;
-insert into users (id, first_name, last_name, credentials_id)
-values (4, 'Regular', 'RS', 4);
+insert into users (id, first_name, last_name)
+values (4, 'Regular', 'RS');
 update credentials
 set user_personal_data_id = 4
 where id = 4;
 alter sequence user_personal_data_seq restart with 3;
+
+-- login=email@email.ru, password=password, role = user
+insert into credentials (id, email, password, user_personal_data_id)
+values (1, 'email@email.ru', '$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86', 1);
+-- login=admin@gmail.ru, password=password, role = admin
+insert into credentials (id, email, password, user_personal_data_id)
+values (2, 'admin@gmail.ru', '$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86', 2);
+-- login=simple@gmail.ru, password=user123, role = user
+insert into credentials (id, email, password, user_personal_data_id)
+values (3, 'simple@gmail.ru', '$2a$10$deGk.zxpc23BWE7Upb89IOG1eELe3cK0RIA0h91aB/wjLFOkE/a8.', null);
+-- login=regular@gmail.ru, password=user123, role = user
+insert into credentials (id, email, password, user_personal_data_id)
+values (4, 'regular@gmail.ru', '$2a$10$deGk.zxpc23BWE7Upb89IOG1eELe3cK0RIA0h91aB/wjLFOkE/a8.', 4);
+-- nextId = 4
+alter sequence credentials_seq restart with 5;
 
 insert into users_roles (user_id, role_id)
 values (1, 1);

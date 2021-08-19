@@ -11,6 +11,7 @@ import com.jetbrains.life_science.controller.protocol.draft.view.DraftProtocolVi
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
+import com.jetbrains.life_science.user.data.service.UserPersonalDataService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -20,7 +21,8 @@ class DraftProtocolController(
     val draftProtocolService: DraftProtocolService,
     val credentialsService: CredentialsService,
     val approachService: PublicApproachService,
-    val viewMapper: DraftProtocolViewMapper
+    val viewMapper: DraftProtocolViewMapper,
+    val userPersonalDataService: UserPersonalDataService
 ) {
 
     @GetMapping("/{protocolId}")
@@ -30,7 +32,10 @@ class DraftProtocolController(
     ): DraftProtocolView {
         val protocol = draftProtocolService.get(protocolId)
         checkDraftProtocolAccess(protocol, user)
-        return viewMapper.toView(protocol)
+        return viewMapper.toView(
+            draftProtocol = protocol,
+            usersData = extractUsersData(protocol)
+        )
     }
 
     @PostMapping
@@ -41,7 +46,10 @@ class DraftProtocolController(
         val approach = approachService.get(dto.approachId)
         val info = DraftProtocolDTOToInfoAdapter(dto, approach, author)
         val protocol = draftProtocolService.create(info)
-        return viewMapper.toView(protocol)
+        return viewMapper.toView(
+            draftProtocol = protocol,
+            usersData = extractUsersData(protocol)
+        )
     }
 
     @PostMapping("/{protocolId}/participants")
@@ -68,13 +76,16 @@ class DraftProtocolController(
         draftProtocolService.removeParticipant(protocol.id, participant)
     }
 
-    fun checkDraftProtocolAccess(protocol: DraftProtocol, credentials: Credentials) {
+    private fun extractUsersData(protocol: DraftProtocol) =
+        protocol.participants.map { userPersonalDataService.getByCredentials(it) }
+
+    private fun checkDraftProtocolAccess(protocol: DraftProtocol, credentials: Credentials) {
         if (protocol.participants.all { it.id != credentials.id } && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
     }
 
-    fun checkOwnerOrAdminAccess(protocol: DraftProtocol, credentials: Credentials) {
+    private fun checkOwnerOrAdminAccess(protocol: DraftProtocol, credentials: Credentials) {
         if (protocol.owner.id != credentials.id && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
