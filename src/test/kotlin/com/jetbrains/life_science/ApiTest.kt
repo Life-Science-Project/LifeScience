@@ -107,7 +107,7 @@ abstract class ApiTest {
         }
     }
 
-    fun postRequest(path: String, requestBody: Any): ResultActionsDsl {
+    fun postRequest(path: String, requestBody: Any?): ResultActionsDsl {
         return mockMvc.post(path) {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(requestBody)
