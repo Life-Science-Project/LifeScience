@@ -12,7 +12,6 @@ import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import com.jetbrains.life_science.user.data.service.UserPersonalDataService
-import com.jetbrains.life_science.util.UTCZone
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
