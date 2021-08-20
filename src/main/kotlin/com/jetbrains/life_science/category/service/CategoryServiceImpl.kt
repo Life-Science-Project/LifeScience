@@ -18,6 +18,7 @@ class CategoryServiceImpl(
     val searchService: CategorySearchUnitService
 ) : CategoryService {
 
+    @Transactional
     override fun createCategory(categoryInfo: CategoryInfo): Category {
         val parent = categoryInfo.parentId?.let { getCategoryParent(it) }
         val createdCategory = categoryFactory.createCategory(categoryInfo, parent)
