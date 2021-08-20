@@ -128,7 +128,7 @@ class PublishApproachRequestServiceTest {
     @Test
     fun `delete existing pending publish approach request`() {
         // Prepare data
-        val publishApproachId = 1L
+        val publishApproachId = 2L
 
         // Action
         service.delete(publishApproachId)

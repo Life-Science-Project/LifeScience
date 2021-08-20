@@ -1,18 +1,18 @@
 package com.jetbrains.life_science.container.protocol.view
 
-import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
+import com.jetbrains.life_science.container.protocol.entity.Protocol
 import org.springframework.stereotype.Component
 
 @Component
 class ProtocolViewMapper {
-    fun toViewShort(protocol: PublicProtocol): ProtocolShortView {
+    fun toViewShort(protocol: Protocol): ProtocolShortView {
         return ProtocolShortView(
             name = protocol.name,
             id = protocol.id
         )
     }
 
-    fun toViewsShort(protocols: List<PublicProtocol>): List<ProtocolShortView> {
+    fun toViewsShort(protocols: List<Protocol>): List<ProtocolShortView> {
         return protocols.map { toViewShort(it) }
     }
 }
