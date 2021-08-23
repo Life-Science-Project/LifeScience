@@ -32,6 +32,18 @@ class SectionServiceImpl(
         return repository.save(section)
     }
 
+    // Adds all the sections from the list in reversed order (to save the original order of sections without prevSection)
+    @Transactional
+    override fun createMany(infos: List<SectionCreationInfo>, allSections: List<Section>): List<Section> {
+        val currentSections = allSections.toMutableList()
+        infos.asReversed().forEach {
+            val section = factory.create(it)
+            moveOrdersOnCreate(it.prevSection, currentSections)
+            currentSections.add(repository.save(section))
+        }
+        return currentSections
+    }
+
     private fun moveOrdersOnCreate(previous: Section?, allSections: List<Section>) {
         if (previous == null) {
             allSections.onEach { it.order++ }
