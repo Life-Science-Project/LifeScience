@@ -45,6 +45,7 @@ class PublisherServiceImpl(
         return publicApproach
     }
 
+    @Transactional
     override fun publishDraftProtocol(draftProtocol: DraftProtocol): PublicProtocol {
 
         // Create public entity
@@ -61,12 +62,14 @@ class PublisherServiceImpl(
         return publicProtocol
     }
 
+    @Transactional
     override fun publishApproachEditRecord(approachEditRecord: ApproachEditRecord): PublicApproach {
         val approach = approachEditRecord.approach
         processEditRecord(approachEditRecord, publicApproachService, approach.sections, approach.id, approachEditRecordService::clear)
         return approach
     }
 
+    @Transactional
     override fun publishProtocolEditRecord(protocolEditRecord: ProtocolEditRecord): PublicProtocol {
         val protocol = protocolEditRecord.protocol
         processEditRecord(protocolEditRecord, publicProtocolService, protocol.sections, protocol.id, protocolEditRecordService::clear)
