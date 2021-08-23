@@ -28,7 +28,7 @@ class SectionServiceImpl(
     @Transactional
     override fun create(info: SectionCreationInfo): Section {
         val section = factory.create(info)
-        moveOrdersOnCreate(info.prevSection, info.allSections)
+        moveOrdersOnCreate(info.prevSection, info.allSections) { repository.save(it) }
         return repository.save(section)
     }
 
@@ -41,18 +41,21 @@ class SectionServiceImpl(
             moveOrdersOnCreate(it.prevSection, currentSections)
             currentSections.add(repository.save(section))
         }
-        return currentSections
+        return currentSections.reversed()
     }
 
-    private fun moveOrdersOnCreate(previous: Section?, allSections: List<Section>) {
+    private fun moveOrdersOnCreate(
+        previous: Section?,
+        allSections: List<Section>,
+        afterChange: (Section) -> Unit = {}
+    ) {
         if (previous == null) {
-            allSections.onEach { it.order++ }
-                .forEach { repository.save(it) }
+            allSections
         } else {
             allSections.filter { it.order > previous.order }
-                .onEach { it.order++ }
-                .forEach { repository.save(it) }
         }
+            .onEach { it.order++ }
+            .forEach { afterChange(it) }
     }
 
     @Transactional
