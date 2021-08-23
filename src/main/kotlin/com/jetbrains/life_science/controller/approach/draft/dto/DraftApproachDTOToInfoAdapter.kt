@@ -4,8 +4,8 @@ import com.jetbrains.life_science.container.approach.service.DraftApproachInfo
 import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 
-class DraftCategoryCreationDTOToInfoAdapter(
-    dto: DraftApproachCreationDTO,
+class DraftApproachDTOToInfoAdapter(
+    dto: DraftApproachDTO,
     initialCategory: Category,
     override val owner: Credentials
 ) : DraftApproachInfo {
