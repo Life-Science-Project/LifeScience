@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.controller.review.request
 
 import com.jetbrains.life_science.ApiTest
-import com.jetbrains.life_science.container.protocol.view.ProtocolShortView
+import com.jetbrains.life_science.controller.protocol.view.ProtocolShortView
 import com.jetbrains.life_science.controller.approach.view.ApproachShortView
 import com.jetbrains.life_science.controller.review.request.view.ApproachReviewRequestView
 import com.jetbrains.life_science.controller.review.request.view.ProtocolReviewRequestView
