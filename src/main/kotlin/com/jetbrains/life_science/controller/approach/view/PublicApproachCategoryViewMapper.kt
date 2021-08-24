@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.container.approach.view
+package com.jetbrains.life_science.controller.approach.view
 
 import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import org.springframework.stereotype.Component

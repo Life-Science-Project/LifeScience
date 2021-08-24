@@ -8,6 +8,8 @@ import com.jetbrains.life_science.section.entity.Section
 interface PublicProtocolService : ContainsSections {
     fun get(id: Long): PublicProtocol
 
+    fun getAllByOwnerId(ownerId: Long): List<PublicProtocol>
+
     fun create(protocol: DraftProtocol): PublicProtocol
 
     override fun addSection(id: Long, section: Section)
