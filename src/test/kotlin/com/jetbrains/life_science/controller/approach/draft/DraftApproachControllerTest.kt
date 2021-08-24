@@ -68,6 +68,40 @@ internal class DraftApproachControllerTest : ApiTest() {
     }
 
     /**
+     * Test should delete existing draft approach
+     */
+    @Test
+    fun `delete draft approach test`() {
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+
+        deleteAuthorized(makePath(1), loginAccessToken)
+
+        flushChanges()
+
+        val request = getAuthorized(makePath(1), loginAccessToken)
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_003, exceptionView.systemCode)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * Should return ApiExceptionView
+     *
+     * Expected 404 http code and 404_003 system code result
+     */
+    @Test
+    fun `delete not existent approach test`() {
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+        val request = deleteRequestAuthorized(makePath(199), loginAccessToken)
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_003, exceptionView.systemCode)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
      * Test check method creation
      */
     @Test

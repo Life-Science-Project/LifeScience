@@ -61,6 +61,38 @@ internal class DraftProtocolControllerTest : ApiTest() {
     }
 
     /**
+     * Test should delete existing draft protocol
+     */
+    @Test
+    fun `delete draft protocol test`() {
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+
+        deleteAuthorized(makePath(1), loginAccessToken)
+
+        val request = getAuthorized(makePath(1), loginAccessToken)
+        val exceptionView = getApiExceptionView(404, request)
+
+        Assertions.assertEquals(404_007, exceptionView.systemCode)
+        Assertions.assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * Should return ApiExceptionView
+     *
+     * Expected 404 http code and 404_007 system code result
+     */
+    @Test
+    fun `delete not existent protocol test`() {
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+        val request = deleteRequestAuthorized(makePath(199), loginAccessToken)
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        Assertions.assertEquals(404_007, exceptionView.systemCode)
+        Assertions.assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
      * Successful draft protocol creation.
      */
     @Test
