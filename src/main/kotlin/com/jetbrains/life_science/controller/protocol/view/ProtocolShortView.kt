@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.container.protocol.view
+package com.jetbrains.life_science.controller.protocol.view
 
 data class ProtocolShortView(
     val id: Long,
