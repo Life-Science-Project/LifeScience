@@ -71,4 +71,8 @@ class DraftProtocolServiceImpl(
         repository.save(draftProtocol)
         return draftProtocol
     }
+
+    override fun getAllByOwnerId(ownerId: Long): List<DraftProtocol> {
+        return repository.getAllByOwnerId(ownerId)
+    }
 }

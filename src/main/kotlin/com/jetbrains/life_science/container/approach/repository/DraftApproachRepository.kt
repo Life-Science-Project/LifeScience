@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface DraftApproachRepository : JpaRepository<DraftApproach, Long> {
     fun existsByIdAndSectionsContains(id: Long, section: Section): Boolean
     fun existsByIdAndParticipantsContains(id: Long, credentials: Credentials): Boolean
+    fun getAllByOwnerId(ownerId: Long): List<DraftApproach>
 }

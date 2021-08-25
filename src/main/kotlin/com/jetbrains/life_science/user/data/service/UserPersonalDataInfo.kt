@@ -11,5 +11,7 @@ interface UserPersonalDataInfo {
 
     val orcid: String?
 
+    val about: String?
+
     val researchId: String?
 }

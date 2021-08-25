@@ -21,4 +21,6 @@ interface DraftProtocolService {
     fun addSection(draftProtocolId: Long, section: Section): DraftProtocol
 
     fun removeSection(draftProtocolId: Long, section: Section): DraftProtocol
+
+    fun getAllByOwnerId(ownerId: Long): List<DraftProtocol>
 }

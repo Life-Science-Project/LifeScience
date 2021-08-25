@@ -62,6 +62,10 @@ class DraftApproachServiceImpl(
         return repository.existsByIdAndParticipantsContains(draftApproachId, user)
     }
 
+    override fun getAllByOwnerId(ownerId: Long): List<DraftApproach> {
+        return repository.getAllByOwnerId(ownerId)
+    }
+
     override fun addSection(id: Long, section: Section) {
         if (!hasSection(id, section)) {
             val draftApproach = get(id)

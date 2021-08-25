@@ -14,4 +14,8 @@ class ApproachViewMapper {
             tags = approach.tags
         )
     }
+
+    fun toViewsShort(approaches: List<Approach>): List<ApproachShortView> {
+        return approaches.map { toViewShort(it) }
+    }
 }
