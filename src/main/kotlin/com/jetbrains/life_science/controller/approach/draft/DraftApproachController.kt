@@ -9,6 +9,7 @@ import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachDTO
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachViewMapper
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
+import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import com.jetbrains.life_science.user.data.service.UserPersonalDataService
@@ -28,7 +29,8 @@ class DraftApproachController(
     val viewMapper: DraftApproachViewMapper,
     val categoryService: CategoryService,
     val credentialsService: CredentialsService,
-    val userPersonalDataService: UserPersonalDataService
+    val userPersonalDataService: UserPersonalDataService,
+    val sectionService: SectionService
 ) {
 
     @GetMapping("/{approachId}")
@@ -56,6 +58,20 @@ class DraftApproachController(
             draftApproach = approach,
             usersData = extractUsersData(approach)
         )
+    }
+
+    @DeleteMapping("/{approachId}")
+    fun delete(
+        @PathVariable approachId: Long,
+        @AuthenticationPrincipal user: Credentials
+    ) {
+        val approach = draftApproachService.get(approachId)
+        checkDraftApproachAccess(approach, user)
+        approach.sections.toList().forEach {
+            draftApproachService.removeSection(approachId, it)
+            sectionService.deleteById(it.id, emptyList())
+        }
+        draftApproachService.delete(approachId)
     }
 
     @PostMapping("/{approachId}/participants")
