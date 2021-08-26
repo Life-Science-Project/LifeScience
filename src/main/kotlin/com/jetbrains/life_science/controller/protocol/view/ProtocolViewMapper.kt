@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.container.protocol.view
+package com.jetbrains.life_science.controller.protocol.view
 
 import com.jetbrains.life_science.container.protocol.entity.Protocol
 import org.springframework.stereotype.Component

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.controller.review.request.view
 
-import com.jetbrains.life_science.container.protocol.view.ProtocolViewMapper
+import com.jetbrains.life_science.controller.protocol.view.ProtocolViewMapper
 import com.jetbrains.life_science.controller.approach.view.ApproachViewMapper
 import com.jetbrains.life_science.controller.review.response.view.ReviewViewMapper
 import com.jetbrains.life_science.controller.user.view.UserViewMapper

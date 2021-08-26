@@ -21,6 +21,10 @@ class PublicProtocolServiceImpl(
         }
     }
 
+    override fun getAllByOwnerId(ownerId: Long): List<PublicProtocol> {
+        return repository.getAllByOwnerId(ownerId)
+    }
+
     override fun create(protocol: DraftProtocol): PublicProtocol {
         val publicProtocol = factory.create(protocol)
         val savedPublicProtocol = repository.save(publicProtocol)

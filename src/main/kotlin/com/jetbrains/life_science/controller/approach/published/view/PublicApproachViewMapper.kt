@@ -4,7 +4,7 @@ import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.controller.category.view.CategoryViewMapper
 import com.jetbrains.life_science.controller.section.view.SectionViewMapper
 import com.jetbrains.life_science.controller.user.view.UserViewMapper
-import com.jetbrains.life_science.container.protocol.view.ProtocolViewMapper
+import com.jetbrains.life_science.controller.protocol.view.ProtocolViewMapper
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import org.springframework.stereotype.Component
 
