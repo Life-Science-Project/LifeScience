@@ -10,6 +10,8 @@ interface PublicApproachService : ContainsSections {
 
     fun create(approach: DraftApproach): PublicApproach
 
+    fun getAllByOwnerId(ownerId: Long): List<PublicApproach>
+
     override fun addSection(id: Long, section: Section)
 
     override fun removeSection(id: Long, section: Section)

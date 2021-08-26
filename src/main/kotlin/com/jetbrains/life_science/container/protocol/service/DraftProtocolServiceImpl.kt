@@ -83,4 +83,8 @@ class DraftProtocolServiceImpl(
             throw DraftProtocolNotFoundException("Draft approach with id $draftApproachId is not found")
         }
     }
+
+    override fun getAllByOwnerId(ownerId: Long): List<DraftProtocol> {
+        return repository.getAllByOwnerId(ownerId)
+    }
 }

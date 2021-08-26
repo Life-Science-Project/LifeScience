@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.controller.approach.published
 
 import com.jetbrains.life_science.ApiTest
-import com.jetbrains.life_science.container.protocol.view.ProtocolShortView
+import com.jetbrains.life_science.controller.protocol.view.ProtocolShortView
 import com.jetbrains.life_science.controller.approach.published.view.PublicApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.user.view.UserShortView

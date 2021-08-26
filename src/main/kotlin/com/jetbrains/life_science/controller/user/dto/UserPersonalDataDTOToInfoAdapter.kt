@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.user.data.dto
+package com.jetbrains.life_science.controller.user.dto
 
 import com.jetbrains.life_science.exception.not_found.DegreeNotFoundException
 import com.jetbrains.life_science.user.degree.AcademicDegree
@@ -16,6 +16,8 @@ class UserPersonalDataDTOToInfoAdapter(
         ?: throw DegreeNotFoundException("Academic degree ${dto.academicDegree} doesn't exist.")
 
     override val organisations = dto.organisations
+
+    override val about = dto.about
 
     override val orcid = dto.orcid
 

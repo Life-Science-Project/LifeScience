@@ -21,6 +21,10 @@ class PublicApproachServiceImpl(
         }
     }
 
+    override fun getAllByOwnerId(ownerId: Long): List<PublicApproach> {
+        return repository.getAllByOwnerId(ownerId)
+    }
+
     override fun create(approach: DraftApproach): PublicApproach {
         val publicApproach = factory.create(approach)
         val savedPublicApproach = repository.save(publicApproach)

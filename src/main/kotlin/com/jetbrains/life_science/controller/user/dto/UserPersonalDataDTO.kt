@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.user.data.dto
+package com.jetbrains.life_science.controller.user.dto
 
 data class UserPersonalDataDTO(
 
@@ -6,7 +6,9 @@ data class UserPersonalDataDTO(
 
     val academicDegree: String,
 
-    val organisations: List<String>,
+    val organisations: List<Long>,
+
+    val about: String?,
 
     val orcid: String?,
 
