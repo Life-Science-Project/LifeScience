@@ -1,7 +1,7 @@
-package com.jetbrains.life_science.controller.section.approach
+package com.jetbrains.life_science.controller.section.protocol
 
-import com.jetbrains.life_science.container.approach.entity.DraftApproach
-import com.jetbrains.life_science.container.approach.service.DraftApproachService
+import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
+import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.content.version.service.ContentVersionService
 import com.jetbrains.life_science.controller.section.dto.SectionCreationDTO
 import com.jetbrains.life_science.controller.section.dto.SectionCreationDTOToInfoAdapter
@@ -19,80 +19,65 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/approaches/draft/{approachId}/sections")
-class DraftApproachSectionController(
+@RequestMapping("/api/protocols/draft/{protocolId}/sections")
+class DraftProtocolSectionController(
     val sectionService: SectionService,
-    val draftApproachService: DraftApproachService,
+    val draftProtocolService: DraftProtocolService,
     val viewMapper: SectionViewMapper,
     val contentVersionService: ContentVersionService
 ) {
 
     @GetMapping("/{sectionId}")
     fun getSection(
-        @PathVariable approachId: Long,
+        @PathVariable protocolId: Long,
         @PathVariable sectionId: Long,
         @AuthenticationPrincipal credentials: Credentials
     ): SectionView {
-        val section = getSectionSecured(approachId, sectionId, credentials)
+        val section = getSectionSecured(protocolId, sectionId, credentials)
         val content = contentVersionService.findBySectionId(sectionId)
         return viewMapper.toView(section, content?.text)
     }
 
-    @PostMapping("/many")
-    fun createSections(
-        @PathVariable approachId: Long,
-        @RequestBody dto: List<SectionCreationDTO>,
-        @AuthenticationPrincipal credentials: Credentials
-    ): List<SectionView> {
-        val approach = getApproachSecured(approachId, credentials)
-        val sectionsInfo = dto.map { sectionDTO ->
-            val prevSection = sectionDTO.prevSectionId?.let { getSectionSecured(approach, it) }
-            SectionCreationDTOToInfoAdapter(sectionDTO, prevSection, approach.sections)
-        }
-        val createdSections = sectionService.createMany(sectionsInfo, approach.sections)
-        return viewMapper.toViewAll(createdSections)
-    }
-
     @PostMapping
     fun createSection(
-        @PathVariable approachId: Long,
+        @PathVariable protocolId: Long,
         @RequestBody dto: SectionCreationDTO,
         @AuthenticationPrincipal credentials: Credentials
     ): SectionView {
-        val approach = getApproachSecured(approachId, credentials)
-        val prevSection = dto.prevSectionId?.let { getSectionSecured(approach, it) }
-        val info = SectionCreationDTOToInfoAdapter(dto, prevSection, approach.sections)
+        val protocol = getProtocolSecured(protocolId, credentials)
+        val prevSection = dto.prevSectionId?.let { getSectionSecured(protocol, it) }
+        val info = SectionCreationDTOToInfoAdapter(dto, prevSection, protocol.sections)
         val section = sectionService.create(info)
-        draftApproachService.addSection(approachId, section)
+        draftProtocolService.addSection(protocolId, section)
         return viewMapper.toView(section)
     }
 
     @DeleteMapping("/{sectionId}")
     fun delete(
-        @PathVariable approachId: Long,
+        @PathVariable protocolId: Long,
         @PathVariable sectionId: Long,
         @AuthenticationPrincipal credentials: Credentials
     ) {
-        val approach = getApproachSecured(approachId, credentials)
+        val protocol = getProtocolSecured(protocolId, credentials)
         val section = sectionService.getById(sectionId)
-        draftApproachService.removeSection(approachId, section)
-        sectionService.deleteById(sectionId, approach.sections)
+        draftProtocolService.removeSection(protocolId, section)
+        sectionService.deleteById(sectionId, protocol.sections)
     }
 
     @PatchMapping("/{sectionId}")
     fun updateSection(
-        @PathVariable approachId: Long,
+        @PathVariable protocolId: Long,
         @PathVariable sectionId: Long,
         @AuthenticationPrincipal credentials: Credentials,
         @RequestBody dto: SectionDTO
     ): SectionView {
-        val approach = getApproachSecured(approachId, credentials)
-        val section = getSectionSecured(approach, sectionId)
+        val protocol = getProtocolSecured(protocolId, credentials)
+        val section = getSectionSecured(protocol, sectionId)
 
         if (section.published) throw SectionAlreadyPublishedException()
 
-        val prevSection = dto.prevSectionId?.let { getSectionSecured(approach, it) }
-        val info = SectionDTOToInfoAdapter(dto, approach.sections, prevSection)
+        val prevSection = dto.prevSectionId?.let { getSectionSecured(protocol, it) }
+        val info = SectionDTOToInfoAdapter(dto, protocol.sections, prevSection)
         val result = sectionService.update(section, info)
 
         return viewMapper.toView(result)
@@ -103,27 +88,27 @@ class DraftApproachSectionController(
         sectionId: Long,
         credentials: Credentials
     ): Section {
-        val approach = getApproachSecured(draftApproachId, credentials)
-        return getSectionSecured(approach, sectionId)
+        val protocol = getProtocolSecured(draftApproachId, credentials)
+        return getSectionSecured(protocol, sectionId)
     }
 
-    private fun getApproachSecured(
+    private fun getProtocolSecured(
         approachId: Long,
         credentials: Credentials
-    ): DraftApproach {
-        val approach = draftApproachService.get(approachId)
-        if (!draftApproachService.hasParticipant(approachId, credentials)) {
+    ): DraftProtocol {
+        val protocol = draftProtocolService.get(approachId)
+        if (!draftProtocolService.hasParticipant(approachId, credentials)) {
             throw ForbiddenOperationException()
         }
-        return approach
+        return protocol
     }
 
     private fun getSectionSecured(
-        draftApproach: DraftApproach,
+        draftProtocol: DraftProtocol,
         sectionId: Long
     ): Section {
         val section = sectionService.getById(sectionId)
-        if (!draftApproachService.hasSection(draftApproach.id, section)) {
+        if (!draftProtocolService.hasSection(draftProtocol.id, section)) {
             throw SectionNotFoundException(sectionId)
         }
         return sectionService.getById(sectionId)

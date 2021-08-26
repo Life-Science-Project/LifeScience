@@ -9,6 +9,7 @@ import com.jetbrains.life_science.controller.protocol.draft.dto.DraftProtocolDTO
 import com.jetbrains.life_science.controller.protocol.draft.view.DraftProtocolView
 import com.jetbrains.life_science.controller.protocol.draft.view.DraftProtocolViewMapper
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
+import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
 import com.jetbrains.life_science.user.data.service.UserPersonalDataService
@@ -22,7 +23,8 @@ class DraftProtocolController(
     val credentialsService: CredentialsService,
     val approachService: PublicApproachService,
     val viewMapper: DraftProtocolViewMapper,
-    val userPersonalDataService: UserPersonalDataService
+    val userPersonalDataService: UserPersonalDataService,
+    val sectionService: SectionService
 ) {
 
     @GetMapping("/{protocolId}")
@@ -50,6 +52,20 @@ class DraftProtocolController(
             draftProtocol = protocol,
             usersData = extractUsersData(protocol)
         )
+    }
+
+    @DeleteMapping("/{protocolId}")
+    fun delete(
+        @PathVariable protocolId: Long,
+        @AuthenticationPrincipal user: Credentials
+    ) {
+        val protocol = draftProtocolService.get(protocolId)
+        checkDraftProtocolAccess(protocol, user)
+        protocol.sections.toList().forEach {
+            draftProtocolService.removeSection(protocolId, it)
+            sectionService.deleteById(it.id, emptyList())
+        }
+        draftProtocolService.delete(protocolId)
     }
 
     @PostMapping("/{protocolId}/participants")
