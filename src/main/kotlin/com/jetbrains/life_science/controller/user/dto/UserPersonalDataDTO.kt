@@ -6,7 +6,7 @@ data class UserPersonalDataDTO(
 
     val academicDegree: String,
 
-    val organisations: List<String>,
+    val organisations: List<Long>,
 
     val about: String?,
 
