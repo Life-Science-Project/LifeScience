@@ -83,7 +83,6 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's draft protocols`() {
-
     }
 
     /**
@@ -91,7 +90,6 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's draft protocols without permission`() {
-
     }
 
     /**
@@ -99,7 +97,6 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's public protocols`() {
-
     }
 
     /**
@@ -107,7 +104,6 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's public protocols without permission`() {
-
     }
 
     /**
@@ -115,7 +111,6 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's draft approaches`() {
-
     }
 
     /**
@@ -123,7 +118,6 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's draft approaches without permission`() {
-
     }
 
     /**
@@ -131,7 +125,6 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's public approaches`() {
-
     }
 
     /**
@@ -139,6 +132,5 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's public approaches without permission`() {
-
     }
 }

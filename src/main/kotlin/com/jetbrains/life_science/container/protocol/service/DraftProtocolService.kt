@@ -26,5 +26,4 @@ interface DraftProtocolService : ContainsSections {
     override fun removeSection(id: Long, section: Section)
 
     fun getAllByOwnerId(ownerId: Long): List<DraftProtocol>
-
 }
