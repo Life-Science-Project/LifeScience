@@ -13,7 +13,10 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
 
-@Sql("/scripts/initial_data.sql")
+@Sql(
+    "/scripts/initial_data.sql",
+    "/scripts/user/user_controller_data.sql"
+)
 internal class UserControllerTest : ApiTest() {
 
     val pathPrefix = "/api/users"
@@ -73,5 +76,69 @@ internal class UserControllerTest : ApiTest() {
 
         assertEquals(403_000, exceptionView.systemCode)
         Assertions.assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * Should return list with views of user's draft protocols
+     */
+    @Test
+    fun `get user's draft protocols`() {
+
+    }
+
+    /**
+     * Should throw unauthorized exception
+     */
+    @Test
+    fun `get user's draft protocols without permission`() {
+
+    }
+
+    /**
+     * Should return list with views of user's public protocols
+     */
+    @Test
+    fun `get user's public protocols`() {
+
+    }
+
+    /**
+     * Should throw unauthorized exception
+     */
+    @Test
+    fun `get user's public protocols without permission`() {
+
+    }
+
+    /**
+     * Should return list with views of user's draft approaches
+     */
+    @Test
+    fun `get user's draft approaches`() {
+
+    }
+
+    /**
+     * Should throw unauthorized exception
+     */
+    @Test
+    fun `get user's draft approaches without permission`() {
+
+    }
+
+    /**
+     * Should return list with views of user's draft approaches
+     */
+    @Test
+    fun `get user's public approaches`() {
+
+    }
+
+    /**
+     * Should throw unauthorized exception
+     */
+    @Test
+    fun `get user's public approaches without permission`() {
+
     }
 }

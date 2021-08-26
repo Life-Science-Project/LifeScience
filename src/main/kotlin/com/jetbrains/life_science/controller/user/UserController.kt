@@ -42,6 +42,7 @@ class UserController(
     }
 
     @GetMapping("/{userId}/protocols/public")
+    @Transactional(readOnly = true)
     fun getPublicProtocols(
         @PathVariable userId: Long,
         @AuthenticationPrincipal credentials: Credentials
@@ -52,6 +53,7 @@ class UserController(
     }
 
     @GetMapping("/{userId}/protocols/draft")
+    @Transactional(readOnly = true)
     fun getDraftProtocols(
         @PathVariable userId: Long,
         @AuthenticationPrincipal credentials: Credentials
@@ -62,6 +64,7 @@ class UserController(
     }
 
     @GetMapping(" /{userId}/approaches/public")
+    @Transactional(readOnly = true)
     fun getPublicApproaches(
         @PathVariable userId: Long,
         @AuthenticationPrincipal credentials: Credentials
@@ -72,6 +75,7 @@ class UserController(
     }
 
     @GetMapping(" /{userId}/approaches/draft")
+    @Transactional(readOnly = true)
     fun getDraftApproaches(
         @PathVariable userId: Long,
         @AuthenticationPrincipal credentials: Credentials
