@@ -34,7 +34,7 @@ class CategoryServiceImpl(
         category.name = categoryInfo.name
         category.aliases = categoryInfo.aliases
         searchService.update(category)
-        return categoryRepository.save(category)
+        return category
     }
 
     private fun updateParents(categoryInfo: CategoryUpdateInfo, category: Category) {
