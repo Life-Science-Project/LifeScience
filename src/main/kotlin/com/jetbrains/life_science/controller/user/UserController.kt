@@ -63,7 +63,7 @@ class UserController(
         return protocolViewMapper.toViewsShort(draftProtocols)
     }
 
-    @GetMapping(" /{userId}/approaches/public")
+    @GetMapping("/{userId}/approaches/public")
     @Transactional(readOnly = true)
     fun getPublicApproaches(
         @PathVariable userId: Long,
@@ -74,7 +74,7 @@ class UserController(
         return approachViewMapper.toViewsShort(publicApproach)
     }
 
-    @GetMapping(" /{userId}/approaches/draft")
+    @GetMapping("/{userId}/approaches/draft")
     @Transactional(readOnly = true)
     fun getDraftApproaches(
         @PathVariable userId: Long,
