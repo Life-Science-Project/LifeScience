@@ -44,7 +44,6 @@ class ReplicatorServiceImpl(
         approachReplicator.deleteAll()
         sectionReplicator.deleteAll()
         categoryReplicator.deleteAll()
-        credentialsReplicator.deleteAll()
     }
 
     private fun decodeData(): CommonStorageEntity {
