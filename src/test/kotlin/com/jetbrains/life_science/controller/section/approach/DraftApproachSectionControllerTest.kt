@@ -33,7 +33,7 @@ internal class DraftApproachSectionControllerTest : ApiTest() {
     @PostConstruct
     fun setup() {
         elasticPopulator = ElasticPopulator(highLevelClient).apply {
-            addPopulator("content_version", "elastic/section_draft_approach_content_version.json")
+            addPopulator("content_version", "elastic/section_draft_content_version.json")
         }
     }
 

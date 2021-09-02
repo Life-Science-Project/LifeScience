@@ -49,26 +49,42 @@ class DraftProtocolServiceImpl(
         return repository.save(protocol)
     }
 
+    override fun hasParticipant(draftProtocolId: Long, user: Credentials): Boolean {
+        exists(draftProtocolId)
+        return repository.existsByIdAndParticipantsContains(draftProtocolId, user)
+    }
+
     override fun delete(draftProtocolId: Long) {
-        if (!repository.existsById(draftProtocolId)) {
-            throw DraftProtocolNotFoundException("Draft protocol with id $draftProtocolId is not found")
-        }
+        exists(draftProtocolId)
         repository.deleteById(draftProtocolId)
     }
 
-    override fun addSection(draftProtocolId: Long, section: Section): DraftProtocol {
-        val draftProtocol = get(draftProtocolId)
+    override fun addSection(id: Long, section: Section) {
+        val draftProtocol = get(id)
         if (!draftProtocol.sections.any { it.id == section.id }) {
             draftProtocol.sections.add(section)
             repository.save(draftProtocol)
         }
-        return draftProtocol
     }
 
-    override fun removeSection(draftProtocolId: Long, section: Section): DraftProtocol {
-        val draftProtocol = get(draftProtocolId)
+    override fun removeSection(id: Long, section: Section) {
+        val draftProtocol = get(id)
         draftProtocol.sections.removeAll { it.id == section.id }
         repository.save(draftProtocol)
-        return draftProtocol
+    }
+
+    override fun hasSection(id: Long, section: Section): Boolean {
+        exists(id)
+        return repository.existsByIdAndSectionsContains(id, section)
+    }
+
+    private fun exists(draftApproachId: Long) {
+        if (!repository.existsById(draftApproachId)) {
+            throw DraftProtocolNotFoundException("Draft approach with id $draftApproachId is not found")
+        }
+    }
+
+    override fun getAllByOwnerId(ownerId: Long): List<DraftProtocol> {
+        return repository.getAllByOwnerId(ownerId)
     }
 }

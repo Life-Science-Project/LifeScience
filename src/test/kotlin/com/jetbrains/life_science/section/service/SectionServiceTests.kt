@@ -81,6 +81,68 @@ internal class SectionServiceTests {
     }
 
     /**
+     * Should create new section with content correctly
+     */
+    @Test
+    fun `create new many sections`() {
+        // Prepare
+        val existingSection = Section(
+            id = 1,
+            name = "general 1",
+            hidden = false,
+            published = false,
+            order = 0
+        )
+        val allSections = listOf(
+            existingSection
+        )
+        val info = listOf(
+            makeSectionCreationInfo(
+                id = 0,
+                name = "new name 1",
+                prevSection = null,
+                visible = true,
+                allSections = listOf()
+            ),
+            makeSectionCreationInfo(
+                id = 0,
+                name = "new name 2",
+                prevSection = existingSection,
+                visible = true,
+                allSections = listOf()
+            ),
+            makeSectionCreationInfo(
+                id = 0,
+                name = "new name 3",
+                prevSection = null,
+                visible = true,
+                allSections = listOf()
+            )
+        )
+
+        // Action
+        val createdSections = service.createMany(info, allSections)
+
+        // Wait
+        elasticPopulator.flush()
+        Thread.sleep(1000)
+
+        // Assert
+        val sections = mutableListOf<Section>()
+        sections.add(service.getById(createdSections[0].id))
+        sections.add(service.getById(createdSections[2].id))
+        sections.add(existingSection)
+        sections.add(service.getById(createdSections[1].id))
+
+        assertEquals(info[0].name, sections[0].name)
+        assertEquals(0, sections[0].order)
+        assertEquals(info[1].name, sections[3].name)
+        assertEquals(3, sections[3].order)
+        assertEquals(info[2].name, sections[1].name)
+        assertEquals(1, sections[1].order)
+    }
+
+    /**
      * Should throw SectionNotFoundException after deleting existing section
      */
     @Test

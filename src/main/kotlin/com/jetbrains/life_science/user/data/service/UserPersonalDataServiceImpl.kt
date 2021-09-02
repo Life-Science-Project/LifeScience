@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.user.data.service
 
 import com.jetbrains.life_science.exception.not_found.UserNotFoundException
-import com.jetbrains.life_science.exception.not_found.UserPersonalDataNotFoundException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import com.jetbrains.life_science.user.data.factory.UserPersonalDataFactory
@@ -16,11 +15,8 @@ class UserPersonalDataServiceImpl(
     val organisationService: OrganisationService
 ) : UserPersonalDataService {
 
-    override fun getByCredentials(credentials: Credentials): UserPersonalData {
-        return userPersonalDataRepository.findByCredentials(credentials) ?: throw UserPersonalDataNotFoundException(
-            "UserData not found for " +
-                "credentials with id ${credentials.id}"
-        )
+    override fun getByCredentials(credentials: Credentials): UserPersonalData? {
+        return userPersonalDataRepository.findByCredentials(credentials)
     }
 
     override fun getAllUsers(): List<UserPersonalData> {
@@ -40,7 +36,7 @@ class UserPersonalDataServiceImpl(
     }
 
     override fun update(info: UserPersonalDataInfo, userPersonalData: UserPersonalData): UserPersonalData {
-        val organisations = organisationService.createListOfOrganizations(info.organisations)
+        val organisations = organisationService.getOrganisationsByIds(info.organisations)
         return userPersonalDataFactory.setParams(info, organisations, userPersonalData)
     }
 }

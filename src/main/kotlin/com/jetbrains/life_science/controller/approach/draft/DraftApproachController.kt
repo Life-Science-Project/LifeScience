@@ -1,22 +1,26 @@
 package com.jetbrains.life_science.controller.approach.draft
 
+import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
-import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAddParticipantDTO
-import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
-import com.jetbrains.life_science.controller.approach.draft.dto.DraftCategoryCreationDTOToInfoAdapter
+import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachDTO
+import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachDTOToInfoAdapter
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachViewMapper
 import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
-import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestInfo
-import com.jetbrains.life_science.review.request.service.publish.PublishApproachRequestService
+import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
-import com.jetbrains.life_science.util.UTCZone
+import com.jetbrains.life_science.user.data.service.UserPersonalDataService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/approaches/draft")
@@ -24,36 +28,50 @@ class DraftApproachController(
     val draftApproachService: DraftApproachService,
     val viewMapper: DraftApproachViewMapper,
     val categoryService: CategoryService,
-    val publishApproachRequestService: PublishApproachRequestService,
-    val credentialsService: CredentialsService
+    val credentialsService: CredentialsService,
+    val userPersonalDataService: UserPersonalDataService,
+    val sectionService: SectionService
 ) {
 
     @GetMapping("/{approachId}")
-    fun getApproach(@PathVariable approachId: Long): DraftApproachView {
+    fun getApproach(
+        @PathVariable approachId: Long,
+        @AuthenticationPrincipal user: Credentials
+    ): DraftApproachView {
         val approach = draftApproachService.get(approachId)
-        return viewMapper.toView(approach)
+        checkDraftApproachAccess(approach, user)
+        return viewMapper.toView(
+            draftApproach = approach,
+            usersData = extractUsersData(approach)
+        )
     }
 
     @PostMapping
     fun create(
-        @RequestBody dto: DraftApproachCreationDTO,
+        @RequestBody dto: DraftApproachDTO,
         @AuthenticationPrincipal author: Credentials
     ): DraftApproachView {
         val category = categoryService.getCategory(dto.initialCategoryId)
-        val info = DraftCategoryCreationDTOToInfoAdapter(dto, category, author)
+        val info = DraftApproachDTOToInfoAdapter(dto, category, author)
         val approach = draftApproachService.create(info)
-        return viewMapper.toView(approach)
+        return viewMapper.toView(
+            draftApproach = approach,
+            usersData = extractUsersData(approach)
+        )
     }
 
-    @PatchMapping("/{approachId}/send")
-    fun sendToReview(
+    @DeleteMapping("/{approachId}")
+    fun delete(
         @PathVariable approachId: Long,
-        @AuthenticationPrincipal author: Credentials
+        @AuthenticationPrincipal user: Credentials
     ) {
         val approach = draftApproachService.get(approachId)
-        checkOwnerAccess(approach, author)
-        val publicationInfo = DraftApproachToPublicationRequestAdapter(author, approach)
-        publishApproachRequestService.create(publicationInfo)
+        checkDraftApproachAccess(approach, user)
+        approach.sections.toList().forEach {
+            draftApproachService.removeSection(approachId, it)
+            sectionService.deleteById(it.id, emptyList())
+        }
+        draftApproachService.delete(approachId)
     }
 
     @PostMapping("/{approachId}/participants")
@@ -64,7 +82,7 @@ class DraftApproachController(
     ) {
         val userCredentials = credentialsService.getByEmail(dto.email)
         val approach = draftApproachService.get(approachId)
-        checkOwnerAccess(approach, author)
+        checkOwnerOrAdminAccess(approach, author)
         draftApproachService.addParticipant(approach.id, userCredentials)
     }
 
@@ -80,23 +98,18 @@ class DraftApproachController(
         draftApproachService.removeParticipant(approach.id, user)
     }
 
-    fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {
+    private fun extractUsersData(approach: DraftApproach) =
+        approach.participants.map { userPersonalDataService.getByCredentials(it) }
+
+    private fun checkDraftApproachAccess(approach: DraftApproach, credentials: Credentials) {
+        if (approach.participants.all { it.id != credentials.id } && !credentials.isAdminOrModerator()) {
+            throw ForbiddenOperationException()
+        }
+    }
+
+    private fun checkOwnerOrAdminAccess(approach: DraftApproach, credentials: Credentials) {
         if (approach.owner.id != credentials.id && !credentials.isAdminOrModerator()) {
             throw ForbiddenOperationException()
         }
-    }
-
-    fun checkOwnerAccess(approach: DraftApproach, credentials: Credentials) {
-        if (approach.owner.id != credentials.id) {
-            throw ForbiddenOperationException()
-        }
-    }
-
-    private class DraftApproachToPublicationRequestAdapter(
-        override val editor: Credentials,
-        override val approach: DraftApproach
-    ) : PublishApproachRequestInfo {
-        override val id: Long = 0
-        override val date: LocalDateTime = LocalDateTime.now(UTCZone)
     }
 }

@@ -18,6 +18,7 @@ class CategoryServiceImpl(
     val searchService: CategorySearchUnitService
 ) : CategoryService {
 
+    @Transactional
     override fun createCategory(categoryInfo: CategoryInfo): Category {
         val parent = categoryInfo.parentId?.let { getCategoryParent(it) }
         val createdCategory = categoryFactory.createCategory(categoryInfo, parent)
@@ -33,7 +34,7 @@ class CategoryServiceImpl(
         category.name = categoryInfo.name
         category.aliases = categoryInfo.aliases
         searchService.update(category)
-        return categoryRepository.save(category)
+        return category
     }
 
     private fun updateParents(categoryInfo: CategoryUpdateInfo, category: Category) {

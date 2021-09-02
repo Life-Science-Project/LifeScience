@@ -9,5 +9,5 @@ data class DraftApproachView(
     val name: String,
     val categories: List<CategoryShortView>,
     val sections: List<SectionShortView>,
-    val participants: List<UserShortView>
+    val participants: List<UserShortView?>
 )
