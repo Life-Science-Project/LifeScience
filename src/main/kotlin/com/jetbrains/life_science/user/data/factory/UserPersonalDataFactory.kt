@@ -28,6 +28,7 @@ class UserPersonalDataFactory(
         userPersonalData.academicDegree = updateInfo.academicDegree
         userPersonalData.doctorDegree = updateInfo.doctorDegree
         userPersonalData.orcid = updateInfo.orcid
+        userPersonalData.about = updateInfo.about
         userPersonalData.researchId = updateInfo.researchId
         userPersonalData.organisations = organisations.toMutableList()
         return userPersonalData
