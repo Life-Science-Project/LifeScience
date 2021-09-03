@@ -86,6 +86,15 @@ internal class UserControllerTest : ApiTest() {
      * return code 403_000 with no arguments.
      */
     @Test
+    fun `get user's draft protocols without enough rights`() {
+        getWithoutPermission("protocols/draft")
+    }
+
+    /**
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.
+     */
+    @Test
     fun `unauthorized get user's draft protocols`() {
         val userId = 1L
         getUnauthorized("$userId/protocols/draft")
@@ -96,6 +105,15 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's public protocols`() {
+    }
+
+    /**
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.
+     */
+    @Test
+    fun `get user's public protocols without enough rights`() {
+        getWithoutPermission("protocols/public")
     }
 
     /**
@@ -120,6 +138,15 @@ internal class UserControllerTest : ApiTest() {
      * return code 403_000 with no arguments.
      */
     @Test
+    fun `get user's draft approaches without enough rights`() {
+        getWithoutPermission("approaches/draft")
+    }
+
+    /**
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.
+     */
+    @Test
     fun `unauthorized get user's draft approaches`() {
         val userId = 1L
         getUnauthorized("$userId/approaches/draft")
@@ -130,6 +157,15 @@ internal class UserControllerTest : ApiTest() {
      */
     @Test
     fun `get user's public approaches`() {
+    }
+
+    /**
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.*
+     */
+    @Test
+    fun `get user's public approaches without enough rights`() {
+        getWithoutPermission("approaches/public")
     }
 
     /**
@@ -145,6 +181,18 @@ internal class UserControllerTest : ApiTest() {
     private fun getUnauthorized(pathSuffix: String) {
         // Prepare data & action
         val request = getRequest("$pathPrefix/$pathSuffix")
+        val exceptionView = getApiExceptionView(403, request)
+
+        // Assert
+        assertEquals(403_000, exceptionView.systemCode)
+        Assertions.assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    private fun getWithoutPermission(pathSuffix: String) {
+        // Prepare data & action
+        val userId = 2L
+        val accessToken = loginAccessToken("email@email.ru", "password")
+        val request = getAuthorized("$pathPrefix/$userId/$pathSuffix", accessToken)
         val exceptionView = getApiExceptionView(403, request)
 
         // Assert
