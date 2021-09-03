@@ -66,16 +66,12 @@ internal class UserControllerTest : ApiTest() {
     }
 
     /**
-     * Should throw unauthorized exception
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.
      */
     @Test
     fun `unauthorized get current user`() {
-        val request = getRequest("$pathPrefix/current")
-
-        val exceptionView = getApiExceptionView(403, request)
-
-        assertEquals(403_000, exceptionView.systemCode)
-        Assertions.assertTrue(exceptionView.arguments.isEmpty())
+        getUnauthorized("current")
     }
 
     /**
@@ -86,10 +82,13 @@ internal class UserControllerTest : ApiTest() {
     }
 
     /**
-     * Should throw unauthorized exception
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.
      */
     @Test
-    fun `get user's draft protocols without permission`() {
+    fun `unauthorized get user's draft protocols`() {
+        val userId = 1L
+        getUnauthorized("$userId/protocols/draft")
     }
 
     /**
@@ -100,10 +99,13 @@ internal class UserControllerTest : ApiTest() {
     }
 
     /**
-     * Should throw unauthorized exception
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.
      */
     @Test
-    fun `get user's public protocols without permission`() {
+    fun `unauthorized get user's public protocols`() {
+        val userId = 1L
+        getUnauthorized("$userId/protocols/public")
     }
 
     /**
@@ -114,10 +116,13 @@ internal class UserControllerTest : ApiTest() {
     }
 
     /**
-     * Should throw unauthorized exception
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.
      */
     @Test
-    fun `get user's draft approaches without permission`() {
+    fun `unauthorized get user's draft approaches`() {
+        val userId = 1L
+        getUnauthorized("$userId/approaches/draft")
     }
 
     /**
@@ -128,9 +133,22 @@ internal class UserControllerTest : ApiTest() {
     }
 
     /**
-     * Should throw unauthorized exception
+     * Should throw unauthorized exception and
+     * return code 403_000 with no arguments.
      */
     @Test
-    fun `get user's public approaches without permission`() {
+    fun `unauthorized get user's public approaches`() {
+        val userId = 1L
+        getUnauthorized("$userId/approaches/public")
+    }
+
+    private fun getUnauthorized(pathSuffix: String) {
+        // Prepare data & action
+        val request = getRequest("$pathPrefix/$pathSuffix")
+        val exceptionView = getApiExceptionView(403, request)
+
+        // Assert
+        assertEquals(403_000, exceptionView.systemCode)
+        Assertions.assertTrue(exceptionView.arguments.isEmpty())
     }
 }
