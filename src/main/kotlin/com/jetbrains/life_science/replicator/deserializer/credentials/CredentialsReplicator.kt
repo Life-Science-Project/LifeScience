@@ -1,6 +1,9 @@
 package com.jetbrains.life_science.replicator.deserializer.credentials
 
+import com.jetbrains.life_science.controller.auth.dto.NewUserDTO
+import com.jetbrains.life_science.controller.auth.dto.NewUserDTOToInfoAdapter
 import com.jetbrains.life_science.user.credentials.entity.Credentials
+import com.jetbrains.life_science.user.credentials.factory.CredentialsFactory
 import com.jetbrains.life_science.user.credentials.repository.CredentialsRepository
 import com.jetbrains.life_science.user.credentials.repository.RoleRepository
 import org.springframework.stereotype.Component
@@ -9,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class CredentialsReplicator(
     private val roleRepository: RoleRepository,
-    private val credentialsRepository: CredentialsRepository
+    private val credentialsRepository: CredentialsRepository,
+    private val credentialsFactory: CredentialsFactory
 ) {
 
     lateinit var admin: Credentials
@@ -22,12 +26,16 @@ class CredentialsReplicator(
     @Transactional
     fun createAdmin() {
         val adminRole = roleRepository.findByName("ROLE_ADMIN")
-        val rawAdmin = Credentials(
-            id = 0,
+        val dto = NewUserDTO(
             email = "admin@email.ru",
             password = "password",
-            roles = mutableListOf(adminRole)
+            firstName = "admin",
+            lastName = "admin"
         )
-        admin = credentialsRepository.save(rawAdmin)
+        val adminCredentials = credentialsFactory.createUser(
+            NewUserDTOToInfoAdapter(dto),
+            mutableListOf(adminRole)
+        )
+        admin = credentialsRepository.save(adminCredentials)
     }
 }
