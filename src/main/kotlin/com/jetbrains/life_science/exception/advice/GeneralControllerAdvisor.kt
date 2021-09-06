@@ -9,7 +9,6 @@ import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import com.jetbrains.life_science.exception.maker.makeExceptionView
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -43,19 +42,6 @@ class GeneralControllerAdvisor {
         return ResponseEntity(
             makeExceptionView(400_003, fieldName, errorValue),
             HttpStatus.BAD_REQUEST
-        )
-    }
-
-    /**
-     * Handle access denied by user's role
-     */
-    @ExceptionHandler(AccessDeniedException::class)
-    fun handleAccessDeniedException(exception: AccessDeniedException): ResponseEntity<ApiExceptionView> {
-        return ResponseEntity(
-            ApiExceptionView(
-                403_000
-            ),
-            HttpStatus.FORBIDDEN
         )
     }
 

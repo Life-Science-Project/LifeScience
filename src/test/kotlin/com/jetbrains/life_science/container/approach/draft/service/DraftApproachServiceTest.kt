@@ -4,7 +4,7 @@ import com.jetbrains.life_science.container.approach.draft.service.maker.makeDra
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.category.service.CategoryService
-import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
+import com.jetbrains.life_science.exception.not_found.ApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.user.credentials.service.CredentialsService
@@ -98,7 +98,7 @@ class DraftApproachServiceTest {
         val approachId = 666L
 
         // Action & Assert
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.get(approachId)
         }
     }
@@ -156,7 +156,7 @@ class DraftApproachServiceTest {
         )
 
         // Action & Assert
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.update(info)
         }
     }
@@ -173,7 +173,7 @@ class DraftApproachServiceTest {
         service.delete(draftApproachId)
 
         // Assert
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.get(draftApproachId)
         }
     }
@@ -187,7 +187,7 @@ class DraftApproachServiceTest {
         val draftApproachId = 239L
 
         // Action & Assert
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.delete(draftApproachId)
         }
     }
@@ -219,7 +219,7 @@ class DraftApproachServiceTest {
         val user = credentialsService.getById(3L)
 
         // Action & Assert
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.addParticipant(approachId, user)
         }
     }
@@ -266,7 +266,7 @@ class DraftApproachServiceTest {
         val user = credentialsService.getById(1L)
 
         // Action & Assert
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.removeParticipant(approachId, user)
         }
     }
@@ -298,7 +298,7 @@ class DraftApproachServiceTest {
         val section = sectionService.getById(1L)
 
         // Action & Assert
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.addSection(approachId, section)
         }
     }
@@ -330,7 +330,7 @@ class DraftApproachServiceTest {
         val section = sectionService.getById(1L)
 
         // Action & Assert
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.removeSection(approachId, section)
         }
     }

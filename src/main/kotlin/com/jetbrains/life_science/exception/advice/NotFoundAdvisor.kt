@@ -5,10 +5,8 @@ import com.jetbrains.life_science.exception.category.CategoryParentNotFoundExcep
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import com.jetbrains.life_science.exception.maker.makeExceptionView
 import com.jetbrains.life_science.exception.not_found.DegreeNotFoundException
-import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
-import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
-import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
-import com.jetbrains.life_science.exception.protocol.PublicProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ApproachNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -34,22 +32,10 @@ class NotFoundAdvisor {
         )
     }
 
-    @ExceptionHandler(DraftApproachNotFoundException::class)
+    @ExceptionHandler(ApproachNotFoundException::class)
     fun handleDraftApproachNotFound(): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
-            ApiExceptionView(
-                systemCode = 404003
-            ),
-            HttpStatus.NOT_FOUND
-        )
-    }
-
-    @ExceptionHandler(PublicApproachNotFoundException::class)
-    fun handlePublicApproachNotFound(): ResponseEntity<ApiExceptionView> {
-        return ResponseEntity(
-            ApiExceptionView(
-                systemCode = 404003
-            ),
+            ApiExceptionView(systemCode = 404_003),
             HttpStatus.NOT_FOUND
         )
     }
@@ -57,29 +43,15 @@ class NotFoundAdvisor {
     @ExceptionHandler(SectionNotFoundException::class)
     fun sectionNotFound(): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
-            ApiExceptionView(
-                systemCode = 404006
-            ),
+            ApiExceptionView(systemCode = 404_006),
             HttpStatus.NOT_FOUND
         )
     }
 
-    @ExceptionHandler(DraftProtocolNotFoundException::class)
+    @ExceptionHandler(ProtocolNotFoundException::class)
     fun handleDraftProtocolNotFound(): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
-            ApiExceptionView(
-                systemCode = 404007
-            ),
-            HttpStatus.NOT_FOUND
-        )
-    }
-
-    @ExceptionHandler(PublicProtocolNotFoundException::class)
-    fun handlePublicProtocolNotFound(): ResponseEntity<ApiExceptionView> {
-        return ResponseEntity(
-            ApiExceptionView(
-                systemCode = 404007
-            ),
+            ApiExceptionView(systemCode = 404_007),
             HttpStatus.NOT_FOUND
         )
     }
@@ -87,7 +59,7 @@ class NotFoundAdvisor {
     @ExceptionHandler(DegreeNotFoundException::class)
     fun handleDegreeNotFound(exception: DegreeNotFoundException): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
-            makeExceptionView(404008, listOf(exception.message)),
+            makeExceptionView(404_008, listOf(exception.message)),
             HttpStatus.NOT_FOUND
         )
     }
