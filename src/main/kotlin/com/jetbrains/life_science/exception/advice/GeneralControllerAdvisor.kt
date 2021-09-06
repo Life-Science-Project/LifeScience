@@ -7,6 +7,7 @@ import com.jetbrains.life_science.exception.auth.ForbiddenOperationException
 import com.jetbrains.life_science.exception.common.WrongRequestWithMessageException
 import com.jetbrains.life_science.exception.handler.ApiExceptionView
 import com.jetbrains.life_science.exception.maker.makeExceptionView
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -45,12 +46,21 @@ class GeneralControllerAdvisor {
         )
     }
 
+    /**
+     * Handle access denied by user's role
+     */
+    @ExceptionHandler(AccessDeniedException::class)
+    fun handleAccessDeniedException(exception: AccessDeniedException): ResponseEntity<ApiExceptionView> {
+        return ResponseEntity(
+            ApiExceptionView(403_000),
+            HttpStatus.FORBIDDEN
+        )
+    }
+
     @ExceptionHandler(ForbiddenOperationException::class)
     fun handleForbiddenOperationException(exception: ForbiddenOperationException): ResponseEntity<ApiExceptionView> {
         return ResponseEntity(
-            ApiExceptionView(
-                403_000
-            ),
+            ApiExceptionView(403_000),
             HttpStatus.FORBIDDEN
         )
     }
