@@ -13,7 +13,7 @@ class UserPersonalDataDTOToInfoAdapter(
     override val doctorDegree = dto.doctorDegree
 
     override val academicDegree = academicDegreeMap[dto.academicDegree]
-        ?: throw DegreeNotFoundException("Academic degree ${dto.academicDegree} doesn't exist.")
+        ?: throw DegreeNotFoundException(dto.academicDegree)
 
     override val organisations = dto.organisations
 
