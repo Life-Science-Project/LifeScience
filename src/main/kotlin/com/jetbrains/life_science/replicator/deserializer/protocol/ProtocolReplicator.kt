@@ -20,12 +20,12 @@ class ProtocolReplicator(
     private val protocolSearchUnitRepository: ProtocolSearchUnitRepository,
     private val sectionReplicator: SectionReplicator,
     private val credentialsReplicator: CredentialsReplicator,
-    private val entityManager: EntityManager,
+    private val entityManager: EntityManager
 ) {
 
     @Transactional
     fun deleteAll() {
-        entityManager.createNativeQuery("ALTER SEQUENCE public_protocol_seq RESTART WITH 1;")
+        entityManager.createNativeQuery("alter sequence public_protocol_seq restart with 1;")
             .executeUpdate()
         publicProtocolRepository.deleteAll()
         protocolSearchUnitRepository.deleteAll()

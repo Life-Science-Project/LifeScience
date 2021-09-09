@@ -24,12 +24,12 @@ class ApproachReplicator(
     private val approachSearchUnitRepository: ApproachSearchUnitRepository,
     private val categoryService: CategoryService,
     private val credentialsReplicator: CredentialsReplicator,
-    private val entityManager: EntityManager,
+    private val entityManager: EntityManager
 ) {
 
     @Transactional
     fun deleteAll() {
-        entityManager.createNativeQuery("ALTER SEQUENCE public_approach_seq RESTART WITH 1;")
+        entityManager.createNativeQuery("alter sequence public_approach_seq restart with 1;")
             .executeUpdate()
         publicApproachRepository.deleteAll()
         approachSearchUnitRepository.deleteAll()

@@ -59,7 +59,6 @@ class WebSecurityConfig(
                 "/api/ping/**"
             ).fullyAuthenticated()
             .antMatchers(HttpMethod.GET).permitAll()
-            .antMatchers("/api/replica/**").permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/api/search/**").permitAll()
             .antMatchers("/api/**").fullyAuthenticated()

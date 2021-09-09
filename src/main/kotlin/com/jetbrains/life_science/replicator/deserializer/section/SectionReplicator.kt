@@ -17,7 +17,7 @@ class SectionReplicator(
 
     @Transactional
     fun deleteAll() {
-        entityManager.createNativeQuery("ALTER SEQUENCE section_seq RESTART WITH 1;")
+        entityManager.createNativeQuery("alter sequence section_seq restart with 1;")
             .executeUpdate()
         sectionRepository.deleteAll()
     }

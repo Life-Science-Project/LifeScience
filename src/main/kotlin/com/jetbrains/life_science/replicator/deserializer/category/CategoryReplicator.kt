@@ -22,7 +22,7 @@ class CategoryReplicator(
 
     @Transactional
     fun deleteAll() {
-        entityManager.createNativeQuery("ALTER SEQUENCE category_seq RESTART WITH 1;")
+        entityManager.createNativeQuery("alter sequence category_seq restart with 1;")
             .executeUpdate()
         categoryRepository.deleteAll()
         categorySearchUnitRepository.deleteAll()
