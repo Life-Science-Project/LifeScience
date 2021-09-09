@@ -26,7 +26,8 @@ class CredentialsReplicator(
     fun deleteAll() {
         entityManager.createNativeQuery(
             "alter sequence credentials_seq restart with 1;\n" +
-                "alter sequence user_personal_data_seq restart with 1;\n")
+                "alter sequence user_personal_data_seq restart with 1;\n"
+        )
             .executeUpdate()
         refreshTokenRepository.deleteAll()
         credentialsRepository.deleteAll()
