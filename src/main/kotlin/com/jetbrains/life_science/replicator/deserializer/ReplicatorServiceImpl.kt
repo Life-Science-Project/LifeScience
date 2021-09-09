@@ -41,9 +41,10 @@ class ReplicatorServiceImpl(
     private fun deleteAll() {
         contentReplicator.deleteAll()
         protocolReplicator.deleteAll()
+        categoryReplicator.deleteAll()
         approachReplicator.deleteAll()
         sectionReplicator.deleteAll()
-        categoryReplicator.deleteAll()
+        credentialsReplicator.deleteAll()
     }
 
     private fun decodeData(): CommonStorageEntity {
