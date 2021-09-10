@@ -5,6 +5,7 @@ import com.jetbrains.life_science.replicator.deserializer.approach.ApproachRepli
 import com.jetbrains.life_science.replicator.deserializer.category.CategoryReplicator
 import com.jetbrains.life_science.replicator.deserializer.content.ContentReplicator
 import com.jetbrains.life_science.replicator.deserializer.credentials.CredentialsReplicator
+import com.jetbrains.life_science.replicator.deserializer.favoriteGroup.FavoriteGroupReplicator
 import com.jetbrains.life_science.replicator.enities.CommonStorageEntity
 import com.jetbrains.life_science.replicator.deserializer.protocol.ProtocolReplicator
 import com.jetbrains.life_science.replicator.deserializer.section.SectionReplicator
@@ -20,7 +21,8 @@ class ReplicatorServiceImpl(
     val protocolReplicator: ProtocolReplicator,
     val sectionReplicator: SectionReplicator,
     val contentReplicator: ContentReplicator,
-    val credentialsReplicator: CredentialsReplicator
+    val credentialsReplicator: CredentialsReplicator,
+    val favoriteGroupReplicator: FavoriteGroupReplicator
 ) : ReplicatorService {
 
     private val pathToData = "classpath:replica/data.json"
@@ -32,7 +34,8 @@ class ReplicatorServiceImpl(
         deleteAll()
         logger.info("Deletion success")
         credentialsReplicator.createAdmin()
-        val (categories, approaches) = decodeData()
+        val (users, categories, approaches) = decodeData()
+        credentialsReplicator.replicateData(users)
         categoryReplicator.replicateData(categories)
         approachReplicator.replicateData(approaches)
         logger.info("Replication success")
@@ -45,6 +48,7 @@ class ReplicatorServiceImpl(
         approachReplicator.deleteAll()
         sectionReplicator.deleteAll()
         credentialsReplicator.deleteAll()
+        favoriteGroupReplicator.deleteAll()
     }
 
     private fun decodeData(): CommonStorageEntity {
