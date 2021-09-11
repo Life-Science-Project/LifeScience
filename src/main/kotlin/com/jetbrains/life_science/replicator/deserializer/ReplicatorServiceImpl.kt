@@ -33,7 +33,6 @@ class ReplicatorServiceImpl(
         logger.info("Replication started")
         deleteAll()
         logger.info("Deletion success")
-        credentialsReplicator.createAdmin()
         val (users, categories, approaches) = decodeData()
         credentialsReplicator.replicateData(users)
         categoryReplicator.replicateData(categories)

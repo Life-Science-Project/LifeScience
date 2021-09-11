@@ -24,7 +24,9 @@ class CredentialsFactory(
 
     fun copyUser(storageEntity: CredentialsStorageEntity, roles: MutableCollection<Role>): Credentials {
         val credentials = Credentials(0, storageEntity.email, storageEntity.password, roles)
-        credentials.userPersonalData = userPersonalDataFactory.create(storageEntity.userData, credentials)
+        if (storageEntity.userData != null) {
+            credentials.userPersonalData = userPersonalDataFactory.create(storageEntity.userData, credentials)
+        }
         return credentials
     }
 }

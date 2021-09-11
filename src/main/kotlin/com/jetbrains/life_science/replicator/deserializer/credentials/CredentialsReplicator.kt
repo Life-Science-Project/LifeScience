@@ -1,8 +1,6 @@
 package com.jetbrains.life_science.replicator.deserializer.credentials
 
 import com.jetbrains.life_science.auth.refresh.repository.RefreshTokenRepository
-import com.jetbrains.life_science.controller.auth.dto.NewUserDTO
-import com.jetbrains.life_science.controller.auth.dto.NewUserDTOToInfoAdapter
 import com.jetbrains.life_science.replicator.enities.CredentialsStorageEntity
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.credentials.factory.CredentialsFactory
@@ -35,30 +33,15 @@ class CredentialsReplicator(
     }
 
     @Transactional
-    fun createAdmin() {
-        val adminRole = roleRepository.findByName("ROLE_ADMIN")
-        val dto = NewUserDTO(
-            email = "admin@email.ru",
-            password = "password",
-            firstName = "admin",
-            lastName = "admin"
-        )
-        val adminCredentials = credentialsFactory.createUser(
-            NewUserDTOToInfoAdapter(dto),
-            mutableListOf(adminRole)
-        )
-        admin = credentialsRepository.save(adminCredentials)
-    }
-
-    @Transactional
     fun replicateData(data: List<CredentialsStorageEntity>) {
         data.forEach { createUser(it) }
+        admin = credentialsRepository.getOne(1L)
     }
 
     fun createUser(storageEntity: CredentialsStorageEntity) {
         val credentials = credentialsFactory.copyUser(
             storageEntity,
-            mutableListOf(roleRepository.findByName(storageEntity.role))
+            storageEntity.role.map { roleRepository.findByName(it) }.toMutableList()
         )
         credentialsRepository.save(credentials)
     }

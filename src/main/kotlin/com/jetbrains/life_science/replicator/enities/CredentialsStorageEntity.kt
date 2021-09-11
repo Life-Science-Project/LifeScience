@@ -4,8 +4,8 @@ data class CredentialsStorageEntity(
     val id: Long,
     val email: String,
     val password: String,
-    val role: String,
-    val userData: UserPersonalDataStorageEntity
+    val role: List<String>,
+    val userData: UserPersonalDataStorageEntity?
 )
 
 data class UserPersonalDataStorageEntity(
