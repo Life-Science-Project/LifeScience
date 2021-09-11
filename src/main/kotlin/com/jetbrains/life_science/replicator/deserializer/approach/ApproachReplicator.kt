@@ -10,9 +10,9 @@ import com.jetbrains.life_science.replicator.deserializer.credentials.Credential
 import com.jetbrains.life_science.replicator.enities.ApproachStorageEntity
 import com.jetbrains.life_science.replicator.deserializer.protocol.ProtocolReplicator
 import com.jetbrains.life_science.replicator.deserializer.section.SectionReplicator
+import com.jetbrains.life_science.user.credentials.repository.CredentialsRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 import javax.persistence.EntityManager
 
 @Component
@@ -24,6 +24,7 @@ class ApproachReplicator(
     private val approachSearchUnitRepository: ApproachSearchUnitRepository,
     private val categoryService: CategoryService,
     private val credentialsReplicator: CredentialsReplicator,
+    private val credentialsRepository: CredentialsRepository,
     private val entityManager: EntityManager
 ) {
 
@@ -53,19 +54,21 @@ class ApproachReplicator(
 
     fun makeApproach(storageEntity: ApproachStorageEntity, categories: MutableList<Category>): PublicApproach {
         val sections = sectionReplicator.replicateData(storageEntity.sections)
-        return PublicApproach(
+        val approach = PublicApproach(
             id = 0,
             name = storageEntity.name,
             sections = sections.toMutableList(),
-            owner = credentialsReplicator.admin,
+            owner = credentialsRepository
+                .findById(storageEntity.ownerId)
+                .orElse(credentialsReplicator.admin),
             tags = mutableListOf(),
-            creationDate = creationDate,
-            coAuthors = mutableListOf(credentialsReplicator.admin),
+            creationDate = storageEntity.creationDateTime,
+            coAuthors = mutableListOf(),
             protocols = mutableListOf(),
             categories = categories,
             aliases = storageEntity.aliases
         )
+        approach.coAuthors.add(approach.owner)
+        return approach
     }
-
-    private val creationDate = LocalDateTime.of(2021, 6, 1, 0, 0)
 }
