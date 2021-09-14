@@ -4,6 +4,7 @@ import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.category.search.repository.CategorySearchUnitRepository
 import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
+import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.replicator.enities.CategoryStorageEntity
 import com.jetbrains.life_science.util.ElasticFlusher
 import org.springframework.stereotype.Component
@@ -14,6 +15,7 @@ import javax.persistence.EntityManager
 @Component
 class CategoryReplicator(
     val categoryRepository: CategoryRepository,
+    val categoryService: CategoryService,
     val categorySearchUnitService: CategorySearchUnitService,
     val categorySearchUnitRepository: CategorySearchUnitRepository,
     val entityManager: EntityManager,
@@ -47,7 +49,7 @@ class CategoryReplicator(
             name = storageEntity.name,
             aliases = storageEntity.aliases,
             subCategories = mutableListOf(),
-            parents = storageEntity.parents.map { categoryRepository.getOne(it) }.toMutableList(),
+            parents = storageEntity.parents.map { categoryService.getById(it) }.toMutableList(),
             approaches = mutableListOf(),
             creationDate = getCreationDate()
         )

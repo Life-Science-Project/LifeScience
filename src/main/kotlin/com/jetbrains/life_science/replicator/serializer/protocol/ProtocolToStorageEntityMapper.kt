@@ -18,7 +18,9 @@ class ProtocolToStorageEntityMapper(
         val section = sectionToStorageEntityMapper.getStorageEntities(protocol.sections.sortedBy { it.order })
         return ProtocolStorageEntity(
             name = protocol.name,
-            sections = section
+            sections = section,
+            ownerId = protocol.owner.id,
+            rating = protocol.rating
         )
     }
 }

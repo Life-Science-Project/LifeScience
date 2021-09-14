@@ -1,19 +1,19 @@
 package com.jetbrains.life_science.replicator.enities
 
-import java.time.LocalDateTime
-
 data class ApproachStorageEntity(
     val name: String,
     val aliases: MutableList<String>,
     val categories: List<Long>,
     val sections: List<SectionStorageEntity>,
     val protocols: List<ProtocolStorageEntity>,
-    val creationDateTime: LocalDateTime,
+    val creationDateTime: String,
     val ownerId: Long
 )
 
 data class ProtocolStorageEntity(
     val name: String,
+    val ownerId: Long,
+    val rating: Long,
     val sections: List<SectionStorageEntity>
 )
 

@@ -51,7 +51,7 @@ class DraftApproachController(
         @RequestBody dto: DraftApproachDTO,
         @AuthenticationPrincipal author: Credentials
     ): DraftApproachView {
-        val category = categoryService.getCategory(dto.initialCategoryId)
+        val category = categoryService.getById(dto.initialCategoryId)
         val info = DraftApproachDTOToInfoAdapter(dto, category, author)
         val approach = draftApproachService.create(info)
         return viewMapper.toView(

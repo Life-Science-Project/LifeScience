@@ -27,7 +27,7 @@ class ApproachToStorageEntityMapper(
             protocols = protocols,
             categories = approach.categories.map { categoriesIdsMap[it.id]!! },
             aliases = approach.aliases,
-            creationDateTime = approach.creationDate,
+            creationDateTime = approach.creationDate.toString(),
             ownerId = approach.owner.id
         )
     }

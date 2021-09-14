@@ -9,6 +9,7 @@ import com.jetbrains.life_science.replicator.deserializer.credentials.Credential
 import com.jetbrains.life_science.replicator.enities.ProtocolStorageEntity
 import com.jetbrains.life_science.replicator.deserializer.section.SectionReplicator
 import com.jetbrains.life_science.section.entity.Section
+import com.jetbrains.life_science.user.credentials.repository.CredentialsRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -20,6 +21,7 @@ class ProtocolReplicator(
     private val protocolSearchUnitRepository: ProtocolSearchUnitRepository,
     private val sectionReplicator: SectionReplicator,
     private val credentialsReplicator: CredentialsReplicator,
+    private val credentialsRepository: CredentialsRepository,
     private val entityManager: EntityManager
 ) {
 
@@ -48,13 +50,19 @@ class ProtocolReplicator(
         data: ProtocolStorageEntity,
         approach: PublicApproach,
         sections: List<Section>
-    ) = PublicProtocol(
-        id = 0,
-        name = data.name,
-        approach = approach,
-        sections = sections.toMutableList(),
-        owner = credentialsReplicator.admin,
-        coAuthors = mutableListOf(credentialsReplicator.admin),
-        rating = 1
-    )
+    ): PublicProtocol {
+        val protocol = PublicProtocol(
+            id = 0,
+            name = data.name,
+            approach = approach,
+            sections = sections.toMutableList(),
+            owner = credentialsRepository
+                .findById(data.ownerId)
+                .orElse(credentialsReplicator.admin),
+            coAuthors = mutableListOf(),
+            rating = data.rating
+        )
+        protocol.coAuthors.add(protocol.owner)
+        return protocol
+    }
 }

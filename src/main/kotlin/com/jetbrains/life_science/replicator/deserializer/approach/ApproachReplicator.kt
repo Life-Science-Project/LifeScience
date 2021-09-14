@@ -11,6 +11,7 @@ import com.jetbrains.life_science.replicator.enities.ApproachStorageEntity
 import com.jetbrains.life_science.replicator.deserializer.protocol.ProtocolReplicator
 import com.jetbrains.life_science.replicator.deserializer.section.SectionReplicator
 import com.jetbrains.life_science.user.credentials.repository.CredentialsRepository
+import java.time.LocalDateTime
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import javax.persistence.EntityManager
@@ -42,7 +43,7 @@ class ApproachReplicator(
     }
 
     fun makeOne(storageEntity: ApproachStorageEntity) {
-        val categories = storageEntity.categories.map { categoryService.getCategory(it) }.toMutableList()
+        val categories = storageEntity.categories.map { categoryService.getById(it) }.toMutableList()
         var approach = makeApproach(storageEntity, categories)
         approach = publicApproachRepository.save(approach)
         publicApproachSearchUnitService.createSearchUnit(approach)
@@ -62,7 +63,7 @@ class ApproachReplicator(
                 .findById(storageEntity.ownerId)
                 .orElse(credentialsReplicator.admin),
             tags = mutableListOf(),
-            creationDate = storageEntity.creationDateTime,
+            creationDate = LocalDateTime.parse(storageEntity.creationDateTime),
             coAuthors = mutableListOf(),
             protocols = mutableListOf(),
             categories = categories,
