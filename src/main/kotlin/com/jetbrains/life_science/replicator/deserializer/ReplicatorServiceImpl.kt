@@ -33,18 +33,19 @@ class ReplicatorServiceImpl(
         logger.info("Replication started")
         deleteAll()
         logger.info("Deletion success")
-        val (users, categories, approaches) = decodeData()
+        val (users, categories, publicApproaches, draftApproaches) = decodeData()
         credentialsReplicator.replicateData(users)
         categoryReplicator.replicateData(categories)
-        approachReplicator.replicateData(approaches)
+        approachReplicator.replicateData(publicApproaches, draftApproaches)
         logger.info("Replication success")
     }
 
     private fun deleteAll() {
         contentReplicator.deleteAll()
         protocolReplicator.deleteAll()
+        approachReplicator.deleteAllDraft()
         categoryReplicator.deleteAll()
-        approachReplicator.deleteAll()
+        approachReplicator.deleteAllPublic()
         sectionReplicator.deleteAll()
         credentialsReplicator.deleteAll()
         favoriteGroupReplicator.deleteAll()

@@ -16,7 +16,8 @@ class ReplicatorStorageMapperImpl(
     override fun serialize(): CommonStorageEntity {
         val users = credentialsToStorageEntityMapper.getStorageEntities()
         val (categories, idsMap) = categoryToStorageEntityMapper.getStorageEntities()
-        val approaches = approachToStorageEntityMapper.getStorageEntities(idsMap)
-        return CommonStorageEntity(users, categories, approaches)
+        val publicApproaches = approachToStorageEntityMapper.getPublicApproachStorageEntities(idsMap)
+        val draftApproaches = approachToStorageEntityMapper.getDraftApproachStorageEntities(idsMap)
+        return CommonStorageEntity(users, categories, publicApproaches, draftApproaches)
     }
 }
