@@ -13,8 +13,9 @@ data class ApproachStorageEntity(
 data class ProtocolStorageEntity(
     val name: String,
     val ownerId: Long,
-    val rating: Long,
-    val sections: List<SectionStorageEntity>
+    val rating: Long?,
+    val sections: List<SectionStorageEntity>,
+    val approachId: Long
 )
 
 data class SectionStorageEntity(

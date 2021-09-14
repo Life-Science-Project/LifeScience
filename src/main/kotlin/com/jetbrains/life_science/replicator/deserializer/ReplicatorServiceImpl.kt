@@ -33,10 +33,11 @@ class ReplicatorServiceImpl(
         logger.info("Replication started")
         deleteAll()
         logger.info("Deletion success")
-        val (users, categories, publicApproaches, draftApproaches) = decodeData()
+        val (users, categories, publicApproaches, draftApproaches, draftProtocols) = decodeData()
         credentialsReplicator.replicateData(users)
         categoryReplicator.replicateData(categories)
         approachReplicator.replicateData(publicApproaches, draftApproaches)
+        protocolReplicator.replicateDraftProtocolData(draftProtocols)
         logger.info("Replication success")
     }
 

@@ -58,7 +58,7 @@ class ApproachReplicator(
         var approach = makePublicApproach(storageEntity, categories)
         approach = publicApproachRepository.save(approach)
         publicApproachSearchUnitService.createSearchUnit(approach)
-        val protocols = protocolReplicator.replicateData(approach, storageEntity.protocols)
+        val protocols = protocolReplicator.replicatePublicProtocolData(approach, storageEntity.protocols)
         approach.protocols.addAll(protocols)
         approach = publicApproachRepository.save(approach)
         categories.forEach { it.approaches.add(approach) }

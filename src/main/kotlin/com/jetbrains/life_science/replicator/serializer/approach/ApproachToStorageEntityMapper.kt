@@ -28,7 +28,7 @@ class ApproachToStorageEntityMapper(
     }
 
     fun mapPublicOne(approach: PublicApproach, categoriesIdsMap: Map<Long, Long>): ApproachStorageEntity {
-        val protocols = protocolToStorageEntityMapper.getStorageEntities(approach.protocols)
+        val protocols = protocolToStorageEntityMapper.getPublicStorageEntities(approach.protocols)
         return mapOne(approach, categoriesIdsMap, protocols)
     }
 
