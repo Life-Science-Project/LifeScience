@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class ReplicatorServiceImpl(
-    val categoryReplicator: CategoryReplicator,
-    val resourceLoader: ResourceLoader,
-    val approachReplicator: ApproachReplicator,
-    val protocolReplicator: ProtocolReplicator,
-    val sectionReplicator: SectionReplicator,
-    val contentReplicator: ContentReplicator,
-    val credentialsReplicator: CredentialsReplicator,
-    val favoriteGroupReplicator: FavoriteGroupReplicator
+    private val categoryReplicator: CategoryReplicator,
+    private val resourceLoader: ResourceLoader,
+    private val approachReplicator: ApproachReplicator,
+    private val protocolReplicator: ProtocolReplicator,
+    private val sectionReplicator: SectionReplicator,
+    private val contentReplicator: ContentReplicator,
+    private val credentialsReplicator: CredentialsReplicator,
+    private val favoriteGroupReplicator: FavoriteGroupReplicator
 ) : ReplicatorService {
 
     private val pathToData = "classpath:replica/data.json"

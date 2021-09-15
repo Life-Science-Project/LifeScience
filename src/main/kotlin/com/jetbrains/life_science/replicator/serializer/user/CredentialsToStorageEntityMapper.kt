@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CredentialsToStorageEntityMapper(
-    val credentialsRepository: CredentialsRepository,
+    private val credentialsRepository: CredentialsRepository,
     val userDataToStorageEntityMapper: UserDataToStorageEntityMapper
 ) {
     fun getStorageEntities(): List<CredentialsStorageEntity> {

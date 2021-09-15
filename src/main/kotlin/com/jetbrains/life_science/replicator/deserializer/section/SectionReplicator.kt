@@ -10,9 +10,9 @@ import javax.persistence.EntityManager
 
 @Component
 class SectionReplicator(
-    val sectionRepository: SectionRepository,
-    val contentReplicator: ContentReplicator,
-    val entityManager: EntityManager
+    private val sectionRepository: SectionRepository,
+    private val contentReplicator: ContentReplicator,
+    private val entityManager: EntityManager
 ) {
 
     @Transactional

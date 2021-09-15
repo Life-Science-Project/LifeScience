@@ -14,11 +14,11 @@ import javax.persistence.EntityManager
 
 @Component
 class CategoryReplicator(
-    val categoryRepository: CategoryRepository,
-    val categoryService: CategoryService,
-    val categorySearchUnitService: CategorySearchUnitService,
-    val categorySearchUnitRepository: CategorySearchUnitRepository,
-    val entityManager: EntityManager,
+    private val categoryRepository: CategoryRepository,
+    private val categoryService: CategoryService,
+    private val categorySearchUnitService: CategorySearchUnitService,
+    private val categorySearchUnitRepository: CategorySearchUnitRepository,
+    private val entityManager: EntityManager,
     private val elasticFlusher: ElasticFlusher
 ) {
 
