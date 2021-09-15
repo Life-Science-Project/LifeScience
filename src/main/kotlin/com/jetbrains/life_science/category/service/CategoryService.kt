@@ -8,7 +8,7 @@ interface CategoryService {
 
     fun deleteCategory(id: Long)
 
-    fun getCategory(id: Long): Category
+    fun getById(id: Long): Category
 
     fun updateCategory(categoryInfo: CategoryUpdateInfo): Category
 

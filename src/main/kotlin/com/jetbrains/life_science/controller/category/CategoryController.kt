@@ -32,13 +32,13 @@ class CategoryController(
 
     @GetMapping("/{id}")
     fun getCategory(@PathVariable id: Long): CategoryView {
-        val category = categoryService.getCategory(id)
+        val category = categoryService.getById(id)
         return viewMapper.toView(category)
     }
 
     @GetMapping("/{id}/paths")
     fun getPaths(@PathVariable id: Long): List<Path> {
-        val category = categoryService.getCategory(id)
+        val category = categoryService.getById(id)
         return categorySearchUnitService.getPaths(category)
     }
 

@@ -41,7 +41,7 @@ class DraftApproachServiceTest {
     @Test
     fun `create new draft approach`() {
         // Prepare data
-        val category = categoryService.getCategory(1)
+        val category = categoryService.getById(1)
         val owner = credentialsService.getById(1L)
         val info = makeDraftApproachInfo(
             id = 0L,
@@ -109,7 +109,7 @@ class DraftApproachServiceTest {
     @Test
     fun `update existing approach`() {
         // Prepare data
-        val category = categoryService.getCategory(1)
+        val category = categoryService.getById(1)
         val owner = credentialsService.getById(1L)
         val info = makeDraftApproachInfo(
             id = 1L,
@@ -142,7 +142,7 @@ class DraftApproachServiceTest {
     @Test
     fun `update non-existing approach`() {
         // Prepare data
-        val category = categoryService.getCategory(1)
+        val category = categoryService.getById(1)
         val owner = credentialsService.getById(1L)
         val info = makeDraftApproachInfo(
             id = 666L,

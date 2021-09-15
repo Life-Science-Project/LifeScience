@@ -4,6 +4,7 @@ import com.jetbrains.life_science.category.entity.Category
 import com.jetbrains.life_science.category.repository.CategoryRepository
 import com.jetbrains.life_science.category.search.repository.CategorySearchUnitRepository
 import com.jetbrains.life_science.category.search.service.CategorySearchUnitService
+import com.jetbrains.life_science.category.service.CategoryService
 import com.jetbrains.life_science.replicator.enities.CategoryStorageEntity
 import com.jetbrains.life_science.util.ElasticFlusher
 import org.springframework.stereotype.Component
@@ -13,16 +14,17 @@ import javax.persistence.EntityManager
 
 @Component
 class CategoryReplicator(
-    val categoryRepository: CategoryRepository,
-    val categorySearchUnitService: CategorySearchUnitService,
-    val categorySearchUnitRepository: CategorySearchUnitRepository,
-    val entityManager: EntityManager,
+    private val categoryRepository: CategoryRepository,
+    private val categoryService: CategoryService,
+    private val categorySearchUnitService: CategorySearchUnitService,
+    private val categorySearchUnitRepository: CategorySearchUnitRepository,
+    private val entityManager: EntityManager,
     private val elasticFlusher: ElasticFlusher
 ) {
 
     @Transactional
     fun deleteAll() {
-        entityManager.createNativeQuery("ALTER SEQUENCE category_seq RESTART WITH 1;")
+        entityManager.createNativeQuery("alter sequence category_seq restart with 1;")
             .executeUpdate()
         categoryRepository.deleteAll()
         categorySearchUnitRepository.deleteAll()
@@ -47,7 +49,7 @@ class CategoryReplicator(
             name = storageEntity.name,
             aliases = storageEntity.aliases,
             subCategories = mutableListOf(),
-            parents = storageEntity.parents.map { categoryRepository.getOne(it) }.toMutableList(),
+            parents = storageEntity.parents.map { categoryService.getById(it) }.toMutableList(),
             approaches = mutableListOf(),
             creationDate = getCreationDate()
         )
