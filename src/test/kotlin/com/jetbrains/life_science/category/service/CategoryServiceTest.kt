@@ -170,6 +170,29 @@ class CategoryServiceTest {
         assertFalse(category.parents.any { it.id == 2L })
     }
 
+    /**
+     * Try to update non-existing category.
+     * It should throw CategoryNotEmptyException.
+     */
+    @Test
+    fun `update non-empty category test`() {
+        // Prepare
+        val info = makeCategoryUpdateInfo(
+            id = 1,
+            name = "changed name",
+            aliases = listOf(
+                "le name"
+            ),
+            parentsToAddIds = listOf(),
+            parentsToDeleteIds = listOf()
+        )
+
+        // Action & Assert
+        assertThrows<CategoryNotEmptyException> {
+            service.updateCategory(info)
+        }
+    }
+
     @Test
     fun `delete existing empty category`() {
         // Prepare

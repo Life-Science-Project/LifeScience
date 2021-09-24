@@ -34,12 +34,14 @@ class SectionServiceImpl(
 
     // Adds all the sections from the list in reversed order (to save the original order of sections without prevSection)
     @Transactional
-    override fun createMany(infos: List<SectionCreationInfo>, allSections: List<Section>): List<Section> {
-        val currentSections = allSections.toMutableList()
+    override fun createMany(infos: List<SectionCreationInfo>, existingSections: List<Section>): List<Section> {
+        val allSections = existingSections.toMutableList()
+        val currentSections = mutableListOf<Section>()
         infos.asReversed().forEach {
             val section = factory.create(it)
-            moveOrdersOnCreate(it.prevSection, currentSections)
+            moveOrdersOnCreate(it.prevSection, allSections)
             currentSections.add(repository.save(section))
+            allSections.add(section)
         }
         return currentSections.reversed()
     }
@@ -73,18 +75,11 @@ class SectionServiceImpl(
     }
 
     override fun getById(id: Long): Section {
-        throwNotExist(id)
-        return repository.findById(id).get()
+        return repository.findById(id).orElseThrow { SectionNotFoundException(id) }
     }
 
     override fun existsById(id: Long): Boolean {
         return repository.existsById(id)
-    }
-
-    private fun throwNotExist(id: Long) {
-        if (!existsById(id)) {
-            throw SectionNotFoundException(id)
-        }
     }
 
     @Transactional
