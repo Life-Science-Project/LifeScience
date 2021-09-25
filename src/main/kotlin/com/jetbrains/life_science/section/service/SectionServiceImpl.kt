@@ -75,11 +75,18 @@ class SectionServiceImpl(
     }
 
     override fun getById(id: Long): Section {
-        return repository.findById(id).orElseThrow { SectionNotFoundException(id) }
+        throwNotExist(id)
+        return repository.findById(id).get()
     }
 
     override fun existsById(id: Long): Boolean {
         return repository.existsById(id)
+    }
+
+    private fun throwNotExist(id: Long) {
+        if (!existsById(id)) {
+            throw SectionNotFoundException(id)
+        }
     }
 
     @Transactional
