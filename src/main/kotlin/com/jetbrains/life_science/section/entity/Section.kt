@@ -32,11 +32,11 @@ class Section(
 
         other as Section
 
-        return id == other.id
-            && name == other.name
-            && hidden == other.hidden
-            && published == other.published
-            && order == other.order
+        return id == other.id &&
+            name == other.name &&
+            hidden == other.hidden &&
+            published == other.published &&
+            order == other.order
     }
 
     override fun hashCode(): Int {
