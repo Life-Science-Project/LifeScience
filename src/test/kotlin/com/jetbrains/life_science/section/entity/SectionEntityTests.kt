@@ -1,6 +1,5 @@
-package com.jetbrains.life_science.section.service
+package com.jetbrains.life_science.section.entity
 
-import com.jetbrains.life_science.section.entity.Section
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
