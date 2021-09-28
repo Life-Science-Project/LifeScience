@@ -61,8 +61,14 @@ class ReplicaControllerTest : ApiTest() {
         // Prepare data
         val accessToken = loginAccessToken("admin@gmail.ru", "password")
 
+        flushChanges()
+        Thread.sleep(2000)
+
         // Action
         postAuthorized("$pathPrefix/replicate", accessToken)
+
+        flushChanges()
+        Thread.sleep(2000)
 
         // Assert
         assertTrue(credentialsRepository.existsById(1L))
