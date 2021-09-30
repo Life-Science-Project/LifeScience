@@ -4,7 +4,7 @@ import com.jetbrains.life_science.container.protocol.service.PublicProtocolServi
 import com.jetbrains.life_science.content.publish.service.ContentService
 import com.jetbrains.life_science.controller.section.view.SectionView
 import com.jetbrains.life_science.controller.section.view.SectionViewMapper
-import com.jetbrains.life_science.exception.protocol.PublicProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.service.SectionService
@@ -39,7 +39,7 @@ class PublicProtocolSectionController(
         sectionId: Long
     ): Section {
         if (!publicProtocolService.isInApproach(publicProtocolId, approachId)) {
-            throw PublicProtocolNotFoundException("Not found protocol: $publicProtocolId")
+            throw ProtocolNotFoundException("Not found protocol: $publicProtocolId")
         }
         val section = sectionService.getById(sectionId)
         if (!publicProtocolService.hasSection(publicProtocolId, section)) {

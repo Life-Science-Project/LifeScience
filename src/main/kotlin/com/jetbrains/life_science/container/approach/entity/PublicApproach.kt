@@ -21,7 +21,7 @@ class PublicApproach(
     override val id: Long,
 
     name: String,
-    aliases: List<String>,
+    aliases: MutableList<String>,
     sections: MutableList<Section>,
     tags: MutableList<String>,
     owner: Credentials,
@@ -30,10 +30,10 @@ class PublicApproach(
     @ManyToMany
     var coAuthors: MutableList<Credentials>,
 
-    @OneToMany
+    @OneToMany(mappedBy = "approach", cascade = [CascadeType.REMOVE, CascadeType.PERSIST])
     var protocols: MutableList<PublicProtocol>,
 
     @ManyToMany(mappedBy = "approaches")
-    var categories: MutableList<Category>
+    override var categories: MutableList<Category>
 
 ) : Approach(name, aliases, sections, tags, owner, creationDate)

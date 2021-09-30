@@ -1,16 +1,18 @@
 package com.jetbrains.life_science.publisher.service
 
+import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.container.approach.service.PublicApproachService
 import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.edit_record.service.ProtocolEditRecordService
-import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
-import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ApproachNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
+import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.section.service.SectionService
 import com.jetbrains.life_science.util.populator.ElasticPopulator
 import org.elasticsearch.client.RestHighLevelClient
@@ -96,21 +98,16 @@ internal class PublisherServiceTest {
 
         // Action
         val approach = service.publishDraftApproach(draftApproach)
+        val publicApproach = publicApproachService.get(approach.id)
 
         // Assert
-        val publicApproach = publicApproachService.get(approach.id)
         assertEquals(draftApproach.name, publicApproach.name)
         assertEquals(draftApproach.categories.toSet(), publicApproach.categories.toSet())
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             draftApproachService.get(draftApproach.id)
         }
-        assertEquals(
-            draftApproach.sections.map { it.id }.toSet(),
-            publicApproach.sections.map { it.id }.toSet()
-        )
-        publicApproach.sections.forEach {
-            assertTrue(it.published)
-        }
+        assertSectionsEquals(draftApproach.sections, publicApproach.sections)
+        assertSectionsPublished(publicApproach.sections)
     }
 
     /**
@@ -120,23 +117,21 @@ internal class PublisherServiceTest {
     fun `publish existing draft protocol`() {
         // Prepare
         val draftProtocol = draftProtocolService.get(1L)
+        val approachId = draftProtocol.approach.id
 
         // Action
         val protocol = service.publishDraftProtocol(draftProtocol)
+        val publicProtocol = publicProtocolService.get(protocol.id)
+        val approach = publicApproachService.get(approachId)
 
         // Assert
-        val publicProtocol = publicProtocolService.get(protocol.id)
+        assertApproachContainsProtocol(approach, publicProtocol.id)
         assertEquals(draftProtocol.name, publicProtocol.name)
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             draftProtocolService.get(draftProtocol.id)
         }
-        assertEquals(
-            draftProtocol.sections.map { it.id }.toSet(),
-            publicProtocol.sections.map { it.id }.toSet()
-        )
-        publicProtocol.sections.forEach {
-            assertTrue(it.published)
-        }
+        assertSectionsEquals(draftProtocol.sections, publicProtocol.sections)
+        assertSectionsPublished(publicProtocol.sections)
     }
 
     /**
@@ -185,5 +180,22 @@ internal class PublisherServiceTest {
                 sectionService.getById(it.id)
             }
         }
+    }
+
+    fun assertSectionsPublished(sections: List<Section>) {
+        sections.forEach {
+            assertTrue(it.published)
+        }
+    }
+
+    fun assertSectionsEquals(draftSections: List<Section>, publicSections: List<Section>) {
+        assertEquals(
+            draftSections.map { it.id }.toSet(),
+            publicSections.map { it.id }.toSet()
+        )
+    }
+
+    fun assertApproachContainsProtocol(approach: PublicApproach, protocolId: Long) {
+        assertTrue(approach.protocols.any { it.id == protocolId })
     }
 }

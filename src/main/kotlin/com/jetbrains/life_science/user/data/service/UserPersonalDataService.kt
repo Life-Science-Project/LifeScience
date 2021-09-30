@@ -5,7 +5,7 @@ import com.jetbrains.life_science.user.data.entity.UserPersonalData
 
 interface UserPersonalDataService {
 
-    fun getByCredentials(credentials: Credentials): UserPersonalData
+    fun getByCredentials(credentials: Credentials): UserPersonalData?
 
     fun getAllUsers(): List<UserPersonalData>
 

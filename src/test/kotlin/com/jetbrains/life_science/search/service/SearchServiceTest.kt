@@ -235,4 +235,128 @@ internal class SearchServiceTest {
         // Assert
         assertEquals(expectedResults, searchResult.toSet())
     }
+
+    /**
+     * Should find expected categories with different letter cases request
+     */
+    @Test
+    fun `uppercase test`() {
+        // Prepare
+        val searchQueryInfoLowercase = makeSearchQueryInfo(
+            text = "fplc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoUppercase = makeSearchQueryInfo(
+            text = "FPLC",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoLowercaseFuzzy = makeSearchQueryInfo(
+            text = "flpc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoUppercaseFuzzy = makeSearchQueryInfo(
+            text = "FLPC",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val searchQueryInfoMixedCase = makeSearchQueryInfo(
+            text = "FpLc",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+
+        val expectedResults = setOf(
+            CategorySearchResult(
+                categoryId = 1, name = "root",
+                paths = listOf(emptyList())
+            )
+        )
+
+        // Action
+        val searchResultLowercase = service.search(searchQueryInfoLowercase)
+        val searchResultUppercase = service.search(searchQueryInfoUppercase)
+        val searchResultLowercaseFuzzy = service.search(searchQueryInfoLowercaseFuzzy)
+        val searchResultUppercaseFuzzy = service.search(searchQueryInfoUppercaseFuzzy)
+        val searchResultMix = service.search(searchQueryInfoMixedCase)
+
+        // Assert
+        assertEquals(expectedResults, searchResultLowercase.toSet())
+        assertEquals(expectedResults, searchResultUppercase.toSet())
+        assertEquals(expectedResults, searchResultLowercaseFuzzy.toSet())
+        assertEquals(expectedResults, searchResultUppercaseFuzzy.toSet())
+        assertEquals(expectedResults, searchResultMix.toSet())
+    }
+
+    @Test
+    fun `suggest query test`() {
+        // Prepare
+        val searchQueryInfo = makeSearchQueryInfo(
+            text = "cat",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val mixedCaseSearchQueryInfo = makeSearchQueryInfo(
+            text = "CaT",
+            includeTypes = listOf(SearchUnitType.CATEGORY),
+            from = 0,
+            size = 100
+        )
+        val expectedResults = setOf(
+            CategorySearchResult(
+                categoryId = 2,
+                name = "catalog 1",
+                paths = listOf(
+                    emptyList()
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 3, name = "catalog",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root")
+                    )
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 4, name = "catalog",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2")
+                    )
+                )
+            ),
+            CategorySearchResult(
+                categoryId = 5, name = "catalog 1",
+                paths = listOf(
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2")
+                    ),
+                    listOf(
+                        PathUnit(1, "root"),
+                        PathUnit(2, "catalog 2"),
+                        PathUnit(4, "catalog")
+                    )
+                )
+            )
+        )
+
+        // Action
+        val searchLowerCaseResult = service.suggest(searchQueryInfo)
+        val searchMixedCaseResult = service.suggest(mixedCaseSearchQueryInfo)
+
+        // Assert
+        assertEquals(expectedResults, searchLowerCaseResult.toSet())
+        assertEquals(expectedResults, searchMixedCaseResult.toSet())
+    }
 }

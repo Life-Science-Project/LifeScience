@@ -19,10 +19,10 @@ values (1, 2);
 insert into draft_approach_participants (draft_approach_id, participants_id)
 values (3, 1);
 
-insert into section (id, name, order_num, published, visible)
-values (8, 'general 1', 1, false, true);
-insert into section (id, name, order_num, published, visible)
-values (9, 'general 2', 2, false, false);
+insert into section (id, name, order_num, published, hidden)
+values (8, 'general 1', 1, false, false);
+insert into section (id, name, order_num, published, hidden)
+values (9, 'general 2', 2, false, true);
 -- nextId = 10
 alter sequence section_seq restart with 10;
 

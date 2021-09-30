@@ -21,6 +21,8 @@ interface DraftApproachService : ContainsSections {
 
     fun hasParticipant(draftApproachId: Long, user: Credentials): Boolean
 
+    fun getAllByOwnerId(ownerId: Long): List<DraftApproach>
+
     override fun addSection(id: Long, section: Section)
 
     override fun removeSection(id: Long, section: Section)

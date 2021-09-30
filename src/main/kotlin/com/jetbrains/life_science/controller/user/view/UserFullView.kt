@@ -4,5 +4,5 @@ data class UserFullView(
     val id: Long,
     val email: String,
     val roles: List<String>,
-    val personalData: UserPersonalDataView
+    val personalData: UserPersonalDataView?
 )

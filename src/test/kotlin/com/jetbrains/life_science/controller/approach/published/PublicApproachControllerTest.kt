@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.controller.approach.published
 
 import com.jetbrains.life_science.ApiTest
+import com.jetbrains.life_science.controller.protocol.view.ProtocolShortView
 import com.jetbrains.life_science.controller.approach.published.view.PublicApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.user.view.UserShortView
@@ -8,7 +9,6 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.test.context.jdbc.Sql
-import java.time.LocalDateTime
 
 @Sql(
     "/scripts/initial_data.sql",
@@ -34,7 +34,9 @@ internal class PublicApproachControllerTest : ApiTest() {
                 UserShortView(id = 1, fullName = "Alex"),
                 UserShortView(id = 2, fullName = "Ben")
             ),
-            protocols = emptyList()
+            protocols = listOf(
+                ProtocolShortView(id = 1, name = "first published")
+            )
         )
 
         val approach = getView<PublicApproachView>(makePath(1))
@@ -57,9 +59,5 @@ internal class PublicApproachControllerTest : ApiTest() {
 
     private fun makePath(addition: Any): String {
         return "$path/$addition"
-    }
-
-    fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
-        return LocalDateTime.of(year, month, day, 0, 0, 0)
     }
 }

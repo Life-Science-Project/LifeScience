@@ -76,8 +76,70 @@ internal class SectionServiceTests {
         // Assert
         assertEquals(info.name, section.name)
         assertEquals(0, section.order)
-        assertEquals(info.visible, section.visible)
+        assertEquals(info.hidden, section.hidden)
         assertFalse(section.published)
+    }
+
+    /**
+     * Should create new section with content correctly
+     */
+    @Test
+    fun `create new many sections`() {
+        // Prepare
+        val existingSection = Section(
+            id = 1,
+            name = "general 1",
+            hidden = false,
+            published = false,
+            order = 0
+        )
+        val allSections = listOf(
+            existingSection
+        )
+        val info = listOf(
+            makeSectionCreationInfo(
+                id = 0,
+                name = "new name 1",
+                prevSection = null,
+                visible = true,
+                allSections = listOf()
+            ),
+            makeSectionCreationInfo(
+                id = 0,
+                name = "new name 2",
+                prevSection = existingSection,
+                visible = true,
+                allSections = listOf()
+            ),
+            makeSectionCreationInfo(
+                id = 0,
+                name = "new name 3",
+                prevSection = null,
+                visible = true,
+                allSections = listOf()
+            )
+        )
+
+        // Action
+        val createdSections = service.createMany(info, allSections)
+
+        // Wait
+        elasticPopulator.flush()
+        Thread.sleep(1000)
+
+        // Assert
+        val sections = mutableListOf<Section>()
+        sections.add(service.getById(createdSections[0].id))
+        sections.add(service.getById(createdSections[2].id))
+        sections.add(existingSection)
+        sections.add(service.getById(createdSections[1].id))
+
+        assertEquals(info[0].name, sections[0].name)
+        assertEquals(0, sections[0].order)
+        assertEquals(info[1].name, sections[3].name)
+        assertEquals(3, sections[3].order)
+        assertEquals(info[2].name, sections[1].name)
+        assertEquals(1, sections[1].order)
     }
 
     /**
@@ -122,7 +184,7 @@ internal class SectionServiceTests {
             id = expectedId,
             name = "general 1",
             order = 1,
-            visible = true,
+            hidden = false,
             published = false
         )
 
@@ -133,7 +195,7 @@ internal class SectionServiceTests {
         assertEquals(expected.id, section.id)
         assertEquals(expected.name, section.name)
         assertEquals(expected.order, section.order)
-        assertEquals(expected.visible, section.visible)
+        assertEquals(expected.hidden, section.hidden)
         assertEquals(expected.published, section.published)
     }
 
@@ -209,7 +271,7 @@ internal class SectionServiceTests {
             id = existingSection.id,
             name = info.name,
             order = 1,
-            visible = info.visible,
+            hidden = info.visible,
             published = existingSection.published
         )
         val expectedContent = Content(
@@ -224,7 +286,7 @@ internal class SectionServiceTests {
         assertEquals(expected.id, section.id)
         assertEquals(expected.name, section.name)
         assertEquals(expected.order, section.order)
-        assertEquals(expected.visible, section.visible)
+        assertEquals(expected.hidden, section.hidden)
         assertEquals(expected.published, section.published)
         assertEquals(expectedContent, content)
     }

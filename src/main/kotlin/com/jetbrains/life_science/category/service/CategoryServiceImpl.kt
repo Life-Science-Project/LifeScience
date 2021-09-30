@@ -18,6 +18,7 @@ class CategoryServiceImpl(
     val searchService: CategorySearchUnitService
 ) : CategoryService {
 
+    @Transactional
     override fun createCategory(categoryInfo: CategoryInfo): Category {
         val parent = categoryInfo.parentId?.let { getCategoryParent(it) }
         val createdCategory = categoryFactory.createCategory(categoryInfo, parent)
@@ -28,12 +29,12 @@ class CategoryServiceImpl(
 
     @Transactional
     override fun updateCategory(categoryInfo: CategoryUpdateInfo): Category {
-        val category = getCategory(categoryInfo.id)
+        val category = getById(categoryInfo.id)
         updateParents(categoryInfo, category)
         category.name = categoryInfo.name
         category.aliases = categoryInfo.aliases
         searchService.update(category)
-        return categoryRepository.save(category)
+        return category
     }
 
     private fun updateParents(categoryInfo: CategoryUpdateInfo, category: Category) {
@@ -66,7 +67,7 @@ class CategoryServiceImpl(
 
     @Transactional
     override fun deleteCategory(id: Long) {
-        val category = getCategory(id)
+        val category = getById(id)
         if (!category.isEmpty) {
             throw CategoryNotEmptyException(id)
         }
@@ -82,7 +83,7 @@ class CategoryServiceImpl(
         return categoryRepository.findCategoryById(id)
     }
 
-    override fun getCategory(id: Long): Category {
+    override fun getById(id: Long): Category {
         return getCategorySafe(id) ?: throw CategoryNotFoundException(id)
     }
 

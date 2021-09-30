@@ -38,13 +38,34 @@ class SearchServiceImpl(
     override fun search(query: SearchQueryInfo): List<SearchResult> {
         val request = makeRequest(query)
         val response = getResponse(request)
-        return response.hits
-            .mapNotNull {
-                processHit(it)
-            }
-            .sortedBy {
-                SearchUnitType.valueOf(it.typeName.toUpperCase()).order
-            }
+        return processHits(response)
+    }
+
+    override fun suggest(query: SearchQueryInfo): List<SearchResult> {
+        val request = makeSuggestRequest(query)
+        val response = getResponse(request)
+        return processHits(response)
+    }
+
+    private fun processHits(response: SearchResponse) = response.hits
+        .mapNotNull {
+            processHit(it)
+        }
+        .sortedBy {
+            SearchUnitType.valueOf(it.typeName.toUpperCase()).order
+        }
+
+    private fun makeSuggestRequest(query: SearchQueryInfo): SearchRequest {
+        val queryBuilder = QueryBuilders.prefixQuery("names", query.text.toLowerCase())
+
+        val searchBuilder = SearchSourceBuilder()
+            .query(queryBuilder)
+            .from(query.from)
+            .size(query.size)
+
+        return SearchRequest()
+            .source(searchBuilder)
+            .indices(*getRequestIndices(query))
     }
 
     private fun getResponse(request: SearchRequest): SearchResponse {
@@ -52,7 +73,7 @@ class SearchServiceImpl(
     }
 
     private fun makeRequest(query: SearchQueryInfo): SearchRequest {
-        val tokens = query.text.trim().split("\\s+".toRegex())
+        val tokens = query.text.trim().split("\\s+".toRegex()).map { it.toLowerCase() }
 
         var shouldContainSetPartQuery = QueryBuilders.boolQuery().minimumShouldMatch((tokens.size * 0.7).toInt())
         var shouldContainNamePartInQuery = QueryBuilders.boolQuery().minimumShouldMatch(1)

@@ -9,12 +9,12 @@ values (2, parsedatetime('17-12-2020 00:00:00.00', 'dd-MM-yyyy hh:mm:ss.SS'), 2)
 -- nextId = 3
 alter sequence approach_edit_record_seq restart with 3;
 
-insert into section (id, name, order_num, published, visible)
-values (1, 'section 1', 1, true, true);
-insert into section (id, name, order_num, published, visible)
-values (2, 'section 2', 2, true, false);
-insert into section (id, name, order_num, published, visible)
-values (3, 'section 3', 3, false, false);
+insert into section (id, name, order_num, published, hidden)
+values (1, 'section 1', 1, true, false);
+insert into section (id, name, order_num, published, hidden)
+values (2, 'section 2', 2, true, true);
+insert into section (id, name, order_num, published, hidden)
+values (3, 'section 3', 3, false, true);
 
 insert into public_approach_sections (public_approach_id, sections_id)
 values (1, 1);

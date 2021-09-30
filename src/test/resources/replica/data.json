@@ -1,0 +1,95 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@gmail.ru",
+      "password": "$2a$10$qL3JuO4sEC7h9bw1Me9Kn.cnJGmK5dp68MI3B0ynKrJXvDy/iRG86",
+      "role": [
+        "ROLE_ADMIN"
+      ],
+      "userData": {
+        "firstName": "Alex",
+        "lastName": "R",
+        "doctorDegree": false,
+        "about": null,
+        "academicDegree": 1,
+        "orcid": null,
+        "researchId": null
+      }
+    }
+  ],
+  "category": [
+    {
+      "id": 1,
+      "name": "catalog 2",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "id": 2,
+      "name": "catalog 2",
+      "aliases": [],
+      "parents": [
+        1
+      ]
+    },
+    {
+      "id": 3,
+      "name": "catalog 2",
+      "aliases": [],
+      "parents": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 4,
+      "name": "catalog 1",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "id": 5,
+      "name": "child 1-2",
+      "aliases": [],
+      "parents": [
+        4
+      ]
+    }
+  ],
+  "publicApproaches": [
+    {
+      "name": "approach 1",
+      "aliases": [],
+      "categories": [
+        4
+      ],
+      "sections": [],
+      "protocols": [
+        {
+          "name": "first published",
+          "ownerId": 1,
+          "rating": 0,
+          "sections": [],
+          "approachId": 1
+        }
+      ],
+      "creationDateTime": "2020-12-17T00:00",
+      "ownerId": 1
+    }
+  ],
+  "draftApproaches": [
+    {
+      "name": "approach 1",
+      "aliases": [],
+      "categories": [
+        4
+      ],
+      "sections": [],
+      "protocols": [],
+      "creationDateTime": "2020-08-17T00:00",
+      "ownerId": 1
+    }
+  ],
+  "draftProtocols": []
+}

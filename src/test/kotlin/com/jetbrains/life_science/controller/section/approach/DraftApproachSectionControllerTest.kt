@@ -33,7 +33,7 @@ internal class DraftApproachSectionControllerTest : ApiTest() {
     @PostConstruct
     fun setup() {
         elasticPopulator = ElasticPopulator(highLevelClient).apply {
-            addPopulator("content_version", "elastic/section_draft_approach_content_version.json")
+            addPopulator("content_version", "elastic/section_draft_content_version.json")
         }
     }
 
@@ -108,10 +108,40 @@ internal class DraftApproachSectionControllerTest : ApiTest() {
         val section = getViewAuthorized<SectionView>(makePath(approachId, "//${created.id}"), accessToken)
 
         // Assert
-        assertEquals(created.id, section.id)
-        assertEquals(sectionCreationDTO.name, section.name)
-        assertEquals(sectionCreationDTO.hidden, section.hidden)
-        assertEquals(null, section.content)
+        assertCreatedSuccessfully(created, section)
+    }
+
+    @Test
+    fun `create many section`() {
+        // Prepare
+        val accessToken = loginAccessToken("email@email.ru", "password")
+        val sectionCreationDTO1 = SectionCreationDTO(
+            name = "created 1",
+            hidden = false,
+            prevSectionId = null
+        )
+        val sectionCreationDTO2 = SectionCreationDTO(
+            name = "created 2",
+            hidden = false,
+            prevSectionId = null
+        )
+        val approachId = 2L
+
+        // Action
+        val createdSections = postAuthorized<List<SectionView>>(
+            makePath(approachId, "/many"),
+            listOf(sectionCreationDTO1, sectionCreationDTO2),
+            accessToken
+        )
+
+        // Prepare
+        flushChanges()
+        val section1 = getViewAuthorized<SectionView>(makePath(approachId, "//${createdSections[0].id}"), accessToken)
+        val section2 = getViewAuthorized<SectionView>(makePath(approachId, "//${createdSections[1].id}"), accessToken)
+
+        // Assert
+        assertCreatedSuccessfully(createdSections[0], section1)
+        assertCreatedSuccessfully(createdSections[1], section2)
     }
 
     @Test
@@ -407,5 +437,12 @@ internal class DraftApproachSectionControllerTest : ApiTest() {
 
     fun makePath(approachId: Long, suffix: String): String {
         return pathPrefix[0] + approachId + pathPrefix[1] + suffix
+    }
+
+    private fun assertCreatedSuccessfully(created: SectionView, section: SectionView) {
+        assertEquals(created.id, section.id)
+        assertEquals(created.name, section.name)
+        assertEquals(created.hidden, section.hidden)
+        assertEquals(null, section.content)
     }
 }

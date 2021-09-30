@@ -17,7 +17,7 @@ class Section(
 
     var name: String,
 
-    var visible: Boolean,
+    var hidden: Boolean,
 
     var published: Boolean,
 
@@ -32,19 +32,17 @@ class Section(
 
         other as Section
 
-        if (id != other.id) return false
-        if (name != other.name) return false
-        if (visible != other.visible) return false
-        if (published != other.published) return false
-        if (order != other.order) return false
-
-        return true
+        return id == other.id &&
+            name == other.name &&
+            hidden == other.hidden &&
+            published == other.published &&
+            order == other.order
     }
 
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + visible.hashCode()
+        result = 31 * result + hidden.hashCode()
         result = 31 * result + published.hashCode()
         result = 31 * result + order.hashCode()
         return result

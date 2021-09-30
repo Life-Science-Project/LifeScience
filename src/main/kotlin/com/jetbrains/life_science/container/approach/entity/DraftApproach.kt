@@ -20,7 +20,7 @@ class DraftApproach(
     override val id: Long,
 
     name: String,
-    aliases: List<String>,
+    aliases: MutableList<String>,
     sections: MutableList<Section>,
     tags: MutableList<String>,
     owner: Credentials,
@@ -30,6 +30,6 @@ class DraftApproach(
     var participants: MutableList<Credentials>,
 
     @ManyToMany
-    var categories: MutableList<Category>
+    override var categories: MutableList<Category>
 
 ) : Approach(name, aliases, sections, tags, owner, creationDate)

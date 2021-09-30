@@ -6,6 +6,5 @@ import java.util.Optional
 
 interface CredentialsRepository : JpaRepository<Credentials, Long> {
     fun findByEmail(email: String): Optional<Credentials>
-
     fun existsByEmail(email: String): Boolean
 }

@@ -24,4 +24,12 @@ class SearchController(
             SearchQueryDTOToQueryInfoAdapter(queryDTO, service.supportedTypes)
         )
     }
+
+    @Operation(summary = "Searches entities by prefix")
+    @PostMapping("/suggest")
+    fun suggest(@Validated @RequestBody queryDTO: SearchQueryDTO): List<SearchResult> {
+        return service.suggest(
+            SearchQueryDTOToQueryInfoAdapter(queryDTO, service.supportedTypes)
+        )
+    }
 }

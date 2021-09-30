@@ -1,7 +1,7 @@
 package com.jetbrains.life_science.container.protocol.draft.service
 
 import com.jetbrains.life_science.container.approach.entity.PublicApproach
-import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.container.protocol.draft.service.maker.makeDraftProtocolInfo
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
@@ -83,7 +83,7 @@ class DraftProtocolServiceTest {
         val draftProtocolId = 239L
 
         // Action & Assert
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.get(draftProtocolId)
         }
     }
@@ -97,7 +97,7 @@ class DraftProtocolServiceTest {
         val owner = credentialsService.getById(1L)
         val approach = createPublicApproach(1L, "public_approach", owner)
         val info = makeDraftProtocolInfo(
-            id = 3L,
+            id = 4L,
             name = "test",
             owner = owner,
             approach = approach,
@@ -169,7 +169,7 @@ class DraftProtocolServiceTest {
         )
 
         // Action & Assert
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.update(info)
         }
     }
@@ -186,7 +186,7 @@ class DraftProtocolServiceTest {
         service.delete(draftProtocolId)
 
         // Assert
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.get(draftProtocolId)
         }
     }
@@ -200,7 +200,7 @@ class DraftProtocolServiceTest {
         val draftProtocolId = 239L
 
         // Action & Assert
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.delete(draftProtocolId)
         }
     }
@@ -232,7 +232,7 @@ class DraftProtocolServiceTest {
         val user = credentialsService.getById(3L)
 
         // Action & Assert
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.addParticipant(draftProtocolId, user)
         }
     }
@@ -279,7 +279,7 @@ class DraftProtocolServiceTest {
         val user = credentialsService.getById(1L)
 
         // Action & Assert
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.removeParticipant(draftProtocolId, user)
         }
     }
@@ -311,7 +311,7 @@ class DraftProtocolServiceTest {
         val section = sectionService.getById(1L)
 
         // Action & Assert
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.addSection(protocolId, section)
         }
     }
@@ -343,7 +343,7 @@ class DraftProtocolServiceTest {
         val section = sectionService.getById(1L)
 
         // Action & Assert
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.removeSection(protocolId, section)
         }
     }

@@ -3,9 +3,12 @@
     "_class": "Category",
     "id": 1,
     "names": [
-      "root"
+      "root",
+      "FPLC"
     ],
-    "context": [],
+    "context": [
+      "FPLC"
+    ],
     "paths": [
       []
     ]

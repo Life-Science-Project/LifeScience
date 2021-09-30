@@ -7,9 +7,11 @@ interface UserPersonalDataInfo {
 
     val academicDegree: AcademicDegree
 
-    val organisations: List<String>
+    val organisations: List<Long>
 
     val orcid: String?
+
+    val about: String?
 
     val researchId: String?
 }
