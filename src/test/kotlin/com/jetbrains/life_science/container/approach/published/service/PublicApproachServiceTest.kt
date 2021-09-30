@@ -5,7 +5,7 @@ import com.jetbrains.life_science.container.approach.entity.PublicApproach
 import com.jetbrains.life_science.container.approach.search.service.ApproachSearchUnitService
 import com.jetbrains.life_science.container.approach.service.DraftApproachService
 import com.jetbrains.life_science.container.approach.service.PublicApproachService
-import com.jetbrains.life_science.exception.not_found.PublicApproachNotFoundException
+import com.jetbrains.life_science.exception.not_found.ApproachNotFoundException
 import com.jetbrains.life_science.section.service.SectionService
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -100,7 +100,7 @@ class PublicApproachServiceTest {
         val approachId = 666L
 
         // Action & Assert
-        assertThrows<PublicApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.get(approachId)
         }
     }
@@ -132,7 +132,7 @@ class PublicApproachServiceTest {
         val section = sectionService.getById(1L)
 
         // Action & Assert
-        assertThrows<PublicApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.addSection(approachId, section)
         }
     }
@@ -164,7 +164,7 @@ class PublicApproachServiceTest {
         val section = sectionService.getById(1L)
 
         // Action & Assert
-        assertThrows<PublicApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             service.removeSection(approachId, section)
         }
     }

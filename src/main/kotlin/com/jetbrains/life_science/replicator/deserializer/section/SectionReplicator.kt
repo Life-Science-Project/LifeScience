@@ -10,14 +10,14 @@ import javax.persistence.EntityManager
 
 @Component
 class SectionReplicator(
-    val sectionRepository: SectionRepository,
-    val contentReplicator: ContentReplicator,
-    val entityManager: EntityManager
+    private val sectionRepository: SectionRepository,
+    private val contentReplicator: ContentReplicator,
+    private val entityManager: EntityManager
 ) {
 
     @Transactional
     fun deleteAll() {
-        entityManager.createNativeQuery("ALTER SEQUENCE section_seq RESTART WITH 1;")
+        entityManager.createNativeQuery("alter sequence section_seq restart with 1;")
             .executeUpdate()
         sectionRepository.deleteAll()
     }

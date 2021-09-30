@@ -1,7 +1,6 @@
 package com.jetbrains.life_science.user.data.service
 
 import com.jetbrains.life_science.exception.not_found.UserNotFoundException
-import com.jetbrains.life_science.exception.not_found.UserPersonalDataNotFoundException
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.user.data.entity.UserPersonalData
 import com.jetbrains.life_science.user.data.factory.UserPersonalDataFactory
@@ -11,36 +10,33 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserPersonalDataServiceImpl(
-    val userPersonalDataFactory: UserPersonalDataFactory,
-    val userPersonalDataRepository: UserPersonalDataRepository,
+    val factory: UserPersonalDataFactory,
+    val repository: UserPersonalDataRepository,
     val organisationService: OrganisationService
 ) : UserPersonalDataService {
 
-    override fun getByCredentials(credentials: Credentials): UserPersonalData {
-        return userPersonalDataRepository.findByCredentials(credentials) ?: throw UserPersonalDataNotFoundException(
-            "UserData not found for " +
-                "credentials with id ${credentials.id}"
-        )
+    override fun getByCredentials(credentials: Credentials): UserPersonalData? {
+        return repository.findByCredentials(credentials)
     }
 
     override fun getAllUsers(): List<UserPersonalData> {
-        return userPersonalDataRepository.findAll()
+        return repository.findAll()
     }
 
     override fun getById(id: Long): UserPersonalData {
-        return userPersonalDataRepository.findById(id).orElseThrow { UserNotFoundException("User not found by id $id") }
+        return repository.findById(id).orElseThrow { UserNotFoundException("User not found by id $id") }
     }
 
     override fun deleteById(id: Long) {
-        userPersonalDataRepository.deleteById(id)
+        repository.deleteById(id)
     }
 
     override fun countAll(): Long {
-        return userPersonalDataRepository.count()
+        return repository.count()
     }
 
     override fun update(info: UserPersonalDataInfo, userPersonalData: UserPersonalData): UserPersonalData {
-        val organisations = organisationService.createListOfOrganizations(info.organisations)
-        return userPersonalDataFactory.setParams(info, organisations, userPersonalData)
+        val organisations = organisationService.getOrganisationsByIds(info.organisations)
+        return factory.setParams(info, organisations, userPersonalData)
     }
 }

@@ -1,11 +1,12 @@
 package com.jetbrains.life_science.container.protocol.service
 
+import com.jetbrains.life_science.container.ContainsSections
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 
-interface DraftProtocolService {
+interface DraftProtocolService : ContainsSections {
 
     fun get(draftProtocolId: Long): DraftProtocol
 
@@ -13,19 +14,23 @@ interface DraftProtocolService {
 
     fun update(protocolInfo: DraftProtocolInfo): DraftProtocol
 
+    fun delete(draftProtocolId: Long)
+
     fun addParticipant(draftProtocolId: Long, credentials: Credentials): DraftProtocol
 
     fun removeParticipant(draftProtocolId: Long, credentials: Credentials): DraftProtocol
 
-    fun delete(draftProtocolId: Long)
+    fun hasParticipant(draftProtocolId: Long, user: Credentials): Boolean
 
-    fun addSection(draftProtocolId: Long, section: Section): DraftProtocol
+    override fun addSection(id: Long, section: Section)
 
-    fun removeSection(draftProtocolId: Long, section: Section): DraftProtocol
+    override fun removeSection(id: Long, section: Section)
 
     fun addFile(draftProtocolId: Long, file: FTPFile): DraftProtocol
 
     fun removeFile(draftProtocolId: Long, file: FTPFile): DraftProtocol
 
     fun hasFile(draftProtocolId: Long, file: FTPFile): Boolean
+
+    fun getAllByOwnerId(ownerId: Long): List<DraftProtocol>
 }

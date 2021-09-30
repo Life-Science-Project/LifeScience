@@ -2,7 +2,7 @@ package com.jetbrains.life_science.controller.approach.draft
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachAddParticipantDTO
-import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachCreationDTO
+import com.jetbrains.life_science.controller.approach.draft.dto.DraftApproachDTO
 import com.jetbrains.life_science.controller.approach.draft.view.DraftApproachView
 import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.user.view.UserShortView
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.jdbc.Sql
-import java.time.LocalDateTime
 
 @Sql(
     "/scripts/initial_data.sql",
@@ -69,12 +68,46 @@ internal class DraftApproachControllerTest : ApiTest() {
     }
 
     /**
+     * Test should delete existing draft approach
+     */
+    @Test
+    fun `delete draft approach test`() {
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+
+        deleteAuthorized(makePath(1), loginAccessToken)
+
+        flushChanges()
+
+        val request = getAuthorized(makePath(1), loginAccessToken)
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_003, exceptionView.systemCode)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
+     * Should return ApiExceptionView
+     *
+     * Expected 404 http code and 404_003 system code result
+     */
+    @Test
+    fun `delete not existent approach test`() {
+        val loginAccessToken = loginAccessToken("email@email.ru", "password")
+        val request = deleteRequestAuthorized(makePath(199), loginAccessToken)
+
+        val exceptionView = getApiExceptionView(404, request)
+
+        assertEquals(404_003, exceptionView.systemCode)
+        assertTrue(exceptionView.arguments.isEmpty())
+    }
+
+    /**
      * Test check method creation
      */
     @Test
     fun `create method with base sections test`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 1
         )
@@ -104,7 +137,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `create method with wrong initial parent category id`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 199
         )
@@ -125,7 +158,7 @@ internal class DraftApproachControllerTest : ApiTest() {
     @Test
     fun `create method by regular user failure test`() {
         val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        val dto = DraftApproachCreationDTO(
+        val dto = DraftApproachDTO(
             name = "approach Z",
             initialCategoryId = 199
         )
@@ -135,49 +168,6 @@ internal class DraftApproachControllerTest : ApiTest() {
 
         assertEquals(404_001, exceptionView.systemCode)
         assertEquals(listOf(listOf("199")), exceptionView.arguments)
-    }
-
-    /**
-     * Test checks sending to publication draft approach
-     */
-    @Test
-    fun `send to publication test`() {
-        val loginAccessToken = loginAccessToken("email@email.ru", "password")
-        patchAuthorized(makePath("1/send"), loginAccessToken)
-
-        val request = publishApproachRequestRepository.findAll().filter { it.approach.id == 1L }
-        assertTrue(request.size == 1)
-    }
-
-    /**
-     * Test checks reject to publication by other user
-     *
-     * Expected 403 http code and 403_000 system code result
-     * with requested category id in view arguments.
-     */
-    @Test
-    fun `send to publication by regular user`() {
-        val loginAccessToken = loginAccessToken("simple@gmail.ru", "user123")
-        val request = patchRequestAuthorized(makePath("1/send"), loginAccessToken)
-
-        val exceptionView = getApiExceptionView(403, request)
-
-        assertEquals(403_000, exceptionView.systemCode)
-    }
-
-    /**
-     * Test checks reject to publication by anonymous user
-     *
-     * Expected 403 http code and 403_000 system code result
-     * with requested category id in view arguments.
-     */
-    @Test
-    fun `send to publication by anonymous user`() {
-        val request = patchRequest(makePath("1/send"))
-
-        val exceptionView = getApiExceptionView(403, request)
-
-        assertEquals(403_000, exceptionView.systemCode)
     }
 
     /**
@@ -305,9 +295,5 @@ internal class DraftApproachControllerTest : ApiTest() {
 
     private fun makePath(addition: Any): String {
         return "$path/$addition"
-    }
-
-    fun timeOf(year: Int, month: Int, day: Int): LocalDateTime {
-        return LocalDateTime.of(year, month, day, 0, 0, 0)
     }
 }

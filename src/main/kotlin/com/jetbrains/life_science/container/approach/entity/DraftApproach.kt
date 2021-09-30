@@ -32,6 +32,6 @@ class DraftApproach(
     var participants: MutableList<Credentials>,
 
     @ManyToMany
-    var categories: MutableList<Category>
+    override var categories: MutableList<Category>
 
 ) : Approach(name, aliases, sections, tags, owner, creationDate, files)

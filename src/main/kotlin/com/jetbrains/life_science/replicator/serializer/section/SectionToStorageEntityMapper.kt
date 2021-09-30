@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class SectionToStorageEntityMapper(
-    val contentRepository: ContentRepository
+    private val contentRepository: ContentRepository
 ) {
 
     fun getStorageEntities(sections: List<Section>): List<SectionStorageEntity> {

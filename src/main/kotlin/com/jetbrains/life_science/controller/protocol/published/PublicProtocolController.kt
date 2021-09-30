@@ -3,7 +3,7 @@ package com.jetbrains.life_science.controller.protocol.published
 import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
 import com.jetbrains.life_science.controller.protocol.published.view.PublicProtocolView
 import com.jetbrains.life_science.controller.protocol.published.view.PublicProtocolViewMapper
-import com.jetbrains.life_science.exception.protocol.PublicProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -23,7 +23,7 @@ class PublicProtocolController(
     ): PublicProtocolView {
         val protocol = publicProtocolService.get(protocolId)
         if (protocol.approach.id != approachId) {
-            throw PublicProtocolNotFoundException("Protocol not found")
+            throw ProtocolNotFoundException("Protocol not found")
         }
         return viewMapper.toView(protocol)
     }

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.container.protocol.service
 
-import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.container.protocol.factory.DraftProtocolFactory
@@ -17,7 +17,7 @@ class DraftProtocolServiceImpl(
 ) : DraftProtocolService {
     override fun get(draftProtocolId: Long): DraftProtocol {
         return repository.findById(draftProtocolId).orElseThrow {
-            DraftProtocolNotFoundException("Draft protocol with id $draftProtocolId is not found")
+            ProtocolNotFoundException("Draft protocol with id $draftProtocolId is not found")
         }
     }
 
@@ -50,27 +50,43 @@ class DraftProtocolServiceImpl(
         return repository.save(protocol)
     }
 
+    override fun hasParticipant(draftProtocolId: Long, user: Credentials): Boolean {
+        exists(draftProtocolId)
+        return repository.existsByIdAndParticipantsContains(draftProtocolId, user)
+    }
+
     override fun delete(draftProtocolId: Long) {
-        if (!repository.existsById(draftProtocolId)) {
-            throw DraftProtocolNotFoundException("Draft protocol with id $draftProtocolId is not found")
-        }
+        exists(draftProtocolId)
         repository.deleteById(draftProtocolId)
     }
 
-    override fun addSection(draftProtocolId: Long, section: Section): DraftProtocol {
-        val draftProtocol = get(draftProtocolId)
+    override fun addSection(id: Long, section: Section) {
+        val draftProtocol = get(id)
         if (!draftProtocol.sections.any { it.id == section.id }) {
             draftProtocol.sections.add(section)
             repository.save(draftProtocol)
         }
-        return draftProtocol
     }
 
-    override fun removeSection(draftProtocolId: Long, section: Section): DraftProtocol {
-        val draftProtocol = get(draftProtocolId)
+    override fun removeSection(id: Long, section: Section) {
+        val draftProtocol = get(id)
         draftProtocol.sections.removeAll { it.id == section.id }
         repository.save(draftProtocol)
-        return draftProtocol
+    }
+
+    override fun hasSection(id: Long, section: Section): Boolean {
+        exists(id)
+        return repository.existsByIdAndSectionsContains(id, section)
+    }
+
+    private fun exists(draftApproachId: Long) {
+        if (!repository.existsById(draftApproachId)) {
+            throw ProtocolNotFoundException("Draft approach with id $draftApproachId is not found")
+        }
+    }
+
+    override fun getAllByOwnerId(ownerId: Long): List<DraftProtocol> {
+        return repository.getAllByOwnerId(ownerId)
     }
 
     override fun addFile(draftProtocolId: Long, file: FTPFile): DraftProtocol {

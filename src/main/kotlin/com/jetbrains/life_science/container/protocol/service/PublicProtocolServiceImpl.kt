@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.container.protocol.service
 
-import com.jetbrains.life_science.exception.protocol.PublicProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.container.protocol.factory.PublicProtocolFactory
@@ -18,8 +18,12 @@ class PublicProtocolServiceImpl(
 ) : PublicProtocolService {
     override fun get(id: Long): PublicProtocol {
         return repository.findById(id).orElseThrow {
-            PublicProtocolNotFoundException("Public protocol with id $id is not found")
+            ProtocolNotFoundException("Public protocol with id $id is not found")
         }
+    }
+
+    override fun getAllByOwnerId(ownerId: Long): List<PublicProtocol> {
+        return repository.getAllByOwnerId(ownerId)
     }
 
     override fun create(protocol: DraftProtocol): PublicProtocol {
@@ -35,7 +39,7 @@ class PublicProtocolServiceImpl(
 
     override fun hasSection(id: Long, section: Section): Boolean {
         if (!repository.existsById(id)) {
-            throw PublicProtocolNotFoundException("Public protocol with id $id is not found")
+            throw ProtocolNotFoundException("Public protocol with id $id is not found")
         }
         return repository.existsByIdAndSectionsContains(id, section)
     }

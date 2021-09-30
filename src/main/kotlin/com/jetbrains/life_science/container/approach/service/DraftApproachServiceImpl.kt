@@ -3,7 +3,7 @@ package com.jetbrains.life_science.container.approach.service
 import com.jetbrains.life_science.container.approach.entity.DraftApproach
 import com.jetbrains.life_science.container.approach.factory.DraftApproachFactory
 import com.jetbrains.life_science.container.approach.repository.DraftApproachRepository
-import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
+import com.jetbrains.life_science.exception.not_found.ApproachNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.ftp.entity.FTPFile
 import com.jetbrains.life_science.section.entity.Section
@@ -17,7 +17,7 @@ class DraftApproachServiceImpl(
 ) : DraftApproachService {
     override fun get(id: Long): DraftApproach {
         return repository.findById(id).orElseThrow {
-            DraftApproachNotFoundException("Draft approach with id $id is not found")
+            ApproachNotFoundException("Draft approach with id $id is not found")
         }
     }
 
@@ -61,6 +61,10 @@ class DraftApproachServiceImpl(
     override fun hasParticipant(draftApproachId: Long, user: Credentials): Boolean {
         exists(draftApproachId)
         return repository.existsByIdAndParticipantsContains(draftApproachId, user)
+    }
+
+    override fun getAllByOwnerId(ownerId: Long): List<DraftApproach> {
+        return repository.getAllByOwnerId(ownerId)
     }
 
     override fun addSection(id: Long, section: Section) {
@@ -107,7 +111,7 @@ class DraftApproachServiceImpl(
 
     private fun exists(draftApproachId: Long) {
         if (!repository.existsById(draftApproachId)) {
-            throw DraftApproachNotFoundException("Draft approach with id $draftApproachId is not found")
+            throw ApproachNotFoundException("Draft approach with id $draftApproachId is not found")
         }
     }
 }

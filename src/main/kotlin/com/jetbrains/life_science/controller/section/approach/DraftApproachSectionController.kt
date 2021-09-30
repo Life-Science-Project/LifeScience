@@ -38,6 +38,22 @@ class DraftApproachSectionController(
         return viewMapper.toView(section, content?.text)
     }
 
+    @PostMapping("/many")
+    fun createSections(
+        @PathVariable approachId: Long,
+        @RequestBody dto: List<SectionCreationDTO>,
+        @AuthenticationPrincipal credentials: Credentials
+    ): List<SectionView> {
+        val approach = getApproachSecured(approachId, credentials)
+        val sectionsInfo = dto.map { sectionDTO ->
+            val prevSection = sectionDTO.prevSectionId?.let { getSectionSecured(approach, it) }
+            SectionCreationDTOToInfoAdapter(sectionDTO, prevSection, approach.sections)
+        }
+        val createdSections = sectionService.createMany(sectionsInfo, approach.sections)
+        createdSections.forEach { draftApproachService.addSection(approachId, it) }
+        return viewMapper.toViewAll(createdSections)
+    }
+
     @PostMapping
     fun createSection(
         @PathVariable approachId: Long,
@@ -111,6 +127,6 @@ class DraftApproachSectionController(
         if (!draftApproachService.hasSection(draftApproach.id, section)) {
             throw SectionNotFoundException(sectionId)
         }
-        return sectionService.getById(sectionId)
+        return section
     }
 }

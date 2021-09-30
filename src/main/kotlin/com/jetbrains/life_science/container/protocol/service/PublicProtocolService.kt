@@ -9,6 +9,8 @@ import com.jetbrains.life_science.section.entity.Section
 interface PublicProtocolService : ContainsSections {
     fun get(id: Long): PublicProtocol
 
+    fun getAllByOwnerId(ownerId: Long): List<PublicProtocol>
+
     fun create(protocol: DraftProtocol): PublicProtocol
 
     fun hasFile(id: Long, file: FTPFile): Boolean

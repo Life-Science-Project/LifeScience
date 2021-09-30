@@ -5,6 +5,7 @@ import com.jetbrains.life_science.replicator.deserializer.approach.ApproachRepli
 import com.jetbrains.life_science.replicator.deserializer.category.CategoryReplicator
 import com.jetbrains.life_science.replicator.deserializer.content.ContentReplicator
 import com.jetbrains.life_science.replicator.deserializer.credentials.CredentialsReplicator
+import com.jetbrains.life_science.replicator.deserializer.favoriteGroup.FavoriteGroupReplicator
 import com.jetbrains.life_science.replicator.enities.CommonStorageEntity
 import com.jetbrains.life_science.replicator.deserializer.protocol.ProtocolReplicator
 import com.jetbrains.life_science.replicator.deserializer.section.SectionReplicator
@@ -14,13 +15,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class ReplicatorServiceImpl(
-    val categoryReplicator: CategoryReplicator,
-    val resourceLoader: ResourceLoader,
-    val approachReplicator: ApproachReplicator,
-    val protocolReplicator: ProtocolReplicator,
-    val sectionReplicator: SectionReplicator,
-    val contentReplicator: ContentReplicator,
-    val credentialsReplicator: CredentialsReplicator
+    private val categoryReplicator: CategoryReplicator,
+    private val resourceLoader: ResourceLoader,
+    private val approachReplicator: ApproachReplicator,
+    private val protocolReplicator: ProtocolReplicator,
+    private val sectionReplicator: SectionReplicator,
+    private val contentReplicator: ContentReplicator,
+    private val credentialsReplicator: CredentialsReplicator,
+    private val favoriteGroupReplicator: FavoriteGroupReplicator
 ) : ReplicatorService {
 
     private val pathToData = "classpath:replica/data.json"
@@ -31,20 +33,23 @@ class ReplicatorServiceImpl(
         logger.info("Replication started")
         deleteAll()
         logger.info("Deletion success")
-        credentialsReplicator.createAdmin()
-        val (categories, approaches) = decodeData()
+        val (users, categories, publicApproaches, draftApproaches, draftProtocols) = decodeData()
+        credentialsReplicator.replicateData(users)
         categoryReplicator.replicateData(categories)
-        approachReplicator.replicateData(approaches)
+        approachReplicator.replicateData(publicApproaches, draftApproaches)
+        protocolReplicator.replicateDraftProtocolData(draftProtocols)
         logger.info("Replication success")
     }
 
     private fun deleteAll() {
         contentReplicator.deleteAll()
         protocolReplicator.deleteAll()
-        approachReplicator.deleteAll()
-        sectionReplicator.deleteAll()
+        approachReplicator.deleteAllDraft()
         categoryReplicator.deleteAll()
+        approachReplicator.deleteAllPublic()
+        sectionReplicator.deleteAll()
         credentialsReplicator.deleteAll()
+        favoriteGroupReplicator.deleteAll()
     }
 
     private fun decodeData(): CommonStorageEntity {

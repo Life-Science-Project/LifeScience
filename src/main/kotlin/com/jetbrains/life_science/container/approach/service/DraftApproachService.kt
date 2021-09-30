@@ -22,6 +22,8 @@ interface DraftApproachService : ContainsSections {
 
     fun hasParticipant(draftApproachId: Long, user: Credentials): Boolean
 
+    fun getAllByOwnerId(ownerId: Long): List<DraftApproach>
+
     fun addFile(draftApproachId: Long, file: FTPFile): DraftApproach
 
     fun removeFile(draftApproachId: Long, file: FTPFile): DraftApproach

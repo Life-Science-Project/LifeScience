@@ -36,6 +36,6 @@ class PublicApproach(
     var protocols: MutableList<PublicProtocol>,
 
     @ManyToMany(mappedBy = "approaches")
-    var categories: MutableList<Category>
+    override var categories: MutableList<Category>
 
 ) : Approach(name, aliases, sections, tags, owner, creationDate, files)

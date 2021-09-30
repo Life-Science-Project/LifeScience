@@ -11,7 +11,7 @@ import com.jetbrains.life_science.controller.category.view.CategoryShortView
 import com.jetbrains.life_science.controller.category.view.CategoryView
 import com.jetbrains.life_science.controller.category.view.CategoryViewMapper
 import com.jetbrains.life_science.user.credentials.entity.Credentials
-import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -32,18 +32,18 @@ class CategoryController(
 
     @GetMapping("/{id}")
     fun getCategory(@PathVariable id: Long): CategoryView {
-        val category = categoryService.getCategory(id)
+        val category = categoryService.getById(id)
         return viewMapper.toView(category)
     }
 
     @GetMapping("/{id}/paths")
     fun getPaths(@PathVariable id: Long): List<Path> {
-        val category = categoryService.getCategory(id)
+        val category = categoryService.getById(id)
         return categorySearchUnitService.getPaths(category)
     }
 
     @PostMapping
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun create(@Validated @RequestBody categoryCreationDTO: CategoryCreationDTO): CategoryShortView {
         val categoryInfo = CategoryCreationDTOToInfoAdapter(categoryCreationDTO)
         val category = categoryService.createCategory(categoryInfo)
@@ -51,7 +51,7 @@ class CategoryController(
     }
 
     @PatchMapping("/{categoryId}")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun update(
         @Validated @RequestBody categoryUpdateDTO: CategoryUpdateDTO,
         @PathVariable categoryId: Long
@@ -62,7 +62,7 @@ class CategoryController(
     }
 
     @DeleteMapping("/{id}")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun delete(@PathVariable id: Long, @AuthenticationPrincipal credentials: Credentials) {
         categoryService.deleteCategory(id)
     }

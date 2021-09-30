@@ -13,6 +13,8 @@ interface PublicApproachService : ContainsSections {
 
     fun hasFile(id: Long, file: FTPFile): Boolean
 
+    fun getAllByOwnerId(ownerId: Long): List<PublicApproach>
+
     override fun addSection(id: Long, section: Section)
 
     override fun removeSection(id: Long, section: Section)

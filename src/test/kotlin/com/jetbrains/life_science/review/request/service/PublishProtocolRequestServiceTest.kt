@@ -136,7 +136,7 @@ class PublishProtocolRequestServiceTest {
     @Test
     fun `delete existing pending publish protocol request`() {
         // Prepare data
-        val publishProtocolId = 1L
+        val publishProtocolId = 2L
 
         // Action
         service.delete(publishProtocolId)

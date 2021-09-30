@@ -5,12 +5,17 @@ data class ApproachStorageEntity(
     val aliases: MutableList<String>,
     val categories: List<Long>,
     val sections: List<SectionStorageEntity>,
-    val protocols: List<ProtocolStorageEntity>
+    val protocols: List<ProtocolStorageEntity>,
+    val creationDateTime: String,
+    val ownerId: Long
 )
 
 data class ProtocolStorageEntity(
     val name: String,
-    val sections: List<SectionStorageEntity>
+    val ownerId: Long,
+    val rating: Long?,
+    val sections: List<SectionStorageEntity>,
+    val approachId: Long
 )
 
 data class SectionStorageEntity(
