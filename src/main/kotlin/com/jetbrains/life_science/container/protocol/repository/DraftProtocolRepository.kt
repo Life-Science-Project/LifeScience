@@ -4,7 +4,6 @@ import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 import com.jetbrains.life_science.section.entity.Section
 import com.jetbrains.life_science.ftp.entity.FTPFile
-import com.jetbrains.life_science.section.entity.Section
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface DraftProtocolRepository : JpaRepository<DraftProtocol, Long> {

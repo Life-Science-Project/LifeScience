@@ -105,7 +105,8 @@ class ApproachReplicator(
             creationDate = LocalDateTime.parse(storageEntity.creationDateTime),
             participants = mutableListOf(),
             categories = categories,
-            aliases = storageEntity.aliases
+            aliases = storageEntity.aliases,
+            files = mutableListOf()
         )
         approach.participants.add(approach.owner)
         return approach
