@@ -36,11 +36,11 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
 
-    implementation("org.junit.jupiter:junit-jupiter:5.7.2")
+    implementation("org.junit.jupiter:junit-jupiter:5.8.0")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools:2.5.4")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.4")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.5")
     testImplementation("org.springframework.security:spring-security-test:5.5.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt")
 

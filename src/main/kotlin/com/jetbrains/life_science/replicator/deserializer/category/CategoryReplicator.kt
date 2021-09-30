@@ -33,14 +33,17 @@ class CategoryReplicator(
     @Transactional
     fun replicateData(data: List<CategoryStorageEntity>) {
         categorySearchUnitRepository.deleteAll()
-        data.forEach { createOne(it) }
+        val sortedData = data.sortedWith(compareBy { it.id })
+        sortedData.forEach { createOne(it) }
     }
 
     private fun createOne(storageEntity: CategoryStorageEntity) {
         var category = createCategory(storageEntity)
         category = categoryRepository.save(category)
+        categoryRepository.flush()
         categorySearchUnitService.createSearchUnit(category)
         elasticFlusher.flush(100)
+        entityManager.flush()
     }
 
     private fun createCategory(storageEntity: CategoryStorageEntity) =

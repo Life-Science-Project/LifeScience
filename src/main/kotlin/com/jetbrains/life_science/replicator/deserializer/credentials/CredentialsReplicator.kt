@@ -38,6 +38,7 @@ class CredentialsReplicator(
     fun replicateData(data: List<CredentialsStorageEntity>) {
         data.forEach { createUser(it) }
         admin = credentialsService.getById(1L)
+        entityManager.flush()
     }
 
     fun createUser(storageEntity: CredentialsStorageEntity) {

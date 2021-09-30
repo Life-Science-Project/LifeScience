@@ -51,6 +51,7 @@ class ApproachReplicator(
     fun replicateData(publicData: List<ApproachStorageEntity>, draftData: List<ApproachStorageEntity>) {
         publicData.forEach { makePublicOne(it) }
         draftData.forEach { makeDraftOne(it) }
+        entityManager.flush()
     }
 
     fun makePublicOne(storageEntity: ApproachStorageEntity) {

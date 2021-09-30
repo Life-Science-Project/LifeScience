@@ -43,12 +43,16 @@ class ProtocolReplicator(
 
     @Transactional
     fun replicatePublicProtocolData(approach: PublicApproach, data: List<ProtocolStorageEntity>): List<PublicProtocol> {
-        return data.map { replicatePublicOne(approach, it) }
+        val result = data.map { replicatePublicOne(approach, it) }
+        entityManager.flush()
+        return result
     }
 
     @Transactional
     fun replicateDraftProtocolData(data: List<ProtocolStorageEntity>): List<DraftProtocol> {
-        return data.map { replicateDraftOne(it) }
+        val result = data.map { replicateDraftOne(it) }
+        entityManager.flush()
+        return result
     }
 
     private fun replicateDraftOne(data: ProtocolStorageEntity): DraftProtocol {
