@@ -1,4 +1,4 @@
-package com.jetbrains.life_science.controller.replica
+package com.jetbrains.life_science._replica
 
 import com.jetbrains.life_science.ApiTest
 import com.jetbrains.life_science.user.credentials.repository.CredentialsRepository

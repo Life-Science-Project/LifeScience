@@ -40,6 +40,7 @@ class CategoryReplicator(
     private fun createOne(storageEntity: CategoryStorageEntity) {
         var category = createCategory(storageEntity)
         category = categoryRepository.save(category)
+        categoryRepository.flush()
         categorySearchUnitService.createSearchUnit(category)
         elasticFlusher.flush(100)
         entityManager.flush()
