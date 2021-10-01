@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.container.protocol.service
 
-import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.exception.request.RemoveOwnerFromParticipantsException
 import com.jetbrains.life_science.container.protocol.entity.DraftProtocol
 import com.jetbrains.life_science.container.protocol.factory.DraftProtocolFactory
@@ -16,7 +16,7 @@ class DraftProtocolServiceImpl(
 ) : DraftProtocolService {
     override fun get(draftProtocolId: Long): DraftProtocol {
         return repository.findById(draftProtocolId).orElseThrow {
-            DraftProtocolNotFoundException("Draft protocol with id $draftProtocolId is not found")
+            ProtocolNotFoundException("Draft protocol with id $draftProtocolId is not found")
         }
     }
 
@@ -80,7 +80,7 @@ class DraftProtocolServiceImpl(
 
     private fun exists(draftApproachId: Long) {
         if (!repository.existsById(draftApproachId)) {
-            throw DraftProtocolNotFoundException("Draft approach with id $draftApproachId is not found")
+            throw ProtocolNotFoundException("Draft approach with id $draftApproachId is not found")
         }
     }
 

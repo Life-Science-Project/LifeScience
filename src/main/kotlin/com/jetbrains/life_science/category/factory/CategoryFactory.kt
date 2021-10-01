@@ -20,8 +20,4 @@ class CategoryFactory {
             aliases = info.aliases
         )
     }
-
-    fun setParams(category: Category, categoryInfo: CategoryInfo, parent: Category?) {
-        category.name = categoryInfo.name
-    }
 }

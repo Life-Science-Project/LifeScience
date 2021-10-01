@@ -6,7 +6,7 @@ interface SectionService {
 
     fun create(info: SectionCreationInfo): Section
 
-    fun createMany(infos: List<SectionCreationInfo>, allSections: List<Section>): List<Section>
+    fun createMany(infos: List<SectionCreationInfo>, existingSections: List<Section>): List<Section>
 
     fun deleteById(id: Long, allSections: List<Section>)
 
