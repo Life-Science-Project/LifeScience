@@ -40,4 +40,5 @@ out/
 .DS_Store
 
 ### Local environment ###
+
 /src/main/resources/application-local.properties
