@@ -50,6 +50,7 @@ class DraftApproachSectionController(
             SectionCreationDTOToInfoAdapter(sectionDTO, prevSection, approach.sections)
         }
         val createdSections = sectionService.createMany(sectionsInfo, approach.sections)
+        createdSections.forEach { draftApproachService.addSection(approachId, it) }
         return viewMapper.toViewAll(createdSections)
     }
 
@@ -126,6 +127,6 @@ class DraftApproachSectionController(
         if (!draftApproachService.hasSection(draftApproach.id, section)) {
             throw SectionNotFoundException(sectionId)
         }
-        return sectionService.getById(sectionId)
+        return section
     }
 }

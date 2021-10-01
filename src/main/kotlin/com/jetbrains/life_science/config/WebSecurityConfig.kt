@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
-import java.util.*
 
 @Configuration
 @EnableWebSecurity
@@ -54,10 +53,11 @@ class WebSecurityConfig(
             .authorizeRequests()
             .antMatchers(
                 "/api/approaches/draft/**",
+                "/api/protocols/draft/**",
                 "/api/review/request/**",
+                "/api/users/**",
                 "/api/ping/**"
             ).fullyAuthenticated()
-            .antMatchers("/api/users/current").fullyAuthenticated()
             .antMatchers(HttpMethod.GET).permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/api/search/**").permitAll()

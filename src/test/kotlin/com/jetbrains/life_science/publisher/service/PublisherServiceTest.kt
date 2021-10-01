@@ -7,8 +7,8 @@ import com.jetbrains.life_science.container.approach.service.PublicApproachServi
 import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
 import com.jetbrains.life_science.edit_record.service.ApproachEditRecordService
 import com.jetbrains.life_science.edit_record.service.ProtocolEditRecordService
-import com.jetbrains.life_science.exception.not_found.DraftApproachNotFoundException
-import com.jetbrains.life_science.exception.not_found.DraftProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ApproachNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.exception.section.SectionNotFoundException
 import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
 import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
@@ -103,7 +103,7 @@ internal class PublisherServiceTest {
         // Assert
         assertEquals(draftApproach.name, publicApproach.name)
         assertEquals(draftApproach.categories.toSet(), publicApproach.categories.toSet())
-        assertThrows<DraftApproachNotFoundException> {
+        assertThrows<ApproachNotFoundException> {
             draftApproachService.get(draftApproach.id)
         }
         assertSectionsEquals(draftApproach.sections, publicApproach.sections)
@@ -127,7 +127,7 @@ internal class PublisherServiceTest {
         // Assert
         assertApproachContainsProtocol(approach, publicProtocol.id)
         assertEquals(draftProtocol.name, publicProtocol.name)
-        assertThrows<DraftProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             draftProtocolService.get(draftProtocol.id)
         }
         assertSectionsEquals(draftProtocol.sections, publicProtocol.sections)

@@ -1,6 +1,6 @@
 package com.jetbrains.life_science.container.protocol.published.service
 
-import com.jetbrains.life_science.exception.protocol.PublicProtocolNotFoundException
+import com.jetbrains.life_science.exception.not_found.ProtocolNotFoundException
 import com.jetbrains.life_science.container.protocol.entity.PublicProtocol
 import com.jetbrains.life_science.container.protocol.search.service.ProtocolSearchUnitService
 import com.jetbrains.life_science.container.protocol.service.DraftProtocolService
@@ -85,7 +85,7 @@ class PublicProtocolServiceTest {
         val protocolId = 666L
 
         // Action & Assert
-        assertThrows<PublicProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.get(protocolId)
         }
     }
@@ -134,7 +134,7 @@ class PublicProtocolServiceTest {
         val section = sectionService.getById(1L)
 
         // Action & Assert
-        assertThrows<PublicProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.addSection(protocolId, section)
         }
     }
@@ -166,7 +166,7 @@ class PublicProtocolServiceTest {
         val section = sectionService.getById(1L)
 
         // Action & Assert
-        assertThrows<PublicProtocolNotFoundException> {
+        assertThrows<ProtocolNotFoundException> {
             service.removeSection(protocolId, section)
         }
     }

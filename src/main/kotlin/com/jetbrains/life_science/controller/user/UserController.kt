@@ -6,7 +6,7 @@ import com.jetbrains.life_science.container.protocol.service.DraftProtocolServic
 import com.jetbrains.life_science.container.protocol.service.PublicProtocolService
 import com.jetbrains.life_science.controller.approach.view.ApproachShortView
 import com.jetbrains.life_science.controller.approach.view.ApproachViewMapper
-import com.jetbrains.life_science.controller.protocol.view.ProtocolShortView
+import com.jetbrains.life_science.controller.protocol.view.ProtocolView
 import com.jetbrains.life_science.controller.protocol.view.ProtocolViewMapper
 import com.jetbrains.life_science.controller.user.dto.UserPersonalDataDTO
 import com.jetbrains.life_science.controller.user.dto.UserPersonalDataDTOToInfoAdapter
@@ -46,10 +46,10 @@ class UserController(
     fun getPublicProtocols(
         @PathVariable userId: Long,
         @AuthenticationPrincipal credentials: Credentials
-    ): List<ProtocolShortView> {
+    ): List<ProtocolView> {
         checkAccess(userId, credentials)
         val publicProtocols = publicProtocolService.getAllByOwnerId(userId)
-        return protocolViewMapper.toViewsShort(publicProtocols)
+        return protocolViewMapper.toViews(publicProtocols)
     }
 
     @GetMapping("/{userId}/protocols/draft")
@@ -57,10 +57,10 @@ class UserController(
     fun getDraftProtocols(
         @PathVariable userId: Long,
         @AuthenticationPrincipal credentials: Credentials
-    ): List<ProtocolShortView> {
+    ): List<ProtocolView> {
         checkAccess(userId, credentials)
         val draftProtocols = draftProtocolService.getAllByOwnerId(userId)
-        return protocolViewMapper.toViewsShort(draftProtocols)
+        return protocolViewMapper.toViews(draftProtocols)
     }
 
     @GetMapping("/{userId}/approaches/public")
@@ -81,7 +81,7 @@ class UserController(
         @AuthenticationPrincipal credentials: Credentials
     ): List<ApproachShortView> {
         checkAccess(userId, credentials)
-        val draftApproach = publicApproachService.getAllByOwnerId(userId)
+        val draftApproach = draftApproachService.getAllByOwnerId(userId)
         return approachViewMapper.toViewsShort(draftApproach)
     }
 
@@ -91,6 +91,7 @@ class UserController(
         @AuthenticationPrincipal credentials: Credentials,
         @RequestBody dto: UserPersonalDataDTO
     ): UserFullView {
+        checkAccess(userId, credentials)
         val info = UserPersonalDataDTOToInfoAdapter(dto)
         val currentPersonalData = userPersonalDataService.getById(userId)
         val personalData = userPersonalDataService.update(info, currentPersonalData)

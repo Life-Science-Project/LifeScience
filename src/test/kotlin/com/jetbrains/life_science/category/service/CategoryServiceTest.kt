@@ -115,7 +115,7 @@ class CategoryServiceTest {
         )
 
         // Action
-        val category = service.getCategory(1)
+        val category = service.getById(1)
 
         // Assert
         assertEquals(expectedCategory.id, category.id)
@@ -136,7 +136,7 @@ class CategoryServiceTest {
 
         // Action
         val createdCategory = service.createCategory(info)
-        val category = service.getCategory(createdCategory.id)
+        val category = service.getById(createdCategory.id)
 
         // Assert
         assertEquals(createdCategory.id, category.id)
@@ -160,7 +160,7 @@ class CategoryServiceTest {
 
         // Action
         service.updateCategory(info)
-        val category = service.getCategory(5)
+        val category = service.getById(5)
 
         // Assert
         assertEquals(info.id, category.id)
@@ -168,6 +168,29 @@ class CategoryServiceTest {
         assertEquals(info.aliases, category.aliases)
         assertTrue(category.parents.any { it.id == 3L })
         assertFalse(category.parents.any { it.id == 2L })
+    }
+
+    /**
+     * Try to update non-existing category.
+     * It should throw CategoryNotEmptyException.
+     */
+    @Test
+    fun `update non-empty category test`() {
+        // Prepare
+        val info = makeCategoryUpdateInfo(
+            id = 1,
+            name = "changed name",
+            aliases = listOf(
+                "le name"
+            ),
+            parentsToAddIds = listOf(),
+            parentsToDeleteIds = listOf()
+        )
+
+        // Action & Assert
+        assertThrows<CategoryNotEmptyException> {
+            service.updateCategory(info)
+        }
     }
 
     @Test
@@ -180,7 +203,7 @@ class CategoryServiceTest {
 
         // Assert
         assertThrows<CategoryNotFoundException> {
-            service.getCategory(existingId)
+            service.getById(existingId)
         }
     }
 
@@ -202,7 +225,7 @@ class CategoryServiceTest {
 
         // Action & Assert
         assertThrows<CategoryNotFoundException> {
-            service.getCategory(notExistingId)
+            service.getById(notExistingId)
         }
     }
 
