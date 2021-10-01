@@ -84,7 +84,8 @@ class ProtocolReplicator(
                 .findById(data.ownerId)
                 .orElse(credentialsReplicator.admin),
             coAuthors = mutableListOf(),
-            rating = data.rating ?: 0
+            rating = data.rating ?: 0,
+            parameters = mutableListOf()
         )
         protocol.coAuthors.add(protocol.owner)
         return protocol
@@ -103,7 +104,8 @@ class ProtocolReplicator(
             owner = credentialsRepository
                 .findById(data.ownerId)
                 .orElse(credentialsReplicator.admin),
-            participants = mutableListOf()
+            participants = mutableListOf(),
+            parameters = mutableListOf()
         )
         protocol.participants.add(protocol.owner)
         return protocol

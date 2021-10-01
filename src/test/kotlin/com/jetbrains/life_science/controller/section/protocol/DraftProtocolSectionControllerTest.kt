@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct
 
 @Sql(
     "/scripts/initial_data.sql",
+    "/scripts/protocol/parameter/parameters_data.sql",
     "/scripts/protocol/draft_protocol_data.sql"
 )
 internal class DraftProtocolSectionControllerTest : ApiTest() {

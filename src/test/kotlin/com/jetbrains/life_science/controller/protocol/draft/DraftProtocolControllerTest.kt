@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql
 
 @Sql(
     "/scripts/initial_data.sql",
+    "/scripts/protocol/parameter/parameters_data.sql",
     "/scripts/protocol/draft_protocol_data.sql"
 )
 internal class DraftProtocolControllerTest : ApiTest() {

@@ -10,6 +10,6 @@ data class PublicProtocolView(
     val name: String,
     val approach: ApproachShortView,
     val sections: List<SectionShortView>,
-    val coAuthors: List<UserShortView>,
+    val coAuthors: List<UserShortView?>,
     val parameters: List<ProtocolParameterView>
 )

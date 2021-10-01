@@ -1,6 +1,7 @@
 package com.jetbrains.life_science.controller.protocol.draft.dto
 
 import com.jetbrains.life_science.container.approach.entity.PublicApproach
+import com.jetbrains.life_science.container.protocol.parameter.entity.ProtocolParameter
 import com.jetbrains.life_science.container.protocol.service.DraftProtocolInfo
 import com.jetbrains.life_science.user.credentials.entity.Credentials
 
@@ -12,4 +13,5 @@ class DraftProtocolDTOToInfoAdapter(
     override val id: Long = 0
     override val name = dto.name
     override val approach = parentApproach
+    override val params = listOf<ProtocolParameter>()
 }
